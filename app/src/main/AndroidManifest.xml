@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.vinners.trumanms">
+    package="com.vinners.cube_vishwakarma">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Dangerous Permissions -->
@@ -12,7 +12,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
-        android:name="com.vinners.trumanms.TrumanApp"
+        android:name="com.vinners.cube_vishwakarma.TrumanApp"
         android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -43,7 +43,7 @@
             android:resource="@array/preloaded_fonts" />
 
         <activity
-            android:name="com.vinners.trumanms.ui.splash.SplashActivity"
+            android:name=".ui.splash.SplashActivity"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:noHistory="true"
@@ -65,19 +65,11 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name="com.vinners.trumanms.ui.appIntro.AppIntroActivity"
-            android:screenOrientation="portrait" />
 
-        <activity android:name="com.vinners.trumanms.ui.appVersionDiscontinued.VersionBlockActivity"
+        <activity android:name=".ui.appVersionDiscontinued.VersionBlockActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden"/>
-        <activity
-            android:name="com.vinners.trumanms.ui.home.HomeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateAlwaysHidden" />
         <service
             android:name=".notification.NotificationService"
             android:exported="true">

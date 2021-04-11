@@ -85,22 +85,22 @@ android {
          */
         production {
             dimension "default"
-            applicationId "com.vinners.trumanms"
-            resValue "string", "app_name", "Truman Gig"
+            applicationId "com.vinners.cube_vishwakarma"
+            resValue "string", "app_name", "Cube"
             buildConfigField "String", "API_URL", '"https://admin.truman.ooo:5052"'
-            versionCode 13
-            versionName "1.1.0"
+            versionCode 1
+            versionName "1.0.0"
         }
         /**
          * development Build
          */
         development {
             dimension "default"
-            applicationId "com.vinners.trumanms.development"
-            resValue "string", "app_name", "Truman Gig Dev"
+            applicationId "com.vinners.cube_vishwakarma.development"
+            resValue "string", "app_name", "Cube Dev"
             buildConfigField "String", "API_URL", '"http://trumanmsdev.vinnersolutions.com:5052"'
-            versionCode 3
-            versionName "1.0.3-beta"
+            versionCode 1
+            versionName "1.0.0-beta"
         }
     }
 
@@ -126,16 +126,9 @@ android {
 dependencies {
     implementation project(':base')
     implementation project(':core')
-    implementation project(':feature_auth')
     implementation project(':cache')
     implementation project(':data')
     implementation project(':remote')
-    implementation project(path: ':feature_my_money')
-    implementation project(path: ':feature_myjobs')
-    implementation project(path: ':feature_help')
-    implementation project(path: ':feature_jobs')
-    implementation project(path: ':feature_profile')
-    implementation project(path: ':feature_notification')
 
     testImplementation Libs.junit
     testImplementation Libs.mockitoInline
@@ -151,7 +144,7 @@ dependencies {
     // debugImplementation Libs.leakCanary2
     debugImplementation Libs.Facebook.stetho
 
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 
     implementation Libs.Vinners.logger
     implementation Libs.timber
@@ -191,12 +184,12 @@ dependencies {
     implementation Libs.Google.material
     implementation Libs.Google.auth
 
-    implementation Libs.Firebase.firebaseCore
-    implementation Libs.Firebase.firebaseAnalytics
-    implementation Libs.Firebase.crashlytics
-    implementation Libs.Firebase.inAppMessaging
-    implementation Libs.Firebase.firebaseMessaging
-    implementation Libs.Firebase.dynamicLinks
+    implementation platform(Libs.Firebase.firebaseBom)
+    implementation Libs.Firebase.analyticsKtx
+    implementation Libs.Firebase.crashlyticsKtx
+    implementation Libs.Firebase.inAppMessagingKtx
+    implementation Libs.Firebase.firebaseMessagingKtx
+    implementation Libs.Firebase.dynamicLinksKtx
 
     kapt Libs.Dagger.androidProcessor
     kapt Libs.Dagger.compiler
@@ -206,6 +199,7 @@ dependencies {
     //These two are here just to make dagger 2 happy
     implementation Libs.AndroidX.Room.runtime
     implementation Libs.Square.OkHttp.loggingInterceptor
+
     //coil imageLoder
     implementation "io.coil-kt:coil:0.11.0"
 }

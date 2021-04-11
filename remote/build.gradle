@@ -44,6 +44,7 @@ dependencies {
     implementation Libs.Dagger.dagger
     kapt Libs.Dagger.compiler
 
+    implementation(platform(Libs.Square.OkHttp.okhttpBom))
     implementation Libs.Square.OkHttp.loggingInterceptor
 
 }

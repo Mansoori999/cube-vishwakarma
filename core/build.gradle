@@ -44,12 +44,11 @@ dependencies {
 
     implementation Libs.Google.material
 
-    implementation Libs.Firebase.firebaseCore
-    implementation Libs.Firebase.crashlytics
-    implementation Libs.Firebase.firebaseAnalytics
+    implementation platform(Libs.Firebase.firebaseBom)
+    implementation Libs.Firebase.analyticsKtx
+    implementation Libs.Firebase.crashlyticsKtx
 
     implementation Libs.AndroidX.Navigation.navigationFragmentKtx
-
     implementation Libs.AndroidX.Room.runtime
 
     implementation Libs.circularImageView
@@ -60,4 +59,7 @@ dependencies {
 
     implementation Libs.RxJava.rxAndroid
     implementation Libs.RxJava.rxJava
+
+    implementation(platform(Libs.Square.OkHttp.okhttpBom))
+    implementation Libs.Square.OkHttp.okHttp
 }

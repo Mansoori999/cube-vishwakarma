@@ -1,34 +1,33 @@
 {
   "project_info": {
-    "project_number": "863743733478",
-    "firebase_url": "https://truman-gig.firebaseio.com",
-    "project_id": "truman-gig",
-    "storage_bucket": "truman-gig.appspot.com"
+    "project_number": "616236549467",
+    "project_id": "cube-481e4",
+    "storage_bucket": "cube-481e4.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:863743733478:android:6ba5aa8f4a3d02e3601527",
+        "mobilesdk_app_id": "1:616236549467:android:b258f7ae0b57df2df8c67e",
         "android_client_info": {
-          "package_name": "com.vinners.trumanms"
+          "package_name": "com.vinners.cube_vishwakarma"
         }
       },
       "oauth_client": [
         {
-          "client_id": "863743733478-qamh56qci1lp87g2144aif25alu8jhq9.apps.googleusercontent.com",
+          "client_id": "616236549467-c2ego0p07oll3prutv2oo2483s4nlpek.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBXLEJUJ2fp0kilRawyDtiaP5753X-6Kjo"
+          "current_key": "AIzaSyD0ZOLWcJQ50TyijMRBL0-OyPoaf_k6u1k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "863743733478-qamh56qci1lp87g2144aif25alu8jhq9.apps.googleusercontent.com",
+              "client_id": "616236549467-c2ego0p07oll3prutv2oo2483s4nlpek.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -37,27 +36,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:863743733478:android:fd71a7e38456b262601527",
+        "mobilesdk_app_id": "1:616236549467:android:62cc43c615e5343ef8c67e",
         "android_client_info": {
-          "package_name": "com.vinners.trumanms.debug"
+          "package_name": "com.vinners.cube_vishwakarma.debug"
         }
       },
       "oauth_client": [
         {
-          "client_id": "863743733478-qamh56qci1lp87g2144aif25alu8jhq9.apps.googleusercontent.com",
+          "client_id": "616236549467-c2ego0p07oll3prutv2oo2483s4nlpek.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBXLEJUJ2fp0kilRawyDtiaP5753X-6Kjo"
+          "current_key": "AIzaSyD0ZOLWcJQ50TyijMRBL0-OyPoaf_k6u1k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "863743733478-qamh56qci1lp87g2144aif25alu8jhq9.apps.googleusercontent.com",
+              "client_id": "616236549467-c2ego0p07oll3prutv2oo2483s4nlpek.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -66,27 +65,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:863743733478:android:b10ea82e861f5eb3601527",
+        "mobilesdk_app_id": "1:616236549467:android:8317c99ab22f9d73f8c67e",
         "android_client_info": {
-          "package_name": "com.vinners.trumanms.development"
+          "package_name": "com.vinners.cube_vishwakarma.development"
         }
       },
       "oauth_client": [
         {
-          "client_id": "863743733478-qamh56qci1lp87g2144aif25alu8jhq9.apps.googleusercontent.com",
+          "client_id": "616236549467-c2ego0p07oll3prutv2oo2483s4nlpek.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBXLEJUJ2fp0kilRawyDtiaP5753X-6Kjo"
+          "current_key": "AIzaSyD0ZOLWcJQ50TyijMRBL0-OyPoaf_k6u1k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "863743733478-qamh56qci1lp87g2144aif25alu8jhq9.apps.googleusercontent.com",
+              "client_id": "616236549467-c2ego0p07oll3prutv2oo2483s4nlpek.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
@@ -95,27 +94,27 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:863743733478:android:a388d356efad1479601527",
+        "mobilesdk_app_id": "1:616236549467:android:da2e70ab6809bb7ff8c67e",
         "android_client_info": {
-          "package_name": "com.vinners.trumanms.development.debug"
+          "package_name": "com.vinners.cube_vishwakarma.development.debug"
         }
       },
       "oauth_client": [
         {
-          "client_id": "863743733478-qamh56qci1lp87g2144aif25alu8jhq9.apps.googleusercontent.com",
+          "client_id": "616236549467-c2ego0p07oll3prutv2oo2483s4nlpek.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBXLEJUJ2fp0kilRawyDtiaP5753X-6Kjo"
+          "current_key": "AIzaSyD0ZOLWcJQ50TyijMRBL0-OyPoaf_k6u1k"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "863743733478-qamh56qci1lp87g2144aif25alu8jhq9.apps.googleusercontent.com",
+              "client_id": "616236549467-c2ego0p07oll3prutv2oo2483s4nlpek.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

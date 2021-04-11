@@ -33,14 +33,15 @@ object Libs {
 
     object Firebase {
 
+        val firebaseBom = "com.google.firebase:firebase-bom:27.0.0"
         val firebaseCore = "com.google.firebase:firebase-core:17.4.1"
-        val firebaseAnalytics = "com.google.firebase:firebase-analytics:17.5.0"
-        val firebaseMessaging = "com.google.firebase:firebase-messaging:20.1.7"
-        val dynamicLinks = "com.google.firebase:firebase-dynamic-links:19.1.0"
-        val inAppMessaging = "com.google.firebase:firebase-inappmessaging-display:19.0.6"
-        val crashlytics = "com.google.firebase:firebase-crashlytics:17.2.1"
+        val analyticsKtx = "com.google.firebase:firebase-analytics-ktx"
+        val crashlyticsKtx = "com.google.firebase:firebase-crashlytics-ktx"
+        val firebaseMessagingKtx = "com.google.firebase:firebase-messaging-ktx"
+        val dynamicLinksKtx =   "com.google.firebase:firebase-dynamic-links-ktx"
+        val inAppMessagingKtx = "com.google.firebase:firebase-inappmessaging-display-ktx"
+
         val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.3.0"
-        val auth = "com.google.firebase:firebase-auth:19.3.1"
     }
 
     object Google {
@@ -171,7 +172,10 @@ object Libs {
     object Square {
 
         object OkHttp {
-            val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:4.7.2"
+            val okhttpBom = "com.squareup.okhttp3:okhttp-bom:4.9.1"
+
+            val okHttp = "com.squareup.okhttp3:okhttp"
+            val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor"
         }
 
         object Okio {
