@@ -1,0 +1,49 @@
+import mobile.buildsrc.Libs
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildToolVersion
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+        multiDexEnabled true
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation project(':base')
+    implementation project(path: ':data')
+
+    testImplementation Libs.junit
+
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.coreKtx
+
+    implementation Libs.Coroutines.core
+
+    implementation Libs.Square.Retrofit.retrofit
+    implementation Libs.Square.Retrofit.gsonConverter
+    implementation 'org.conscrypt:conscrypt-android:2.5.1'
+
+    implementation Libs.Vinners.logger
+
+    implementation Libs.Dagger.dagger
+    kapt Libs.Dagger.compiler
+
+    implementation Libs.Square.OkHttp.loggingInterceptor
+
+}

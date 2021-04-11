@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:background="@color/white"
+    app:cardElevation="7dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/companyIcon"
+            android:layout_width="30dp"
+            android:layout_height="60dp"/>
+        <TextView
+            android:id="@+id/company_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginRight="5dp"
+            android:layout_toEndOf="@id/companyIcon"
+            android:fontFamily="@font/lato_bold"
+            android:textColor="@color/clientHeading"
+            android:textSize="15sp"
+            tools:text="Job Id" />
+
+        <TextView
+            android:id="@+id/job_position_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/company_name_tv"
+            android:layout_alignStart="@id/company_name_tv"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/raleway_bold"
+            android:textColor="@color/jobSubHeading"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            tools:text="Job Description" />
+
+        <TextView
+            android:id="@+id/job_place"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/job_position_tv"
+            android:layout_alignStart="@id/company_name_tv"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/raleway_bold"
+            android:textColor="@color/cityText"
+            android:textSize="14sp"
+            tools:text="Gurgaon" />
+        <ImageView
+            android:id="@+id/closeBtn"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentRight="true"
+           android:src="@drawable/close"/>
+
+        <LinearLayout
+            android:id="@+id/iconLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@id/job_place"
+            android:layout_alignLeft="@id/company_name_tv"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toLeftOf="@id/jobStatusChngBtn">
+
+            <ImageView
+                android:id="@+id/motorBike"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/motor_bike" />
+
+            <ImageView
+                android:id="@+id/certificate"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/certificate" />
+
+            <ImageView
+                android:id="@+id/workFormHome"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/wfh" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/workStatusLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dailyNotesBtn"
+            android:layout_marginTop="5dp"
+            android:layout_alignParentLeft="true"
+            android:background="@drawable/work_status_background">
+            <TextView
+                android:id="@+id/workStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/raleway_bold"
+                android:text="Status"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/salary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dailyNotesBtn"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:lines="1"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="right"
+            android:textColor="@color/salaryText"
+            android:textSize="14sp"
+            tools:text="12000-25000 PM" />
+
+        <Button
+            android:id="@+id/jobStatusChngBtn"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/job_place"
+            android:layout_toLeftOf="@id/dailyNotesBtn"
+            android:layout_marginLeft="10dp"
+            android:text="Change Status"
+            android:textColor="@color/black"
+            android:backgroundTint="@color/white"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:textSize="8sp"
+            app:cornerRadius="5dp"/>
+        <Button
+            android:id="@+id/dailyNotesBtn"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/job_place"
+            android:layout_marginLeft="10dp"
+            android:text="Daily Notes"
+            android:textColor="@color/black"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:textSize="8sp"
+            android:backgroundTint="@color/actionBtnText"
+            app:cornerRadius="5dp" />
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        tools:context="com.vinners.trumanms.ui.home.HomeActivity">
+
+        <include
+            android:id="@+id/homeHeader"
+            layout="@layout/home_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/homeViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/homeBotttomNavigation"
+            android:layout_below="@id/homeHeader"
+            android:visibility="gone" />
+        <View
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/homeHeader"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:background="@color/text_color"/>
+
+        <FrameLayout
+            android:id="@+id/fragmentContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/homeBotttomNavigation"
+            android:layout_below="@id/separator"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/homeBotttomNavigation"
+            style="@style/Widget.MaterialComponents.BottomNavigationView.Colored"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="bottom"
+            android:background="@color/white"
+            app:itemTextColor="@drawable/bottom_nav_title_color_selector"
+            app:labelVisibilityMode="labeled"
+            app:menu="@menu/bottom_nav_items" />
+    </RelativeLayout>
+</layout>

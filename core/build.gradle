@@ -1,0 +1,63 @@
+import mobile.buildsrc.Libs
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildToolVersion
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+    }
+
+    buildFeatures{
+        dataBinding = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation project(':cache')
+    implementation project(':data')
+    implementation project(':remote')
+    implementation project(':base')
+
+    testImplementation(Libs.junit)
+
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.Lifecycle.extensions
+    implementation Libs.AndroidX.multiDex
+    // implementation Libs.AndroidX.Security.securityCrypto
+    implementation Libs.Vinners.logger
+    implementation Libs.timber
+    implementation Libs.Google.playLocation
+    implementation Libs.Google.playRefer
+    implementation Libs.Google.playCore
+    implementation Libs.Google.maps
+
+    implementation Libs.Google.material
+
+    implementation Libs.Firebase.firebaseCore
+    implementation Libs.Firebase.crashlytics
+    implementation Libs.Firebase.firebaseAnalytics
+
+    implementation Libs.AndroidX.Navigation.navigationFragmentKtx
+
+    implementation Libs.AndroidX.Room.runtime
+
+    implementation Libs.circularImageView
+    implementation Libs.zoomableImageView
+    implementation Libs.Dagger.dagger
+    kapt Libs.Dagger.compiler
+    implementation Libs.Google.smsRetriver
+
+    implementation Libs.RxJava.rxAndroid
+    implementation Libs.RxJava.rxJava
+}

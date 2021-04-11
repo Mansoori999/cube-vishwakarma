@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="10dp"
+    android:layout_marginLeft="5dp"
+    android:layout_marginRight="5dp"
+    android:background="@color/white"
+    app:cardElevation="7dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/companyIcon"
+            android:layout_width="40dp"
+            android:layout_height="60dp"
+            />
+
+        <ImageView
+            android:id="@+id/passJobIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/pass_the_job"
+            android:visibility="gone" />
+        <ImageView
+            android:id="@+id/shareJobIcon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:visibility="gone"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/share_purple"/>
+        <TextView
+            android:id="@+id/passJob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/passJobIcon"
+            android:layout_alignParentEnd="true"
+            android:fontFamily="@font/raleway_thin"
+            android:visibility="gone"
+            android:text="Pass"
+            android:textSize="10sp"/>
+        <TextView
+            android:id="@+id/shareJob"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/shareJobIcon"
+           android:layout_alignParentRight="true"
+            android:visibility="gone"
+            android:fontFamily="@font/raleway_thin"
+            android:text="Share"
+            android:textSize="10sp"/>
+        <TextView
+            android:id="@+id/companyHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@id/companyIcon"
+            android:layout_toLeftOf="@id/passJobIcon"
+            android:fontFamily="@font/raleway_bold"
+            android:text="Microsoft"
+            android:textColor="@color/clientHeading"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/jobTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/companyHeading"
+            android:layout_alignLeft="@id/companyHeading"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/raleway_bold"
+            android:text="Ui/Ux developer"
+            android:textSize="16sp"
+            android:textColor="@color/jobSubHeading"
+            android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/companyLoca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jobTitle"
+            android:layout_alignLeft="@id/companyHeading"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/raleway_bold"
+            android:text="Delhi ,India"
+            android:textColor="@color/cityText"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/salary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/companyLoca"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="right"
+            android:layout_toRightOf="@id/iconLayout"
+            android:textColor="@color/salaryText"
+            android:textSize="14sp"
+            tools:text="12000-25000 PM" />
+
+        <LinearLayout
+            android:id="@+id/iconLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@id/companyLoca"
+            android:layout_alignLeft="@id/companyHeading"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/motorBike"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/motor_bike" />
+
+            <ImageView
+                android:id="@+id/certificate"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/certificate" />
+
+            <ImageView
+                android:id="@+id/workFormHome"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/wfh" />
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+           android:id="@+id/acceptBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/companyLoca"
+            android:layout_marginLeft="10dp"
+            android:layout_alignParentRight="true"
+            android:text="Accept and get trained"
+            android:backgroundTint="@color/actionBtnText"
+            android:textColor="@color/black"
+            android:visibility="gone"
+            android:textSize="10sp"/>
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

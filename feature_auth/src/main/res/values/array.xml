@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="firstNamePref">
+        <item>Mr.</item>
+        <item>Ms.</item>
+    </string-array>
+    <string-array name="education">
+        <item>Education</item>
+        <item>No Schooling</item>
+        <item>5th Pass</item>
+        <item>8th Pass</item>
+        <item>10th Pass</item>
+        <item>12th Pass</item>
+        <item>Under-Graduate</item>
+        <item>Graduate</item>
+        <item>Post-Graduate</item>
+    </string-array>
+    <string-array name="language">
+        <item>Language</item>
+        <item>Hindi</item>
+        <item>English</item>
+        <item>Bengali</item>
+        <item>Marathi</item>
+        <item>Telugu</item>
+        <item>Tamil</item>
+        <item>Gujarati</item>
+        <item>Urdu</item>
+        <item>Kannada</item>
+        <item>Odia</item>
+        <item>Malayalam</item>
+        <item>Punjabi</item>
+    </string-array>
+    <string-array name="designation">
+        <item>Designation</item>
+        <item>Developer</item>
+        <item>Manager</item>
+        <item>Designer</item>
+    </string-array>
+    <string-array name="agencyType">
+        <item>Agency Type</item>
+        <item>LLP</item>
+        <item>PVT</item>
+        <item>1 Person Company</item>
+        <item>Proprietorship</item>
+        <item>Other</item>
+    </string-array>
+    <string-array name="experience">
+        <item>Experience</item>
+        <item>0-6 Months</item>
+        <item>6-12 Months</item>
+        <item>1 Year</item>
+        <item>2 Years</item>
+        <item>3 Years</item>
+        <item>4 Years</item>
+        <item>5 Years</item>
+        <item>5-10 Years</item>
+        <item>Above 10 Years</item>
+
+    </string-array>
+    <string-array name="bank">
+        <item>Select Bank</item>
+        <item>Sbi</item>
+        <item>CBI</item>
+        <item>Pnb</item>
+        <item>Canara</item>
+
+    </string-array>
+    <string-array name="city">
+        <item>City</item>
+        <item>Delhi</item>
+        <item>Faridabad</item>
+        <item>Hisar</item>
+    </string-array>
+    <string-array name="cityr">
+        <item>City</item>
+    </string-array>
+    <string-array name="pincode">
+        <item>Pincode</item>
+    </string-array>
+    <string-array name="teamSize">
+        <item>Team Size</item>
+        <item>1-5</item>
+        <item>6-10</item>
+        <item>11-20</item>
+        <item>20-50</item>
+    </string-array>
+    <string-array name="yearOfBusiness">
+        <item>Year In Business</item>
+        <item>0-6 Months</item>
+        <item>6-12 Months</item>
+        <item>1 Year</item>
+        <item>2 Years</item>
+        <item>3 Years</item>
+        <item>4 Years</item>
+        <item>5 Years</item>
+        <item>5-10 Years</item>
+        <item>Above 10 Years</item>
+    </string-array>
+
+</resources>

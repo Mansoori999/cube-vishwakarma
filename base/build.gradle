@@ -1,0 +1,11 @@
+import mobile.buildsrc.Libs
+
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+dependencies {
+    implementation Libs.Kotlin.stdlib
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

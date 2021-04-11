@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="5dp"
+    android:background="@color/white"
+    app:cardElevation="7dp">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/companyIcon"
+            android:layout_width="40dp"
+            android:layout_height="60dp" />
+        <TextView
+            android:id="@+id/jobId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toEndOf="@id/companyIcon"
+            android:textColor="@color/job_id"
+            android:textSize="15sp"
+            tools:text="JobId:12345"/>
+        <TextView
+            android:id="@+id/companyHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jobId"
+            android:layout_alignStart="@id/jobId"
+            android:fontFamily="@font/raleway_bold"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            tools:text="Microsoft"/>
+        <TextView
+            android:id="@+id/jobDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/companyHeading"
+            android:layout_alignStart="@id/jobId"
+            android:fontFamily="@font/raleway"
+            android:textColor="@color/job_location"
+            tools:text="job located in delhi,job located in delhi,job located in delhi,job located in delhi,"/>
+        <ImageView
+            android:id="@+id/companyLocaIcon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_below="@id/jobDescription"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/location"/>
+
+        <TextView
+            android:id="@+id/jobLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jobDescription"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toLeftOf="@id/policy_view_action"
+            android:layout_toRightOf="@id/companyLocaIcon"
+            android:fontFamily="@font/lato"
+            android:gravity="left"
+            android:textColor="@color/job_location"
+            android:textSize="14sp"
+            tools:text="delhi,India"
+            />
+        <ImageView
+            android:id="@+id/workDurationIcon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_below="@id/jobLocation"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/time_duration"/>
+
+        <TextView
+            android:id="@+id/workDuration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jobLocation"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toLeftOf="@id/policy_view_action"
+            android:layout_toRightOf="@id/workDurationIcon"
+            android:fontFamily="@font/lato"
+            android:gravity="left"
+            android:textColor="@color/job_location"
+            android:textSize="14sp"
+            tools:text="work duration: 60 days"/>
+        <ImageView
+            android:id="@+id/dateOfIssueIcon"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:layout_below="@id/workDuration"
+            android:layout_marginTop="6dp"
+            android:src="@drawable/date_of_issue"/>
+
+        <TextView
+            android:id="@+id/dateOfIssue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/workDuration"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_toLeftOf="@id/policy_view_action"
+            android:layout_toRightOf="@id/dateOfIssueIcon"
+            android:fontFamily="@font/lato"
+            android:gravity="left"
+            android:textColor="@color/job_location"
+            android:textSize="14sp"
+            tools:text="20 Aug 2020"
+            />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/policy_view_action"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jobDescription"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/save_for_job_box"
+            android:text="View "
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/policy_download_action"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/policy_view_action"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="5dp"
+            android:backgroundTint="@color/button_back"
+            android:text="Download"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

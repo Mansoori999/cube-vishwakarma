@@ -1,0 +1,54 @@
+import mobile.buildsrc.Libs
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildToolVersion
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+        multiDexEnabled true
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+
+dependencies {
+    implementation project(':base')
+
+    testImplementation Libs.junit
+    testImplementation Libs.mockitoInline
+    testImplementation Libs.mockitoKotlin
+    testImplementation Libs.Coroutines.test
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.Vinners.logger
+    implementation Libs.Firebase.auth
+    implementation Libs.Google.auth
+
+    implementation Libs.Coroutines.core
+
+    implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation Libs.Dagger.dagger
+    kapt Libs.Dagger.compiler
+
+    implementation Libs.RxJava.rxAndroid
+    implementation Libs.RxJava.rxJava
+}

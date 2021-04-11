@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    app:cardElevation="8dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/category"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_bold"
+            android:text="Category"
+            android:textColor="@color/black" />
+        <TextView
+            android:id="@+id/queEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/category"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/raleway"
+            android:text="Category"
+            android:textColor="@color/que_ans_cplor"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/ansEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/queEt"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/raleway"
+            android:textColor="#808080"
+            android:textSize="16sp"
+            tools:text="ans" />
+        <TextView
+            android:id="@+id/dateEt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="5dp"
+            android:fontFamily="@font/lato"
+            tools:text="20 aug 2020"/>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/queImg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+           android:layout_below="@id/dateEt"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/image"/>
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

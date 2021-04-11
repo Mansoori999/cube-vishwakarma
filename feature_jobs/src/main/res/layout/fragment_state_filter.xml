@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+        <TextView
+            android:id="@+id/cityTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/raleway_bold"
+            android:text="Select State"
+            android:textSize="16sp"/>
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/stateSearchView"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_below="@id/cityTitle"
+            android:layout_marginTop="10dp"
+            android:background="@color/searchBar"
+            android:visibility="gone"
+            app:defaultQueryHint="Search"
+            app:iconifiedByDefault="false"
+            app:searchIcon="@drawable/search"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/stateRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/okBtn"
+            android:layout_below="@id/stateSearchView"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        <TextView
+            android:id="@+id/okBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:padding="10dp"
+            android:text="Ok"
+            android:textColor="@color/black"/>
+    </RelativeLayout>
+
+</layout>

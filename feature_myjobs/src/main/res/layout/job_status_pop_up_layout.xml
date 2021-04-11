@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/withdraw_reason_dialog_background"
+    android:padding="10dp">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/raleway_bold"
+        android:text="Status"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
+    <RelativeLayout
+        android:id="@+id/statusSpinnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/title"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/help_spinner_background">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/statusSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:entries="@array/inHandJobStatus"
+            android:spinnerMode="dropdown"
+            android:theme="@style/MatchSpinnerTheme" />
+    </RelativeLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitStatusBtn"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/statusSpinnerLayout"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/button_back"
+        android:text="Submit"
+        android:textAllCaps="false"
+        android:textColor="@color/white"/>
+
+</RelativeLayout>

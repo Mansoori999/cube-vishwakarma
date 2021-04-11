@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="250dp"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/queryTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:fontFamily="@font/raleway_black"
+        android:text="Enter Query"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
+
+    <RelativeLayout
+        android:id="@+id/categorySpinnerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_below="@id/queryTitle"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/help_spinner_background">
+
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:id="@+id/categorySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:spinnerMode="dropdown"
+            android:theme="@style/MatchSpinnerTheme" />
+    </RelativeLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/queryLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/categorySpinnerLayout"
+        android:layout_marginTop="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/queryEt"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:gravity="start"
+            android:hint="Question*"
+            android:imeOptions="actionNext" />
+    </com.google.android.material.textfield.TextInputLayout>
+    <RelativeLayout
+        android:id="@+id/queryImageLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/queryLayout">
+
+        <TextView
+            android:id="@+id/queryImageTitle"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Image" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/queryContainer"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_below="@id/queryImageTitle"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/image" />
+
+        <ImageView
+            android:id="@+id/clickPhoto"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_alignRight="@+id/queryContainer"
+            android:layout_alignBottom="@+id/queryContainer"
+            android:src="@drawable/ic_camera_round" />
+    </RelativeLayout>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/querySubmitBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/queryImageLayout"
+        android:layout_marginTop="10dp"
+        android:backgroundTint="@color/button_back"
+        android:inputType="textCapWords"
+        android:text="Submit"
+        android:textColor="@color/white" />
+</RelativeLayout>

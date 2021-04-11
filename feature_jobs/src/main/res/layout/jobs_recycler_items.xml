@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="5dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="5dp"
+    android:background="@color/white"
+    app:cardElevation="7dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/companyIcon"
+            android:layout_width="40dp"
+            android:layout_height="60dp" />
+        <ImageView
+            android:id="@+id/isAppliedTick"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_below="@id/companyIcon"
+            android:src="@drawable/ic_success"/>
+        <TextView
+            android:id="@+id/companyHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/dateOfOpening"
+            android:layout_toRightOf="@id/companyIcon"
+            android:fontFamily="@font/raleway_bold"
+            android:textColor="@color/clientHeading"
+            android:textSize="15sp"
+            tools:text="Microsoft" />
+
+        <TextView
+            android:id="@+id/jobTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/companyHeading"
+            android:layout_alignLeft="@id/companyHeading"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/raleway_bold"
+            android:text="Ui/Ux developer"
+            android:textColor="@color/jobSubHeading"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/companyLoca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/jobTitle"
+            android:layout_alignLeft="@id/companyHeading"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/raleway_bold"
+            android:text="Delhi ,India"
+            android:textColor="@color/cityText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/dateOfOpening"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:fontFamily="@font/lato_bold"
+            android:text="4 days ago"
+            android:textColor="@color/salaryText" />
+
+        <TextView
+            android:id="@+id/salary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/companyLoca"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/lato_bold"
+            android:gravity="right"
+            android:layout_toRightOf="@id/iconLayout"
+            android:textColor="@color/salaryText"
+            android:textSize="14sp"
+            tools:text="12000-25000 PM" />
+
+        <LinearLayout
+            android:id="@+id/iconLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_below="@id/companyLoca"
+            android:layout_alignLeft="@id/companyHeading"
+            android:layout_marginTop="5dp">
+
+            <ImageView
+                android:id="@+id/motorBike"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/motor_bike" />
+
+            <ImageView
+                android:id="@+id/certificate"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/certificate" />
+
+            <ImageView
+                android:id="@+id/workFormHome"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="5dp"
+                android:src="@drawable/wfh" />
+        </LinearLayout>
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

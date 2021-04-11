@@ -1,0 +1,45 @@
+import mobile.buildsrc.GradlePlugins
+import mobile.buildsrc.Libs
+
+buildscript {
+
+    ext {
+        kotlin_version = '1.4.0'
+    }
+    ext.buildConfig = [
+            'compileSdk': 29,
+            'minSdk'    : 19,
+            'targetSdk' : 29,
+            'buildToolVersion' : '29.0.2'
+    ]
+
+    repositories {
+        google()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "com.android.tools.build:gradle:4.0.1"
+        classpath Libs.Kotlin.gradlePlugin
+        classpath Libs.Firebase.crashlyticsGradlePlugin
+        classpath "com.google.gms:google-services:4.3.3"
+    }
+}
+
+plugins {
+    id 'com.github.ben-manes.versions' version "0.28.0"
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://maven.google.com/' }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}

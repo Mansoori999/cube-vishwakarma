@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.12"
+        android:src="@drawable/truman_logo" />
+
+    <ImageView
+        android:id="@+id/slideImg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_below="@id/logo"
+        android:layout_weight="0.8"
+        android:src="@drawable/info_slide_img_3" />
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_below="@id/slideImg"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.08"
+        android:textColor="@color/intro_heading"
+        tools:text="Earn Great Money locally" />
+
+    <TextView
+        android:id="@+id/descprition"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_below="@id/title"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.15"
+        android:gravity="center"
+        android:textColor="@color/intro_small_text"
+        tools:text="Sign up to accept earning opportunities in your neighbourhood" />
+
+</LinearLayout>

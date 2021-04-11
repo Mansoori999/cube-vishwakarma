@@ -1,0 +1,149 @@
+default_platform(:android)
+
+
+platform :android do
+  before_all do |lane, options|
+
+    @flavour = "development"
+    if not options.empty?
+      @flavour = options[:production] ? "production" : "development"
+    end
+    puts "Current Flavour #{@flavour}"
+
+    @build_type = "Debug"
+    if not options.empty?
+      @build_type = options[:release] ? "Release" : "Debug"
+    end
+
+    puts "Current Build Type #{@build_type}"
+
+  end
+
+  desc "Assemble Build"
+  lane :assemble_build do |options|
+    properties = {
+      "android.injected.signing.store.file" => "key-store.jks",
+      "android.injected.signing.store.password" => ENV['KEY_PASSWORD'],
+      "android.injected.signing.key.alias" => ENV['KEY_ALIAS'],
+      "android.injected.signing.key.password" => ENV['STORE_PASSWORD'],
+    } if @build_type == "Release" && @flavour == "production"
+
+    properties = {
+          "android.injected.signing.store.file" => "/home/circleci/src/codeSigning/app-debug.jks",
+          "android.injected.signing.store.password" => "android",
+          "android.injected.signing.key.alias" => "CommonDevKeyStore",
+          "android.injected.signing.key.password" => "android",
+        } if @build_type == "Release" && @flavour == "development"
+
+    puts "Assembling Build For #{@flavour} #{@build_type}"
+    gradle(task: "assemble",
+           flavor: @flavour,
+           build_type: @build_type,
+           properties: properties)
+  end
+
+  desc "Assemble Test Application"
+  lane :assemble_test_application do |options|
+    gradle(task: "assemble",
+           flavor: @flavour,
+           build_type: "#{@build_type}AndroidTest")
+  end
+
+  desc "Assemble Build and Test Application"
+  lane :assemble do |options|
+    assemble_build options
+    assemble_test_application options
+  end
+
+  desc "Run unit tests"
+  lane :unit_tests do |options|
+
+    puts "Current Test For #{@flavour} #{@build_type}"
+    gradle(task: "test",
+           flavor: @flavour,
+           build_type: @build_type)
+  end
+
+  desc "Run instrumentation tests"
+  lane :instrumentation_tests do
+    automated_test_emulator_run(
+      AVD_setup_path: "fastlane/AVD_setup.json",
+      AVD_recreate_new: false,
+      AVD_clean_after: false,
+      gradle_task: "connectedDebugAndroidTest")
+  end
+
+  desc "Run instrumentation tests in Firebase Test Lab"
+  lane :instrumentation_tests_testlab do
+    assemble
+    run_tests_firebase_testlab(
+      project_id: "project-id",
+      devices: [
+        {
+          model: "Nexus6P",
+          version: "27"
+        }
+      ],
+      delete_firebase_files: true)
+  end
+
+  desc "Submit a new Beta Build to Firebase Distribution"
+    lane :deploy_to_firebase_distribution do |options|
+      assemble_build
+      puts "Deploying build to #{options[:group]}"
+
+      # Distributing Created APK to Firebase App Distribution
+      firebase_app_distribution(
+                             app: "1:184047087204:android:99acc180a583dcb5fdf971",
+                             groups: "#{options[:group]}",
+                             release_notes: "/firebase/release-notes.txt",
+                             firebase_cli_path: “/usr/local/bin/firebase”
+                         )
+
+      notify_slack_app_release_success
+  end
+
+  desc "Notifies of new Release on Slack"
+  lane :notify_slack_app_release_success do
+
+    @version = sh("jq -r '.elements[0].versionName' /home/circleci/src/app/build/outputs/apk/development/release/output-metadata.json")
+    puts "Version: #{@version}"
+
+
+    # Notifying Testers Via Slack
+    slack(
+              message: "🎉 Truman Ms Development New App Released",
+              success: true,
+              payload: {
+                  "Build Date" => Time.new.to_s,
+                  "Built by" => "Fastlane",
+              },
+              channel: "#app-release-announcements",
+              default_payloads: [:git_author, :last_git_commit_message],
+              attachment_properties: {
+                thumb_url: "https://raw.githubusercontent.com/vinnersafterwork/truman-ms-android/master/app/src/development/res/mipmap-xxhdpi/ic_launcher_round.png?token=ACXVULAQWGZAHWUOXUP3B6C62PD2U",
+                  fields: [{
+                    title: "New Version",
+                    value: @version,
+                    short: true
+                  }]
+                }
+          )
+  end
+
+  desc "Notifies of ne on Slack"
+    lane :notify_slack_app_release_failure do
+      slack(
+                message: "Truman Ms Development New App Release Failed",
+                success: false,
+                channel: "@Himanshu"
+            )
+    end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy_to_play_store do
+    @build_type = "Release"
+    assemble_build
+    upload_to_play_store
+  end
+end

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+   android:layout_marginTop="8dp"
+    app:cardElevation="8dp"
+    tools:context=".ui.documents.DocumentsActivity">
+
+    <RelativeLayout
+        android:id="@+id/catalogue_row"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/catalogue_row_image"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="5dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_documents" />
+        <TextView
+            android:id="@+id/policy_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_toRightOf="@id/catalogue_row_image"
+            android:textColor="@color/jobSubHeading"
+            android:textSize="15sp"
+            tools:text="title"/>
+        <TextView
+            android:id="@+id/policy_category"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/policy_title"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@id/catalogue_row_image"
+            android:fontFamily="@font/raleway_bold"
+            android:text="Catalogue Name"
+            android:textColor="@android:color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/catalogue_row_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/policy_category"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="70dp"
+            android:layout_toRightOf="@id/catalogue_row_image"
+            android:text="Description text"
+            android:visibility="gone" />
+
+
+        <ProgressBar
+            android:id="@+id/policy_progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/catalogue_row_description"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="70dp"
+            android:layout_toRightOf="@id/catalogue_row_image"
+            android:indeterminate="true"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/policy_download_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/policy_progress_bar"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="70dp"
+            android:layout_toRightOf="@id/catalogue_row_image"
+            android:indeterminate="true"
+            android:text="Not Downloaded"
+            android:visibility="visible" />
+
+        <!--<ImageView
+            android:id="@+id/catalogue_row_download_action"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="5dp"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:background="?android:attr/selectableItemBackground"
+            android:src="@drawable/ic_download" />-->
+
+        <View
+            android:id="@+id/dummy_line"
+            android:layout_width="0.5dp"
+            android:layout_height="10dp"
+            android:layout_below="@id/policy_download_status"
+            android:layout_centerHorizontal="true" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/policy_view_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/policy_download_status"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@id/dummy_line"
+            android:backgroundTint="@color/save_for_job_box"
+            android:text="View Online"
+            android:textAllCaps="false"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/policy_download_action"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/policy_download_status"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="20dp"
+            android:layout_toRightOf="@id/dummy_line"
+            android:backgroundTint="@color/button_back"
+            android:text="Download"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="12sp" />
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

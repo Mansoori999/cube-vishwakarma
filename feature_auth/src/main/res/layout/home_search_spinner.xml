@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <androidx.appcompat.widget.SearchView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="2dp"
+                android:layout_weight="1"
+                app:iconifiedByDefault="false"
+                android:background="#f7f8fd"
+                app:searchIcon="@drawable/search"
+
+                app:defaultQueryHint="Search Job by keywords" />
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="2dp"
+                android:layout_marginRight="2dp"
+                android:layout_marginBottom="2dp"
+               android:layout_weight="0.6"
+                app:cardCornerRadius="5dp"
+                app:cardElevation="10dp">
+            <RelativeLayout
+                android:id="@+id/citySpinnerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+                <ImageView
+                    android:id="@+id/spinnerIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/ic_location" />
+
+                <androidx.appcompat.widget.AppCompatSpinner
+                    android:id="@+id/citySpinner"
+                    style="@style/Widget.AppCompat.DropDownItem.Spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                   android:layout_marginLeft="8dp"
+                    android:layout_toRightOf="@id/spinnerIcon"
+                    android:entries="@array/city"
+                    android:gravity="center"
+                    android:spinnerMode="dialog" />
+            </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+</layout>
+

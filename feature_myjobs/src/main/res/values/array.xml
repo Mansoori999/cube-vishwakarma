@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="inHandJobItems">
+        <item>No Training</item>
+        <item>Task not doable</item>
+        <item>Earning Opportunity less</item>
+        <item>Others</item>
+    </string-array>
+    <string-array name="inHandJobStatus">
+        <item>Retraining Required</item>
+        <item>Task in progress</item>
+        <item>Hold</item>
+        <item>Finish</item>
+    </string-array>
+</resources>

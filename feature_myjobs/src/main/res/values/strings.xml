@@ -1,0 +1,13 @@
+<resources>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="my_offers">My Offers</string>
+    <string name="saved">Saved</string>
+    <string name="applied">Applied</string>
+    <string name="in_hand">In-Hand</string>
+    <string name="offered_jobs">Offered Tasks</string>
+    <string name="my_jobs">My Tasks</string>
+    <string name="withdraw_napplication">Withdraw\nApplication</string>
+    <string name="share_job">Share Share</string>
+    <string name="apply_the_job">Apply the Task</string>
+</resources>

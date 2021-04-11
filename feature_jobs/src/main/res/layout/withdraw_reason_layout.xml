@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/withdraw_reason_dialog_background"
+    android:padding="10dp">
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Withdraw Job"
+        android:textColor="@color/black"
+        android:textSize="18sp"/>
+    <com.google.android.material.textfield.TextInputLayout
+       android:id="@+id/reasonContainer"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:errorEnabled="true"
+        android:layout_below="@id/title">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/reasonEt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="Reason"/>
+    </com.google.android.material.textfield.TextInputLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/submitJobBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/reasonContainer"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:text="Submit"
+        android:textAllCaps="false"/>
+
+</RelativeLayout>

@@ -1,0 +1,211 @@
+import mobile.buildsrc.Libs
+
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'com.google.firebase.crashlytics'
+apply plugin: 'com.google.gms.google-services'
+
+def getGitHash = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'rev-parse', '--short', 'HEAD'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildToolVersion
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField "String", "GIT_HASH", "\"${getGitHash()}\""
+    }
+
+    androidExtensions {
+        experimental = true
+        features = ["parcelize"]
+    }
+
+    buildFeatures {
+        dataBinding = true
+    }
+
+    signingConfigs {
+        debug {
+            storeFile rootProject.file("codeSigning/app-debug.jks")
+            storePassword "android"
+            keyAlias "CommonDevKeyStore"
+            keyPassword "android"
+        }
+
+        //Release Signing On Fastlane
+    }
+
+    buildTypes {
+
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-Debug'
+            minifyEnabled false
+
+            //Gradle Speed Hacks
+            crunchPngs false
+            manifestPlaceholders = [enableFirebaseMessaging: "true",
+                                    enableFirebaseAnalytics: "false",
+                                    enableCrashReporting   : "false"]
+            splits.abi.enable = false
+            splits.density.enable = false
+        }
+
+        release {
+            minifyEnabled false
+            manifestPlaceholders = [enableFirebaseMessaging: "true",
+                                    enableFirebaseAnalytics: "true",
+                                    enableCrashReporting   : "true"]
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    packagingOptions {
+        exclude("META-INF/*.kotlin_module")
+    }
+
+    flavorDimensions "default"
+    productFlavors {
+
+        /**
+         * Google Play Store Build
+         */
+        production {
+            dimension "default"
+            applicationId "com.vinners.trumanms"
+            resValue "string", "app_name", "Truman Gig"
+            buildConfigField "String", "API_URL", '"https://admin.truman.ooo:5052"'
+            versionCode 13
+            versionName "1.1.0"
+        }
+        /**
+         * development Build
+         */
+        development {
+            dimension "default"
+            applicationId "com.vinners.trumanms.development"
+            resValue "string", "app_name", "Truman Gig Dev"
+            buildConfigField "String", "API_URL", '"http://trumanmsdev.vinnersolutions.com:5052"'
+            versionCode 3
+            versionName "1.0.3-beta"
+        }
+    }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+}
+
+dependencies {
+    implementation project(':base')
+    implementation project(':core')
+    implementation project(':feature_auth')
+    implementation project(':cache')
+    implementation project(':data')
+    implementation project(':remote')
+    implementation project(path: ':feature_my_money')
+    implementation project(path: ':feature_myjobs')
+    implementation project(path: ':feature_help')
+    implementation project(path: ':feature_jobs')
+    implementation project(path: ':feature_profile')
+    implementation project(path: ':feature_notification')
+
+    testImplementation Libs.junit
+    testImplementation Libs.mockitoInline
+    testImplementation Libs.mockitoKotlin
+    testImplementation Libs.AndroidX.archCoreTesting
+
+    androidTestImplementation Libs.AndroidX.Test.core
+    androidTestImplementation Libs.AndroidX.Test.rules
+    androidTestImplementation Libs.AndroidX.Test.runner
+    androidTestImplementation Libs.AndroidX.Test.espressoCore
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+
+    // debugImplementation Libs.leakCanary2
+    debugImplementation Libs.Facebook.stetho
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.0.10'
+
+    implementation Libs.Vinners.logger
+    implementation Libs.timber
+
+    implementation Libs.Google.playRefer
+    implementation Libs.Google.playCore
+    implementation Libs.Google.smsRetriver
+    implementation Libs.Google.playLocation
+    implementation Libs.Google.maps
+
+    implementation Libs.circularImageView
+    implementation Libs.AirBnb.lottie
+    implementation Libs.zoomableImageView
+    implementation Libs.appIntro
+
+    implementation Libs.cameraIntegrator
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.Lifecycle.extensions
+    implementation Libs.AndroidX.multiDex
+
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.vectorDrawables
+    implementation Libs.AndroidX.constraintlayout
+
+    implementation Libs.AndroidX.Navigation.navigationUiKtx
+    implementation Libs.AndroidX.Navigation.navigationFragmentKtx
+
+    implementation Libs.Coroutines.core
+    implementation Libs.Coroutines.rx2
+    implementation Libs.Coroutines.android
+    implementation Libs.AndroidX.Lifecycle.lifeCyleViewModel
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0"
+    implementation 'androidx.fragment:fragment-ktx:1.2.5'
+    implementation "androidx.activity:activity-ktx:1.1.0"
+
+    implementation Libs.Google.material
+    implementation Libs.Google.auth
+
+    implementation Libs.Firebase.firebaseCore
+    implementation Libs.Firebase.firebaseAnalytics
+    implementation Libs.Firebase.crashlytics
+    implementation Libs.Firebase.inAppMessaging
+    implementation Libs.Firebase.firebaseMessaging
+    implementation Libs.Firebase.dynamicLinks
+
+    kapt Libs.Dagger.androidProcessor
+    kapt Libs.Dagger.compiler
+    implementation Libs.Dagger.androidSupport
+    implementation Libs.Dagger.dagger
+
+    //These two are here just to make dagger 2 happy
+    implementation Libs.AndroidX.Room.runtime
+    implementation Libs.Square.OkHttp.loggingInterceptor
+    //coil imageLoder
+    implementation "io.coil-kt:coil:0.11.0"
+}

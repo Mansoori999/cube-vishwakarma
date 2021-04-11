@@ -1,0 +1,93 @@
+import mobile.buildsrc.Libs
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion buildConfig.compileSdk
+    buildToolsVersion buildConfig.buildToolVersion
+
+    defaultConfig {
+        minSdkVersion buildConfig.minSdk
+        targetSdkVersion buildConfig.targetSdk
+
+        consumerProguardFiles 'consumer-rules.pro'
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    androidExtensions {
+        experimental = true
+        features = ["parcelize"]
+    }
+
+    buildFeatures{
+        dataBinding = true
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation project(':base')
+    implementation project(path: ':data')
+    implementation project(path: ':core')
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+
+    testImplementation Libs.junit
+    testImplementation Libs.mockitoInline
+    testImplementation Libs.mockitoKotlin
+    testImplementation Libs.AndroidX.archCoreTesting
+    testImplementation Libs.Coroutines.test
+
+    androidTestImplementation Libs.AndroidX.Test.core
+    androidTestImplementation Libs.AndroidX.Test.rules
+    androidTestImplementation Libs.AndroidX.Test.runner
+    androidTestImplementation Libs.AndroidX.Test.espressoCore
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+
+    implementation Libs.AirBnb.lottie
+    implementation Libs.progressButton
+
+    implementation Libs.cameraIntegrator
+    implementation Libs.Kotlin.stdlib
+    implementation Libs.AndroidX.appcompat
+    implementation Libs.AndroidX.coreKtx
+    implementation Libs.AndroidX.Lifecycle.lifeCyleViewModel
+    implementation Libs.AndroidX.Lifecycle.lifeCyleLiveData
+
+    implementation Libs.AndroidX.Navigation.navigationUiKtx
+    implementation Libs.AndroidX.Navigation.navigationFragmentKtx
+
+    implementation Libs.Vinners.logger
+
+    implementation Libs.Dagger.dagger
+    implementation Libs.Dagger.androidSupport
+    kapt Libs.Dagger.compiler
+    kapt Libs.Dagger.androidProcessor
+
+    implementation Libs.Firebase.firebaseCore
+    implementation Libs.Firebase.firebaseAnalytics
+    implementation Libs.Firebase.firebaseMessaging
+    implementation Libs.Firebase.dynamicLinks
+
+    implementation Libs.Google.material
+    implementation Libs.circularImageView
+
+    implementation Libs.RxJava.rxAndroid
+    implementation Libs.RxJava.rxJava
+
+    implementation Libs.Google.playLocation
+    implementation Libs.Google.smsRetriver
+    implementation Libs.Google.auth
+    implementation Libs.Glide.glide
+    implementation 'io.apptik.widget:multiselectspinner:1.0.12'
+
+
+    implementation "io.coil-kt:coil:0.11.0"
+}

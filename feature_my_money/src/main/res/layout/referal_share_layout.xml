@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/logoIcon"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:src="@drawable/msg_image"/>
+
+    <TextView
+        android:id="@+id/shareText"
+        style="@style/TextAppearance.MaterialComponents.Headline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/logoIcon"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        tools:text="name" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/shareImageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_below="@id/shareText"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:visibility="gone" />
+    <ImageView
+        android:id="@+id/liveInterIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/shareImageView"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="20dp"
+        android:src="@drawable/refe_tick"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/liveInter"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shareImageView"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/liveInterIcon"
+        android:text="Live Interviews"
+        android:visibility="gone" />
+    <ImageView
+        android:id="@+id/locationIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/liveInter"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/refe_tick"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/location"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/liveInter"
+        android:layout_alignLeft="@id/liveInter"
+        android:layout_marginTop="5dp"
+        android:text="Interviews across PAN India"
+        android:visibility="gone" />
+
+    <ImageView
+        android:id="@+id/freeCostIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/location"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/refe_tick"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/freeCost"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/location"
+        android:layout_alignLeft="@id/liveInter"
+        android:layout_marginTop="5dp"
+        android:text="Free of cost"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/rewardIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_below="@id/freeCost"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/refe_tick"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/reward"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/freeCost"
+        android:layout_alignLeft="@id/liveInter"
+        android:layout_marginTop="5dp"
+        android:text="Rewards"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/googlePlayStoreIcon"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_below="@id/freeCost"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:src="@drawable/google_play_store"
+        android:visibility="gone"/>
+
+</LinearLayout>

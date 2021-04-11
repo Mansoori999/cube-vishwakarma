@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        android:id="@+id/registerAgencyWorkLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white">
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical"
+            android:padding="13dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp">
+
+                <ImageView
+                    android:id="@+id/agencyWorkBackBtn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:text="Registration"
+                    android:textColor="@color/button_back"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/progress_container_background">
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="100"
+                    android:progress="75"
+                    android:progressDrawable="@drawable/progress_bar_background"
+                    android:requiresFadingEdge="horizontal" />
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Education/Work"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/card_background"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+                    <EditText
+                        android:id="@+id/teamSizeEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/edittext_background"
+                        android:hint="Team Size"
+                        android:imeOptions="actionGo"
+                        android:inputType="number"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/intro_skip" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/spinner_background">
+
+                        <androidx.appcompat.widget.AppCompatSpinner
+                            android:id="@+id/yearInBusinessSpinner"
+                            android:spinnerMode="dropdown"
+                            android:layout_width="match_parent"
+                            android:layout_height="60dp"
+                            android:entries="@array/yearOfBusiness"
+                            android:theme="@style/MatchSpinnerTheme" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/languageSelectionLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/spinner_background">
+
+                        <TextView
+                            android:id="@+id/selectedLanguageEt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@id/selectStateIcon"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/raleway_medium"
+                            android:singleLine="true"
+                            android:text="Languages"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                        <ImageView
+                            android:id="@+id/selectStateIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="15dp"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_down_arrow_2"/>
+                    </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/workCatSelectionLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@drawable/spinner_background">
+
+                        <TextView
+                            android:id="@+id/selectedWorkCatEt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@id/selectWorkCatIcon"
+                            android:ellipsize="end"
+                            android:fontFamily="@font/raleway_medium"
+                            android:singleLine="true"
+                            android:text="Work Category"
+                            android:textColor="@color/black"
+                            android:textSize="16sp" />
+                        <ImageView
+                            android:id="@+id/selectWorkCatIcon"
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="15dp"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_down_arrow_2"/>
+                    </RelativeLayout>
+
+                    <EditText
+                        android:id="@+id/webPageEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:background="@drawable/edittext_background"
+                        android:hint="Website Page"
+                        android:layout_marginTop="10dp"
+                        android:imeOptions="actionGo"
+                        android:inputType="textCapWords"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/intro_skip" />
+
+                    <EditText
+                        android:id="@+id/facebookEt"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_marginTop="10dp"
+                        android:imeOptions="actionGo"
+                        android:inputType="text"
+                        android:background="@drawable/edittext_background"
+                        android:hint="Facebook Page"
+                        android:textColor="@color/black"
+                        android:textColorHint="@color/intro_skip" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:visibility="gone"
+                app:cardCornerRadius="4dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/card_background"
+                    android:orientation="vertical"
+
+                    android:padding="10dp">
+                    <TextView
+                        android:id="@+id/BusinessCardTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Business Card"
+                        android:textColor="@color/black"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="16sp"/>
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/businessCardPic"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
+                        android:layout_below="@id/BusinessCardTitle"
+                        android:background="#f4f4f4"/>
+                    <TextView
+                        android:id="@+id/clickImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Click Image"
+                        android:textColor="@color/black"
+                        android:layout_below="@id/BusinessCardTitle"
+                        android:textSize="14sp"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"/>
+                </RelativeLayout>
+            </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/agencyWorkContiBtn"
+                android:layout_width="200dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/button_back"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="CONTINUE"
+                android:textColor="@color/white"
+                app:cornerRadius="40dp" />
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</layout>
+
