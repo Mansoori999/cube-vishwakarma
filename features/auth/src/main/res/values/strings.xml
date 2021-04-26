@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">Login</string>
+    <color name="daggerB">#1E90FF</color>
+
+    <style name="Theme.AppCompat.DayNight.DarkActionBar">
+        <item name="colorPrimary">#1E90FF</item>
+    </style>
+</resources>

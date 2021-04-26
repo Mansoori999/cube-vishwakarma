@@ -1,6 +1,7 @@
 package com.vinners.cube_vishwakarma.feature_auth.ui
 
 import android.content.pm.PackageManager
+import android.widget.Button
 import androidx.activity.viewModels
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
 import com.vinners.cube_vishwakarma.feature_auth.R
@@ -15,6 +16,7 @@ class AuthActivity : BaseActivity<ActivityAuthBinding, AuthViewModel>(R.layout.a
         private const val PERMISSION_REQUEST_STORAGE = 233
         const val REQUEST_CODE = 101
     }
+
 
     @Inject
     lateinit var viewModelFactory: AuthViewModelFactory
@@ -31,9 +33,11 @@ class AuthActivity : BaseActivity<ActivityAuthBinding, AuthViewModel>(R.layout.a
     }
 
     override fun onInitDataBinding() {
+
     }
 
     override fun onInitViewModel() {
+
     }
 
     override fun onRequestPermissionsResult(

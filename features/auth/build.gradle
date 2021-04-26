@@ -38,6 +38,9 @@ dependencies {
     implementation project(path: ':data')
     implementation project(path: ':core')
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     testImplementation Libs.junit
     testImplementation Libs.mockitoInline
@@ -88,4 +91,5 @@ dependencies {
     implementation Libs.Glide.glide
 
     implementation "io.coil-kt:coil:0.11.0"
+    implementation 'com.chaos.view:pinview:1.4.4'
 }

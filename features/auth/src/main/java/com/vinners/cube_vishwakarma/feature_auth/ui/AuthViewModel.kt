@@ -3,6 +3,7 @@ package com.vinners.cube_vishwakarma.feature_auth.ui
 import androidx.lifecycle.ViewModel
 import com.vinners.cube_vishwakarma.data.models.LoggedInUser
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
+import kotlin.jvm.Throws
 
 open class AuthViewModel(
     private val userSessionManager: UserSessionManager

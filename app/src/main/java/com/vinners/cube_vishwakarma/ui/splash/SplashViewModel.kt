@@ -68,6 +68,11 @@ class SplashViewModel @Inject constructor(
     init {
         viewModelScope.launch {
 
+
+            delay(4000L)
+            _launcherState.postValue(LauncherActivityState.UserNotLoggedIn)
+            return@launch
+
             logger.d("Init...")
             delay(SPLASH_TIME)
 
@@ -81,15 +86,15 @@ class SplashViewModel @Inject constructor(
     }
 
     private suspend fun checkForUserLogin() {
-//        if (isUserLoggedIn()) {
-//            logger.d("isUserLoggedIn() : true")
-//            _launcherState.postValue(LauncherActivityState.UserLoggedIn)
-//        } else {
-//            logger.d("appIntroShown : true")
-//            appIntroShown = sharedPreferences.getBoolean(APP_INTRO_SHOWN, false)
-//           // checkForReferrer()
-//            checkIfNeedToShowAppIntro()
-//        }
+        if (false) {
+            logger.d("isUserLoggedIn() : true")
+            _launcherState.postValue(LauncherActivityState.UserLoggedIn)
+        } else {
+            logger.d("appIntroShown : true")
+            appIntroShown = sharedPreferences.getBoolean(APP_INTRO_SHOWN, false)
+           // checkForReferrer()
+            checkIfNeedToShowAppIntro()
+        }
     }
 
     private fun checkIfNeedToShowAppIntro() {

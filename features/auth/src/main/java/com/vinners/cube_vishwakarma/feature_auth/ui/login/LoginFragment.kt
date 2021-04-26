@@ -1,11 +1,17 @@
 package com.vinners.cube_vishwakarma.feature_auth.ui.login
 
 import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.Editable
+import android.text.TextUtils
 import android.text.TextWatcher
 import android.util.Log
+import android.util.Patterns
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -21,9 +27,14 @@ import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.feature_auth.R
 import com.vinners.cube_vishwakarma.feature_auth.databinding.FragmentLoginBinding
 import com.vinners.cube_vishwakarma.feature_auth.di.AuthViewModelFactory
+import com.vinners.cube_vishwakarma.feature_auth.di.DaggerAuthComponent
+import com.vinners.cube_vishwakarma.feature_auth.ui.login.OtpVerify.Otpcheck
+
+
 
 import javax.inject.Inject
 
+@Suppress("UNREACHABLE_CODE")
 class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layout.fragment_login) {
 
     @Inject
@@ -37,102 +48,61 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
 
     override val viewModel: LoginViewModel by viewModels { viewModelFactory }
 
-    private fun startListeningForOtpTypeEvents() {
-        viewBinding.YoEt.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) {}
-
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-
-                val currentLength = s!!.length
-                Log.d("TAG", s.toString())
-
-                if (currentLength > previousLength) {
-                    //User has Entered A digit
-                    insertDigitInCurrentAndHighlightNextOne(s, currentLength)
-                } else {
-                    //User has deleted A digit
-                    deleteHighlightedDigit()
-                }
-
-                previousLength = currentLength
-            }
-
-            private fun deleteHighlightedDigit() {
-                if (highlightedEditTextIndex == 0) {
-                    val editText = viewBinding.editTextHolder.getChildAt(0) as EditText
-                    editText.text = null
-                } else {
-
-                    val editText =
-                        viewBinding.editTextHolder.getChildAt(highlightedEditTextIndex) as EditText
-                    val text = editText.text.toString()
-
-                    if (highlightedEditTextIndex == 9 && text.isNotEmpty()) {
-                        editText.text = null
-                    } else {
-
-                        editText.text = null
-
-
-                        val editTextNext =
-                            viewBinding.editTextHolder.getChildAt(highlightedEditTextIndex - 1) as EditText
-
-
-                        if (text.isEmpty())
-                            editTextNext.text = null
-
-                        highlightedEditTextIndex--
-                    }
-                }
-            }
-
-            private fun insertDigitInCurrentAndHighlightNextOne(
-                s: CharSequence,
-                currentLength: Int
-            ) {
-                val editText = viewBinding.editTextHolder.getChildAt(previousLength) as EditText
-                editText.setText(s.subSequence(previousLength, currentLength).toString())
-
-                if (currentLength < 10) {
-                    editText.setBackgroundResource(R.color.white)
-                    val editTextNext =
-                        viewBinding.editTextHolder.getChildAt(currentLength) as EditText
-
-
-                    highlightedEditTextIndex = currentLength
-                }
-                mobileNo = s.toString()
-            }
-        })
-    }
-
 
     override fun onInitDependencyInjection() {
-//        DaggerAuthComponent
-//            .builder()
-//            .coreComponent(getCoreComponent())
-//            .build()
-//            .inject(this)
+        DaggerAuthComponent
+            .builder()
+            .coreComponent(getCoreComponent())
+            .build()
+            .inject(this)
     }
-    override fun onInitDataBinding() {
-        viewBinding.userPasswordInputLayout.visibility = View.GONE
-        viewBinding.et1.setOnClickListener {
-            showSoftKeyboard(viewBinding.YoEt)
-        }
-        viewBinding.et2.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
-        viewBinding.et3.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
-        viewBinding.et4.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
-        viewBinding.et5.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
-        viewBinding.et6.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
-        viewBinding.et7.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
-        viewBinding.et8.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
-        viewBinding.et9.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
-        viewBinding.et10.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
 
-        startListeningForOtpTypeEvents()
-        /* viewBinding.loginBtn.setOnClickListener {
+    override fun onInitDataBinding() {
+
+
+        viewBinding.button.setOnClickListener {
+
+            val email = viewBinding.textEmail.text
+            val password = viewBinding.textPassword.text
+
+                if (email.toString().trim().isEmpty()) {
+                    viewBinding.textEmail.error = "Required"
+                    Toast.makeText(requireContext(), "User Name Required", Toast.LENGTH_SHORT)
+                        .show()
+                } else if (password.toString().trim().isEmpty()) {
+                    viewBinding.textPassword.error = "Required"
+                    Toast.makeText(requireContext(), "ID Pin Required", Toast.LENGTH_SHORT).show()
+                } else {
+                    val intent = Intent(requireContext(), Otpcheck::class.java)
+                    startActivity(intent)
+                }
+            }
+
+    }
+
+
+    override fun onInitViewModel() {
+
+    }
+
+}
+
+//        viewBinding.userPasswordInputLayout.visibility = View.GONE
+//        viewBinding.et1.setOnClickListener {
+//            showSoftKeyboard(viewBinding.YoEt)
+//        }
+//        viewBinding.et2.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
+//        viewBinding.et3.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
+//        viewBinding.et4.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
+//        viewBinding.et5.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
+//        viewBinding.et6.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
+//        viewBinding.et7.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
+//        viewBinding.et8.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
+//        viewBinding.et9.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
+//        viewBinding.et10.setOnClickListener { showSoftKeyboard(viewBinding.YoEt) }
+
+//        startListeningForOtpTypeEvents()
+            /* viewBinding.loginBtn.setOnClickListener {
              if (viewBinding.userPasswordInputLayout.isVisible) {
                  viewModel.login(
                      mobileNo,
@@ -141,7 +111,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
              } else {
                  viewModel.isUserRegister(mobileNo)
              }
-         }*/
+         }
         viewBinding.loginOtpBtn.setOnClickListener {
             viewModel.isUserRegister(mobileNo)
             // viewModel.loginWithOtp(mobileNo)
@@ -155,7 +125,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
     override fun onInitViewModel() {
 
         viewModel.registerWithOtpState.observe(this, Observer {
-            /* when (it) {
+             when (it) {
                  Lce.Loading -> {
                  }
                  is Lce.Content -> {
@@ -170,7 +140,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
                      }
                  }
                  is Lce.Error -> showInformationDialog(it.error)
-             }*/
+             }
             when (it) {
                 Lce.Loading -> {
 
@@ -287,6 +257,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
             imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT)
         }
     }
-}
+}*/
+
+
 
 

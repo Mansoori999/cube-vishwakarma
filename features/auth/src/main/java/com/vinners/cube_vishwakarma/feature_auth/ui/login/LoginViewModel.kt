@@ -135,6 +135,7 @@ class LoginViewModel @Inject constructor(
             _loginFormState.postValue("Enter Valid Mobile No.")
             return
         }
+
         _loginWithOtpState.value = Lce.Loading
         logger.d("Otp sending...")
         viewModelScope.launch(Dispatchers.IO) {
@@ -154,6 +155,7 @@ class LoginViewModel @Inject constructor(
             _loginFormState.postValue("Enter Valid Mobile No.")
             return
         }
+
         _loginStateChange.value = Lce.loading()
         viewModelScope.launch {
             try {

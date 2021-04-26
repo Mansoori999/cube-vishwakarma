@@ -129,6 +129,11 @@ dependencies {
     implementation project(':cache')
     implementation project(':data')
     implementation project(':remote')
+    implementation project(path: ':features:complaints')
+    implementation project(path: ':features:auth')
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
     testImplementation Libs.junit
     testImplementation Libs.mockitoInline

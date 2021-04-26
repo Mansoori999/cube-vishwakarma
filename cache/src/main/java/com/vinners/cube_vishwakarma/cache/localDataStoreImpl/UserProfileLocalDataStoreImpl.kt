@@ -23,6 +23,8 @@ class UserProfileLocalDataStoreImpl @Inject constructor(
 ) : UserProfileLocalDataStore {
 
     override fun getProfile(): Observable<Profile> {
+
+
         return profileDao
             .profile
             .map { profileList ->

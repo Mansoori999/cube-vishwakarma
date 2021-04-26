@@ -10,6 +10,7 @@ import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivitySplashBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
+import com.vinners.cube_vishwakarma.feature_auth.ui.AuthActivity
 
 import com.vinners.cube_vishwakarma.ui.appVersionDiscontinued.VersionBlockActivity
 import javax.inject.Inject
@@ -74,6 +75,7 @@ class SplashActivity :
                 }
             }
         })
+
     }
 
     private fun showAppIntro() {
@@ -100,9 +102,9 @@ class SplashActivity :
     }
 
     private fun startLoginActivity() {
-//        val intent = Intent(this, LoginActivity::class.java)
-//       // intent.putExtra(OtpActivity.INTENT_REFERAL_CODE,referralCode)
-//        startActivity(intent)
-//        finish()
+        val intent = Intent(this, AuthActivity::class.java)
+        startActivity(intent)
+        finish()
+
     }
 }
