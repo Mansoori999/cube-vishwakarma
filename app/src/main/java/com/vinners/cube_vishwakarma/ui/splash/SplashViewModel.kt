@@ -69,15 +69,15 @@ class SplashViewModel @Inject constructor(
         viewModelScope.launch {
 
 
-            delay(4000L)
-            _launcherState.postValue(LauncherActivityState.UserNotLoggedIn)
-            return@launch
+//            delay(4000L)
+
 
             logger.d("Init...")
             delay(SPLASH_TIME)
-
-           if (appInfo.debugBuild) {
+            if (appInfo.debugBuild) {
                 checkForUserLogin()
+                _launcherState.postValue(LauncherActivityState.UserNotLoggedIn)
+                return@launch
             } else {
                 logger.d("shouldCheckForAppUpdate() : true, checking for app update....")
                 checkForAppUpdate()
@@ -152,7 +152,7 @@ class SplashViewModel @Inject constructor(
         private const val LAST_APP_UPDATE_CHECK_TIME = "last_app_update_check_time"
         private const val FOUR_HOURS = 4
         private const val MAX_APP_UPDATE_CHECKING_TIME = 20_000L
-        private const val SPLASH_TIME = 100L
+        private const val SPLASH_TIME = 250L
     }
 
     private fun checkForReferrer() {

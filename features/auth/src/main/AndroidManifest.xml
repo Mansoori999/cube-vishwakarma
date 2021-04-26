@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.vinners.cube_vishwakarma.feature_auth">
 
     <application>
-        <activity android:name=".ui.otpverify.Otpcheck"></activity>
-        <activity android:name=".ui.login.OtpVerify.OtpPin"></activity>
+
         <activity android:name=".ui.AuthActivity">
             <meta-data
                 android:name="preloaded_fonts"
                 android:resource="@array/preloaded_fonts" />
         </activity>
-    </application>
 
+    <activity android:name=".ui.login.OtpVerify.OtpCheckActivity"
+        android:screenOrientation="portrait"
+       ></activity>
+
+    </application>
 </manifest>

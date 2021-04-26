@@ -2,6 +2,7 @@ package com.vinners.cube_vishwakarma.feature_auth.ui.login
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.text.Editable
@@ -28,8 +29,7 @@ import com.vinners.cube_vishwakarma.feature_auth.R
 import com.vinners.cube_vishwakarma.feature_auth.databinding.FragmentLoginBinding
 import com.vinners.cube_vishwakarma.feature_auth.di.AuthViewModelFactory
 import com.vinners.cube_vishwakarma.feature_auth.di.DaggerAuthComponent
-import com.vinners.cube_vishwakarma.feature_auth.ui.login.OtpVerify.Otpcheck
-
+import com.vinners.cube_vishwakarma.feature_auth.ui.login.OtpVerify.OtpCheckActivity
 
 
 import javax.inject.Inject
@@ -59,21 +59,21 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
 
     override fun onInitDataBinding() {
 
-
-        viewBinding.button.setOnClickListener {
+        viewBinding.loginButton.setBackgroundColor(Color.parseColor("#2383E1"))
+        viewBinding.loginButton.setOnClickListener {
 
             val email = viewBinding.textEmail.text
             val password = viewBinding.textPassword.text
 
                 if (email.toString().trim().isEmpty()) {
                     viewBinding.textEmail.error = "Required"
-                    Toast.makeText(requireContext(), "User Name Required", Toast.LENGTH_SHORT)
+                    Toast.makeText(requireContext(), "Login ID Required", Toast.LENGTH_SHORT)
                         .show()
                 } else if (password.toString().trim().isEmpty()) {
                     viewBinding.textPassword.error = "Required"
-                    Toast.makeText(requireContext(), "ID Pin Required", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "4 Digit PIN Required", Toast.LENGTH_SHORT).show()
                 } else {
-                    val intent = Intent(requireContext(), Otpcheck::class.java)
+                    val intent = Intent(context, OtpCheckActivity::class.java)
                     startActivity(intent)
                 }
             }

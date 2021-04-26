@@ -87,7 +87,7 @@ android {
             dimension "default"
             applicationId "com.vinners.cube_vishwakarma"
             resValue "string", "app_name", "Cube"
-            buildConfigField "String", "API_URL", '"https://admin.truman.ooo:5052"'
+            buildConfigField "String", "API_URL", '"http://cubedev.vinnersolutions.com:7012"'
             versionCode 1
             versionName "1.0.0"
         }
@@ -98,7 +98,7 @@ android {
             dimension "default"
             applicationId "com.vinners.cube_vishwakarma.development"
             resValue "string", "app_name", "Cube Dev"
-            buildConfigField "String", "API_URL", '"http://trumanmsdev.vinnersolutions.com:5052"'
+            buildConfigField "String", "API_URL", '"http://cubedev.vinnersolutions.com:7012"'
             versionCode 1
             versionName "1.0.0-beta"
         }
