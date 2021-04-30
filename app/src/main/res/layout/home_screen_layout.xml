@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_margin="10dp"
+    android:layout_height="wrap_content">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="100dp"
+        android:id="@+id/complaint"
+        android:layout_height="100dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/mainscreen_border">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complaint"
+                android:id="@+id/complaint_label"
+                android:layout_centerInParent="true"
+                android:textSize="14sp"
+                android:textColor="@color/black"
+                android:textStyle="normal"/>
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:id="@+id/documents"-->
+<!--        android:layout_height="100dp">-->
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            android:background="@drawable/mainscreen_border">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Documents"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="normal"/>-->
+<!--        </RelativeLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="100dp"-->
+<!--        android:id="@+id/attendance"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_height="100dp">-->
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            android:background="@drawable/mainscreen_border">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Attendance"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="normal"/>-->
+<!--        </RelativeLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="100dp"-->
+<!--        android:id="@+id/expense"-->
+<!--        android:layout_below="@+id/complaint"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:layout_height="100dp">-->
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            android:background="@drawable/mainscreen_border">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Expense"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="normal"/>-->
+<!--        </RelativeLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_below="@+id/documents"-->
+<!--        android:id="@+id/tutorials"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:layout_height="100dp">-->
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            android:background="@drawable/mainscreen_border">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Tutorials"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="normal"/>-->
+<!--        </RelativeLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        android:layout_width="100dp"-->
+<!--        android:layout_below="@+id/attendance"-->
+<!--        android:layout_alignParentRight="true"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:id="@+id/Outlets"-->
+<!--        android:layout_height="100dp">-->
+<!--        <RelativeLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:orientation="vertical"-->
+<!--            android:background="@drawable/mainscreen_border">-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Outlets"-->
+<!--                android:layout_centerInParent="true"-->
+<!--                android:textSize="14sp"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textStyle="normal"/>-->
+<!--        </RelativeLayout>-->
+<!--    </androidx.cardview.widget.CardView>-->
+
+</RelativeLayout>
+
+</layout>

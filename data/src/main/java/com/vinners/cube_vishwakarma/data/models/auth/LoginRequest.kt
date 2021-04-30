@@ -12,8 +12,8 @@ data class LoginRequest(
     val password : String? = null,
 
     @SerializedName("appHash")
-    val appHash : String?,
+    val appHash : String?
 
-    @SerializedName("mobileInfo")
-    val mobileInfo : MobileInformation? = null
+//    @SerializedName("mobileInfo")
+//    val mobileInfo : MobileInformation? = null
 )

@@ -30,31 +30,48 @@ class AuthRemoteDataStoreImpl @Inject constructor(
             CheckUserRegistrationStatusRequest(mobile = mobileNumber,appHash = appHash)
         ).bodyOrThrow().first()
     }
+//    mobileInformation: MobileInformation?
+//    override suspend fun login(
+//        mobileNumber: String?,
+//        password: String?,
+//        appHash : String?
+//
+//    ): LoginResponse {
+//        val response = authService.login(
+//            LoginRequest(
+//                userName = mobileNumber,
+//                password = password,
+//                appHash = appHash
+////                mobileInfo = mobileInformation
+//            )
+//        ).bodyOrThrow().first()
+//
+//        userSessionManager.startNewSession(LoggedInUser(
+//            id = response.id,
+//            sessionToken = response.authToken!!,
+//            displayName = response.name,
+//            mobileNumber = response.mobile!!,
+//            email = response.email,
+//            pic = response.pic,
+//        ))
+//        return response
+//    }
 
     override suspend fun login(
-        mobileNumber: String?,
-        password: String?,
-        appHash : String?,
-        mobileInformation: MobileInformation?
-    ): LoginResponse {
-        val response = authService.login(
-            LoginRequest(
-                userName = mobileNumber,
-                password = password,
-                appHash = appHash,
-                mobileInfo = mobileInformation
-            )
+            mobileNumber: String?,
+            password: String?,
+            appHash : String?
+    ): LoginWithOtpResponse {
+
+      return authService.login(
+                LoginRequest(
+                        userName = mobileNumber,
+                        password = password,
+                        appHash = appHash
+                )
         ).bodyOrThrow().first()
 
-        userSessionManager.startNewSession(LoggedInUser(
-            id = response.id,
-            sessionToken = response.authToken,
-            displayName = response.firstName,
-            mobileNumber = response.mobile,
-            email = response.email,
-            empCode = response.empcode
-        ))
-        return response
+
     }
 
 
@@ -73,11 +90,11 @@ class AuthRemoteDataStoreImpl @Inject constructor(
         ).bodyOrThrow().first()
         userSessionManager.startNewSession(LoggedInUser(
             id = response.id,
-            sessionToken = response.authToken,
-            displayName = response.firstName,
-            mobileNumber = response.mobile,
+            sessionToken = response.authToken!!,
+            displayName = response.name,
+            mobileNumber = response.mobile!!,
             email = response.email,
-            empCode = response.empcode
+            pic = response.pic,
         ))
         return response
     }
@@ -88,11 +105,11 @@ class AuthRemoteDataStoreImpl @Inject constructor(
        val  response = authService.verifyOtpLogin(verifyOtpLoginRequest).bodyOrThrow().first()
         userSessionManager.startNewSession(LoggedInUser(
             id = response.id,
-            sessionToken = response.authToken,
-            displayName = response.firstName,
-            mobileNumber = response.mobile,
+            sessionToken = response.authToken!!,
+            displayName = response.name,
+            mobileNumber = response.mobile!!,
             email = response.email,
-            empCode = response.empcode
+            pic = response.pic,
         ))
         return response
     }
@@ -101,10 +118,10 @@ class AuthRemoteDataStoreImpl @Inject constructor(
         authService.resendOtp(otpToken).bodyOrThrow()
     }
 
-    override suspend fun register(registerRequest: RegisterRequest) {
-     val response = authService.register(registerRequest).bodyOrThrow().first()
-        userSessionManager.addEmpCode(response.empcode)
-    }
+//    override suspend fun register(registerRequest: RegisterRequest) {
+//     val response = authService.register(registerRequest).bodyOrThrow().first()
+//        userSessionManager.addEmpCode(response.empcode)
+//    }
 
     override suspend fun forgotPassword(mobileNumber: String?) {
         authService.forgotPassword(

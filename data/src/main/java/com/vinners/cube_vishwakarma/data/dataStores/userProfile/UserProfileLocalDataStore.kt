@@ -17,11 +17,11 @@ interface UserProfileLocalDataStore {
 
     suspend fun getCachedProfile(): Profile?
 
-    suspend fun markProfilePictureAsUpdated()
-
-    suspend fun updateProfilePic(profilePic: String?)
-
-    suspend fun updateAadharNo(aadharNo: String?)
+//    suspend fun markProfilePictureAsUpdated()
+//
+//    suspend fun updateProfilePic(profilePic: String?)
+//
+//    suspend fun updateAadharNo(aadharNo: String?)
 
     suspend fun updateProfile(request: RegisterRequest)
 

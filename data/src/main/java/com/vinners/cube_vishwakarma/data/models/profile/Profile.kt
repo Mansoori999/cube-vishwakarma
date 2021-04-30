@@ -5,115 +5,143 @@ import com.google.gson.annotations.SerializedName
 import java.util.*
 
 data class Profile(
-    @SerializedName("firstName")
-    val firstName: String? = null,
+        @SerializedName("id")
+        val id: String? = null,
 
-    @SerializedName("lastName")
-    val lastName: String? = null,
+        @SerializedName("name")
+        val name: String? = null,
 
-    @SerializedName("userType")
-    val userType: String? = null,
+        @SerializedName("mobile")
+        val mobile: String? = null,
 
-    @SerializedName("agencyType")
-    val agencyType: String? = null,
+        @SerializedName("nickname")
+        val nickname: String? = null,
 
-    @SerializedName("agencyname")
-    val agencyName: String? = null,
+        @SerializedName("alternatemobile")
+        val alternatemobile: String? = null,
 
-    @SerializedName("mobile")
-    val mobile: String? = null,
+        @SerializedName("email")
+        val email: String? = null,
 
-    @SerializedName("watsappMobile")
-    val whatsAppMobileNumber: String? = null,
+        @SerializedName("logintype")
+        val logintype: String? = null,
 
-    @SerializedName("email")
-    val email: String? = null,
+        @SerializedName("designation")
+        val designation: String? = null,
 
-    @SerializedName("dob")
-    val dob: String? = null,
+        @SerializedName("loginid")
+        val loginid: String? = null,
 
-    @SerializedName("gender")
-    val gender: String? = null,
 
-    @SerializedName("city")
-    val district: String? = null,
+        @SerializedName("pic")
+        val pic: String? = null,
 
-    @SerializedName("cityId")
-    val cityId: Int? = null,
+        @SerializedName("employment")
+        val employment: String? = null,
 
-    @SerializedName("password")
-    val password: String,
+        @SerializedName("usertype")
+        val userType: String? = null,
 
-    @SerializedName("pinCode")
-    val pinCode: String? = null,
+        @SerializedName("managerid")
+        val managerid: String? = null,
 
-    @SerializedName("pinCodeId")
-    val pinCodeId: Int? = null,
+        @SerializedName("deviceid")
+        val deviceid: String? = null,
 
-    @SerializedName("gpsAddress")
-    val gpsAddress : String? = null,
+        @SerializedName("doj")
+        val doj: String? = null,
 
-    @SerializedName("education")
-    val education : String? = null,
+        @SerializedName("dol")
+        val dol: String? = null,
 
-    @SerializedName("experience")
-    val experience : String? = null,
+        @SerializedName("gender")
+        val gender: String? = null,
 
-    @SerializedName("languages")
-    val languages : String? = null,
+        @SerializedName("dob")
+        val dob: String? = null,
 
-    @SerializedName("twoWheeler")
-    val twoWheeler : Boolean,
+        @SerializedName("education")
+        val education: String? = null,
 
-    @SerializedName("workCategory")
-    val workCategory : String? = null,
+        @SerializedName("aadhaarno")
+        val aadhaarno: String? = null,
 
-    @SerializedName("gps")
-    val gps : String? = null,
+        @SerializedName("aadhaarpic")
+        val aadhaarpic: String? = null,
 
-    @SerializedName("designation")
-    val designation : String? = null,
+        @SerializedName("pan")
+        val pan: String? = null,
 
-    @SerializedName("teamSize")
-    val teamSize : String? = null,
+        @SerializedName("panpic")
+        val panpic: String? = null,
 
-    @SerializedName("websitePage")
-    val websitePage : String? = null,
+        @SerializedName("dlnumber")
+        val dlnumber: String? = null,
 
-    @SerializedName("facebookPage")
-    val facebookPage : String? = null,
+        @SerializedName("dlpic")
+        val dlpic: String? = null,
 
-    @SerializedName("yearsInBusiness ")
-    val yearsInBusiness: String? = null,
+        @SerializedName("pfnumber")
+        val pfnumber: String? = null,
 
-    @SerializedName("bankname")
-    val bankName: String? = null,
+        @SerializedName("esicnumber")
+        val esicnumber: String? = null,
 
-    @SerializedName("accountno")
-    val accountNo: String? = null,
+        @SerializedName("voterid")
+        val voterid: String? = null,
 
-    @SerializedName("nameonbank")
-    val nameOnBank: String? = null,
+        @SerializedName("voteridpic")
+        val voteridpic: String? = null,
 
-    @SerializedName("mobileonbank")
-    val mobileOnBank: String? = null,
 
-    @SerializedName("ifsc")
-    val ifsc: String? = null,
+        @SerializedName("bankname")
+        val bankname: String? = null,
 
-    @SerializedName("districtid")
-    val districtId: Int? = null,
+        @SerializedName("nameonbank")
+        val nameonbank: String? = null,
 
-    @SerializedName("stateid")
-    val stateId: Int? = null,
+        @SerializedName("ifsc")
+        val ifsc: String? = null,
 
-    @SerializedName("state")
-    val state: String? = null,
+        @SerializedName("bankbranch")
+        val bankbranch: String? = null,
 
-    @SerializedName("profilepic")
-    val profilePic: String? = null,
+        @SerializedName("accountno")
+        val accountno: String? = null,
 
-    val aadharNo: String? = null,
+        @SerializedName("emergencymobile")
+        val emergencymobile: String? = null,
 
-    val profilePicUpdated: Boolean = false
+        @SerializedName("emergencyname")
+        val emergencyname: String? = null,
+
+        @SerializedName("emergencyrelation")
+        val emergencyrelation: String? = null,
+
+        @SerializedName("referencename")
+        val referencename: String? = null,
+
+        @SerializedName("referencemobile")
+        val referencemobile: String? = null,
+
+        @SerializedName("referencerelation")
+        val referencerelation: String? = null,
+
+        @SerializedName("address")
+        val address: String? = null,
+
+        @SerializedName("pincode")
+        val pincode: String? = null,
+
+        @SerializedName("city")
+        val city: String? = null,
+
+        @SerializedName("state")
+        val state: String? = null,
+
+        @SerializedName("createdon")
+        val createdon: String? = null,
+
+        @SerializedName("createdby")
+        val createdby: String? = null
 )

@@ -19,6 +19,7 @@ import com.vinners.cube_vishwakarma.data.exceptions.AppVersionDiscontinuedExcept
 import com.vinners.cube_vishwakarma.data.models.profile.AppVersion
 import com.vinners.cube_vishwakarma.data.repository.AppUpdateRepository
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
+import com.vinners.cube_vishwakarma.feature_auth.ui.AuthViewModel
 
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -51,7 +52,7 @@ class SplashViewModel @Inject constructor(
     private val installReferrerClient: InstallReferrerClient,
     private val logger: Logger,
     private val appInfo: AppInfo
-) : ViewModel(), InstallReferrerStateListener {
+) : AuthViewModel(userSessionManager), InstallReferrerStateListener {
 
     private var appIntroShown: Boolean = false
 
@@ -76,7 +77,7 @@ class SplashViewModel @Inject constructor(
             delay(SPLASH_TIME)
             if (appInfo.debugBuild) {
                 checkForUserLogin()
-                _launcherState.postValue(LauncherActivityState.UserNotLoggedIn)
+//                _launcherState.postValue(LauncherActivityState.UserNotLoggedIn)
                 return@launch
             } else {
                 logger.d("shouldCheckForAppUpdate() : true, checking for app update....")
@@ -86,24 +87,24 @@ class SplashViewModel @Inject constructor(
     }
 
     private suspend fun checkForUserLogin() {
-        if (false) {
+        if (isUserLoggedIn()) {
             logger.d("isUserLoggedIn() : true")
             _launcherState.postValue(LauncherActivityState.UserLoggedIn)
         } else {
             logger.d("appIntroShown : true")
-            appIntroShown = sharedPreferences.getBoolean(APP_INTRO_SHOWN, false)
-           // checkForReferrer()
+//            appIntroShown = sharedPreferences.getBoolean(APP_INTRO_SHOWN, false)
+//             checkForReferrer()
             checkIfNeedToShowAppIntro()
         }
     }
 
     private fun checkIfNeedToShowAppIntro() {
 
-        if (appIntroShown) {
+//        if (appIntroShown) {
             logger.d("appIntroShown : true")
             _launcherState.postValue(LauncherActivityState.UserNotLoggedIn)
-        } else
-            _launcherState.postValue(LauncherActivityState.ShowAppIntro)
+//        } else
+//            _launcherState.postValue(LauncherActivityState.ShowAppIntro)
     }
 
     private fun shouldCheckForAppUpdate(): Boolean {
@@ -152,7 +153,7 @@ class SplashViewModel @Inject constructor(
         private const val LAST_APP_UPDATE_CHECK_TIME = "last_app_update_check_time"
         private const val FOUR_HOURS = 4
         private const val MAX_APP_UPDATE_CHECKING_TIME = 20_000L
-        private const val SPLASH_TIME = 250L
+        private const val SPLASH_TIME = 2200L
     }
 
     private fun checkForReferrer() {

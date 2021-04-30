@@ -13,13 +13,20 @@ interface AuthRemoteDataStore {
         mobileNumber: String?,
         appHash: String?
     ): UserRegistrationCheckResponse
+//    mobileInformation: MobileInformation?
+//    suspend fun login(
+//        mobileNumber: String?,
+//        password: String?,
+//        appHash: String?
+//
+//    ): LoginResponse
 
     suspend fun login(
-        mobileNumber: String?,
-        password: String?,
-        appHash: String?,
-        mobileInformation: MobileInformation?
-    ): LoginResponse
+            mobileNumber: String?,
+            password: String?,
+            appHash: String?
+
+    ): LoginWithOtpResponse
 
     suspend fun loginWithOtp(
         mobileNumber: String?,
@@ -37,7 +44,7 @@ interface AuthRemoteDataStore {
         otpToken: String
     )
 
-    suspend fun register(registerRequest: RegisterRequest)
+//    suspend fun register(registerRequest: RegisterRequest)
 
     suspend fun forgotPassword(
         mobileNumber: String?

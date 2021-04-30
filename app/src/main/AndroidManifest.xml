@@ -22,13 +22,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Truman"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.HomeScreen">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".ui.complaints.complaintRequest.ComplaintRequestActivity"></activity>
+        <activity
+            android:name=".ui.complaints.myComplaint.MyComplaintActivity"
+            android:label="@string/title_activity_my_complaint"
+            android:theme="@style/Theme.Truman.NoActionBar" />
+        <activity android:name=".ui.complaints.ComplaintsActivity" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait" />
@@ -68,6 +69,11 @@
                 <action android:name="android.intent.action.VIEW" />
 
                 <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="tasked.com"
+                    android:scheme="http" />
             </intent-filter>
         </activity>
         <activity

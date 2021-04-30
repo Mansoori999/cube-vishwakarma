@@ -24,7 +24,7 @@ import com.vinners.cube_vishwakarma.cache.typeConverter.DateTypeConverter
 abstract class LocalDatabase : RoomDatabase() {
 
     companion object {
-        const val DATABASE_NAME = "truman_7.db"
+        const val DATABASE_NAME = "cube_1.db"
     }
 
     // The associated DAOs for the database

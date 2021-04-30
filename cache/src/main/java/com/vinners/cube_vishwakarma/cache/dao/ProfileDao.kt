@@ -27,14 +27,14 @@ interface ProfileDao {
     @Update(onConflict = OnConflictStrategy.IGNORE)
     suspend fun update(cachedProfile: CachedProfile)
 
-    @Query("UPDATE ${CachedProfile.TABLE_NAME} SET " + "${CachedProfile.COLUMN_PROFILE_PICTURE_UPDATED}=1")
-    suspend fun markProfilePictureAsUpdated()
-
-    @Query("UPDATE ${CachedProfile.TABLE_NAME} SET " + "${CachedProfile.COLUMN_PROFILE_PIC}=:profilePic")
-    suspend fun updateProfilePic(profilePic: String?)
-
-    @Query("UPDATE ${CachedProfile.TABLE_NAME} SET " + "${CachedProfile.COLUMN_AADHAR_NO}=:aadharNo")
-    suspend fun updateAdhar(aadharNo: String?)
+//    @Query("UPDATE ${CachedProfile.TABLE_NAME} SET " + "${CachedProfile.COLUMN_PROFILE_PICTURE_UPDATED}=1")
+//    suspend fun markProfilePictureAsUpdated()
+//
+//    @Query("UPDATE ${CachedProfile.TABLE_NAME} SET " + "${CachedProfile.COLUMN_PROFILE_PIC}=:profilePic")
+//    suspend fun updateProfilePic(profilePic: String?)
+//
+//    @Query("UPDATE ${CachedProfile.TABLE_NAME} SET " + "${CachedProfile.COLUMN_AADHAR_NO}=:aadharNo")
+//    suspend fun updateAdhar(aadharNo: String?)
 
    // @Query("UPDATE ${CachedProfile.TABLE_NAME} SET " + "${CachedProfile.COLUMN_RESUME_UPDATED}=1")
     //suspend fun markResumeAsUpdated()
@@ -51,14 +51,14 @@ interface ProfileDao {
                 "${CachedProfile.COLUMN_ACCOUNT_NO}=:accountNo," +
                 "${CachedProfile.COLUMN_BANK_NAME}=:bankName," +
                 "${CachedProfile.COLUMN_NAME_ON_BANK}=:nameOnBank," +
-                "${CachedProfile.COLUMN_MOBILE_ON_BANK}=:mobileOnBank," +
+                "${CachedProfile.COLUMN_BANKBRANCH}=:bankbranch," +
                 "${CachedProfile.COLUMN_IFSC}=:ifsc"
     )
     suspend fun updateBankData(
        accountNo: String?,
        bankName: String?,
        nameOnBank: String?,
-       mobileOnBank: String?,
+       bankbranch: String?,
        ifsc: String?
     )
 

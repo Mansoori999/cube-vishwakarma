@@ -45,8 +45,8 @@ class ProfileRepository @Inject constructor(
 
     suspend fun updateProfilePic(imageUrl: String?){
         userProfileRemoteDataSource.updateProfilePic(imageUrl)
-        userProfileLocalDataStore.updateProfilePic(imageUrl)
-        userProfileLocalDataStore.markProfilePictureAsUpdated()
+//        userProfileLocalDataStore.updateProfilePic(imageUrl)
+//        userProfileLocalDataStore.markProfilePictureAsUpdated()
     }
 
     suspend fun getBankDetails(ifsc: String): BankDetails{
@@ -66,7 +66,7 @@ class ProfileRepository @Inject constructor(
 
     suspend fun updateAdharAndPan(bankKey: String?,bank: Bank,imageFile: String?,imageFile_2: String?){
         userProfileRemoteDataSource.updateAdharAndPan(bankKey,bank,imageFile,imageFile_2)
-        userProfileLocalDataStore.updateAadharNo(bank.adharNo)
+//        userProfileLocalDataStore.updateAadharNo(bank.adharNo)
     }
 
 

@@ -40,7 +40,8 @@ interface LoginViewModelEvents {
 
     val loginFormState: LiveData<String>
 
-    val loginStateChange: LiveData<Lce<LoginResponse>>
+    val loginStateChange: LiveData<Lce<LoginWithOtpResponse>>
+//    val loginStateChange: LiveData<Lce<LoginResponse>>
 
     val registerState: LiveData<Lce<UserNameCheckStates>>
 
@@ -65,8 +66,11 @@ class LoginViewModel @Inject constructor(
     private val _loginFormState = MutableLiveData<String>()
     override val loginFormState: LiveData<String> get() = _loginFormState
 
-    private val _loginStateChange = MutableLiveData<Lce<LoginResponse>>()
-    override val loginStateChange: LiveData<Lce<LoginResponse>> get() = _loginStateChange
+//    private val _loginStateChange = MutableLiveData<Lce<LoginResponse>>()
+//    override val loginStateChange: LiveData<Lce<LoginResponse>> get() = _loginStateChange
+
+    private val _loginStateChange = MutableLiveData<Lce<LoginWithOtpResponse>>()
+    override val loginStateChange: LiveData<Lce<LoginWithOtpResponse>> get() = _loginStateChange
 
     private val _registerState = MutableLiveData<Lce<UserNameCheckStates>>()
     override val registerState: LiveData<Lce<UserNameCheckStates>> get() = _registerState
@@ -132,7 +136,7 @@ class LoginViewModel @Inject constructor(
 
     fun loginWithOtp(mobile: String) {
         if (!isMobileValid(mobile)) {
-            _loginFormState.postValue("Enter Valid Mobile No.")
+            _loginFormState.postValue("Enter Valid Login ID")
             return
         }
 
@@ -160,7 +164,7 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val response =
-                    authRepository.login(mobile, password, getSignature(), getMobileInformation())
+                    authRepository.login(mobile, password, getSignature())
                 logger.d("success", "Login succed")
 
                 _loginStateChange.postValue(Lce.content(response))

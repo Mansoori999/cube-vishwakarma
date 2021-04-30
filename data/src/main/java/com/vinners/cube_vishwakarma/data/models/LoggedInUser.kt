@@ -7,6 +7,7 @@ data class LoggedInUser(
     val sessionToken: String,
     val displayName: String?,
     val mobileNumber: String,
-    val empCode: String?,
+    val pic: String?,
     val email: String? = null
+
 )

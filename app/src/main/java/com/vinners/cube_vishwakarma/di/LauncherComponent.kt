@@ -6,7 +6,10 @@ import com.vinners.cube_vishwakarma.core.di.scopes.FeatureScope
 import com.vinners.cube_vishwakarma.notification.NotificationService
 import com.vinners.cube_vishwakarma.ui.languageSelection.SelectLanguageFragment
 import com.vinners.cube_vishwakarma.ui.LauncherActivity
+import com.vinners.cube_vishwakarma.ui.MainActivity
 import com.vinners.cube_vishwakarma.ui.appVersionDiscontinued.VersionBlockActivity
+import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintActivity
 import com.vinners.cube_vishwakarma.ui.splash.SplashActivity
 import com.vinners.cube_vishwakarma.ui.splash.SplashFragment
 import dagger.Component
@@ -29,4 +32,11 @@ interface LauncherComponent {
     fun inject(languageFragment: SelectLanguageFragment)
 
     fun inject(versionBlockActivity: VersionBlockActivity)
+
+    fun inject(mainActivity: MainActivity)
+
+    fun inject(complaintsActivity: ComplaintsActivity)
+
+    fun inject(myComplaintActivity: MyComplaintActivity)
+
 }

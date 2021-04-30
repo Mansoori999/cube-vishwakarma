@@ -1,0 +1,11 @@
+<resources>
+
+    <style name="Theme.Truman.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Truman.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Truman.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+</resources>

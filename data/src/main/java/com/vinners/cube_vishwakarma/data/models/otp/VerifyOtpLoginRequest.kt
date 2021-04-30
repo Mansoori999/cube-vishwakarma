@@ -11,12 +11,7 @@ data class VerifyOtpLoginRequest(
     val otp : String? = null,
 
     @SerializedName("mobileInfo")
-    val mobileInfo : MobileInformation? = null,
+    val mobileInfo : MobileInformation? = null
 
-    @SerializedName("gps")
-    val gps : String? = null,
-
-    @SerializedName("gpsAddress")
-    val gpsAddress : String? = null
 ) {
 }

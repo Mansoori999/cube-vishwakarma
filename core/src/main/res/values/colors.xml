@@ -32,8 +32,8 @@
     <color name="truman_green_dark">#26716B</color>
     <color name="world_rugby_green_light">#61b754</color>
     <color name="world_rugby_green_lighter">#93ea83</color>
-    <color name="world_rugby_blue">#0000ac</color>
-    <color name="world_rugby_blue_dark">#001754</color>
+    <color name="world_rugby_blue">#2383E1</color>
+    <color name="world_rugby_blue_dark">#2383E1</color>
     <color name="world_rugby_blue_light">#768fff</color>
     <color name="world_rugby_blue_lighter">#acbfff</color>
     <color name="world_rugby_red">#e51a19</color>
@@ -55,7 +55,7 @@
     <color name="salaryText">#A0A0A0</color>
     <color name="actionBtnText">#ACB7D3</color>
     <color name="job_complete">#E82189</color>
-    <color name="money_earned">#3430CE</color>
+    <color name="money_earned">#2383E1</color>
     <color name="overall_rating">#9FC628</color>
     <color name="profile_other_text">#606060</color>
     <color name="job_title">#353535</color>

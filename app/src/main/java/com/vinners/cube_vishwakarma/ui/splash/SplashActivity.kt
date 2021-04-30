@@ -12,6 +12,8 @@ import com.vinners.cube_vishwakarma.databinding.ActivitySplashBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.feature_auth.ui.AuthActivity
+import com.vinners.cube_vishwakarma.feature_auth.ui.login.OtpVerify.OtpCheckActivity
+import com.vinners.cube_vishwakarma.ui.MainActivity
 
 import com.vinners.cube_vishwakarma.ui.appVersionDiscontinued.VersionBlockActivity
 import javax.inject.Inject
@@ -47,7 +49,7 @@ class SplashActivity :
                     LauncherActivityState.AppVersionDiscontinued -> startAppVersionDiscontinuedActivity()
                    LauncherActivityState.UserNotLoggedIn -> startLoginActivity()
                     LauncherActivityState.UserLoggedIn -> startMainActivity()
-                    LauncherActivityState.ShowAppIntro -> showAppIntro()
+//                    LauncherActivityState.ShowAppIntro -> showAppIntro()
                 }
             })
         viewModel.appIntroState.observe(this, Observer {
@@ -95,11 +97,11 @@ class SplashActivity :
     }
 
     private fun startMainActivity() {
-//        if (userSessionManager.empCode.isNullOrEmpty())
-//            startActivity(Intent(this, RegisterActivity::class.java))
-//        else
-//            startActivity(Intent(this, HomeActivity::class.java))
-//        finish()
+        if (userSessionManager.userId.isNullOrEmpty())
+            startActivity(Intent(this, AuthActivity::class.java))
+        else
+            startActivity(Intent(this, MainActivity::class.java))
+        finish()
     }
 
     private fun startLoginActivity() {

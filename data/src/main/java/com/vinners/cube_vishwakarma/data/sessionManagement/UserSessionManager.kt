@@ -15,7 +15,8 @@ class UserSessionManager @Inject constructor(
     val userName: String? get() = sharedPreferences.getString(NAME,null)
     val userId: String? get() = sharedPreferences.getString(ID,null)
     val mobile: String? get() = sharedPreferences.getString(PHONE_NUMBER,null)
-    val empCode: String? get() = sharedPreferences.getString(EMP_CODE,null)
+    val profilepic: String? get() = sharedPreferences.getString(PROFILE_PIC,null)
+//    val empCode: String? get() = sharedPreferences.getString(EMP_CODE,null)
 
     /**
      * Logs Out
@@ -35,7 +36,7 @@ class UserSessionManager @Inject constructor(
         val name = sharedPreferences.getString(NAME,null)
         val email = sharedPreferences.getString(USER_EMAIL, null)
         val id = sharedPreferences.getString(ID,null)
-        val empCode = sharedPreferences.getString(EMP_CODE,null)
+        val profilepic= sharedPreferences.getString(PROFILE_PIC,null)
 
         return LoggedInUser(
             sessionToken = authToken,
@@ -43,7 +44,8 @@ class UserSessionManager @Inject constructor(
             mobileNumber = mobileNumber,
             email = email,
             id = id,
-            empCode = empCode
+            pic = profilepic,
+
         )
     }
 
@@ -55,15 +57,15 @@ class UserSessionManager @Inject constructor(
             putString(NAME,loggedInUserInfo.displayName)
             putString(USER_EMAIL,loggedInUserInfo.email)
             putString(ID,loggedInUserInfo.id)
-            putString(EMP_CODE,loggedInUserInfo.empCode)
+            putString(profilepic,loggedInUserInfo.pic)
         }.apply()
     }
 
-    fun addEmpCode(empCode: String?){
-        sharedPreferences.edit().apply {
-            putString(EMP_CODE,empCode)
-        }.apply()
-    }
+//    fun addEmpCode(empCode: String?){
+//        sharedPreferences.edit().apply {
+//            putString(EMP_CODE,empCode)
+//        }.apply()
+//    }
     private fun removePreviousData(){
         sharedPreferences.edit().clear().apply()
     }
@@ -79,5 +81,6 @@ class UserSessionManager @Inject constructor(
         private const val CITY_NAME = "ATowOofEHSU8mLVSWfMe"
         private const val PHONE_NUMBER = "p608Iy1pLX3prIHT2wnJ"
         private const val USER_EMAIL = "VYHsJ8ehzdAITLr9m0Bf"
+        private const val PROFILE_PIC = "g5h5j6Q8jkjjuKp55RbjS"
     }
 }

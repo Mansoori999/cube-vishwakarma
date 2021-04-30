@@ -6,4 +6,7 @@
     <style name="Theme.AppCompat.DayNight.DarkActionBar">
         <item name="colorPrimary">#1E90FF</item>
     </style>
+    <string name="loading">Loading</string>
+    <string name="text_invalid_mobile_number">Invalid Login ID</string>
+    <string name="invalid_password">Invalid 4 Digit Pin</string>
 </resources>

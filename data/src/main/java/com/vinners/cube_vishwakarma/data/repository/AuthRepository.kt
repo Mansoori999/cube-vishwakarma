@@ -5,6 +5,7 @@ import com.vinners.cube_vishwakarma.data.dataStores.AuthRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.userProfile.UserProfileLocalDataStore
 import com.vinners.cube_vishwakarma.data.models.auth.*
 import com.vinners.cube_vishwakarma.data.models.mdm.MobileInformation
+
 import com.vinners.cube_vishwakarma.data.models.otp.VerifyOtpLoginRequest
 import com.vinners.cube_vishwakarma.data.models.otp.VerifyOtpRequest
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
@@ -34,14 +35,14 @@ class AuthRepository @Inject constructor(
             appHash
         )
     }
+//    mobileInformation: MobileInformation?
 
     suspend fun login(
         mobileNumber: String?,
         password: String?,
-        appHash: String?,
-        mobileInformation: MobileInformation?
-    ): LoginResponse {
-        return authRemoteDataStore.login(mobileNumber, password, appHash, mobileInformation)
+        appHash: String?
+    ): LoginWithOtpResponse {
+        return authRemoteDataStore.login(mobileNumber, password, appHash)
     }
 
     suspend fun loginWithOtp(
@@ -55,41 +56,54 @@ class AuthRepository @Inject constructor(
         val loginResponse = authRemoteDataStore.verifyOtp(verifyOtpRequest)
         profileLocalDataStore.updateProfile(
             RegisterRequest(
-                firstName = loginResponse.firstName,
-                lastName = loginResponse.lastName,
+                name = loginResponse.name,
+                nickname = loginResponse.nickname,
                 mobile = loginResponse.mobile,
                 email = loginResponse.email,
-                agencyType = loginResponse.agencyType,
+                alternatemobile = loginResponse.alternatemobile,
                 userType = loginResponse.userType,
-                whatsAppMobileNumber = loginResponse.whatsAppMobileNumber,
+                logintype = loginResponse.logintype,
                 dob = loginResponse.dob,
                 gender = loginResponse.gender,
-                district = loginResponse.district,
-                cityId = loginResponse.cityId,
-                pinCode = loginResponse.pincode,
-                pinCodeId = loginResponse.pinCodeId,
+                loginid = loginResponse.loginid,
+                city = loginResponse.city,
+                pincode = loginResponse.pincode,
+                pic = loginResponse.pic,
                 education = loginResponse.education,
-                experience = loginResponse.experience,
-                languages = loginResponse.languages,
-                twoWheeler = loginResponse.twoWheeler,
-                workCategory = loginResponse.workCategory,
-                teamSize = loginResponse.teamSize,
-                websitePage = loginResponse.websitePage,
-                facebookPage = loginResponse.facebookPage,
+                aadhaarno = loginResponse.aadhaarno,
+                aadhaarpic = loginResponse.aadhaarpic,
+                pan = loginResponse.pan,
+                panpic = loginResponse.panpic,
+                dlnumber = loginResponse.dlnumber,
+                dlpic = loginResponse.dlpic,
+                pfnumber = loginResponse.pfnumber,
                 designation = loginResponse.designation,
-                password = "pass",
-                agencyName = loginResponse.agencyName,
-                yearsInBusiness = loginResponse.yearsinbusiness,
-                bankName = loginResponse.bankName,
-                nameOnBank = loginResponse.nameOnBank,
-                mobileOnBank = loginResponse.mobileOnBank,
+                esicnumber = loginResponse.esicnumber,
+                voterid = loginResponse.voterid,
+                voteridpic = loginResponse.voteridpic,
+                bankname = loginResponse.bankname,
+                nameonbank = loginResponse.nameonbank,
+                bankbranch = loginResponse.bankbranch,
                 ifsc = loginResponse.ifsc,
-                accountNo = loginResponse.accountNo,
-                stateId = loginResponse.stateId,
+                accountno = loginResponse.accountno,
+                emergencymobile = loginResponse.emergencymobile,
                 state = loginResponse.state,
-                districtId = loginResponse.districtId,
-                profilePic = loginResponse.profilePic,
-                adhar = loginResponse.adhar
+                emergencyname = loginResponse.emergencyname,
+                emergencyrelation = loginResponse.emergencyrelation,
+                referencename = loginResponse.referencename,
+
+                referencemobile = loginResponse.referencemobile,
+                referencerelation = loginResponse.referencerelation,
+                address = loginResponse.address,
+                createdby = loginResponse.createdby,
+                createdon = loginResponse.createdon,
+                authToken = loginResponse.authToken,
+                employment = loginResponse.employment,
+                managerid = loginResponse.managerid,
+                deviceid = loginResponse.deviceid,
+                doj = loginResponse.doj,
+                dol = loginResponse.dol,
+
             )
         )
         return loginResponse
@@ -99,41 +113,53 @@ class AuthRepository @Inject constructor(
         val loginResponse = authRemoteDataStore.verifyOtpLogin(verifyOtpLoginRequest)
         profileLocalDataStore.updateProfile(
             RegisterRequest(
-                firstName = loginResponse.firstName,
-                lastName = loginResponse.lastName,
+                name = loginResponse.name,
+                nickname = loginResponse.nickname,
                 mobile = loginResponse.mobile,
                 email = loginResponse.email,
-                agencyType = loginResponse.agencyType,
+                alternatemobile = loginResponse.alternatemobile,
                 userType = loginResponse.userType,
-                whatsAppMobileNumber = loginResponse.whatsAppMobileNumber,
+                logintype = loginResponse.logintype,
                 dob = loginResponse.dob,
                 gender = loginResponse.gender,
-                district = loginResponse.district,
-                cityId = loginResponse.cityId,
-                pinCode = loginResponse.pincode,
-                pinCodeId = loginResponse.pinCodeId,
+                loginid = loginResponse.loginid,
+                city = loginResponse.city,
+                pincode = loginResponse.pincode,
+                pic = loginResponse.pic,
                 education = loginResponse.education,
-                experience = loginResponse.experience,
-                languages = loginResponse.languages,
-                twoWheeler = loginResponse.twoWheeler,
-                workCategory = loginResponse.workCategory,
-                teamSize = loginResponse.teamSize,
-                websitePage = loginResponse.websitePage,
-                facebookPage = loginResponse.facebookPage,
+                aadhaarno = loginResponse.aadhaarno,
+                aadhaarpic = loginResponse.aadhaarpic,
+                pan = loginResponse.pan,
+                panpic = loginResponse.panpic,
+                dlnumber = loginResponse.dlnumber,
+                dlpic = loginResponse.dlpic,
+                pfnumber = loginResponse.pfnumber,
                 designation = loginResponse.designation,
-                password = "pass",
-                agencyName = loginResponse.agencyName,
-                yearsInBusiness = loginResponse.yearsinbusiness,
-                bankName = loginResponse.bankName,
-                nameOnBank = loginResponse.nameOnBank,
-                mobileOnBank = loginResponse.mobileOnBank,
+                esicnumber = loginResponse.esicnumber,
+                voterid = loginResponse.voterid,
+                voteridpic = loginResponse.voteridpic,
+                bankname = loginResponse.bankname,
+                nameonbank = loginResponse.nameonbank,
+                bankbranch = loginResponse.bankbranch,
                 ifsc = loginResponse.ifsc,
-                accountNo = loginResponse.accountNo,
-                stateId = loginResponse.stateId,
+                accountno = loginResponse.accountno,
+                emergencymobile = loginResponse.emergencymobile,
                 state = loginResponse.state,
-                districtId = loginResponse.districtId,
-                profilePic = loginResponse.profilePic,
-                adhar =  loginResponse.adhar
+                emergencyname = loginResponse.emergencyname,
+                emergencyrelation = loginResponse.emergencyrelation,
+                referencename = loginResponse.referencename,
+
+                referencemobile = loginResponse.referencemobile,
+                referencerelation = loginResponse.referencerelation,
+                address = loginResponse.address,
+                createdby = loginResponse.createdby,
+                createdon = loginResponse.createdon,
+                authToken = loginResponse.authToken,
+                employment = loginResponse.employment,
+                managerid = loginResponse.managerid,
+                deviceid = loginResponse.deviceid,
+                doj = loginResponse.doj,
+                dol = loginResponse.dol,
             )
         )
         return loginResponse
@@ -145,10 +171,10 @@ class AuthRepository @Inject constructor(
             authRemoteDataStore.resendOtp(otpToken)
     }
 
-    suspend fun register(registerRequest: RegisterRequest) {
-        authRemoteDataStore.register(registerRequest)
-        profileLocalDataStore.updateProfile(registerRequest)
-    }
+//    suspend fun register(registerRequest: RegisterRequest) {
+//        authRemoteDataStore.register(registerRequest)
+//        profileLocalDataStore.updateProfile(registerRequest)
+//    }
 
     suspend fun forgotPassword(
         mobileNumber: String?

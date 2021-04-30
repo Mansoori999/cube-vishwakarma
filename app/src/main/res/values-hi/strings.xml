@@ -17,4 +17,8 @@
     <string name="curren_version">Current Version : %s</string>
     <string name="skip">Skip</string>
     <string name="back">Back</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="nav_header_title">Vishwakarma Electrical</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>

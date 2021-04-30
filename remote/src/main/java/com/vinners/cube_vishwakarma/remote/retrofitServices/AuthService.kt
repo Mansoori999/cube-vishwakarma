@@ -17,6 +17,7 @@ import retrofit2.http.Query
 
 interface AuthService {
 
+
     @POST("api/auth/verify")
     suspend fun checkUserRegistrationStatus(
         @Body request: CheckUserRegistrationStatusRequest
@@ -26,9 +27,13 @@ interface AuthService {
     @POST("api/auth/login")
     suspend fun login(
         @Body loginRequest: LoginRequest
-    ): Response<ArrayList<LoginResponse>>
+    ): Response<ArrayList<LoginWithOtpResponse>>
 
-    @POST("/api/auth/sendotp")
+//    @POST("api/auth/login")
+//    suspend fun login(
+//            @Body loginRequest: LoginRequest
+//    ): Response<ArrayList<LoginResponse>>
+    @POST("api/auth/sendotp")
     suspend fun loginWithOtp(
         @Body loginWithOtpRequest: LoginWithOtpRequest
     ): Response<ArrayList<LoginWithOtpResponse>>
