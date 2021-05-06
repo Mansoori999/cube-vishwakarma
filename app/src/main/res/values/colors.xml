@@ -12,4 +12,7 @@
     <color name="actionBtnText">#ACB7D3</color>
     <color name="daggerBlue">#2383E1</color>
     <color name="dashboardDark">#2383E1</color>
+    <color name="red">#E7151D</color>
+    <color name="lightGray">#858585</color>
+    <color name="dirtyWhite">#E0E0E0</color>
 </resources>

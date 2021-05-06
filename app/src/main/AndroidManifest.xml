@@ -22,14 +22,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Truman"
         tools:ignore="UnusedAttribute">
+        <activity android:name=".ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity"></activity>
         <activity android:name=".ui.complaints.complaintRequest.ComplaintRequestActivity"></activity>
         <activity
             android:name=".ui.complaints.myComplaint.MyComplaintActivity"
             android:label="@string/title_activity_my_complaint"
             android:theme="@style/Theme.Truman.NoActionBar" />
         <activity android:name=".ui.complaints.ComplaintsActivity" />
-
-
         <activity
             android:name=".ui.MainActivity"
             android:screenOrientation="portrait" />

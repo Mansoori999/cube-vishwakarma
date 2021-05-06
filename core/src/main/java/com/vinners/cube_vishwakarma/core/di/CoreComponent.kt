@@ -90,4 +90,6 @@ interface CoreComponent {
 
     fun getPostThreadExecuter(): PostExecutionThread
 
+    fun getComplaintsRepository(): MyComplaintRepository
+
 }

@@ -10,6 +10,8 @@ import com.vinners.cube_vishwakarma.ui.MainActivity
 import com.vinners.cube_vishwakarma.ui.appVersionDiscontinued.VersionBlockActivity
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintActivity
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 import com.vinners.cube_vishwakarma.ui.splash.SplashActivity
 import com.vinners.cube_vishwakarma.ui.splash.SplashFragment
 import dagger.Component
@@ -39,4 +41,25 @@ interface LauncherComponent {
 
     fun inject(myComplaintActivity: MyComplaintActivity)
 
+    fun inject(allFragment: AllFragment)
+
+    fun inject(dueFragment: DueFragment)
+
+    fun inject(cancelledFragment: CancelledFragment)
+
+    fun inject(doneFragment: DoneFragment)
+
+    fun inject(holdFragment: HoldFragment)
+
+    fun inject(workingFragment: WorkingFragment)
+
+    fun inject(billedFragment: BilledFragment)
+
+    fun inject(estimatedFragment: EstimatedFragment)
+
+    fun inject(paymentFragment: PaymentFragment)
+
+    fun inject(draftFragment: DraftFragment)
+
+    fun inject(myComplaintDetailsActivity: MyComplaintDetailsActivity)
 }

@@ -5,6 +5,7 @@ import com.vinners.core.logger.Logger
 import com.vinners.cube_vishwakarma.base.AppInfo
 import com.vinners.cube_vishwakarma.core.SessionExpirationListenerImpl
 import com.vinners.cube_vishwakarma.data.dataStores.AuthRemoteDataStore
+import com.vinners.cube_vishwakarma.data.dataStores.complaint.MyComplaintRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.help.HelpRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.jobs.JobsRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.money.MoneyRemoteDataStore
@@ -82,6 +83,8 @@ abstract class RemoteModule {
             return retrofitServiceFactory.prepareService(NotificationService::class.java)
         }
 
+
+
         @JvmStatic
         @Provides
         @Singleton
@@ -102,6 +105,7 @@ abstract class RemoteModule {
         ): IfscService {
             return retrofitServiceFactory.prepareIfscService(IfscService::class.java)
         }
+
 
 
         @JvmStatic
@@ -134,6 +138,16 @@ abstract class RemoteModule {
                     )
                 )
         }
+
+
+        @Provides
+        @JvmStatic
+        fun provideMyComplaintService(
+                retrofitServiceFactory: RetrofitServiceFactory
+        ): MyComplaintService {
+            return retrofitServiceFactory.prepareService(MyComplaintService::class.java)
+        }
+
     }
 
     @Binds
@@ -153,4 +167,8 @@ abstract class RemoteModule {
 
     @Binds
     abstract fun bindNotificationRemoteDataSource(notificationRemoteDataStoreImp: NotificationRemoteDataStoreImp): NotificationRemoteDataStore
+
+    @Binds
+    abstract fun bindMyComplaintRemoteDataSource(myComplaintRemoteDataStoreImpl: MyComplaintRemoteDataStoreImpl): MyComplaintRemoteDataStore
+
 }

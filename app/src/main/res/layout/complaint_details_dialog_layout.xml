@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:padding="10dp"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/loading_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:layout_centerInParent="true"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="10dp"
+        android:id="@+id/relative1"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status"
+            android:textStyle="normal"
+            android:textSize="18dp"
+            android:layout_centerVertical="true"
+            android:textColor="@color/black"
+            android:id="@+id/statusTxt"/>
+        <androidx.appcompat.widget.AppCompatSpinner
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_toRightOf="@+id/statusTxt"
+            android:id="@+id/status_spinner"
+            android:background="@drawable/spinner_background"
+            android:minHeight="30dp"/>
+
+
+    </RelativeLayout>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:hint="Reason *"
+            android:visibility="gone"
+            android:layout_below="@+id/relative1"
+            android:layout_marginTop="@dimen/dimension_20dp"
+            android:textSize="18dp"
+            android:id="@+id/reason"
+            android:textColor="@color/black"
+            />
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_below="@+id/reason"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/uploadbtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Update"
+            android:layout_toLeftOf="@+id/cancelbtn"
+            android:textSize="16dp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:layout_marginLeft="@dimen/dimension_20dp"
+            android:id="@+id/cancelbtn"
+            android:layout_alignParentRight="true"
+           android:textSize="16dp"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>
+</layout>
