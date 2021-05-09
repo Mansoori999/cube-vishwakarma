@@ -41,6 +41,10 @@ class CancelledFragment : BaseFragment<FragmentCancelledBinding, AllComplaintFra
                     setAllComplaintsListener(this@CancelledFragment)
                 }
     }
+    fun allComplaintSearchFilter(newText: String?){
+        allComplaintRecyclerAdapter.filter.filter(newText)
+
+    }
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
 

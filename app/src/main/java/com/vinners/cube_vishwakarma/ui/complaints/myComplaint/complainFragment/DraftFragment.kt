@@ -39,6 +39,10 @@ class DraftFragment :  BaseFragment<FragmentDraftBinding, AllComplaintFragmentVi
                 setAllComplaintsListener(this@DraftFragment)
             }
     }
+    fun allComplaintSearchFilter(newText: String?){
+        allComplaintRecyclerAdapter.filter.filter(newText)
+
+    }
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
 

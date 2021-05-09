@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vinners.cube_vishwakarma.core.di.modules.ViewModelKey
 import com.vinners.cube_vishwakarma.ui.MainActivityViewModel
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.ComplaintRequestViewModel
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintViewModel
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
 import com.vinners.cube_vishwakarma.ui.languageSelection.LanguageViewModel
+import com.vinners.cube_vishwakarma.ui.outlets.OutletsViewModel
 import com.vinners.cube_vishwakarma.ui.splash.SplashViewModel
 import dagger.Binds
 import dagger.Module
@@ -43,5 +45,13 @@ abstract class LauncherModule {
     @ViewModelKey(AllComplaintFragmentViewModel::class)
     abstract fun bindAllComplaintFragmentViewModel(viewModel: AllComplaintFragmentViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(OutletsViewModel::class)
+    abstract fun bindOutletsViewModel(viewModel: OutletsViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(ComplaintRequestViewModel::class)
+    abstract fun bindComplaintRequestViewModel(viewModel: ComplaintRequestViewModel): ViewModel
 }

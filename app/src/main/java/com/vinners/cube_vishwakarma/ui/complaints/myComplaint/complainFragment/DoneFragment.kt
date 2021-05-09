@@ -44,6 +44,10 @@ class DoneFragment : BaseFragment<FragmentDoneBinding, AllComplaintFragmentViewM
                     setAllComplaintsListener(this@DoneFragment)
                 }
     }
+    fun allComplaintSearchFilter(newText: String?){
+        allComplaintRecyclerAdapter.filter.filter(newText)
+
+    }
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
 

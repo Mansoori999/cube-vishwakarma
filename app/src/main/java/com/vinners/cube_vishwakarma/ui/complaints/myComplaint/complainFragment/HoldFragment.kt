@@ -41,6 +41,10 @@ class HoldFragment : BaseFragment<FragmentHoldBinding, AllComplaintFragmentViewM
                     setAllComplaintsListener(this@HoldFragment)
                 }
     }
+    fun allComplaintSearchFilter(newText: String?){
+        allComplaintRecyclerAdapter.filter.filter(newText)
+
+    }
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
 
@@ -64,7 +68,7 @@ class HoldFragment : BaseFragment<FragmentHoldBinding, AllComplaintFragmentViewM
     override fun onInitDataBinding() {
         userid = userSessionManager.userId
         viewBinding.allcomplaintFragmentRecycler.layoutManager = LinearLayoutManager(context)
-        allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
+        allComplaintRecyclerAdapter.updateViewList(emptyList())
         viewBinding.allcomplaintFragmentRecycler.adapter = allComplaintRecyclerAdapter
         viewBinding.refreshLayout.setOnRefreshListener {
 
@@ -93,13 +97,14 @@ class HoldFragment : BaseFragment<FragmentHoldBinding, AllComplaintFragmentViewM
                     if (itemlist.isEmpty()){
                         viewBinding.progressBar.setVisibilityGone()
                         viewBinding.errorLayout.root.setVisibilityVisible()
+                        allComplaintRecyclerAdapter.updateViewList(emptyList())
                         viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
                         viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+
                         viewBinding.errorLayout.messageTv.text = "Not Hold Complaint Found"
                     } else {
                         viewBinding.errorLayout.root.setVisibilityGone()
                         viewBinding.progressBar.setVisibilityGone()
-
                         allComplaintRecyclerAdapter.updateViewList(itemlist)
                         if (!viewBinding.refreshLayout.isRefreshing) {
                             viewBinding.refreshLayout.isRefreshing = false

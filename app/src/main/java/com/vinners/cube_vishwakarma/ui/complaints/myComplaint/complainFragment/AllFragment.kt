@@ -49,6 +49,11 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
 
     override val viewModel: AllComplaintFragmentViewModel by viewModels{ viewModelFactory }
 
+    fun allComplaintSearchFilter(newText: String?){
+        allComplaintRecyclerAdapter.filter.filter(newText)
+
+    }
+
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
             .builder()

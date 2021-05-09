@@ -92,4 +92,8 @@ interface CoreComponent {
 
     fun getComplaintsRepository(): MyComplaintRepository
 
+    fun getOutletRepository(): OutletRepository
+
+    fun getComplaintRequestRepository(): ComplaintRequestRepository
+
 }

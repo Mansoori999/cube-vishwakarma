@@ -40,6 +40,10 @@ class EstimatedFragment : BaseFragment<FragmentEstimatedBinding, AllComplaintFra
                 setAllComplaintsListener(this@EstimatedFragment)
             }
     }
+    fun allComplaintSearchFilter(newText: String?){
+        allComplaintRecyclerAdapter.filter.filter(newText)
+
+    }
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
 

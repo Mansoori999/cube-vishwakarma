@@ -24,7 +24,7 @@ interface ComplaintEvents {
 
     val complaintDetailsState :LiveData<Lce<MyComplainDetailsList>>
 
-    val uploadListState:LiveData<Lce<List<String>>>
+    val upDateListState:LiveData<Lce<List<String>>>
 
 
 }
@@ -68,17 +68,17 @@ class AllComplaintFragmentViewModel @Inject constructor(
     }
 
     /* Upload Complaint*/
-    private val _uploadListState = MutableLiveData<Lce<List<String>>>()
-    override val uploadListState: LiveData<Lce<List<String>>> = _uploadListState
+    private val _upDateListState = MutableLiveData<Lce<List<String>>>()
+    override val upDateListState: LiveData<Lce<List<String>>> = _upDateListState
 
     fun upDateComplaints(statusremarks:String, status:String, id:Int){
-        _uploadListState.value = Lce.Loading
+        _upDateListState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {
                 val response = myComplaintRepository.upDateComplaints(statusremarks,status,id)
-                _uploadListState.postValue(Lce.content(response))
+                _upDateListState.postValue(Lce.content(response))
             }catch (e : Exception){
-                _uploadListState.postValue(Lce.error(e.localizedMessage))
+                _upDateListState.postValue(Lce.error(e.localizedMessage))
 
             }
         }

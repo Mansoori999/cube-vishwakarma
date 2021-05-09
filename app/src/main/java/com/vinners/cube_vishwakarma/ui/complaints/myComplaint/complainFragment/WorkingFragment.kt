@@ -40,6 +40,10 @@ class WorkingFragment : BaseFragment<FragmentWorkingBinding, AllComplaintFragmen
                     setAllComplaintsListener(this@WorkingFragment)
                 }
     }
+    fun allComplaintSearchFilter(newText: String?){
+        allComplaintRecyclerAdapter.filter.filter(newText)
+
+    }
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
 
@@ -77,6 +81,10 @@ class WorkingFragment : BaseFragment<FragmentWorkingBinding, AllComplaintFragmen
         }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+    }
     override fun onInitViewModel() {
         viewModel.complaintListState.observe(this, Observer {
             when(it){
@@ -95,11 +103,11 @@ class WorkingFragment : BaseFragment<FragmentWorkingBinding, AllComplaintFragmen
                         viewBinding.errorLayout.root.setVisibilityVisible()
                         viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
                         viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+                        allComplaintRecyclerAdapter.updateViewList(emptyList())
                         viewBinding.errorLayout.messageTv.text = "Not Working Complaint Found"
                     } else {
                         viewBinding.errorLayout.root.setVisibilityGone()
                         viewBinding.progressBar.setVisibilityGone()
-
                         allComplaintRecyclerAdapter.updateViewList(itemlist)
                         if (!viewBinding.refreshLayout.isRefreshing) {
                             viewBinding.refreshLayout.isRefreshing = false

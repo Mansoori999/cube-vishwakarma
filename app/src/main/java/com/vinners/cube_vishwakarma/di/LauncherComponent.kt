@@ -8,12 +8,19 @@ import com.vinners.cube_vishwakarma.ui.languageSelection.SelectLanguageFragment
 import com.vinners.cube_vishwakarma.ui.LauncherActivity
 import com.vinners.cube_vishwakarma.ui.MainActivity
 import com.vinners.cube_vishwakarma.ui.appVersionDiscontinued.VersionBlockActivity
+import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
+
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.ComplaintRequestActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
+import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
+import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
+import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
 import com.vinners.cube_vishwakarma.ui.splash.SplashActivity
 import com.vinners.cube_vishwakarma.ui.splash.SplashFragment
+import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
 import dagger.Component
 
 @FeatureScope
@@ -62,4 +69,18 @@ interface LauncherComponent {
     fun inject(draftFragment: DraftFragment)
 
     fun inject(myComplaintDetailsActivity: MyComplaintDetailsActivity)
+
+    fun inject(attendanceActivity: AttendanceActivity)
+
+    fun inject(documentsActivity: DocumentsActivity)
+
+    fun inject(expenseActivity: ExpenseActivity)
+
+    fun inject(outletsActivity: OutletsActivity)
+
+    fun inject(tutorialsActivity: TutorialsActivity)
+
+    fun inject (complaintRequestActivity: ComplaintRequestActivity)
+
+
 }

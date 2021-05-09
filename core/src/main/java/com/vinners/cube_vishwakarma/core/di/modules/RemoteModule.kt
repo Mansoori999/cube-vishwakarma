@@ -5,11 +5,13 @@ import com.vinners.core.logger.Logger
 import com.vinners.cube_vishwakarma.base.AppInfo
 import com.vinners.cube_vishwakarma.core.SessionExpirationListenerImpl
 import com.vinners.cube_vishwakarma.data.dataStores.AuthRemoteDataStore
+import com.vinners.cube_vishwakarma.data.dataStores.complaint.ComplaintRequestRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.complaint.MyComplaintRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.help.HelpRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.jobs.JobsRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.money.MoneyRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.notification.NotificationRemoteDataStore
+import com.vinners.cube_vishwakarma.data.dataStores.outlets.OutletRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.userProfile.UserProfileRemoteDataSource
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.remote.RetrofitServiceFactory
@@ -148,6 +150,22 @@ abstract class RemoteModule {
             return retrofitServiceFactory.prepareService(MyComplaintService::class.java)
         }
 
+        @Provides
+        @JvmStatic
+        fun provideOutletService(
+                retrofitServiceFactory: RetrofitServiceFactory
+        ): OutletService {
+            return retrofitServiceFactory.prepareService(OutletService::class.java)
+        }
+
+        @Provides
+        @JvmStatic
+        fun provideComplaintRequestService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): ComplaintRequestService {
+            return retrofitServiceFactory.prepareService(ComplaintRequestService::class.java)
+        }
+
     }
 
     @Binds
@@ -170,5 +188,11 @@ abstract class RemoteModule {
 
     @Binds
     abstract fun bindMyComplaintRemoteDataSource(myComplaintRemoteDataStoreImpl: MyComplaintRemoteDataStoreImpl): MyComplaintRemoteDataStore
+
+    @Binds
+    abstract fun bindOutletRemoteDataStore(outletRemoteDataStoreImpl: OutletRemoteDataStoreImpl): OutletRemoteDataStore
+
+    @Binds
+    abstract fun bindComplaintRequestRemoteDataStore(complaintRequestRemoteDataStoreImpl: ComplaintRequestRemoteDataStoreImpl): ComplaintRequestRemoteDataStore
 
 }

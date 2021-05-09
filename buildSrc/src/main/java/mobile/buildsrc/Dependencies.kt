@@ -141,9 +141,8 @@ object Libs {
     }
 
     object AirBnb {
-        val lottie = "com.airbnb.android:lottie:3.4.0"
+        val lottie = "com.airbnb.android:lottie:3.0.7"
     }
-
     object Facebook {
         val stetho = "com.facebook.stetho:stetho:1.5.1"
     }

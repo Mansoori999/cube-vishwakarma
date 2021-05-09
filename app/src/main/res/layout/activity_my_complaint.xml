@@ -20,7 +20,7 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimaryDark"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="My Complaint"
+            app:title="My Complaints"
             app:titleTextColor="@android:color/white" />
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"

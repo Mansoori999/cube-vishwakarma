@@ -1,6 +1,6 @@
 package com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.model
 
-data class OutletAreaData(
+data class ComplaintTypeData(
     val id: String?,
     val name: String
 ) {

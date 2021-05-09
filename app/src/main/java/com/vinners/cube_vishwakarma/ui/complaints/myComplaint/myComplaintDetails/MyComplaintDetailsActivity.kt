@@ -1,7 +1,6 @@
 package com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails
 
 
-import android.content.Context
 import android.content.Intent
 import android.view.Gravity
 import android.widget.*
@@ -9,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import com.google.android.material.internal.ContextUtils.getActivity
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.DateTimeHelper
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
@@ -18,15 +16,15 @@ import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplainDetailsList
-import com.vinners.cube_vishwakarma.data.models.complaints.StatusData
-import com.vinners.cube_vishwakarma.data.models.homeScreen.MainActivityListModel
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityMyComplaintDetailsBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintActivity
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.AllFragment
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.DueFragment
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.HoldFragment
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.WorkingFragment
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
-
 import javax.inject.Inject
 
 class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBinding,AllComplaintFragmentViewModel>(R.layout.activity_my_complaint_details) {
@@ -143,7 +141,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
             }
             update.setOnClickListener{
                 setValidationUpdate()
-
+                mAlertDialog.dismiss()
             }
 
         }
@@ -152,7 +150,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
     private fun setValidationUpdate() {
         if  (reason.isVisible && reason.text.isNullOrBlank()){
-            showInformationDialog("Please Wright Reason")
+            showInformationDialog("Please Write Reason")
             return
         }
         if (statusValue == null){
@@ -165,6 +163,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
                 status = statusValue.toString()
 
         )
+
     }
 
 
@@ -216,23 +215,193 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
             }
         })
 
-        viewModel.uploadListState.observe(this, Observer {
+        viewModel.upDateListState.observe(this, Observer {
             when(it){
                 Lce.Loading ->{
+                    viewBinding.loadingData.setVisibilityVisible()
+                    viewBinding.detailScreen.setVisibilityGone()
 
                 }
                 is Lce.Content ->{
-                    Toast.makeText(this, "Status Updated", Toast.LENGTH_SHORT).show()
-                    startActivity(Intent(this, MyComplaintActivity::class.java))
-                    finish()
+                    if (status!!.equals("Working")){
+                        Toast.makeText(this, "Status Updated", Toast.LENGTH_SHORT).show()
+
+                        id.let { viewModel.getComplainDetails(it!!) }
+                        viewModel.complaintDetailsState.observe(this, Observer {
+                            when(it){
+                                Lce.Loading ->{
+                                    viewBinding.loadingData.setVisibilityVisible()
+                                }
+                                is Lce.Content ->{
+                                    if (it.content != null){
+                                        viewBinding.loadingData.setVisibilityGone()
+                                        viewBinding.date.text = DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                                        viewBinding.complaintId.text = it.content.complaintid
+                                        viewBinding.work.text = it.content.work
+                                        viewBinding.type.text = it.content.type
+                                        viewBinding.outletName.text = it.content.outletname
+                                        viewBinding.regional.text = it.content.regionaloffice
+                                        viewBinding.sales.text = it.content.salesarea
+                                        viewBinding.district.text = it.content.district
+                                        viewBinding.letter.text = it.content.letterstatus
+                                        viewBinding.status.text = it.content.status
+                                        viewBinding.subadmin.text = it.content.subadmin
+                                        viewBinding.supervisor.text = it.content.supervisor
+                                        viewBinding.foreman.text = it.content.foreman
+                                        viewBinding.enduser.text = it.content.enduser
+                                        viewBinding.order.text = it.content.orderBy
+                                        viewBinding.remarks.text = it.content.remarks
+                                        setChangeStatus(it.content)
+
+                                    }else{
+                                        viewBinding.loadingData.setVisibilityVisible()
+                                    }
+
+
+
+                                }
+                                is Lce.Error ->
+                                {
+
+                                    viewBinding.loadingData.setVisibilityGone()
+                                    showInformationDialog(it.error)
+
+                                }
+
+                            }
+                        })
+                        viewBinding.loadingData.setVisibilityGone()
+                        viewBinding.detailScreen.setVisibilityVisible()
+//                        getSupportFragmentManager().beginTransaction()
+//                                .add(android.R.id.content, WorkingFragment.newInstance())
+//                                .commit()
+////                        startActivity(Intent(this, WorkingFragment::class.java))
+//                        finish()
+                    }else if (status!!.equals("Hold")){
+                        Toast.makeText(this, "Status Updated", Toast.LENGTH_SHORT).show()
+                        id.let { viewModel.getComplainDetails(it!!) }
+                        viewModel.complaintDetailsState.observe(this, Observer {
+                            when(it){
+                                Lce.Loading ->{
+                                    viewBinding.loadingData.setVisibilityVisible()
+                                }
+                                is Lce.Content ->{
+                                    if (it.content != null){
+                                        viewBinding.loadingData.setVisibilityGone()
+                                        viewBinding.date.text = DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                                        viewBinding.complaintId.text = it.content.complaintid
+                                        viewBinding.work.text = it.content.work
+                                        viewBinding.type.text = it.content.type
+                                        viewBinding.outletName.text = it.content.outletname
+                                        viewBinding.regional.text = it.content.regionaloffice
+                                        viewBinding.sales.text = it.content.salesarea
+                                        viewBinding.district.text = it.content.district
+                                        viewBinding.letter.text = it.content.letterstatus
+                                        viewBinding.status.text = it.content.status
+                                        viewBinding.subadmin.text = it.content.subadmin
+                                        viewBinding.supervisor.text = it.content.supervisor
+                                        viewBinding.foreman.text = it.content.foreman
+                                        viewBinding.enduser.text = it.content.enduser
+                                        viewBinding.order.text = it.content.orderBy
+                                        viewBinding.remarks.text = it.content.remarks
+                                        setChangeStatus(it.content)
+
+                                    }else{
+                                        viewBinding.loadingData.setVisibilityVisible()
+                                    }
+
+
+
+                                }
+                                is Lce.Error ->
+                                {
+
+                                    viewBinding.loadingData.setVisibilityGone()
+                                    showInformationDialog(it.error)
+
+                                }
+
+                            }
+                        })
+                        viewBinding.loadingData.setVisibilityGone()
+                        viewBinding.detailScreen.setVisibilityVisible()
+//                        getSupportFragmentManager().beginTransaction()
+//                                .add(android.R.id.content, HoldFragment.newInstance())
+//                                .commit()
+////                        startActivity(Intent(this, HoldFragment::class.java))
+//                        finish()
+                    }else if (status!!.equals("Due")){
+                        Toast.makeText(this, "Status Updated", Toast.LENGTH_SHORT).show()
+                        id.let { viewModel.getComplainDetails(it!!) }
+                        viewModel.complaintDetailsState.observe(this, Observer {
+                            when(it){
+                                Lce.Loading ->{
+                                    viewBinding.loadingData.setVisibilityVisible()
+                                }
+                                is Lce.Content ->{
+                                    if (it.content != null){
+                                        viewBinding.loadingData.setVisibilityGone()
+                                        viewBinding.date.text = DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                                        viewBinding.complaintId.text = it.content.complaintid
+                                        viewBinding.work.text = it.content.work
+                                        viewBinding.type.text = it.content.type
+                                        viewBinding.outletName.text = it.content.outletname
+                                        viewBinding.regional.text = it.content.regionaloffice
+                                        viewBinding.sales.text = it.content.salesarea
+                                        viewBinding.district.text = it.content.district
+                                        viewBinding.letter.text = it.content.letterstatus
+                                        viewBinding.status.text = it.content.status
+                                        viewBinding.subadmin.text = it.content.subadmin
+                                        viewBinding.supervisor.text = it.content.supervisor
+                                        viewBinding.foreman.text = it.content.foreman
+                                        viewBinding.enduser.text = it.content.enduser
+                                        viewBinding.order.text = it.content.orderBy
+                                        viewBinding.remarks.text = it.content.remarks
+                                        setChangeStatus(it.content)
+
+                                    }else{
+                                        viewBinding.loadingData.setVisibilityVisible()
+                                    }
+
+
+
+                                }
+//                                is Lce.Error ->
+//                                {
+//
+//                                    viewBinding.loadingData.setVisibilityGone()
+//                                    showInformationDialog(it.error)
+//
+//                                }
+
+                            }
+                        })
+
+                        viewBinding.loadingData.setVisibilityGone()
+                        viewBinding.detailScreen.setVisibilityVisible()
+//                        getSupportFragmentManager().beginTransaction()
+//                                .add(android.R.id.content, DueFragment.newInstance())
+//                                .commit()
+////                        startActivity(Intent(this, DueFragment::class.java))
+//                        finish()
+                    }
+
                 }
                 is Lce.Error ->{
+                    viewBinding.loadingData.setVisibilityGone()
                     showInformationDialog(it.error)
                 }
             }
         })
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        for (fragment in supportFragmentManager.fragments) {
+            fragment.onActivityResult(requestCode, resultCode, data)
+        }
+    }
     private fun setChangeStatus(content: MyComplainDetailsList) {
 
         if (content.status?.toLowerCase().equals("due") ||

@@ -30,7 +30,13 @@ import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.feature_auth.ui.AuthActivity
 import com.vinners.cube_vishwakarma.feature_auth.ui.login.LoginFragment
+import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
+
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
+import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
+import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
+import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
+import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
 import de.hdodenhof.circleimageview.CircleImageView
 
 import java.io.File
@@ -180,24 +186,24 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             }
             1->
             {
-//                val intent = Intent(this, ComplaintsActivity::class.java)
-//                startActivity(intent)
+                val intent = Intent(this, DocumentsActivity::class.java)
+                startActivity(intent)
             }
             2->{
-//                val intent = Intent(this, ComplaintsActivity::class.java)
-//                startActivity(intent)
+                val intent = Intent(this, AttendanceActivity::class.java)
+                startActivity(intent)
             }
             3->{
-//                val intent = Intent(this, ComplaintsActivity::class.java)
-//                startActivity(intent)
+                val intent = Intent(this, ExpenseActivity::class.java)
+                startActivity(intent)
             }
             4->{
-//                val intent = Intent(this, ComplaintsActivity::class.java)
-//                startActivity(intent)
+                val intent = Intent(this, TutorialsActivity::class.java)
+                startActivity(intent)
             }
             5->{
-//                val intent = Intent(this, ComplaintsActivity::class.java)
-//                startActivity(intent)
+                val intent = Intent(this, OutletsActivity::class.java)
+                startActivity(intent)
             }
 
         }

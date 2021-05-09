@@ -41,6 +41,10 @@ class PaymentFragment : BaseFragment<FragmentPaymentBinding, AllComplaintFragmen
                 setAllComplaintsListener(this@PaymentFragment)
             }
     }
+    fun allComplaintSearchFilter(newText: String?){
+        allComplaintRecyclerAdapter.filter.filter(newText)
+
+    }
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
 

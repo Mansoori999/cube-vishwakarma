@@ -1,4 +1,4 @@
-package com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment
+package com.vinners.cube_vishwakarma.ui.outlets
 
 import android.content.Context
 import android.graphics.Color
@@ -12,45 +12,46 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.DateTimeHelper
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
 
-interface  AllComplaintsClickListener {
+interface  OutletsClickListener {
 
-    fun OnAllComplaintsClick(myComplaintList: MyComplaintList)
+    fun OnOutletClick(outletsList: OutletsList)
 }
 
-class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerAdapter.AllComplaintRecyclerHolder>(), Filterable {
-    private var complaintList = listOf<MyComplaintList>()
+class OutletRecyclerAdapter() : RecyclerView.Adapter<OutletRecyclerAdapter.OutletRecyclerHolder>(), Filterable {
+    private var outletList = listOf<OutletsList>()
     private lateinit var context: Context
     private lateinit var simpleDateFormat: SimpleDateFormat
-    private lateinit var allComplaintsClickListener: AllComplaintsClickListener
-    var mFilteredItemList = listOf<MyComplaintList>()
+    private lateinit var outletsClickListener: OutletsClickListener
+    var mFilteredItemList = listOf<OutletsList>()
     private var searchFilter: SearchFilters? = null
 
 
-    fun updateViewList (complaintList: List<MyComplaintList>){
-        this.complaintList = complaintList
-        mFilteredItemList = complaintList
+    fun updateViewList (outletList: List<OutletsList>){
+        this.outletList = outletList
+        mFilteredItemList = outletList
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllComplaintRecyclerHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.all_complaint_layout, parent, false)
-        return AllComplaintRecyclerHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OutletRecyclerHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.outlet_list_layout, parent, false)
+        return OutletRecyclerHolder(view)
     }
 
     override fun getItemCount(): Int {
        return mFilteredItemList.size
     }
 
-    override fun onBindViewHolder(holder: AllComplaintRecyclerHolder, position: Int) {
+    override fun onBindViewHolder(holder: OutletRecyclerHolder, position: Int) {
         holder.onBind(mFilteredItemList[position])
     }
-    fun setAllComplaintsListener(allComplaintsClickListener: AllComplaintsClickListener) {
-        this.allComplaintsClickListener = allComplaintsClickListener
+    fun setOutletListener(outletsClickListener: OutletsClickListener) {
+        this.outletsClickListener = outletsClickListener
     }
 
     override fun getFilter(): Filter {
@@ -63,13 +64,15 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
         override fun performFiltering(constraint: CharSequence?): FilterResults {
             val charString = constraint.toString()
             if (charString.isEmpty()) {
-                mFilteredItemList = complaintList
+                mFilteredItemList = outletList
             } else {
-                val filteredList = mutableListOf<MyComplaintList>()
-                for (resultlist in complaintList) {
-                    if (resultlist.outlet!!.toLowerCase().contains(charString.toLowerCase())   ||
+                val filteredList = mutableListOf<OutletsList>()
+                for (resultlist in outletList) {
+                    if (resultlist.name!!.toLowerCase().contains(charString.toLowerCase())   ||
+                            resultlist.regionaloffice!!.toLowerCase().contains(charString.toLowerCase())||
+                            resultlist.salesarea!!.toLowerCase().contains(charString.toLowerCase()) ||
                             resultlist.customercode!!.toLowerCase().contains(charString.toLowerCase())||
-                            resultlist.complaintid!!.toLowerCase().contains(charString.toLowerCase()) ) {
+                            resultlist.districtname!!.toLowerCase().contains(charString.toLowerCase())) {
                         filteredList.add(resultlist)
                     }
                 }
@@ -81,55 +84,36 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
         }
 
         override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-            mFilteredItemList = results?.values as List<MyComplaintList>
+            mFilteredItemList = results?.values as List<OutletsList>
             notifyDataSetChanged()
 
         }
     }
-    inner class AllComplaintRecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class OutletRecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val complaintId = itemView.findViewById<TextView>(R.id.id)
-        private val date = itemView.findViewById<TextView>(R.id.dateEt)
-        private val  status = itemView.findViewById<TextView>(R.id.status)
-        private val name = itemView.findViewById<TextView>(R.id.outlet_name)
-//        private val code = itemView.findViewById<TextView>(R.id.customer_code)
-        private val letterstatus = itemView.findViewById<TextView>(R.id.letterstatus)
+
+
+        private val name = itemView.findViewById<TextView>(R.id.name)
+        private val code = itemView.findViewById<TextView>(R.id.code)
+        private val district = itemView.findViewById<TextView>(R.id.district)
+        private val sales = itemView.findViewById<TextView>(R.id.sales)
+        private val  regionalOffice = itemView.findViewById<TextView>(R.id.regional_office)
 
         init {
 
             itemView.setOnClickListener {
-                allComplaintsClickListener.OnAllComplaintsClick(complaintList[adapterPosition])
+                outletsClickListener.OnOutletClick(outletList[adapterPosition])
             }
         }
 
-        fun onBind(complaintList: MyComplaintList){
+        fun onBind(outletsList: OutletsList){
 
-            name.text = "${complaintList.outlet}   -   ${complaintList.customercode}"
-            complaintId.text = "${complaintList.complaintid}"
-//            date.text =  "${complaintList.fordate}"
-           date.text = DateTimeHelper.getDDMMYYYYDateFromString(complaintList.fordate!!)
-//            code.text = "-  ${complaintList.customercode}"
-            letterstatus.text = "Letter status : ${complaintList.letterstatus}"
-            status.text = complaintList.status
-            if (complaintList.status!!.toLowerCase().equals("done")) {
-                status.setTextColor(Color.parseColor("#99CC33"))
-            }else if (complaintList.status!!.toLowerCase().equals("due")){
-                status.setTextColor(Color.parseColor("#FF6633"))
-            }else if (complaintList.status!!.toLowerCase().equals("working")){
-                status.setTextColor(Color.parseColor("#0066CC"))
-            }else if (complaintList.status!!.toLowerCase().equals("hold")){
-                status.setTextColor(Color.parseColor("#6699CC"))
-            }else if (complaintList.status!!.toLowerCase().equals("cancelled")){
-                status.setTextColor(Color.parseColor("#2EC43E"))
-            }else if (complaintList.status!!.toLowerCase().equals("draft")){
-                status.setTextColor(Color.parseColor("#996699"))
-            }else if (complaintList.status!!.toLowerCase().equals("estimated")){
-                status.setTextColor(Color.parseColor("#003366"))
-            }else if (complaintList.status!!.toLowerCase().equals("billed")){
-                status.setTextColor(Color.parseColor("#FFCC33"))
-            }else if (complaintList.status!!.toLowerCase().equals("payment")){
-                status.setTextColor(Color.parseColor("#E16117"))
-            }
+            name.text = "${outletsList.name}"
+            code.text = "${outletsList.customercode}"
+            district.text = "${outletsList.districtname}"
+            sales.text = outletsList.salesarea
+            regionalOffice.text = outletsList.regionaloffice
+
         }
     }
 

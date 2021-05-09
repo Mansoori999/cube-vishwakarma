@@ -39,6 +39,10 @@ class DueFragment : BaseFragment<FragmentDueBinding, AllComplaintFragmentViewMod
                     setAllComplaintsListener(this@DueFragment)
                 }
     }
+    fun allComplaintSearchFilter(newText: String?){
+        allComplaintRecyclerAdapter.filter.filter(newText)
+
+    }
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
 
@@ -90,6 +94,7 @@ class DueFragment : BaseFragment<FragmentDueBinding, AllComplaintFragmentViewMod
                     if (itemlist.isEmpty()){
                         viewBinding.progressBar.setVisibilityGone()
                         viewBinding.errorLayout.root.setVisibilityVisible()
+                        allComplaintRecyclerAdapter.updateViewList(emptyList())
                         viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
                         viewBinding.errorLayout.errorActionButton.setVisibilityGone()
                         viewBinding.errorLayout.messageTv.text = "Not Due Complaint Found"
