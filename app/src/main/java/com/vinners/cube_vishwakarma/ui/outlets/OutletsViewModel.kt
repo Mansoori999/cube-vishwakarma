@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplainDetailsList
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.outlets.OutletDetailsList
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import com.vinners.cube_vishwakarma.data.repository.OutletRepository
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ interface OutletEvents {
 
     val outletListState: LiveData<Lce<List<OutletsList>>>
 
+    val outletDetailsListState : LiveData<Lce<OutletDetailsList>>
 
 
 
@@ -30,14 +32,31 @@ private val outletRepository: OutletRepository
     private val _outletListState = MutableLiveData<Lce<List<OutletsList>>>()
     override val outletListState: LiveData<Lce<List<OutletsList>>> = _outletListState
 
-    fun getOutletData(){
+    fun getOutletData() {
         _outletListState.value = Lce.Loading
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val response = outletRepository.getOutletData()
                 _outletListState.postValue(Lce.content(response))
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 _outletListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    /* Outlet Details*/
+    private val _outletDetailsListState = MutableLiveData<Lce<OutletDetailsList>>()
+    override val outletDetailsListState: LiveData<Lce<OutletDetailsList>> = _outletDetailsListState
+
+    fun getOutletDetailsData(outletid : String) {
+        _outletDetailsListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = outletRepository.getOutletDetails(outletid)
+                _outletDetailsListState.postValue(Lce.content(response))
+            } catch (e: Exception) {
+                _outletDetailsListState.postValue(Lce.error(e.localizedMessage))
 
             }
         }

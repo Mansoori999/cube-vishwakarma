@@ -16,6 +16,10 @@ data class OutletsList(
         val salesarea : String? =null,
 
         @SerializedName("districtname")
-        val districtname : String? =null
+        val districtname : String? =null,
+
+        @SerializedName("id")
+        val outletid : String? =null,
+
 ) {
 }

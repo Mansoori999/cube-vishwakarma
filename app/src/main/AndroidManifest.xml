@@ -22,7 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Truman"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.tutorials.TutorialsActivity"></activity>
+        <activity android:name=".ui.outlets.OutletDetalisActivity"></activity>
+        <activity android:name=".ui.complaints.complaintRequestView.ComplaintRequestViewActivity" />
+        <activity android:name=".ui.tutorials.TutorialsActivity" />
         <activity android:name=".ui.outlets.OutletsActivity" />
         <activity android:name=".ui.expense.ExpenseActivity" />
         <activity android:name=".ui.documents.DocumentsActivity" />

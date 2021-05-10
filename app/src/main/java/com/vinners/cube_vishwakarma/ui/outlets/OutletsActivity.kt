@@ -1,5 +1,6 @@
 package com.vinners.cube_vishwakarma.ui.outlets
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -16,16 +17,18 @@ import com.vinners.cube_vishwakarma.core.base.BaseActivity
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
+import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityOutletsBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintViewModel
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 import java.util.*
 import javax.inject.Inject
 
-class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.layout.activity_outlets) {
+class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.layout.activity_outlets),OutletsClickListener {
 
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
@@ -43,9 +46,7 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
                 }
     }
 
-    private fun setOutletListener(outletsClickListener: OutletsActivity) {
 
-    }
 
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
@@ -141,6 +142,14 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
             }
         })
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun OnOutletClick(outletsList: OutletsList) {
+        Intent(this, OutletDetalisActivity::class.java).apply {
+            putExtra(OutletDetalisActivity.OUTLET_ID, outletsList.outletid)
+        }.also {
+            startActivity(it)
+        }
     }
 
 }
