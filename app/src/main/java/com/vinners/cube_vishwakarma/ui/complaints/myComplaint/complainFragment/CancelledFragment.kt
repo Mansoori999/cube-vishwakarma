@@ -21,6 +21,8 @@ import com.vinners.cube_vishwakarma.databinding.FragmentCancelledBinding
 import com.vinners.cube_vishwakarma.databinding.FragmentDueBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintRecyclerAdapter
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintsClickListener
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
 import java.util.*
@@ -28,7 +30,7 @@ import javax.inject.Inject
 
 
 class CancelledFragment : BaseFragment<FragmentCancelledBinding, AllComplaintFragmentViewModel>(R.layout.fragment_cancelled),
-    AllComplaintsClickListener {
+        AllComplaintsClickListener {
     companion object {
         fun newInstance() = CancelledFragment()
 

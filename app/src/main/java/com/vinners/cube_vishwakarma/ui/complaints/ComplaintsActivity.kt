@@ -7,6 +7,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.ComplaintRequestActivity
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintActivity
 
 
@@ -31,7 +32,7 @@ class ComplaintsActivity : AppCompatActivity() {
         }
         val complaintRequest = findViewById<CardView>(R.id.complaint_request)
         complaintRequest.setOnClickListener {
-            val intent = Intent(this, ComplaintRequestActivity::class.java)
+            val intent = Intent(this, ComplaintRequestViewActivity::class.java)
             startActivity(intent)
         }
     }

@@ -1,6 +1,7 @@
 package com.vinners.cube_vishwakarma.ui.outlets
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -26,7 +27,6 @@ interface  OutletsClickListener {
 class OutletRecyclerAdapter() : RecyclerView.Adapter<OutletRecyclerAdapter.OutletRecyclerHolder>(), Filterable {
     private var outletList = listOf<OutletsList>()
     private lateinit var context: Context
-    private lateinit var simpleDateFormat: SimpleDateFormat
     private lateinit var outletsClickListener: OutletsClickListener
     var mFilteredItemList = listOf<OutletsList>()
     private var searchFilter: SearchFilters? = null
@@ -39,16 +39,18 @@ class OutletRecyclerAdapter() : RecyclerView.Adapter<OutletRecyclerAdapter.Outle
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OutletRecyclerHolder {
+        this.context = parent.context
         val view = LayoutInflater.from(parent.context).inflate(R.layout.outlet_list_layout, parent, false)
         return OutletRecyclerHolder(view)
     }
 
-    override fun getItemCount(): Int {
-       return mFilteredItemList.size
-    }
 
     override fun onBindViewHolder(holder: OutletRecyclerHolder, position: Int) {
         holder.onBind(mFilteredItemList[position])
+
+    }
+    override fun getItemCount(): Int {
+        return mFilteredItemList.size
     }
     fun setOutletListener(outletsClickListener: OutletsClickListener) {
         this.outletsClickListener = outletsClickListener
@@ -102,7 +104,7 @@ class OutletRecyclerAdapter() : RecyclerView.Adapter<OutletRecyclerAdapter.Outle
         init {
 
             itemView.setOnClickListener {
-                outletsClickListener.OnOutletClick(outletList[adapterPosition])
+                outletsClickListener.OnOutletClick(mFilteredItemList[adapterPosition])
             }
         }
 
@@ -113,6 +115,7 @@ class OutletRecyclerAdapter() : RecyclerView.Adapter<OutletRecyclerAdapter.Outle
             district.text = "${outletsList.districtname}"
             sales.text = outletsList.salesarea
             regionalOffice.text = outletsList.regionaloffice
+
 
         }
     }

@@ -1,9 +1,7 @@
 package com.vinners.cube_vishwakarma.data.dataStores.complaint
 
 
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOrderByList
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintTypeList
+import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.*
 
 interface ComplaintRequestRemoteDataStore{
 
@@ -20,4 +18,6 @@ interface ComplaintRequestRemoteDataStore{
             remarks:String,
             orderby:String
     ) : List<String>
+
+    suspend fun getViewComplaintRequest(startDate: String,endDate: String) :List<ComplaintRequestResponse>
 }

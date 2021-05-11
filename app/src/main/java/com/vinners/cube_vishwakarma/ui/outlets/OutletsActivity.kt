@@ -29,6 +29,9 @@ import java.util.*
 import javax.inject.Inject
 
 class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.layout.activity_outlets),OutletsClickListener {
+    companion object {
+        const val OUTLET_ID = "outeltid"
+    }
 
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
@@ -146,7 +149,7 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
 
     override fun OnOutletClick(outletsList: OutletsList) {
         Intent(this, OutletDetalisActivity::class.java).apply {
-            putExtra(OutletDetalisActivity.OUTLET_ID, outletsList.outletid)
+            putExtra(OUTLET_ID, outletsList.outletid)
         }.also {
             startActivity(it)
         }

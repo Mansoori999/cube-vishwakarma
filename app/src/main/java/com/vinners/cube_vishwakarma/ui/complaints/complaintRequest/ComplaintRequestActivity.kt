@@ -1,5 +1,6 @@
 package com.vinners.cube_vishwakarma.ui.complaints.complaintRequest
 
+import android.content.Intent
 import android.view.Gravity
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -17,6 +18,7 @@ import com.vinners.cube_vishwakarma.databinding.ActivityComplaintRequestBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.model.*
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity
 import java.util.stream.Collectors
 import javax.inject.Inject
 
@@ -250,98 +252,95 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
                 }
                 is Lce.Content ->{
                     Toast.makeText(this, "Complaint Request Data Submitted", Toast.LENGTH_SHORT).show()
-
-//                    viewBinding.addComplaintDataErrorLayout.root.setVisibilityGone()
-//                    viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
-//                    viewBinding.addDataLoadingLayout.setVisibilityGone()
-//                    viewBinding.addComplaintDataMainLayout.root.setVisibilityVisible()
-//                    viewBinding.addComplaintDataMainLayout.wordEt.text.clear()
-                    viewModel.loadRegionalAndSalesInfo
-                            .observe(this, Observer {
-                                when (it) {
-                                    LoadMetaForAddComplaintState.LoadingLoadMetaForAddComplaintState -> {
-                                        viewBinding.addComplaintDataMainLayout.root.setVisibilityGone()
-                                        viewBinding.addComplaintDataErrorLayout.root.setVisibilityGone()
-                                        viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
-                                        viewBinding.addDataLoadingLayout.setVisibilityVisible()
-                                    }
-                                    is LoadMetaForAddComplaintState.MetaForAddComplaintStateLoaded->{
-                                        viewBinding.addComplaintDataErrorLayout.root.setVisibilityGone()
-                                        viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
-                                        viewBinding.addDataLoadingLayout.setVisibilityGone()
-                                        viewBinding.addComplaintDataMainLayout.root.setVisibilityVisible()
-
-                                        val regionals = it.regionalAndSalesInfo.map {
-                                            RegionalOfficeData(
-                                                    id = it.roid!!,
-                                                    name = it.regionaloffice!!
-                                            )
-                                        }.toMutableList()
-                                        setRegionalOnRegionalOfficeSpinner(regionals)
-
-                                    }
-                                    is LoadMetaForAddComplaintState.ErrorInLoadingMetaForAddComplaintLoaded->{
-                                        viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
-                                        viewBinding.addDataLoadingLayout.setVisibilityGone()
-                                        viewBinding.addComplaintDataMainLayout.root.setVisibilityGone()
-
-                                        viewBinding.addComplaintDataErrorLayout.root.setVisibilityVisible()
-                                        viewBinding.addComplaintDataErrorLayout.informationTV.text = it.error
-                                    }
-
-                                }
-                                viewBinding.addComplaintDataMainLayout.editRemarks.text.clear()
-                                viewBinding.addComplaintDataMainLayout.wordEt.text.clear()
-                                viewBinding.addComplaintDataMainLayout.districtEt.text.clear()
-                                viewBinding.addComplaintDataMainLayout.locationET.text.clear()
-                                viewBinding.addComplaintDataMainLayout.categoryEt.text.clear()
-                            })
-                    viewModel.getNewComplaintData()
-                    viewModel.complaintTypeListState.observe(this, Observer {
-                        when(it){
-                            Lce.Loading ->{
-                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityVisible()
-                            }
-                            is Lce.Content->{
-                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
-                                val complaintType = it.content.map {
-                                    ComplaintTypeData(
-                                            id = it.id!!,
-                                            name = it.name!!
-                                    )
-                                }.toMutableList()
-                                setComplaintOnComplaintTypeSpinner(complaintType)
-
-
-                            }
-                            is Lce.Error ->{
-                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
-                            }
-                        }
-                    })
-                    viewModel.getComplaintTypeData()
-
-                    viewModel.orderbyListState.observe(this, Observer {
-                        when(it){
-                            Lce.Loading ->{
-                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityVisible()
-                            }
-                            is Lce.Content->{
-                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
-                                val orderBy = it.content.map {
-                                    OrderByData(
-                                            id = it.id!!,
-                                            name = it.fullnamedesig!!
-                                    )
-                                }.toMutableList()
-                                setOrderOnOrderBySpinner(orderBy)
-                            }
-                            is Lce.Error ->{
-                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
-                            }
-                        }
-                    })
-                    viewModel.getOrderByData()
+                    val intent = Intent(this,ComplaintRequestViewActivity::class.java)
+                    startActivity(intent)
+                    finish()
+//                    viewModel.loadRegionalAndSalesInfo
+//                            .observe(this, Observer {
+//                                when (it) {
+//                                    LoadMetaForAddComplaintState.LoadingLoadMetaForAddComplaintState -> {
+//                                        viewBinding.addComplaintDataMainLayout.root.setVisibilityGone()
+//                                        viewBinding.addComplaintDataErrorLayout.root.setVisibilityGone()
+//                                        viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
+//                                        viewBinding.addDataLoadingLayout.setVisibilityVisible()
+//                                    }
+//                                    is LoadMetaForAddComplaintState.MetaForAddComplaintStateLoaded->{
+//                                        viewBinding.addComplaintDataErrorLayout.root.setVisibilityGone()
+//                                        viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
+//                                        viewBinding.addDataLoadingLayout.setVisibilityGone()
+//                                        viewBinding.addComplaintDataMainLayout.root.setVisibilityVisible()
+//
+//                                        val regionals = it.regionalAndSalesInfo.map {
+//                                            RegionalOfficeData(
+//                                                    id = it.roid!!,
+//                                                    name = it.regionaloffice!!
+//                                            )
+//                                        }.toMutableList()
+//                                        setRegionalOnRegionalOfficeSpinner(regionals)
+//
+//                                    }
+//                                    is LoadMetaForAddComplaintState.ErrorInLoadingMetaForAddComplaintLoaded->{
+//                                        viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
+//                                        viewBinding.addDataLoadingLayout.setVisibilityGone()
+//                                        viewBinding.addComplaintDataMainLayout.root.setVisibilityGone()
+//
+//                                        viewBinding.addComplaintDataErrorLayout.root.setVisibilityVisible()
+//                                        viewBinding.addComplaintDataErrorLayout.informationTV.text = it.error
+//                                    }
+//
+//                                }
+//                                viewBinding.addComplaintDataMainLayout.editRemarks.text.clear()
+//                                viewBinding.addComplaintDataMainLayout.wordEt.text.clear()
+//                                viewBinding.addComplaintDataMainLayout.districtEt.text.clear()
+//                                viewBinding.addComplaintDataMainLayout.locationET.text.clear()
+//                                viewBinding.addComplaintDataMainLayout.categoryEt.text.clear()
+//                            })
+//                    viewModel.getNewComplaintData()
+//                    viewModel.complaintTypeListState.observe(this, Observer {
+//                        when(it){
+//                            Lce.Loading ->{
+//                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityVisible()
+//                            }
+//                            is Lce.Content->{
+//                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
+//                                val complaintType = it.content.map {
+//                                    ComplaintTypeData(
+//                                            id = it.id!!,
+//                                            name = it.name!!
+//                                    )
+//                                }.toMutableList()
+//                                setComplaintOnComplaintTypeSpinner(complaintType)
+//
+//
+//                            }
+//                            is Lce.Error ->{
+//                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
+//                            }
+//                        }
+//                    })
+//                    viewModel.getComplaintTypeData()
+//
+//                    viewModel.orderbyListState.observe(this, Observer {
+//                        when(it){
+//                            Lce.Loading ->{
+//                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityVisible()
+//                            }
+//                            is Lce.Content->{
+//                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
+//                                val orderBy = it.content.map {
+//                                    OrderByData(
+//                                            id = it.id!!,
+//                                            name = it.fullnamedesig!!
+//                                    )
+//                                }.toMutableList()
+//                                setOrderOnOrderBySpinner(orderBy)
+//                            }
+//                            is Lce.Error ->{
+//                                viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
+//                            }
+//                        }
+//                    })
+//                    viewModel.getOrderByData()
 
                 }
                 is Lce.Error ->{

@@ -20,6 +20,8 @@ import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.FragmentDueBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintRecyclerAdapter
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintsClickListener
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
 import java.util.*
@@ -27,7 +29,7 @@ import javax.inject.Inject
 
 
 class DueFragment : BaseFragment<FragmentDueBinding, AllComplaintFragmentViewModel>(R.layout.fragment_due),
-    AllComplaintsClickListener {
+        AllComplaintsClickListener {
     companion object {
         fun newInstance() = DueFragment()
 
@@ -89,7 +91,7 @@ class DueFragment : BaseFragment<FragmentDueBinding, AllComplaintFragmentViewMod
                 is Lce.Content->
                 {
                     val itemlist = it.content.filter {
-                        it.status?.toLowerCase().equals("Due")
+                        it.status?.toLowerCase().equals("due")
                     }
                     if (itemlist.isEmpty()){
                         viewBinding.progressBar.setVisibilityGone()

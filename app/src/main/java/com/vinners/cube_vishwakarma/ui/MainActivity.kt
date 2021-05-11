@@ -100,17 +100,16 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
         val userName = view.findViewById<TextView>(R.id.username)
         userName.setText(String.format("Hii, %s", userSessionManager.userName))
-        val logoutbtn = view.findViewById<ImageView>(R.id.logout_btn)
-        logoutbtn.setOnClickListener {
+        viewBinding.contentMainContainer.logout.setOnClickListener {
             MaterialAlertDialogBuilder(this)
-                    .setTitle("Log Out")
-                    .setMessage("Do you want to log out?")
-                    .setPositiveButton("Yes") { _, _ ->
+                .setTitle("Log Out")
+                .setMessage("Do you want to log out?")
+                .setPositiveButton("Yes") { _, _ ->
 //                        userSessionManager.logOut()
-                        viewModel.logout()
-                    }.setNegativeButton("No") { dialog, _ ->
-                        dialog.cancel()
-                    }.show()
+                    viewModel.logout()
+                }.setNegativeButton("No") { dialog, _ ->
+                    dialog.cancel()
+                }.show()
         }
         val recyclerView: RecyclerView = findViewById(R.id.Recyclerview_home)
         mainActivityRecyclerAdapter.updateViewList(homeList)

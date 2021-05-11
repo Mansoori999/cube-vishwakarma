@@ -11,6 +11,7 @@
 
         <include
             layout="@layout/content_main"
+            android:id="@+id/content_main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 

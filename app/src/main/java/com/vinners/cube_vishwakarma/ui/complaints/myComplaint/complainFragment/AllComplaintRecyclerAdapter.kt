@@ -1,4 +1,4 @@
-package com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment
+package com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain
 
 import android.content.Context
 import android.graphics.Color
@@ -8,10 +8,13 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.DateTimeHelper
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
+import com.vinners.cube_vishwakarma.ui.outlets.OutletRecyclerAdapter
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
@@ -25,7 +28,6 @@ interface  AllComplaintsClickListener {
 class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerAdapter.AllComplaintRecyclerHolder>(), Filterable {
     private var complaintList = listOf<MyComplaintList>()
     private lateinit var context: Context
-    private lateinit var simpleDateFormat: SimpleDateFormat
     private lateinit var allComplaintsClickListener: AllComplaintsClickListener
     var mFilteredItemList = listOf<MyComplaintList>()
     private var searchFilter: SearchFilters? = null
@@ -38,6 +40,7 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllComplaintRecyclerHolder {
+        this.context = parent.context
         val view = LayoutInflater.from(parent.context).inflate(R.layout.all_complaint_layout, parent, false)
         return AllComplaintRecyclerHolder(view)
     }
@@ -67,10 +70,18 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
             } else {
                 val filteredList = mutableListOf<MyComplaintList>()
                 for (resultlist in complaintList) {
-                    if (resultlist.outlet!!.toLowerCase().contains(charString.toLowerCase())   ||
-                            resultlist.customercode!!.toLowerCase().contains(charString.toLowerCase())||
-                            resultlist.complaintid!!.toLowerCase().contains(charString.toLowerCase()) ) {
-                        filteredList.add(resultlist)
+                    if (resultlist.outlet.isNullOrEmpty().not() || resultlist.complaintid.isNullOrEmpty().not()
+                        || resultlist.customercode.isNullOrEmpty().not()) {
+                        if (resultlist.outlet!!.toLowerCase().contains(charString.toLowerCase()) ||
+                            resultlist.customercode!!.toLowerCase()
+                                .contains(charString.toLowerCase()) ||
+                            resultlist.complaintid!!.toLowerCase()
+                                .contains(charString.toLowerCase())
+                        ) {
+                            filteredList.add(resultlist)
+                        }
+                    }else{
+                        Toast.makeText(context, "Beach", Toast.LENGTH_SHORT).show()
                     }
                 }
                 mFilteredItemList = filteredList
@@ -79,9 +90,12 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
             filterResults.values = mFilteredItemList
             return filterResults
         }
-
         override fun publishResults(constraint: CharSequence?, results: FilterResults) {
-            mFilteredItemList = results?.values as List<MyComplaintList>
+            mFilteredItemList = if(results == null || results.values == null)
+                ArrayList<MyComplaintList>()
+            else
+                results.values as List<MyComplaintList>
+
             notifyDataSetChanged()
 
         }
@@ -98,7 +112,7 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
         init {
 
             itemView.setOnClickListener {
-                allComplaintsClickListener.OnAllComplaintsClick(complaintList[adapterPosition])
+                allComplaintsClickListener.OnAllComplaintsClick(mFilteredItemList[adapterPosition])
             }
         }
 

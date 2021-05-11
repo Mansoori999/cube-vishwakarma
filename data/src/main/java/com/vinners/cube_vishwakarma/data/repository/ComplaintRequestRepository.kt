@@ -2,9 +2,7 @@ package com.vinners.cube_vishwakarma.data.repository
 
 
 import com.vinners.cube_vishwakarma.data.dataStores.complaint.ComplaintRequestRemoteDataStore
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOrderByList
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintTypeList
+import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.*
 import javax.inject.Inject
 
 class ComplaintRequestRepository @Inject constructor(
@@ -30,5 +28,9 @@ class ComplaintRequestRepository @Inject constructor(
             orderby:String
     ):List<String>{
         return complaintRequestRemoteDataStore.submitComplaintRequestData(typeid,work,outletid,remarks,orderby)
+    }
+
+    suspend fun getViewComplaintRequest(startDate: String,endDate: String) :List<ComplaintRequestResponse>{
+        return complaintRequestRemoteDataStore.getViewComplaintRequest(startDate,endDate)
     }
 }

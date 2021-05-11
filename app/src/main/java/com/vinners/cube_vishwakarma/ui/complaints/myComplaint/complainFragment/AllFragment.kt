@@ -17,13 +17,15 @@ import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.FragmentAllBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintRecyclerAdapter
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintsClickListener
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
 import java.util.*
 import javax.inject.Inject
 
-class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewModel>(R.layout.fragment_all),AllComplaintsClickListener {
+class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewModel>(R.layout.fragment_all), AllComplaintsClickListener {
     companion object {
         fun newInstance() = AllFragment()
 

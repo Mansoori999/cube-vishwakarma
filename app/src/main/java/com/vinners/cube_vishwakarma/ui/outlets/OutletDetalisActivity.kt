@@ -20,9 +20,7 @@ import javax.inject.Inject
 
 class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, OutletsViewModel>(R.layout.activity_outlet_detalis) {
 
-    companion object {
-        const val OUTLET_ID = "outeltid"
-    }
+
 
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
@@ -48,12 +46,12 @@ class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, Outlets
     }
 
     override fun onInitDataBinding() {
-        outletid = intent.getStringExtra(OUTLET_ID)
+        outletid = intent.getStringExtra(OutletsActivity.OUTLET_ID)
         viewBinding.outletDetailsToolbar.setNavigationOnClickListener {
             onBackPressed()
         }
         val mapUrl = "http://maps.google.co.in/maps?q="+ gps
-        viewBinding.locationpin.setOnClickListener {
+        viewBinding.gps.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.co.in/maps?q="+ gps))
             startActivity(intent)
         }
@@ -74,18 +72,14 @@ class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, Outlets
                         if (it.content.pic != null){
                             viewBinding.imageView.load(appInfo.getFullAttachmentUrl(it.content.pic!!))
                         }else{
-                            viewBinding.imageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_image,null))
+                            viewBinding.imageView.setImageDrawable(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_default_image,null))
                         }
                         viewBinding.outletDetailScreen.setVisibilityVisible()
                         viewBinding.loadingData.setVisibilityGone()
-                        viewBinding.outletid.text = it.content.outletid
                         viewBinding.outletName.text = it.content.outlet
                         viewBinding.customercode.text = it.content.customercode
-                        viewBinding.roid.text = it.content.roid
                         viewBinding.regionaloffice.text = it.content.regionaloffice
-                        viewBinding.said.text = it.content.said
                         viewBinding.sales.text = it.content.salesarea
-                        viewBinding.district.text = it.content.district
                         viewBinding.location.text = it.content.location
                         viewBinding.address.text = it.content.address
                         viewBinding.category.text = it.content.category
@@ -94,17 +88,17 @@ class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, Outlets
                         viewBinding.secondarymobile.text = it.content.secondarymobile
                         viewBinding.primarymail.text = it.content.primarymail
                         viewBinding.secondarymail.text = it.content.secondarymail
-                        if (it.content.gps!!.isEmpty().not() && it.content.gps != "," ) {
-                            viewBinding.gps.text = it.content.gps
-                            viewBinding.locationpin.setVisibilityVisible()
+                        if (it.content.gps != null && it.content.gps != "," ) {
+                            viewBinding.gps.setVisibilityVisible()
+                            gps = it.content.gps!!
                         }else{
-                            viewBinding.gps.text = it.content.gps
-                            viewBinding.locationpin.setVisibilityGone()
+                            viewBinding.gps.setVisibilityGone()
                         }
-                        viewBinding.gpsaddress.text = it.content.gpsaddress
+
+
                         viewBinding.zone.text = it.content.zone
-                        viewBinding.zoneid.text = it.content.zoneid
-                        gps = it.content.gps!!
+
+
                     }else{
                         viewBinding.loadingData.setVisibilityVisible()
                     }

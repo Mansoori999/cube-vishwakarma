@@ -5,9 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOrderByList
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintTypeList
+import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.*
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import com.vinners.cube_vishwakarma.data.repository.ComplaintRequestRepository
 import kotlinx.coroutines.Dispatchers
@@ -36,6 +34,8 @@ interface ComplaintTypeEvents {
     val orderbyListState :  LiveData<Lce<List<ComplaintOrderByList>>>
 
     val submitListState : LiveData<Lce<List<String>>>
+
+    val viewComplaintRequestListState : LiveData<Lce<List<ComplaintRequestResponse>>>
 
 }
 class ComplaintRequestViewModel @Inject constructor(
@@ -120,6 +120,24 @@ private val complaintRequestRepository: ComplaintRequestRepository
                 _submitListState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _submitListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    /* View complaint Request Data */
+
+    private val _viewComplaintRequestListState = MutableLiveData<Lce<List<ComplaintRequestResponse>>>()
+    override val viewComplaintRequestListState: LiveData<Lce<List<ComplaintRequestResponse>>> = _viewComplaintRequestListState
+
+    fun getComplaintRequestView(startDate: String,endDate: String){
+        _viewComplaintRequestListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = complaintRequestRepository.getViewComplaintRequest(startDate,endDate)
+                _viewComplaintRequestListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _viewComplaintRequestListState.postValue(Lce.error(e.localizedMessage))
 
             }
         }

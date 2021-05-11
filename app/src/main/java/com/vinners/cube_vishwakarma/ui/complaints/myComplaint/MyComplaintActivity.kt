@@ -81,50 +81,70 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,MyComplaintVi
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 //     sectionsPagerAdapter.fundSearchFilter(newText)
-                if (viewPager.currentItem  ==0)
-                {
-                    val fragment =  viewPager.adapter!!.instantiateItem(viewPager, 0) as Fragment
-                    if ( fragment is AllFragment)
-                        fragment.allComplaintSearchFilter(newText)
-                } else if (viewPager.currentItem  == 1) {
-                    val fragment = viewPager.adapter!!.instantiateItem(viewPager, 1) as Fragment
-                    if (fragment is DueFragment)
-                        fragment.allComplaintSearchFilter(newText)
-                }else if (viewPager.currentItem  == 2) {
-                    val fragment = viewPager.adapter!!.instantiateItem(viewPager, 2) as Fragment
-                    if (fragment is WorkingFragment)
-                        fragment.allComplaintSearchFilter(newText)
-                }else if (viewPager.currentItem  == 3) {
-                    val fragment = viewPager.adapter!!.instantiateItem(viewPager, 3) as Fragment
-                    if (fragment is HoldFragment)
-                        fragment.allComplaintSearchFilter(newText)
-                }else if (viewPager.currentItem  == 4) {
-                    val fragment = viewPager.adapter!!.instantiateItem(viewPager, 4) as Fragment
-                    if (fragment is CancelledFragment)
-                        fragment.allComplaintSearchFilter(newText)
-                }else if (viewPager.currentItem  == 5) {
-                    val fragment = viewPager.adapter!!.instantiateItem(viewPager, 5) as Fragment
-                    if (fragment is DoneFragment)
-                        fragment.allComplaintSearchFilter(newText)
-                }else if (viewPager.currentItem  == 6) {
-                    val fragment = viewPager.adapter!!.instantiateItem(viewPager, 6) as Fragment
-                    if (fragment is DraftFragment)
-                        fragment.allComplaintSearchFilter(newText)
-                }else if (viewPager.currentItem  == 7) {
-                    val fragment = viewPager.adapter!!.instantiateItem(viewPager, 7) as Fragment
-                    if (fragment is EstimatedFragment)
-                        fragment.allComplaintSearchFilter(newText)
-                }else if (viewPager.currentItem  == 8) {
-                    val fragment = viewPager.adapter!!.instantiateItem(viewPager, 8) as Fragment
-                    if (fragment is BilledFragment)
-                        fragment.allComplaintSearchFilter(newText)
-                }else if (viewPager.currentItem  == 9) {
-                    val fragment = viewPager.adapter!!.instantiateItem(viewPager, 9) as Fragment
-                    if (fragment is PaymentFragment)
-                        fragment.allComplaintSearchFilter(newText)
+                when (viewPager.currentItem) {
+                    0 -> {
+                        val fragment =  viewPager.adapter!!.instantiateItem(viewPager, 0) as Fragment
+                        if ( fragment is AllFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    1 -> {
+                        val fragment = viewPager.adapter!!.instantiateItem(viewPager, 1) as Fragment
+                        if (fragment is DueFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    2 -> {
+                        val fragment = viewPager.adapter!!.instantiateItem(viewPager, 2) as Fragment
+                        if (fragment is WorkingFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    3 -> {
+                        val fragment = viewPager.adapter!!.instantiateItem(viewPager, 3) as Fragment
+                        if (fragment is HoldFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    4 -> {
+                        val fragment = viewPager.adapter!!.instantiateItem(viewPager, 4) as Fragment
+                        if (fragment is CancelledFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    5 -> {
+                        val fragment = viewPager.adapter!!.instantiateItem(viewPager, 5) as Fragment
+                        if (fragment is DoneFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    6 -> {
+                        val fragment = viewPager.adapter!!.instantiateItem(viewPager, 6) as Fragment
+                        if (fragment is DraftFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    7 -> {
+                        val fragment = viewPager.adapter!!.instantiateItem(viewPager, 7) as Fragment
+                        if (fragment is EstimatedFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    8 -> {
+                        val fragment = viewPager.adapter!!.instantiateItem(viewPager, 8) as Fragment
+                        if (fragment is BilledFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    9 -> {
+                        val fragment = viewPager.adapter!!.instantiateItem(viewPager, 9) as Fragment
+                        if (fragment is PaymentFragment)
+                            fragment.allComplaintSearchFilter(newText)
+                        return true
+                    }
+                    else -> return false
                 }
 
-                return false
             }
         })
         return super.onCreateOptionsMenu(menu)

@@ -46,11 +46,12 @@ object DateTimeHelper {
         return dateFormatter.format(todaysCalendar.time)
     }
 
+
+
     fun getShortDate(date: Date): String {
         dateFormatter = SimpleDateFormat(DATE_TIME_SHORT_DATE, Locale.getDefault())
         return dateFormatter.format(date.time)
     }
-
     fun getFancyDate(date: Date): String {
         dateFormatter = SimpleDateFormat(DATE_TIME_FANCY_DATE, Locale.getDefault())
         return dateFormatter.format(date.time)
@@ -68,6 +69,11 @@ object DateTimeHelper {
     fun getDDMMYYYYDateFromString(dateString: String): String {
         val date = SimpleDateFormat(DATE_TIME_FORMAT_YYYYMMDD).parse(dateString)
         dateFormatter = SimpleDateFormat(DATE_TIME_FORMAT_DDMMYYYY, Locale.getDefault())
+        return dateFormatter.format(date.time)
+    }
+
+    fun getyyyyMMddFormatDate(date: Date): String {
+        dateFormatter = SimpleDateFormat(DATE_TIME_FORMAT_YYYYMMDD, Locale.getDefault())
         return dateFormatter.format(date.time)
     }
 

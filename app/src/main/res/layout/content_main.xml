@@ -45,7 +45,15 @@
                     android:textSize="20dp"
                     android:layout_width="wrap_content" />
 
-
+                <ImageView
+                    android:id="@+id/logout"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_gravity="center"
+                    android:layout_alignParentRight="true"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
+                    android:src="@drawable/ic_logout" />
             </RelativeLayout>
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_pic"

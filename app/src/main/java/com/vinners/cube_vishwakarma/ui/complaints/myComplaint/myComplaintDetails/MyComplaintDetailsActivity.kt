@@ -20,6 +20,9 @@ import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityMyComplaintDetailsBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_STATUS
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_VIEW
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.AllFragment
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.DueFragment
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.HoldFragment
@@ -38,6 +41,10 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private val statusList = ArrayList<String>()
 
     private var id: String? = null
+
+    private var enabledComplaintRequest : Boolean = false
+
+    private var complaintRequestStatus : String? = null
 
     private var detailsId: String? = null
     private var status : String ? = null
@@ -65,6 +72,17 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
     override fun onInitDataBinding() {
         id = intent.getStringExtra("complaintId")
+        enabledComplaintRequest = intent.getBooleanExtra(COMPLAINT_REQUEST_VIEW, false)
+        complaintRequestStatus = intent.getStringExtra(COMPLAINT_REQUEST_STATUS)
+
+        if (enabledComplaintRequest == true) {
+            viewBinding.detailsToolbar.setTitle("Complaint Request Details ")
+            viewBinding.changeStatus.setVisibilityGone()
+
+        }else{
+            viewBinding.detailsToolbar.setTitle("Complaint Details ")
+        }
+
         viewBinding.detailsToolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -188,14 +206,19 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
                         viewBinding.sales.text = it.content.salesarea
                         viewBinding.district.text = it.content.district
                         viewBinding.letter.text = it.content.letterstatus
-                        viewBinding.status.text = it.content.status
+
                         viewBinding.subadmin.text = it.content.subadmin
                         viewBinding.supervisor.text = it.content.supervisor
                         viewBinding.foreman.text = it.content.foreman
                         viewBinding.enduser.text = it.content.enduser
                         viewBinding.order.text = it.content.orderBy
                         viewBinding.remarks.text = it.content.remarks
-                        setChangeStatus(it.content)
+                        if (enabledComplaintRequest == true){
+                            viewBinding.status.text = complaintRequestStatus
+                        }else{
+                            viewBinding.status.text = it.content.status
+                            setChangeStatus(it.content)
+                        }
 
                     }else{
                         viewBinding.loadingData.setVisibilityVisible()

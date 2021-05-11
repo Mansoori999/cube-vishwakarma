@@ -12,14 +12,6 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignParentRight="true"
-        android:id="@+id/logout_btn"
-        app:srcCompat="@drawable/ic_logout"
-        android:paddingTop="8dp"
-        tools:ignore="VectorDrawableCompat" />
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_alignParentBottom="true"

@@ -2,10 +2,7 @@ package com.vinners.cube_vishwakarma.remote.dataStoreImpl
 
 
 import com.vinners.cube_vishwakarma.data.dataStores.complaint.ComplaintRequestRemoteDataStore
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOrderByList
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintSubmitRequest
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintTypeList
+import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.*
 import com.vinners.cube_vishwakarma.remote.extensions.bodyOrThrow
 import com.vinners.cube_vishwakarma.remote.retrofitServices.ComplaintRequestService
 import javax.inject.Inject
@@ -40,5 +37,13 @@ private val complaintRequestService: ComplaintRequestService
                         remarks = remarks,
                         orderby = orderby
                 )).bodyOrThrow()
+    }
+
+    override suspend fun getViewComplaintRequest(startDate: String,endDate: String): List<ComplaintRequestResponse> {
+        return complaintRequestService.getComplaintRequestViewActivityList(
+            ComplaintRequestViewRequest(
+                startDate = startDate,
+                endDate  = endDate
+            )).bodyOrThrow()
     }
 }
