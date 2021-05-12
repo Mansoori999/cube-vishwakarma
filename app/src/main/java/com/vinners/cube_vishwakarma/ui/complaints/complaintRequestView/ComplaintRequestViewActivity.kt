@@ -72,7 +72,11 @@ class ComplaintRequestViewActivity : BaseActivity<ActivityComplaintRequestViewBi
         viewBinding.requestToolbar.setNavigationOnClickListener {
             onBackPressed()
         }
-        viewBinding.newComplaintRequestBtn.setOnClickListener {
+        viewBinding.addNewComplaintRequest.setOnClickListener {
+            val intent = Intent(this, ComplaintRequestActivity::class.java)
+            startActivity(intent)
+        }
+        viewBinding.addComplaint.setOnClickListener {
             val intent = Intent(this, ComplaintRequestActivity::class.java)
             startActivity(intent)
         }

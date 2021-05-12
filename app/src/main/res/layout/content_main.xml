@@ -95,13 +95,24 @@
 
                 <RelativeLayout
                     android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
                     android:layout_height="match_parent">
                     <TextView
                         android:id="@+id/hiuserTV"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="Hii , "
+                        android:textColor="@color/black"
+                        android:textSize="18dp" />
+                    <TextView
+                        android:id="@+id/hiuserMobileTV"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="67656"
+                        android:layout_below="@+id/hiuserTV"
                         android:textColor="@color/black"
                         android:textSize="18dp" />
                 </RelativeLayout>
