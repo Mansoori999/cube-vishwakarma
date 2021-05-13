@@ -331,7 +331,7 @@
                         android:paddingRight="3dp"
                         android:text="Contact Person"
                         android:textColor="#CC000000"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/contactperson"
@@ -408,7 +408,7 @@
                         android:paddingRight="3dp"
                         android:text="Secondary Mail"
                         android:textColor="#CC000000"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/secondarymail"
@@ -485,7 +485,7 @@
                         android:paddingRight="3dp"
                         android:text="Secondary Mobile"
                         android:textColor="#CC000000"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
 
                     <TextView
                         android:id="@+id/secondarymobile"
@@ -563,7 +563,7 @@
                     android:paddingRight="3dp"
                     android:text="Address"
                     android:textColor="#CC000000"
-                    android:textSize="14sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/address"

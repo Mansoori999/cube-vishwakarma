@@ -40,6 +40,7 @@ import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
+import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
 import de.hdodenhof.circleimageview.CircleImageView
 
@@ -85,6 +86,15 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         val hiuserTV = findViewById<TextView>(R.id.hiuserTV)
         hiuserTV.setText(String.format("Hii, %s", userSessionManager.userName))
         val hiuserMobileTV = findViewById<TextView>(R.id.hiuserMobileTV)
+
+        viewBinding.contentMainContainer.profilePic.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
+        viewBinding.contentMainContainer.profileContainer.setOnClickListener {
+            val intent = Intent(this, ProfileActivity::class.java)
+            startActivity(intent)
+        }
         hiuserMobileTV.text = userSessionManager.mobile
         setProfilePicture()
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)

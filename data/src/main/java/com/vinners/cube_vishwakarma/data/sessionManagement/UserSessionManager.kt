@@ -16,6 +16,7 @@ class UserSessionManager @Inject constructor(
     val userId: String? get() = sharedPreferences.getString(ID,null)
     val mobile: String? get() = sharedPreferences.getString(PHONE_NUMBER,null)
     val profilepic: String? get() = sharedPreferences.getString(PROFILE_PIC,null)
+    val designation: String? get() = sharedPreferences.getString(DESIGNATION,null)
 //    val empCode: String? get() = sharedPreferences.getString(EMP_CODE,null)
 
     /**
@@ -37,6 +38,7 @@ class UserSessionManager @Inject constructor(
         val email = sharedPreferences.getString(USER_EMAIL, null)
         val id = sharedPreferences.getString(ID,null)
         val profilepic= sharedPreferences.getString(PROFILE_PIC,null)
+        val design = sharedPreferences.getString(DESIGNATION,null)
 
         return LoggedInUser(
             sessionToken = authToken,
@@ -45,7 +47,7 @@ class UserSessionManager @Inject constructor(
             email = email,
             id = id,
             pic = profilepic,
-
+            design = design
         )
     }
 
@@ -58,6 +60,7 @@ class UserSessionManager @Inject constructor(
             putString(USER_EMAIL,loggedInUserInfo.email)
             putString(ID,loggedInUserInfo.id)
             putString(profilepic,loggedInUserInfo.pic)
+            putString(DESIGNATION,loggedInUserInfo.design)
         }.apply()
     }
 
@@ -82,5 +85,6 @@ class UserSessionManager @Inject constructor(
         private const val PHONE_NUMBER = "p608Iy1pLX3prIHT2wnJ"
         private const val USER_EMAIL = "VYHsJ8ehzdAITLr9m0Bf"
         private const val PROFILE_PIC = "g5h5j6Q8jkjjuKp55RbjS"
+        private const val DESIGNATION = "hUf9a4T3a8JSLPn44Id5e"
     }
 }

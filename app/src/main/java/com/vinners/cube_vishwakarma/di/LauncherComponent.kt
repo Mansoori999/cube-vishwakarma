@@ -20,6 +20,7 @@ import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
+import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.splash.SplashActivity
 import com.vinners.cube_vishwakarma.ui.splash.SplashFragment
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
@@ -87,6 +88,8 @@ interface LauncherComponent {
     fun inject (outletDetalisActivity : OutletDetalisActivity)
 
     fun inject(complaintRequestViewActivity : ComplaintRequestViewActivity)
+
+    fun inject(profileActivity: ProfileActivity)
 
 
 }

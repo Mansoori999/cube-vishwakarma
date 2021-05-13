@@ -8,6 +8,7 @@ data class LoggedInUser(
     val displayName: String?,
     val mobileNumber: String,
     val pic: String?,
-    val email: String? = null
+    val email: String? = null,
+    val design: String?
 
 )

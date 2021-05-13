@@ -22,7 +22,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Truman"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.complaints.complaintRequestView.ComplaintRequestViewDetailsActivity"></activity>
+        <activity android:name=".ui.profile.ProfileActivity"></activity>
+        <activity android:name=".ui.complaints.complaintRequestView.ComplaintRequestViewDetailsActivity" />
         <activity android:name=".ui.outlets.OutletDetalisActivity" />
         <activity android:name=".ui.complaints.complaintRequestView.ComplaintRequestViewActivity" />
         <activity android:name=".ui.tutorials.TutorialsActivity" />

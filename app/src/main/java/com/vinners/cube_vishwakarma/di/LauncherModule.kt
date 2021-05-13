@@ -9,6 +9,7 @@ import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintViewMod
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
 import com.vinners.cube_vishwakarma.ui.languageSelection.LanguageViewModel
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsViewModel
+import com.vinners.cube_vishwakarma.ui.profile.ProfileActivityViewModel
 import com.vinners.cube_vishwakarma.ui.splash.SplashViewModel
 import dagger.Binds
 import dagger.Module
@@ -54,4 +55,10 @@ abstract class LauncherModule {
     @IntoMap
     @ViewModelKey(ComplaintRequestViewModel::class)
     abstract fun bindComplaintRequestViewModel(viewModel: ComplaintRequestViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ProfileActivityViewModel::class)
+    abstract fun bindProfileActivityViewModel(viewModel: ProfileActivityViewModel): ViewModel
+
 }

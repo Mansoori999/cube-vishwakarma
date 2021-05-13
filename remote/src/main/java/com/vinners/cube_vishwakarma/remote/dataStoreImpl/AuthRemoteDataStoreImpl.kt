@@ -95,6 +95,8 @@ class AuthRemoteDataStoreImpl @Inject constructor(
             mobileNumber = response.mobile!!,
             email = response.email,
             pic = response.pic,
+            design = response.designation
+
         ))
         return response
     }
@@ -110,6 +112,7 @@ class AuthRemoteDataStoreImpl @Inject constructor(
             mobileNumber = response.mobile!!,
             email = response.email,
             pic = response.pic,
+            design = response.designation
         ))
         return response
     }
