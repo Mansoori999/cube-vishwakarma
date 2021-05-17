@@ -12,6 +12,7 @@ import com.vinners.cube_vishwakarma.core.base.BaseActivity
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
+import com.vinners.cube_vishwakarma.data.models.outlets.OutletDetailsList
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityOutletDetalisBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
@@ -20,7 +21,18 @@ import javax.inject.Inject
 
 class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, OutletsViewModel>(R.layout.activity_outlet_detalis) {
 
+    companion object {
+        const val OUTLET_NAME= "name"
+        const val OUTLET_CUSTOMER_CODE = "customer_code"
+        const val OUTLET_REGIONAL_OFFICE = "regional_office"
+        const val OUTLET_SALES_AREA = "sales_area"
+        const val OUTLET_SECONDARY_MAIL = "secondary_mail"
+        const val OUTLET_SECONDARY_MOBILE = "secondary_mobile"
+        const val OUTLET_IMAGE = "outlet_image"
+        const val OUTLET_ID = "outlet_id"
 
+
+    }
 
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
@@ -46,10 +58,12 @@ class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, Outlets
     }
 
     override fun onInitDataBinding() {
-        outletid = intent.getStringExtra(OutletsActivity.OUTLET_ID)
+        outletid = intent.getStringExtra(OUTLET_ID)
         viewBinding.outletDetailsToolbar.setNavigationOnClickListener {
             onBackPressed()
+
         }
+
         val mapUrl = "http://maps.google.co.in/maps?q="+ gps
         viewBinding.gps.setOnClickListener {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.co.in/maps?q="+ gps))
@@ -95,10 +109,8 @@ class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, Outlets
                             viewBinding.gps.setVisibilityGone()
                         }
 
-
                         viewBinding.zone.text = it.content.zone
-
-
+                        editOutlet(it.content)
                     }else{
                         viewBinding.loadingData.setVisibilityVisible()
                     }
@@ -112,5 +124,26 @@ class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, Outlets
             }
         })
 
+    }
+
+    private fun editOutlet(content: OutletDetailsList) {
+        viewBinding.editButton.setOnClickListener {
+            val intent = Intent(this,EditOutletActivity::class.java)
+            intent.putExtra(OUTLET_NAME,content.outlet)
+            intent.putExtra(OUTLET_CUSTOMER_CODE,content.customercode)
+            intent.putExtra(OUTLET_REGIONAL_OFFICE,content.regionaloffice)
+            intent.putExtra(OUTLET_SALES_AREA,content.salesarea)
+            intent.putExtra(OUTLET_SECONDARY_MAIL,content.secondarymail)
+            intent.putExtra(OUTLET_SECONDARY_MOBILE,content.secondarymobile)
+            intent.putExtra(OUTLET_IMAGE,content.pic)
+            intent.putExtra(OUTLET_ID,content.outletid)
+            startActivity(intent)
+        }
+
+        viewBinding.complaintsBtn.setOnClickListener {
+            val intent = Intent(this,OutletComplaintsActivity::class.java)
+            intent.putExtra(OUTLET_ID,content.outletid)
+            startActivity(intent)
+        }
     }
 }

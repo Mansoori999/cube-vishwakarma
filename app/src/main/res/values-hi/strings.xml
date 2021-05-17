@@ -21,4 +21,8 @@
     <string name="nav_header_title">Vishwakarma Electrical</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="turn_on_gps_message">Important!!, Gps Not Turned On You will be redirected to settings page , Please
+        turn on GPS and set mode to High Accuracy
+    </string>
 </resources>

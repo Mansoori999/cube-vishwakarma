@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.MenuItem
-import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -18,6 +17,7 @@ import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -26,6 +26,9 @@ import com.vinners.cube_vishwakarma.BuildConfig
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.base.AppInfo
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
+import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
+import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
+import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.data.models.homeScreen.MainActivityListModel
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
@@ -33,9 +36,7 @@ import com.vinners.cube_vishwakarma.databinding.ActivityMainBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.feature_auth.ui.AuthActivity
-import com.vinners.cube_vishwakarma.feature_auth.ui.login.LoginFragment
 import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
-
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
@@ -43,8 +44,6 @@ import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
 import de.hdodenhof.circleimageview.CircleImageView
-
-import java.io.File
 import java.lang.String
 import javax.inject.Inject
 
@@ -171,10 +170,23 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                     dialog.cancel()
                 }.show()
         }
-        val recyclerView: RecyclerView = findViewById(R.id.Recyclerview_home)
-        mainActivityRecyclerAdapter.updateViewList(homeList)
-        recyclerView.adapter = mainActivityRecyclerAdapter
-        preparehomeData()
+//        val recyclerView: RecyclerView = findViewById(R.id.Recyclerview_home)
+//
+//        val layoutManager = GridLayoutManager(this, 2)
+//        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+//            override fun getSpanSize(position: Int): Int {
+//                val pos = position % 5
+//                if (pos == 0){
+//                    return 2
+//                }else{
+//                    return 1
+//                }
+//            }
+//        }
+//        recyclerView.layoutManager = layoutManager
+//        mainActivityRecyclerAdapter.updateViewList(homeList)
+//        recyclerView.adapter = mainActivityRecyclerAdapter
+//        preparehomeData()
 
     }
 
@@ -192,12 +204,11 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     }
 
     private fun preparehomeData() {
-        homeList.add(MainActivityListModel("Complaints"))
-        homeList.add(MainActivityListModel("Documents"))
-        homeList.add(MainActivityListModel("Attendance"))
-        homeList.add(MainActivityListModel("Expense"))
-        homeList.add(MainActivityListModel("Tutorials"))
-        homeList.add(MainActivityListModel("Outlets"))
+        homeList.add(MainActivityListModel("Totals","#99CC33"))
+        homeList.add(MainActivityListModel("Due","#FF6633"))
+        homeList.add(MainActivityListModel("Working","#0066CC"))
+        homeList.add(MainActivityListModel("Pending Letter","#2EC43E"))
+        homeList.add(MainActivityListModel("Done","#ff0000"))
 
         mainActivityRecyclerAdapter.notifyDataSetChanged()
     }
@@ -230,6 +241,28 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
         })
         viewModel.initViewModel()
+        viewModel.dashboardState.observe(this, Observer {
+            when(it){
+                Lce.Loading ->{
+                    viewBinding.contentMainContainer.loadingData.setVisibilityVisible()
+                }
+                is Lce.Content ->{
+                    viewBinding.contentMainContainer.loadingData.setVisibilityGone()
+                    viewBinding.contentMainContainer.totals.text = it.content.total
+                    viewBinding.contentMainContainer.due.text = it.content.due
+                    viewBinding.contentMainContainer.working.text = it.content.working
+                    viewBinding.contentMainContainer.pending.text = it.content.pendingletter
+                    viewBinding.contentMainContainer.done.text = it.content.done
+
+                }
+                is Lce.Error ->{
+                    viewBinding.contentMainContainer.loadingData.setVisibilityGone()
+                    showInformationDialog(it.error)
+
+                }
+            }
+        })
+        viewModel.dashBoardData()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
@@ -240,30 +273,27 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         when(position){
             0 ->
             {
-                val intent = Intent(this, ComplaintsActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(this, ComplaintsActivity::class.java)
+//                startActivity(intent)
             }
             1->
             {
-                val intent = Intent(this, DocumentsActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(this, DocumentsActivity::class.java)
+//                startActivity(intent)
             }
             2->{
-                val intent = Intent(this, AttendanceActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(this, AttendanceActivity::class.java)
+//                startActivity(intent)
             }
             3->{
-                val intent = Intent(this, ExpenseActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(this, ExpenseActivity::class.java)
+//                startActivity(intent)
             }
             4->{
-                val intent = Intent(this, TutorialsActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(this, TutorialsActivity::class.java)
+//                startActivity(intent)
             }
-            5->{
-                val intent = Intent(this, OutletsActivity::class.java)
-                startActivity(intent)
-            }
+
 
         }
     }

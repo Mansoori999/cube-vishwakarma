@@ -181,6 +181,6 @@ object QuickAlertDialog {
     interface OnClickListener {
         fun okButtonClicked()
 
-        fun onCancelButtonClick()
+//        fun onCancelButtonClick()
     }
 }

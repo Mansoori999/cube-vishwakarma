@@ -1,12 +1,14 @@
 package com.vinners.cube_vishwakarma.core.di.modules
 
 import android.content.Context
+import android.location.Geocoder
 import com.vinners.core.logger.Logger
 import com.vinners.cube_vishwakarma.base.AppInfo
 import com.vinners.cube_vishwakarma.core.SessionExpirationListenerImpl
 import com.vinners.cube_vishwakarma.data.dataStores.AuthRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.complaint.ComplaintRequestRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.complaint.MyComplaintRemoteDataStore
+import com.vinners.cube_vishwakarma.data.dataStores.dashboard.DashBoardRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.help.HelpRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.jobs.JobsRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.money.MoneyRemoteDataStore
@@ -47,7 +49,7 @@ abstract class RemoteModule {
 
         @Provides
         @JvmStatic
-        fun provideDashboardService(
+        fun provideJobsService(
             retrofitServiceFactory: RetrofitServiceFactory
         ): JobsService {
             return retrofitServiceFactory.prepareService(JobsService::class.java)
@@ -166,13 +168,22 @@ abstract class RemoteModule {
             return retrofitServiceFactory.prepareService(ComplaintRequestService::class.java)
         }
 
+        @Provides
+        @JvmStatic
+        fun provideDashBoardService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): DashBoardService {
+            return retrofitServiceFactory.prepareService(DashBoardService::class.java)
+        }
+
+
     }
 
     @Binds
     abstract fun bindAuthRemoteDataSource(authRemoteDataStoreImpl: AuthRemoteDataStoreImpl): AuthRemoteDataStore
 
     @Binds
-    abstract fun bindDashboardRemoteDataSource(dashboardRemotedataStoteImp: JobsRemotedataStoteImp): JobsRemoteDataStore
+    abstract fun bindDashboardRemoteDataSource(jobsRemotedataStoteImp: JobsRemotedataStoteImp): JobsRemoteDataStore
 
     @Binds
     abstract fun bindProfileRemoteDataSource(userProfileRemoteDataStoreImpl: UserProfileRemoteDataStoreImpl): UserProfileRemoteDataSource
@@ -194,5 +205,9 @@ abstract class RemoteModule {
 
     @Binds
     abstract fun bindComplaintRequestRemoteDataStore(complaintRequestRemoteDataStoreImpl: ComplaintRequestRemoteDataStoreImpl): ComplaintRequestRemoteDataStore
+
+    @Binds
+    abstract fun bindDashBoardRemoteDataStore(dashBoardRemoteDataStoreImpl: DashBoardRemoteDataStoreImpl): DashBoardRemoteDataStore
+
 
 }

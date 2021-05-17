@@ -56,12 +56,12 @@ public class LocationHelper {
     /**
      * Provides access to the Fused SuggestedLocation Provider API.
      */
-    private WeakReference<FusedLocationProviderClient> mFusedLocationClient;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     /**
      * Provides access to the SuggestedLocation Settings API.
      */
-    private WeakReference<SettingsClient> mSettingsClient;
+    private SettingsClient mSettingsClient;
 
     /**
      * Stores parameters for requests to the FusedLocationProviderApi.
@@ -77,7 +77,7 @@ public class LocationHelper {
     /**
      * Callback for SuggestedLocation events.
      */
-    private WeakReference<LocationCallback> mLocationCallback;
+    private LocationCallback mLocationCallback;
 
 
     /**
@@ -91,8 +91,8 @@ public class LocationHelper {
 
 
     public LocationHelper(Context mContext) {
-        mFusedLocationClient = new WeakReference<>(LocationServices.getFusedLocationProviderClient(mContext));
-        mSettingsClient = new WeakReference<>(LocationServices.getSettingsClient(mContext));
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(mContext);
+        mSettingsClient = LocationServices.getSettingsClient(mContext);
     }
 
     /**
@@ -149,7 +149,7 @@ public class LocationHelper {
      * @param locationCallback
      */
     public void setLocationCallback(LocationCallback locationCallback) {
-        this.mLocationCallback = new WeakReference<>(locationCallback);
+        this.mLocationCallback = locationCallback;
     }
 
 
@@ -209,45 +209,37 @@ public class LocationHelper {
      * runtime permission has been granted.
      */
 
-    public void checkForGpsSettings(final GpsSettingsCheckCallback callback) {
+    public void checkForGpsSettings(GpsSettingsCheckCallback callback) {
 
         if (mLocationSettingsRequest == null) {
             throw new IllegalStateException("must call init() before check for gps settings");
         }
 
-        if (mSettingsClient.get() == null) {
+        if (mSettingsClient == null) {
             return;
         }
         // Begin by checking if the device has the necessary jobLocation settings.
-        mSettingsClient.get().checkLocationSettings(mLocationSettingsRequest)
-                .addOnSuccessListener(new OnSuccessListener<LocationSettingsResponse>() {
-                    @Override
-                    public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
-                        callback.requiredGpsSettingAreAvailable();
+        mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
+                .addOnSuccessListener(locationSettingsResponse -> callback.requiredGpsSettingAreAvailable())
+                .addOnFailureListener(e -> {
+
+                    int statusCode = ((ApiException) e).getStatusCode();
+                    switch (statusCode) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            Log.i(TAG, "SuggestedLocation settings are not satisfied. notifying back to the requesting object ");
+
+                            ResolvableApiException rae = (ResolvableApiException) e;
+                            callback.requiredGpsSettingAreUnAvailable(rae);
+
+                            break;
+
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            Log.i(TAG, "Turn On SuggestedLocation From Settings. ");
+
+                            callback.gpsSettingsNotAvailable();
+                            break;
                     }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
 
-                        int statusCode = ((ApiException) e).getStatusCode();
-                        switch (statusCode) {
-                            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                                Log.i(TAG, "SuggestedLocation settings are not satisfied. notifying back to the requesting object ");
-
-                                ResolvableApiException rae = (ResolvableApiException) e;
-                                callback.requiredGpsSettingAreUnAvailable(rae);
-
-                                break;
-
-                            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                                Log.i(TAG, "Turn On SuggestedLocation From Settings. ");
-
-                                callback.gpsSettingsNotAvailable();
-                                break;
-                        }
-
-                    }
                 });
     }
 
@@ -273,7 +265,7 @@ public class LocationHelper {
             return;
         }
 
-        if (mFusedLocationClient.get() == null) {
+        if (mFusedLocationClient == null) {
             return;
         }
 
@@ -282,13 +274,8 @@ public class LocationHelper {
         }
 
         Log.d(TAG, "startLocationUpdates: starting updates.");
-        mFusedLocationClient.get().requestLocationUpdates(mLocationRequest, mLocationCallback.get(), Looper.myLooper())
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void task) {
-                        mRequestingLocationUpdates = true;
-                    }
-                });
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper())
+                .addOnSuccessListener(task -> mRequestingLocationUpdates = true);
 
     }
 
@@ -307,7 +294,7 @@ public class LocationHelper {
             return;
         }
 
-        if (mFusedLocationClient.get() == null) {
+        if (mFusedLocationClient == null) {
             return;
         }
 
@@ -316,14 +303,9 @@ public class LocationHelper {
         }
 
         Log.d(TAG, "stopLocationUpdates: stopping location updates.");
-        mFusedLocationClient.get()
-                .removeLocationUpdates(mLocationCallback.get())
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        mRequestingLocationUpdates = false;
-                    }
-                });
+        mFusedLocationClient
+                .removeLocationUpdates(mLocationCallback)
+                .addOnCompleteListener(task -> mRequestingLocationUpdates = false);
     }
 
 }

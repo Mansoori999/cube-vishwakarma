@@ -1,17 +1,19 @@
 package com.vinners.cube_vishwakarma.ui.outlets
 
+import android.location.Geocoder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
-import com.vinners.cube_vishwakarma.data.models.complaints.MyComplainDetailsList
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletDetailsList
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import com.vinners.cube_vishwakarma.data.repository.OutletRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import mobile.androidbase.location.LocationUtils
+import java.io.File
 import javax.inject.Inject
 
 
@@ -22,11 +24,24 @@ interface OutletEvents {
 
     val outletDetailsListState : LiveData<Lce<OutletDetailsList>>
 
+    val  complaintsbyoutletListState: LiveData<Lce<List<MyComplaintList>>>
 
 
 }
+
+sealed class UploadEditOutletState {
+
+    object EditOutletDataLoading : UploadEditOutletState()
+
+    object OutletDataUpdated : UploadEditOutletState()
+
+    data class ErrorInUpDateEditOutletData(
+        val error: String
+    ) : UploadEditOutletState()
+}
 class OutletsViewModel @Inject constructor(
-private val outletRepository: OutletRepository
+    private val outletRepository: OutletRepository,
+    private val geocoder: Geocoder
 ): ViewModel(),OutletEvents {
 
     private val _outletListState = MutableLiveData<Lce<List<OutletsList>>>()
@@ -62,5 +77,66 @@ private val outletRepository: OutletRepository
         }
     }
 
+    /* Outlet Details*/
+    private val _uploadEditOutletDataState = MutableLiveData<UploadEditOutletState>()
+    val uploadEditOutletDataState: LiveData<UploadEditOutletState> = _uploadEditOutletDataState
 
+    fun upDateEditOutletData(
+        outletid: String?,
+        secondarymail: String?,
+        secondarymobile: String?,
+        latitude: Double,
+        longitude: Double,
+        images: List<String>,
+        pic:String?
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            _uploadEditOutletDataState.postValue(UploadEditOutletState.EditOutletDataLoading)
+
+            val gps = "$latitude,$longitude"
+            val fullAddressFromGps = LocationUtils.addressFromLocation(
+                geoCoder = geocoder,
+                latitude = latitude,
+                longitude = longitude
+            )
+
+            outletRepository.editOutlet(
+               outletid,
+               secondarymail,
+                secondarymobile,
+                gps,
+                fullAddressFromGps,
+                images,
+                pic
+            )
+
+            _uploadEditOutletDataState.postValue(UploadEditOutletState.OutletDataUpdated)
+        } catch (e: Exception) {
+
+            _uploadEditOutletDataState.postValue(
+                UploadEditOutletState.ErrorInUpDateEditOutletData(
+                    e.toString()
+                )
+            )
+            e.printStackTrace()
+        }
+
+    }
+
+    /* Outlet Details*/
+    private val _complaintsbyoutletListState = MutableLiveData<Lce<List<MyComplaintList>>>()
+    override val complaintsbyoutletListState: LiveData<Lce<List<MyComplaintList>>> = _complaintsbyoutletListState
+
+    fun getComplaintByOutletId(outletid : String) {
+        _complaintsbyoutletListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = outletRepository.getComplaintsByOutletid(outletid)
+                _complaintsbyoutletListState.postValue(Lce.content(response))
+            } catch (e: Exception) {
+                _complaintsbyoutletListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
 }

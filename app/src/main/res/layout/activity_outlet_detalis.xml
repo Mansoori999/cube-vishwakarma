@@ -28,7 +28,18 @@
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="Outlet Details"
             app:navigationIcon="@drawable/ic_arrow_left"
-            app:titleTextColor="@android:color/white" />
+            app:titleTextColor="@android:color/white" >
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/editButton"
+                android:layout_gravity="right"
+                android:background="?attr/colorPrimaryDark"
+                android:src="@drawable/ic_edit"
+                android:layout_marginRight="10dp"
+                android:clickable="true"
+                tools:ignore="VectorDrawableCompat" />
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -58,7 +69,14 @@
                 android:background="@android:color/darker_gray"
                 android:scaleType="fitXY"
                 />
-
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/complaintsBtn"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Complaints" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:id="@+id/detail_screen"
@@ -581,9 +599,6 @@
                     android:text="NA"
                     android:textColor="#80000000"
                     android:textSize="12sp" />
-
-
-
 
                 </RelativeLayout>
 

@@ -61,4 +61,5 @@ abstract class LauncherModule {
     @ViewModelKey(ProfileActivityViewModel::class)
     abstract fun bindProfileActivityViewModel(viewModel: ProfileActivityViewModel): ViewModel
 
+
 }

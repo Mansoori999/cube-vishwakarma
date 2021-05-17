@@ -1,14 +1,10 @@
 package com.vinners.cube_vishwakarma.ui.outlets
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
-import androidx.appcompat.widget.Toolbar
 import androidx.core.content.res.ResourcesCompat
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
 import androidx.lifecycle.Observer
@@ -22,16 +18,12 @@ import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityOutletsBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintViewModel
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
+
 import java.util.*
 import javax.inject.Inject
 
 class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.layout.activity_outlets),OutletsClickListener {
-    companion object {
-        const val OUTLET_ID = "outeltid"
-    }
+
 
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
@@ -149,7 +141,7 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
 
     override fun OnOutletClick(outletsList: OutletsList) {
         Intent(this, OutletDetalisActivity::class.java).apply {
-            putExtra(OUTLET_ID, outletsList.outletid)
+            putExtra(OutletDetalisActivity.OUTLET_ID, outletsList.outletid)
         }.also {
             startActivity(it)
         }

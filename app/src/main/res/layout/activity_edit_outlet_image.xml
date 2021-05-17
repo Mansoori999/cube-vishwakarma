@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+<!--    <TextView-->
+<!--        android:id="@+id/storeImageLabel"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="12dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginRight="12dp"-->
+<!--        android:text="STORE IMAGE"-->
+<!--        android:textSize="12sp"-->
+<!--        android:textStyle="bold" />-->
+    ​
+
+    <include
+        layout="@layout/layout_click_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageViewOutlet"
+        android:layout_margin="12dp" />
+
+</LinearLayout>
+</layout>

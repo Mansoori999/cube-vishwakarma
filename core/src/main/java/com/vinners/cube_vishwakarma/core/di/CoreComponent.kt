@@ -2,6 +2,7 @@ package com.vinners.cube_vishwakarma.core.di
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.location.Geocoder
 import com.android.installreferrer.api.InstallReferrerClient
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.vinners.core.logger.Logger
@@ -95,5 +96,11 @@ interface CoreComponent {
     fun getOutletRepository(): OutletRepository
 
     fun getComplaintRequestRepository(): ComplaintRequestRepository
+
+    fun getDashBoardRepository():DashBoardRepository
+
+    fun getGeocode(): Geocoder
+
+
 
 }

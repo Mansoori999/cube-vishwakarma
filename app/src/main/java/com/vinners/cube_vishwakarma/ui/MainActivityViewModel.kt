@@ -4,8 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
+import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponse
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
+import com.vinners.cube_vishwakarma.data.repository.DashBoardRepository
 import com.vinners.cube_vishwakarma.data.repository.ProfileRepository
 import com.vinners.cube_vishwakarma.feature_auth.ui.ObserveProfileInteractor
 import io.reactivex.observers.DisposableObserver
@@ -20,10 +23,13 @@ interface ProfileEvents {
     val profile: LiveData<Profile>
     fun initViewModel()
 
+    val dashboardState : LiveData<Lce<DashBoardResponse>>
+
 }
 class MainActivityViewModel@Inject constructor(
-        private val userProfileRepository: ProfileRepository,
-        private val observeProfileInteractor: ObserveProfileInteractor
+    private val userProfileRepository: ProfileRepository,
+    private val dashBoardRepository: DashBoardRepository,
+    private val observeProfileInteractor: ObserveProfileInteractor
 ) : ViewModel(), ProfileEvents  {
 
     private val _logoutState = MutableLiveData<Lse>()
@@ -60,6 +66,24 @@ class MainActivityViewModel@Inject constructor(
 
         override fun onNext(t: Profile) {
             _profile.postValue(t)
+        }
+    }
+
+    /* DashBoard */
+
+    private val _dashboardState =  MutableLiveData<Lce<DashBoardResponse>>()
+    override val dashboardState: LiveData<Lce<DashBoardResponse>> = _dashboardState
+
+    fun dashBoardData() {
+        _dashboardState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = dashBoardRepository.getDashBoard()
+                _dashboardState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _dashboardState.postValue(Lce.error(e.localizedMessage))
+
+            }
         }
     }
 }

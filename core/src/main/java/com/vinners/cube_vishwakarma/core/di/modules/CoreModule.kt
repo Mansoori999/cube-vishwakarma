@@ -3,6 +3,7 @@ package com.vinners.cube_vishwakarma.core.di.modules
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
+import android.location.Geocoder
 import com.android.installreferrer.api.InstallReferrerClient
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -54,6 +55,13 @@ abstract class CoreModule {
         @JvmStatic
         fun providesInstallReferrerClient(context: Context): InstallReferrerClient {
             return InstallReferrerClient.newBuilder(context).build()
+        }
+
+        @Singleton
+        @Provides
+        @JvmStatic
+        fun providesGeocoder(context: Context): Geocoder {
+            return Geocoder(context)
         }
     }
     @Singleton

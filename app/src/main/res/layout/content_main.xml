@@ -55,6 +55,7 @@
                     android:scaleY="0.6"
                     android:src="@drawable/ic_logout" />
             </RelativeLayout>
+
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_pic"
                 android:layout_below="@+id/toolbat_container"
@@ -86,12 +87,12 @@
                 android:layout_height="80dp"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="@dimen/dimension_20dp"
-                android:elevation="10dp"
+                android:elevation="5dp"
                 app:cardBackgroundColor="#fcfcfc"
                 app:cardCornerRadius="10dp"
                 app:cardPreventCornerOverlap="false"
                 app:cardUseCompatPadding="false"
-                card_view:cardElevation="10dp">
+                card_view:cardElevation="5dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -122,29 +123,268 @@
 
         </LinearLayout>
 
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="-10dp"
+            android:layout_below="@+id/lin_card">
 
         <LinearLayout
             android:id="@+id/home_screen_user_menus"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/lin_card"
-            android:gravity="center"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:orientation="vertical"
             >
-<!--        <include layout="@layout/home_screen_layout"/>-->
-            <LinearLayout
+            <ProgressBar
+                android:id="@+id/loading_data"
                 android:layout_width="wrap_content"
-                android:gravity="center"
-                android:layout_height="wrap_content">
-            <androidx.recyclerview.widget.RecyclerView
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone" />
+            <androidx.cardview.widget.CardView
+                android:id="@+id/total_cardView"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:layout_centerHorizontal="true"
+                android:elevation="0dp"
+                app:cardCornerRadius="8dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:layout_margin="5dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false"
+                card_view:cardElevation="2dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/mainscreen_border"
+                    android:layout_gravity="center"
+                    android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="#0099ff"
+                    android:id="@+id/dashboard_text"
+                    android:textStyle="normal"
+                    android:textSize="16sp"
+                    android:layout_gravity="center_vertical"
+                    android:text="Total" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:id="@+id/totals"
+                    android:textColor="#0099ff"
+                    android:layout_gravity="center"
+                    android:text="0"
+                    android:textSize="13sp"
+                    android:textStyle="normal"/>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/Recyclerview_home"
-                app:spanCount="3"
-                app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                tools:listitem="@layout/home_screen_layout"/>
+                android:weightSum="2">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/due_cardView"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="80dp"
+                    android:layout_centerHorizontal="true"
+                    android:elevation="0dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    app:cardCornerRadius="6dp"
+                    android:layout_margin="5dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="false"
+                    card_view:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_gravity="center"
+                        android:background="@drawable/mainscreen_border_due"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#FFA500"
+                            android:id="@+id/due_text"
+                            android:textStyle="normal"
+                            android:textSize="16sp"
+                            android:layout_gravity="center_vertical"
+                            android:text="Due" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#FFA500"
+                            android:layout_gravity="center"
+                            android:text="0"
+                            android:id="@+id/due"
+                            android:textSize="13sp"
+                            android:textStyle="normal"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/working_cardView"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:layout_centerHorizontal="true"
+                    android:elevation="0dp"
+                    app:cardCornerRadius="8dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:layout_margin="5dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="false"
+                    card_view:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/mainscreen_border_working"
+                        android:layout_gravity="center"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#0066CC"
+                            android:id="@+id/working_text"
+                            android:textStyle="normal"
+                            android:textSize="16sp"
+                            android:layout_gravity="center_vertical"
+                            android:text="Working" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#0066CC"
+                            android:layout_gravity="center"
+                            android:text="0"
+                            android:id="@+id/working"
+                            android:textSize="13sp"
+                            android:textStyle="normal"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
             </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:weightSum="2">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/pending_cardView"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="80dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:layout_centerHorizontal="true"
+                    android:elevation="0dp"
+                    app:cardCornerRadius="8dp"
+                    android:layout_margin="5dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="false"
+                    card_view:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/mainscreen_border_pending"
+                        android:layout_gravity="center"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#FF6633"
+                            android:id="@+id/pending_text"
+                            android:textStyle="normal"
+                            android:textSize="16sp"
+                            android:layout_gravity="center_vertical"
+                            android:text="Pending Letter" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#FF6633"
+                            android:layout_gravity="center"
+                            android:text="0"
+                            android:id="@+id/pending"
+                            android:textSize="13sp"
+                            android:textStyle="normal"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/done_cardView"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:layout_centerHorizontal="true"
+                    android:elevation="0dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="false"
+                    app:cardCornerRadius="8dp"
+                    android:layout_margin="5dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    card_view:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/mainscreen_border_done"
+                        android:layout_gravity="center"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#2EC43E"
+                            android:id="@+id/done_text"
+                            android:textStyle="normal"
+                            android:textSize="16sp"
+                            android:layout_gravity="center_vertical"
+                            android:text="Done" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#2EC43E"
+                            android:layout_gravity="center"
+                            android:text="0"
+                            android:id="@+id/done"
+                            android:textSize="13sp"
+                            android:textStyle="normal"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+            </LinearLayout>
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:gravity="center"-->
+<!--                android:layout_marginLeft="10dp"-->
+<!--                android:layout_marginRight="10dp"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_height="wrap_content">-->
+<!--            <androidx.recyclerview.widget.RecyclerView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:id="@+id/Recyclerview_home"-->
+<!--                android:visibility="gone"-->
+<!--                tools:listitem="@layout/dashboard_layout"/>-->
+<!--&lt;!&ndash;                <include layout="@layout/dashboard_layout"/>&ndash;&gt;-->
+<!--            </LinearLayout>-->
+
         </LinearLayout>
+        </ScrollView>
     </RelativeLayout>
 
 
