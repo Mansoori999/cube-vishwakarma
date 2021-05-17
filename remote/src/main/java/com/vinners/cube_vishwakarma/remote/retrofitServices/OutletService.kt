@@ -1,6 +1,7 @@
 package com.vinners.cube_vishwakarma.remote.retrofitServices
 
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.dashboard.ComplaintRequestWithStatus
 import com.vinners.cube_vishwakarma.data.models.outlets.*
 import okhttp3.MultipartBody
 import retrofit2.Response
@@ -26,5 +27,10 @@ interface OutletService {
     @POST("api/complaint/getcomplaintbyoutletid")
     suspend fun getComplaintsByOutletid(
         @Body complaintRequest: ComplaintRequest
+    ):Response<ArrayList<MyComplaintList>>
+
+    @POST("api/complaint/getcomplaintwithstatus")
+    suspend fun getComplaintWithStatus(
+        @Body complaintRequestWithStatus: ComplaintRequestWithStatus
     ):Response<ArrayList<MyComplaintList>>
 }

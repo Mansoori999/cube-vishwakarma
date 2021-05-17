@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
+import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponse
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
 import com.vinners.cube_vishwakarma.data.repository.DashBoardRepository
@@ -24,6 +25,7 @@ interface ProfileEvents {
     fun initViewModel()
 
     val dashboardState : LiveData<Lce<DashBoardResponse>>
+
 
 }
 class MainActivityViewModel@Inject constructor(
@@ -86,4 +88,6 @@ class MainActivityViewModel@Inject constructor(
             }
         }
     }
+
+
 }

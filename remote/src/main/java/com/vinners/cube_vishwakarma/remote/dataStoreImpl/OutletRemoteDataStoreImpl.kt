@@ -3,6 +3,7 @@ package com.vinners.cube_vishwakarma.remote.dataStoreImpl
 import com.vinners.cube_vishwakarma.data.dataStores.outlets.OutletRemoteDataStore
 import com.vinners.cube_vishwakarma.data.models.complaints.ComplaintUserIdRequet
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.dashboard.ComplaintRequestWithStatus
 import com.vinners.cube_vishwakarma.data.models.outlets.ComplaintRequest
 import com.vinners.cube_vishwakarma.data.models.outlets.EditOutletRequest
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletDetailsList
@@ -66,6 +67,14 @@ class OutletRemoteDataStoreImpl @Inject constructor(
         return outletService.getComplaintsByOutletid(
             ComplaintRequest(
               outletid = outletid
+            )
+        ).bodyOrThrow()
+    }
+
+    override suspend fun getComplaintWithStatus(status : String): List<MyComplaintList> {
+        return outletService.getComplaintWithStatus(
+            ComplaintRequestWithStatus(
+                status = status
             )
         ).bodyOrThrow()
     }

@@ -21,4 +21,6 @@ interface OutletRemoteDataStore {
     )
 
     suspend fun getComplaints(outletid :String):List<MyComplaintList>
+
+    suspend fun getComplaintWithStatus(status : String):List<MyComplaintList>
 }

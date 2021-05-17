@@ -40,6 +40,7 @@ import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
+import com.vinners.cube_vishwakarma.ui.outlets.OutletComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
@@ -187,6 +188,39 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //        mainActivityRecyclerAdapter.updateViewList(homeList)
 //        recyclerView.adapter = mainActivityRecyclerAdapter
 //        preparehomeData()
+
+        viewBinding.contentMainContainer.totalCardView.setOnClickListener {
+            viewBinding.contentMainContainer.totalCardView.startAnimation(myAnim);
+            val intent = Intent(this, OutletComplaintsActivity::class.java)
+            intent.putExtra(OutletComplaintsActivity.ENABLE_TOTAL_ACTIVITY, true)
+            startActivity(intent)
+
+        }
+        viewBinding.contentMainContainer.dueCardView.setOnClickListener {
+            val intent = Intent(this, OutletComplaintsActivity::class.java)
+            intent.putExtra(OutletComplaintsActivity.ENABLE_DUE_ACTIVITY, true)
+            startActivity(intent)
+
+        }
+        viewBinding.contentMainContainer.workingCardView.setOnClickListener {
+            val intent = Intent(this, OutletComplaintsActivity::class.java)
+            intent.putExtra(OutletComplaintsActivity.ENABLE_WORKING_ACTIVITY, true)
+            startActivity(intent)
+
+        }
+        viewBinding.contentMainContainer.pendingCardView.setOnClickListener {
+            val intent = Intent(this, OutletComplaintsActivity::class.java)
+            intent.putExtra(OutletComplaintsActivity.ENABLE_PENDING_ACTIVITY, true)
+            startActivity(intent)
+
+        }
+
+        viewBinding.contentMainContainer.doneCardView.setOnClickListener {
+            val intent = Intent(this, OutletComplaintsActivity::class.java)
+            intent.putExtra(OutletComplaintsActivity.ENABLE_DONE_ACTIVITY, true)
+            startActivity(intent)
+
+        }
 
     }
 

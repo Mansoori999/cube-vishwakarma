@@ -25,7 +25,7 @@ interface OutletEvents {
     val outletDetailsListState : LiveData<Lce<OutletDetailsList>>
 
     val  complaintsbyoutletListState: LiveData<Lce<List<MyComplaintList>>>
-
+   val complaintStatusState : LiveData<Lce<List<MyComplaintList>>>
 
 }
 
@@ -123,7 +123,7 @@ class OutletsViewModel @Inject constructor(
 
     }
 
-    /* Outlet Details*/
+    /* Outlet complaints*/
     private val _complaintsbyoutletListState = MutableLiveData<Lce<List<MyComplaintList>>>()
     override val complaintsbyoutletListState: LiveData<Lce<List<MyComplaintList>>> = _complaintsbyoutletListState
 
@@ -135,6 +135,24 @@ class OutletsViewModel @Inject constructor(
                 _complaintsbyoutletListState.postValue(Lce.content(response))
             } catch (e: Exception) {
                 _complaintsbyoutletListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    /* dashboard Complaint  */
+
+    private val _complaintStatusState =  MutableLiveData<Lce<List<MyComplaintList>>>()
+    override val complaintStatusState: LiveData<Lce<List<MyComplaintList>>> = _complaintStatusState
+
+    fun getComplaintWithStatus(status : String) {
+        _complaintStatusState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = outletRepository.getComplaintWithStatus(status)
+                _complaintStatusState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _complaintStatusState.postValue(Lce.error(e.localizedMessage))
 
             }
         }
