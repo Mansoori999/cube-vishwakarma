@@ -18,5 +18,17 @@ data class DashBoardResponse(
         @SerializedName("pendingletter")
         val pendingletter : String? =null,
 
+        @SerializedName("estimated")
+        val estimated : String? =null,
+
+        @SerializedName("draft")
+        val draft : String? =null,
+
+        @SerializedName("billed")
+        val billed : String? =null,
+
+        @SerializedName("payment")
+        val payment : String? =null
+
         ) {
 }

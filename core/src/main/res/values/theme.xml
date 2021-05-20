@@ -15,6 +15,7 @@
         <item name="colorOnSurface">@color/color_on_surface</item>
         <item name="android:colorBackground">@color/color_background</item>
         <item name="colorOnBackground">@color/color_on_background</item>
+
         <!-- System bar attributes
         <item name="android:statusBarColor" tools:targetApi="lollipop">@color/color_status_bar
         </item>-->

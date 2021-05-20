@@ -108,6 +108,9 @@ class ProfileRepository @Inject constructor(
         userProfileLocalDataStore.logout()
     }
 
+    suspend fun changedUserPassword(newpassword: String): String{
+        return userProfileRemoteDataSource.changedUserPassword(newpassword)
+    }
     companion object {
         private const val LAST_MONEY_OPERATION_TIME = "last_wallet_operation"
         private const val FIVE_SECONDS = 5000

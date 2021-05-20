@@ -44,6 +44,7 @@
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
 
+
     </style>
     <style name="ToolbarTheme" parent="@style/ToolbarWoBackButtonTheme">
         <!-- android:textColorPrimary is the color of the title text in the Toolbar  -->
@@ -56,5 +57,17 @@
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
 
+    </style>
+
+    <style name="AppTheme.NavigationDrawerStyle" parent="AppTheme">
+        <item name="colorNavigationItem">@color/menu_item_drawer</item>
+        <item name="colorNavigationItemSelected">@color/white</item>
+        <item name="drawableNavigationItemBackground">@drawable/item_bg</item>
+    </style>
+
+    <style name="Widget.Custom.NavigationView" parent="Widget.Design.NavigationView">
+        <item name="itemIconTint">?attr/colorNavigationItem</item>
+        <item name="itemTextColor">?attr/colorNavigationItem</item>
+        <item name="itemBackground">?attr/drawableNavigationItemBackground</item>
     </style>
 </resources>

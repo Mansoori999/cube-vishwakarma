@@ -128,11 +128,11 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
             if (complaintList.status!!.toLowerCase().equals("done")) {
                 status.setTextColor(Color.parseColor("#99CC33"))
             }else if (complaintList.status!!.toLowerCase().equals("due")){
-                status.setTextColor(Color.parseColor("#FF6633"))
+                status.setTextColor(Color.parseColor("#FFA500"))
             }else if (complaintList.status!!.toLowerCase().equals("working")){
                 status.setTextColor(Color.parseColor("#0066CC"))
             }else if (complaintList.status!!.toLowerCase().equals("hold")){
-                status.setTextColor(Color.parseColor("#6699CC"))
+                status.setTextColor(Color.parseColor("#FF6633"))
             }else if (complaintList.status!!.toLowerCase().equals("cancelled")){
                 status.setTextColor(Color.parseColor("#2EC43E"))
             }else if (complaintList.status!!.toLowerCase().equals("draft")){
@@ -142,7 +142,7 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
             }else if (complaintList.status!!.toLowerCase().equals("billed")){
                 status.setTextColor(Color.parseColor("#FFCC33"))
             }else if (complaintList.status!!.toLowerCase().equals("payment")){
-                status.setTextColor(Color.parseColor("#E16117"))
+                status.setTextColor(Color.parseColor("#FFCC33"))
             }
         }
     }

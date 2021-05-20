@@ -201,4 +201,12 @@ class UserProfileRemoteDataStoreImpl @Inject constructor(
     override suspend fun getAppVersion(appVersion: String): AppVersion {
         return profileService.getAppVersion(appVersion).bodyOrThrow().first()
     }
+
+    override suspend fun changedUserPassword(newpassword: String): String {
+        return profileService.changedUserPassword(
+                PasswordRequest(
+                        newpassword = newpassword
+                )
+        ).bodyOrThrow().first()
+    }
 }

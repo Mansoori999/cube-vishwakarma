@@ -94,7 +94,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
                     .setTitle("Update Status - ${complaintid}")
 
             val  mAlertDialog = mBuilder.show()
-            var statusSpinner = dialogView.findViewById<Spinner>(R.id.status_spinner)
+            val statusSpinner = dialogView.findViewById<Spinner>(R.id.status_spinner)
             reason = dialogView.findViewById<EditText>(R.id.reason)
 //             reasonEt = reason.text.toString()
 //            val spinnerlist = arrayOf("Select Status","Working", "Hold", "Done","Cancelled")

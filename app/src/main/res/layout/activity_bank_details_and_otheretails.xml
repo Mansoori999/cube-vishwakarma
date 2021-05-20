@@ -1,0 +1,516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#fff">
+
+    <RelativeLayout
+        android:id="@+id/toolbar_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:id="@+id/v_one_login"
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="#2383E1" />
+
+        <RelativeLayout
+            android:id="@+id/toolbat_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <ImageView
+                android:id="@+id/bankBtn"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center"
+                android:layout_marginRight="10dp"
+                android:scaleX="0.6"
+                android:scaleY="0.6"
+                android:src="@drawable/ic_arrow_left" />
+
+            <TextView
+                android:id="@+id/bankDetails_and_Other_textview"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/bankBtn"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/librebaskervilleregular"
+                android:text="Bank Details"
+                android:textColor="#fff"
+                android:layout_marginLeft="10dp"
+                android:textSize="20dp"
+                android:layout_width="wrap_content" />
+
+        </RelativeLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_pic"
+            android:layout_below="@+id/toolbat_container"
+            android:layout_width="100dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/user"
+            android:layout_marginTop="10dp"
+            android:layout_height="100dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hii , "
+            android:layout_marginTop="5dp"
+            android:id="@+id/userName"
+            android:layout_below="@+id/profile_pic"
+            android:textColor="@color/white"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:textStyle="normal"
+            android:textSize="20sp"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/bankDetails_screen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="185dp"
+        android:visibility="gone">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_one_user_name"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="@dimen/dimension_20dp"
+            android:elevation="5dp"
+            app:cardBackgroundColor="#fcfcfc"
+            app:cardCornerRadius="10dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="false"
+            card_view:cardElevation="5dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:padding="@dimen/dimension_20dp"
+                android:id="@+id/profile_Container"
+                android:layout_height="wrap_content">
+                <View
+                    android:id="@+id/divider"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Account Holder Name"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:id="@+id/label_holdername"
+                    android:layout_alignEnd="@id/divider"
+                    android:layout_alignRight="@id/divider"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="13sp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textColor="#80000000"
+                    android:textStyle="normal"
+                    android:id="@+id/accountholderName"
+                    android:layout_toRightOf="@+id/divider"
+                    android:textSize="13sp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Account No"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/label_accountno"
+                    android:layout_below="@+id/label_holdername"
+                    android:layout_alignEnd="@id/divider"
+                    android:layout_alignRight="@id/divider"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="13sp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textColor="#80000000"
+                    android:textStyle="normal"
+                    android:layout_below="@+id/accountholderName"
+                    android:id="@+id/accountno"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/divider"
+                    android:textSize="13sp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Bank Name"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/label_bankname"
+                    android:layout_below="@+id/label_accountno"
+                    android:layout_alignEnd="@id/divider"
+                    android:layout_alignRight="@id/divider"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="13sp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textColor="#80000000"
+                    android:textStyle="normal"
+                    android:layout_below="@+id/accountno"
+                    android:id="@+id/bankname"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/divider"
+                    android:textSize="13sp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="IFSC Code"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/label_ifsc"
+                    android:layout_below="@+id/label_bankname"
+                    android:layout_alignEnd="@id/divider"
+                    android:layout_alignRight="@id/divider"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="13sp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textColor="#80000000"
+                    android:textStyle="normal"
+                    android:layout_below="@+id/bankname"
+                    android:id="@+id/ifsccode"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/divider"
+                    android:textSize="13sp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Branch"
+                    android:textColor="@color/black"
+                    android:textStyle="normal"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/label_branch"
+                    android:layout_below="@+id/label_ifsc"
+                    android:layout_alignEnd="@id/divider"
+                    android:layout_alignRight="@id/divider"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:textSize="13sp"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NA"
+                    android:textColor="#80000000"
+                    android:textStyle="normal"
+                    android:layout_below="@+id/ifsccode"
+                    android:id="@+id/branch"
+                    android:layout_marginTop="10dp"
+                    android:layout_toRightOf="@+id/divider"
+                    android:textSize="13sp"
+                    />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/otherDetailsScreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="185dp"
+            android:visibility="visible">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/other_details"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/dimension_20dp"
+                android:elevation="5dp"
+                app:cardBackgroundColor="#fcfcfc"
+                app:cardCornerRadius="10dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false"
+                card_view:cardElevation="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:id="@+id/other_Container"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" Emergency"
+                        android:textSize="18sp"
+                        android:id="@+id/emergency"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+                    <View
+                        android:id="@+id/divider1"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Contact Name"
+                        android:layout_marginTop="@dimen/dimension_20dp"
+                        android:layout_below="@+id/emergency"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        android:id="@+id/label_contact_name"
+                        android:layout_alignEnd="@id/divider1"
+                        android:layout_alignRight="@id/divider1"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textSize="13sp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NA"
+                        android:layout_below="@+id/emergency"
+                        android:textColor="#80000000"
+                        android:textStyle="normal"
+                        android:layout_marginTop="@dimen/dimension_20dp"
+                        android:id="@+id/contactName"
+                        android:layout_toRightOf="@+id/divider1"
+                        android:textSize="13sp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mobile No"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/label_mobil"
+                        android:layout_below="@+id/label_contact_name"
+                        android:layout_alignEnd="@id/divider1"
+                        android:layout_alignRight="@id/divider1"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textSize="13sp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NA"
+                        android:textColor="#80000000"
+                        android:textStyle="normal"
+                        android:layout_below="@+id/contactName"
+                        android:id="@+id/mobile"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/divider1"
+                        android:textSize="13sp"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Relation"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/label_relation"
+                        android:layout_below="@+id/label_mobil"
+                        android:layout_alignEnd="@id/divider1"
+                        android:layout_alignRight="@id/divider1"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textSize="13sp"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NA"
+                        android:textColor="#80000000"
+                        android:textStyle="normal"
+                        android:layout_below="@+id/mobile"
+                        android:id="@+id/relation"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/divider1"
+                        android:textSize="13sp"
+                        />
+
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/referenceScreen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-20dp"
+            android:visibility="visible">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/referencedetails"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/dimension_20dp"
+                android:elevation="5dp"
+                app:cardBackgroundColor="#fcfcfc"
+                app:cardCornerRadius="10dp"
+                app:cardPreventCornerOverlap="false"
+                app:cardUseCompatPadding="false"
+                card_view:cardElevation="5dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:padding="15dp"
+                    android:id="@+id/reference_Container"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Reference"
+                        android:textSize="18sp"
+                        android:id="@+id/reference"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
+                    <View
+                        android:id="@+id/divider2"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Contact Name"
+                        android:layout_marginTop="@dimen/dimension_20dp"
+                        android:layout_below="@+id/reference"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        android:id="@+id/label_contact_name_reference"
+                        android:layout_alignEnd="@id/divider2"
+                        android:layout_alignRight="@id/divider2"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textSize="13sp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NA"
+                        android:layout_below="@+id/reference"
+                        android:textColor="#80000000"
+                        android:textStyle="normal"
+                        android:layout_marginTop="@dimen/dimension_20dp"
+                        android:id="@+id/contactName_reference"
+                        android:layout_toRightOf="@+id/divider2"
+                        android:textSize="13sp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Mobile No"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/label_mobil_reference"
+                        android:layout_below="@+id/label_contact_name_reference"
+                        android:layout_alignEnd="@id/divider2"
+                        android:layout_alignRight="@id/divider2"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textSize="13sp"
+                        />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NA"
+                        android:textColor="#80000000"
+                        android:textStyle="normal"
+                        android:layout_below="@+id/contactName_reference"
+                        android:id="@+id/mobile_reference"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/divider2"
+                        android:textSize="13sp"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Reference"
+                        android:textColor="@color/black"
+                        android:textStyle="normal"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/label_relation_reference"
+                        android:layout_below="@+id/label_mobil_reference"
+                        android:layout_alignEnd="@id/divider2"
+                        android:layout_alignRight="@id/divider2"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:textSize="13sp"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="NA"
+                        android:textColor="#80000000"
+                        android:textStyle="normal"
+                        android:layout_below="@+id/mobile_reference"
+                        android:id="@+id/relation_reference"
+                        android:layout_marginTop="10dp"
+                        android:layout_toRightOf="@+id/divider2"
+                        android:textSize="13sp"
+                        />
+
+
+                </RelativeLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

@@ -22,7 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Truman"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.outlets.OutletComplaintsActivity"></activity>
+        <activity android:name=".ui.profile.BankDetailsAndOtherDetailsActivity"></activity>
+        <activity android:name=".ui.profile.ProfileDetailsActivity" />
+        <activity android:name=".ui.outlets.OutletComplaintsActivity" />
 
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"

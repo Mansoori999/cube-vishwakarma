@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools">
+    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:card_view="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:fillViewport="true"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".ui.profile.ProfileDetailsActivity">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profile_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimaryDark"
+            app:navigationIcon="@drawable/ic_arrow_left"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="Personal Documents"
+            style="@style/ToolbarTheme"
+            app:elevation="0dp"
+            app:titleTextColor="@android:color/white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:id="@+id/personal_documents"
+        android:visibility="visible"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aadhar No"
+            android:id="@+id/adharno"
+            android:textColor="@color/black"
+            android:textStyle="normal"
+            android:textSize="16sp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Aadhar Image"
+            android:id="@+id/frontAndBackAdharPic"
+            android:textColor="@color/black"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/adharno"
+            android:textStyle="normal"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:id="@+id/morePics_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:layout_gravity="center"
+                    android:text="Front"
+                    android:textColor="@color/black"/>
+            <include layout="@layout/doc_click_image_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
+                android:id="@+id/adharpicfront"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:layout_gravity="center"
+                    android:text="Back"
+                    android:textColor="@color/black"/>
+                <include layout="@layout/doc_click_image_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-5dp"
+                    android:id="@+id/adharpicback"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pan Card No"
+            android:id="@+id/panNo"
+            android:textColor="@color/black"
+            android:textStyle="normal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/morePics_container"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pan Card Image"
+            android:id="@+id/pancardimage"
+            android:textColor="@color/black"
+            android:textStyle="normal"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/panNo"
+            android:textSize="16sp"/>
+        <include layout="@layout/doc_click_image_layout"
+            android:layout_below="@+id/pancardimage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/pancardpic"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Voter Id"
+            android:id="@+id/voterid"
+            android:textColor="@color/black"
+            android:textStyle="normal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/pancardpic"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Voter Id Image"
+            android:id="@+id/voterimage"
+            android:textColor="@color/black"
+            android:textStyle="normal"
+            android:layout_marginTop="5dp"
+            android:layout_below="@+id/voterid"
+            android:textSize="16sp"/>
+
+        <LinearLayout
+            android:id="@+id/voterPics_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:layout_gravity="center"
+                    android:text="Front"
+                    android:textColor="@color/black"/>
+                <include layout="@layout/doc_click_image_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-5dp"
+                    android:id="@+id/voterpicfront"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="12sp"
+                    android:textStyle="normal"
+                    android:layout_gravity="center"
+                    android:text="Back"
+                    android:textColor="@color/black"/>
+                <include layout="@layout/doc_click_image_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="-5dp"
+                    android:id="@+id/voterpicback"/>
+            </LinearLayout>
+        </LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driving Licence"
+            android:id="@+id/drivinglicence"
+            android:textColor="@color/black"
+            android:textStyle="normal"
+            android:layout_marginTop="10dp"
+            android:layout_below="@+id/pancardpic"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Driving Licence Image"
+            android:id="@+id/drivinglicenceImage"
+            android:textColor="@color/black"
+            android:textStyle="normal"
+            android:layout_marginTop="5dp"
+            android:textSize="16sp"/>
+        <include layout="@layout/doc_click_image_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/drivingImage"/>
+
+    </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</layout>

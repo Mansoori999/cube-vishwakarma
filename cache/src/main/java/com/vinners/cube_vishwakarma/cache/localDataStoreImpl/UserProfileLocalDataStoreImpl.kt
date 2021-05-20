@@ -76,7 +76,6 @@ class UserProfileLocalDataStoreImpl @Inject constructor(
                         mobile = type.mobile,
                         email = type.email,
                         alternatemobile = type.alternatemobile,
-
                         logintype = type.logintype,
                         designation=type.designation,
                         userType = type.userType,
@@ -95,7 +94,7 @@ class UserProfileLocalDataStoreImpl @Inject constructor(
                         aadhaarno = type.aadhaarno,
                         aadhaarpic = type.aadhaarpic,
                         pan = type.pan,
-                        panpic = type.designation,
+                        panpic = type.panpic,
                         dlnumber = type.dlnumber,
                         dlpic = type.dlpic,
                         bankname = type.bankname,
@@ -129,7 +128,6 @@ class UserProfileLocalDataStoreImpl @Inject constructor(
                     mobile = type.mobile,
                     email = type.email,
                     alternatemobile = type.alternatemobile,
-
                     logintype = type.logintype,
                     designation=type.designation,
                     userType = type.userType,
@@ -148,7 +146,7 @@ class UserProfileLocalDataStoreImpl @Inject constructor(
                     aadhaarno = type.aadhaarno,
                     aadhaarpic = type.aadhaarpic,
                     pan = type.pan,
-                    panpic = type.designation,
+                    panpic = type.panpic,
                     dlnumber = type.dlnumber,
                     dlpic = type.dlpic,
                     bankname = type.bankname,

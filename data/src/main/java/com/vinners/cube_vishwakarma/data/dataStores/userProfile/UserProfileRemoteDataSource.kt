@@ -39,4 +39,8 @@ interface UserProfileRemoteDataSource {
     ): ReferResponse
 
     suspend fun getAppVersion(appVersion: String): AppVersion
+
+    // for changed password
+    suspend fun changedUserPassword(newpassword: String): String
+
 }

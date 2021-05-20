@@ -53,4 +53,12 @@ interface ProfileService {
     @GET("api/user/allowedversion")
     suspend fun getAppVersion(@Query("version") version: String): Response<List<AppVersion>>
 
+
+// changed password
+
+    @POST("api/auth/changeuserpassword")
+    suspend fun changedUserPassword(
+            @Body passwordRequest:PasswordRequest
+    ):Response<List<String>>
+
 }

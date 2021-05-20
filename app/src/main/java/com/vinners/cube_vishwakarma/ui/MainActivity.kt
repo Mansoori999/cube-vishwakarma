@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -13,12 +14,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.cardview.widget.CardView
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
@@ -110,55 +108,64 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         drawerLayout.setDrawerListener(toggle)
         toggle.syncState()
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
-        navigationView.setNavigationItemSelectedListener(this)
-        val inflater: LayoutInflater = this@MainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val viewGroup : ViewGroup = findViewById (R.id.nav_view)
-        var view = inflater.inflate(R.layout.nav_header_main, viewGroup)
-        val userName = view.findViewById<TextView>(R.id.username)
+        val headerView: View = navigationView.getHeaderView(0)
+        navigationView.setItemIconTintList(null)
+        val userName = headerView.findViewById<TextView>(R.id.username)
         userName.setText(String.format("Hii, %s", userSessionManager.userName))
-        val userMobile = view.findViewById<TextView>(R.id.userMobile)
+        val userMobile = headerView.findViewById<TextView>(R.id.userMobile)
         userMobile.text = userSessionManager.mobile
-        val appVersionTV = view.findViewById<TextView>(R.id.appVersionTV)
+        val appVersionTV = findViewById<TextView>(R.id.appVersionTV)
         appVersionTV.text = "App Version: ${BuildConfig.VERSION_NAME}"
+        navigationView.setNavigationItemSelectedListener(this)
 
-        val complaints = view.findViewById<CardView>(R.id.complaint_container)
-        val documents = view.findViewById<CardView>(R.id.doc_container)
-        val attendance = view.findViewById<CardView>(R.id.attendance_container)
-        val expense = view.findViewById<CardView>(R.id.expense_container)
-        val tutorials = view.findViewById<CardView>(R.id.tutorial_container)
-        val outlets = view.findViewById<CardView>(R.id.outlets_container)
-       val  myAnim : Animation = AnimationUtils.loadAnimation(this, R.anim.card_anim);
+//        val inflater: LayoutInflater = this@MainActivity.getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+//        val viewGroup : ViewGroup = findViewById (R.id.nav_view)
+//        var view = inflater.inflate(R.layout.nav_header_main, viewGroup)
+//        val userName = view.findViewById<TextView>(R.id.username)
+//        userName.setText(String.format("Hii, %s", userSessionManager.userName))
+//        val userMobile = view.findViewById<TextView>(R.id.userMobile)
+//        userMobile.text = userSessionManager.mobile
+//        val appVersionTV = view.findViewById<TextView>(R.id.appVersionTV)
+//        appVersionTV.text = "App Version: ${BuildConfig.VERSION_NAME}"
 
-        complaints.setOnClickListener {
-            complaints.startAnimation(myAnim);
-            val intent = Intent(this, ComplaintsActivity::class.java)
-            startActivity(intent)
-        }
-        documents.setOnClickListener {
-            documents.startAnimation(myAnim);
-            val intent = Intent(this, DocumentsActivity::class.java)
-            startActivity(intent)
-        }
-        attendance.setOnClickListener {
-            attendance.startAnimation(myAnim);
-            val intent = Intent(this, AttendanceActivity::class.java)
-            startActivity(intent)
-        }
-        expense.setOnClickListener {
-            expense.startAnimation(myAnim);
-            val intent = Intent(this, ExpenseActivity::class.java)
-            startActivity(intent)
-        }
-        tutorials.setOnClickListener {
-            tutorials.startAnimation(myAnim);
-            val intent = Intent(this, TutorialsActivity::class.java)
-            startActivity(intent)
-        }
-        outlets.setOnClickListener {
-            outlets.startAnimation(myAnim);
-            val intent = Intent(this, OutletsActivity::class.java)
-            startActivity(intent)
-        }
+//        val complaints = view.findViewById<CardView>(R.id.complaint_container)
+//        val documents = view.findViewById<CardView>(R.id.doc_container)
+//        val attendance = view.findViewById<CardView>(R.id.attendance_container)
+//        val expense = view.findViewById<CardView>(R.id.expense_container)
+//        val tutorials = view.findViewById<CardView>(R.id.tutorial_container)
+//        val outlets = view.findViewById<CardView>(R.id.outlets_container)
+
+//
+//        complaints.setOnClickListener {
+//            complaints.startAnimation(myAnim)
+//            val intent = Intent(this, ComplaintsActivity::class.java)
+//            startActivity(intent)
+//        }
+//        documents.setOnClickListener {
+//            documents.startAnimation(myAnim)
+//            val intent = Intent(this, DocumentsActivity::class.java)
+//            startActivity(intent)
+//        }
+//        attendance.setOnClickListener {
+//            attendance.startAnimation(myAnim)
+//            val intent = Intent(this, AttendanceActivity::class.java)
+//            startActivity(intent)
+//        }
+//        expense.setOnClickListener {
+//            expense.startAnimation(myAnim)
+//            val intent = Intent(this, ExpenseActivity::class.java)
+//            startActivity(intent)
+//        }
+//        tutorials.setOnClickListener {
+//            tutorials.startAnimation(myAnim)
+//            val intent = Intent(this, TutorialsActivity::class.java)
+//            startActivity(intent)
+//        }
+//        outlets.setOnClickListener {
+//            outlets.startAnimation(myAnim)
+//            val intent = Intent(this, OutletsActivity::class.java)
+//            startActivity(intent)
+//        }
         val logoutBtn = findViewById<ImageView>(R.id.logout)
         logoutBtn.setOnClickListener {
             MaterialAlertDialogBuilder(this)
@@ -188,27 +195,30 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //        mainActivityRecyclerAdapter.updateViewList(homeList)
 //        recyclerView.adapter = mainActivityRecyclerAdapter
 //        preparehomeData()
-
+        val  myAnim : Animation = AnimationUtils.loadAnimation(this, R.anim.card_anim)
         viewBinding.contentMainContainer.totalCardView.setOnClickListener {
-            viewBinding.contentMainContainer.totalCardView.startAnimation(myAnim);
+            viewBinding.contentMainContainer.totalCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_TOTAL_ACTIVITY, true)
             startActivity(intent)
 
         }
         viewBinding.contentMainContainer.dueCardView.setOnClickListener {
+            viewBinding.contentMainContainer.dueCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_DUE_ACTIVITY, true)
             startActivity(intent)
 
         }
         viewBinding.contentMainContainer.workingCardView.setOnClickListener {
+            viewBinding.contentMainContainer.workingCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_WORKING_ACTIVITY, true)
             startActivity(intent)
 
         }
         viewBinding.contentMainContainer.pendingCardView.setOnClickListener {
+            viewBinding.contentMainContainer.pendingCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_PENDING_ACTIVITY, true)
             startActivity(intent)
@@ -216,8 +226,38 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         }
 
         viewBinding.contentMainContainer.doneCardView.setOnClickListener {
+            viewBinding.contentMainContainer.doneCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_DONE_ACTIVITY, true)
+            startActivity(intent)
+
+        }
+
+        viewBinding.contentMainContainer.draftCardView.setOnClickListener {
+            viewBinding.contentMainContainer.draftCardView.startAnimation(myAnim)
+            val intent = Intent(this, OutletComplaintsActivity::class.java)
+            intent.putExtra(OutletComplaintsActivity.ENABLE_DRAFT_ACTIVITY, true)
+            startActivity(intent)
+
+        }
+        viewBinding.contentMainContainer.estimatedCardView.setOnClickListener {
+            viewBinding.contentMainContainer.estimatedCardView.startAnimation(myAnim)
+            val intent = Intent(this, OutletComplaintsActivity::class.java)
+            intent.putExtra(OutletComplaintsActivity.ENABLE_ESTIMATE_ACTIVITY, true)
+            startActivity(intent)
+
+        }
+        viewBinding.contentMainContainer.billedCardView.setOnClickListener {
+            viewBinding.contentMainContainer.billedCardView.startAnimation(myAnim)
+            val intent = Intent(this, OutletComplaintsActivity::class.java)
+            intent.putExtra(OutletComplaintsActivity.ENABLE_BILLED_ACTIVITY, true)
+            startActivity(intent)
+
+        }
+        viewBinding.contentMainContainer.paymentCardView.setOnClickListener {
+            viewBinding.contentMainContainer.paymentCardView.startAnimation(myAnim)
+            val intent = Intent(this, OutletComplaintsActivity::class.java)
+            intent.putExtra(OutletComplaintsActivity.ENABLE_PAYMENT_ACTIVITY, true)
             startActivity(intent)
 
         }
@@ -287,6 +327,10 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                     viewBinding.contentMainContainer.working.text = it.content.working
                     viewBinding.contentMainContainer.pending.text = it.content.pendingletter
                     viewBinding.contentMainContainer.done.text = it.content.done
+                    viewBinding.contentMainContainer.draft.text = it.content.draft
+                    viewBinding.contentMainContainer.estimated.text = it.content.estimated
+                    viewBinding.contentMainContainer.billed.text = it.content.billed
+                    viewBinding.contentMainContainer.payment.text = it.content.payment
 
                 }
                 is Lce.Error ->{
@@ -300,36 +344,63 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        return false
+        when(item.itemId){
+            R.id.nav_complaint ->{
+                val intent = Intent(this, ComplaintsActivity::class.java)
+                startActivity(intent)
+
+            }
+            R.id.nav_doc ->{
+                val intent = Intent(this, DocumentsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_attendance ->{
+                val intent = Intent(this, AttendanceActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_expanse ->{
+                val intent = Intent(this, ExpenseActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_tutorial ->{
+                val intent = Intent(this, TutorialsActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.nav_outlet ->{
+                val intent = Intent(this, OutletsActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return true
     }
 
     override fun onItemClick(position: Int) {
-        when(position){
-            0 ->
-            {
-//                val intent = Intent(this, ComplaintsActivity::class.java)
-//                startActivity(intent)
-            }
-            1->
-            {
-//                val intent = Intent(this, DocumentsActivity::class.java)
-//                startActivity(intent)
-            }
-            2->{
-//                val intent = Intent(this, AttendanceActivity::class.java)
-//                startActivity(intent)
-            }
-            3->{
-//                val intent = Intent(this, ExpenseActivity::class.java)
-//                startActivity(intent)
-            }
-            4->{
-//                val intent = Intent(this, TutorialsActivity::class.java)
-//                startActivity(intent)
-            }
-
-
-        }
+//        when(position){
+//            0 ->
+//            {
+////                val intent = Intent(this, ComplaintsActivity::class.java)
+////                startActivity(intent)
+//            }
+//            1->
+//            {
+////                val intent = Intent(this, DocumentsActivity::class.java)
+////                startActivity(intent)
+//            }
+//            2->{
+////                val intent = Intent(this, AttendanceActivity::class.java)
+////                startActivity(intent)
+//            }
+//            3->{
+////                val intent = Intent(this, ExpenseActivity::class.java)
+////                startActivity(intent)
+//            }
+//            4->{
+////                val intent = Intent(this, TutorialsActivity::class.java)
+////                startActivity(intent)
+//            }
+//
+//
+//        }
     }
 
 

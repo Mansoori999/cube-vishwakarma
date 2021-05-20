@@ -34,14 +34,24 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
         const val ENABLE_WORKING_ACTIVITY = "enable_WORKING"
         const val ENABLE_PENDING_ACTIVITY = "enable_pending"
         const val ENABLE_DONE_ACTIVITY = "enable_done"
+        const val ENABLE_DRAFT_ACTIVITY = "enable_draft"
+        const val ENABLE_ESTIMATE_ACTIVITY = "enable_estimate"
+        const val ENABLE_BILLED_ACTIVITY = "enable_billed"
+        const val ENABLE_PAYMENT_ACTIVITY = "enable_payment"
 
     }
 
-    val Statustotal : String = ""
-    val Statusdue : String = "Due"
-    val Statusworking : String = "Working"
-    val Statuspending : String = "Pending Letter"
-    val StatusDone : String = "Done"
+    val statustotal : String = ""
+    val statusdue : String = "Due"
+    val statusworking : String = "Working"
+    val statuspending : String = "Pending Letter"
+    val statusDone : String = "Done"
+    val statusDraft : String = "Draft"
+    val statusEstimated : String = "Estimated"
+    val statusBilled : String = "Billed"
+    val statusPayment : String = "Payment"
+
+
 
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
@@ -95,10 +105,14 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
         val enableWorking = intent.getBooleanExtra(ENABLE_WORKING_ACTIVITY, false)
         val enablePending = intent.getBooleanExtra(ENABLE_PENDING_ACTIVITY, false)
         val enabledone = intent.getBooleanExtra(ENABLE_DONE_ACTIVITY, false)
+        val enabledraft = intent.getBooleanExtra(ENABLE_DRAFT_ACTIVITY, false)
+        val enableestimate = intent.getBooleanExtra(ENABLE_ESTIMATE_ACTIVITY, false)
+        val enablebilled = intent.getBooleanExtra(ENABLE_BILLED_ACTIVITY, false)
+        val enablepayment = intent.getBooleanExtra(ENABLE_PAYMENT_ACTIVITY, false)
 
         if (enableTotal == true){
             viewBinding.outletComplaintsToolbar.setTitle("All Complaints")
-            Statustotal.let { viewModel.getComplaintWithStatus(it) }
+            statustotal.let { viewModel.getComplaintWithStatus(it) }
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -108,6 +122,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
                     }
                     is Lce.Content->{
                         if (it.content.isEmpty()){
+                            viewBinding.refreshLayout.isRefreshing = false
                             viewBinding.progressBar.setVisibilityGone()
                             viewBinding.errorLayout.root.setVisibilityVisible()
                             viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
@@ -134,7 +149,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         } else if (enableDue == true){
             viewBinding.outletComplaintsToolbar.setTitle("Due Complaints")
-            Statusdue.let { viewModel.getComplaintWithStatus(it) }
+            statusdue.let { viewModel.getComplaintWithStatus(it) }
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -144,6 +159,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
                     }
                     is Lce.Content->{
                         if (it.content.isEmpty()){
+                            viewBinding.refreshLayout.isRefreshing = false
                             viewBinding.progressBar.setVisibilityGone()
                             viewBinding.errorLayout.root.setVisibilityVisible()
                             viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
@@ -171,7 +187,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enableWorking == true){
             viewBinding.outletComplaintsToolbar.setTitle("Working Complaints")
-            Statusworking.let { viewModel.getComplaintWithStatus(it) }
+            statusworking.let { viewModel.getComplaintWithStatus(it) }
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -181,6 +197,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
                     }
                     is Lce.Content->{
                         if (it.content.isEmpty()){
+                            viewBinding.refreshLayout.isRefreshing = false
                             viewBinding.progressBar.setVisibilityGone()
                             viewBinding.errorLayout.root.setVisibilityVisible()
                             viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
@@ -208,7 +225,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enablePending == true){
             viewBinding.outletComplaintsToolbar.setTitle("Pending Letter Complaints")
-            Statuspending.let { viewModel.getComplaintWithStatus(it) }
+            statuspending.let { viewModel.getComplaintWithStatus(it) }
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -218,6 +235,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
                     }
                     is Lce.Content->{
                         if (it.content.isEmpty()){
+                            viewBinding.refreshLayout.isRefreshing = false
                             viewBinding.progressBar.setVisibilityGone()
                             viewBinding.errorLayout.root.setVisibilityVisible()
                             viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
@@ -244,7 +262,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enabledone == true){
             viewBinding.outletComplaintsToolbar.setTitle("Done Complaints")
-            StatusDone.let { viewModel.getComplaintWithStatus(it) }
+            statusDone.let { viewModel.getComplaintWithStatus(it) }
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -254,6 +272,155 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
                     }
                     is Lce.Content->{
                         if (it.content.isEmpty()){
+                            viewBinding.refreshLayout.isRefreshing = false
+                            viewBinding.progressBar.setVisibilityGone()
+                            viewBinding.errorLayout.root.setVisibilityVisible()
+                            viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
+                            viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+                            viewBinding.errorLayout.messageTv.text = "Not Complaint Found"
+                        } else {
+                            viewBinding.errorLayout.root.setVisibilityGone()
+                            viewBinding.progressBar.setVisibilityGone()
+                            allComplaintRecyclerAdapter.updateViewList(it.content)
+                            if (!viewBinding.refreshLayout.isRefreshing) {
+                                viewBinding.refreshLayout.isRefreshing = false
+                            }
+                        }
+                    }
+                    is Lce.Error->{
+                        viewBinding.progressBar.setVisibilityGone()
+                        viewBinding.refreshLayout.isRefreshing = false
+                        viewBinding.progressBar.setVisibilityGone()
+                        showInformationDialog(it.error)
+
+                    }
+                }
+            })
+
+        }else if (enabledraft == true){
+            viewBinding.outletComplaintsToolbar.setTitle("Draft Complaints")
+            statusDraft.let { viewModel.getComplaintWithStatus(it) }
+            viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
+                when(it){
+                    Lce.Loading->{
+                        viewBinding.errorLayout.root.setVisibilityGone()
+                        viewBinding.progressBar.setVisibilityVisible()
+                        viewBinding.refreshLayout.isRefreshing = false
+                    }
+                    is Lce.Content->{
+                        if (it.content.isEmpty()){
+                            viewBinding.refreshLayout.isRefreshing = false
+                            viewBinding.progressBar.setVisibilityGone()
+                            viewBinding.errorLayout.root.setVisibilityVisible()
+                            viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
+                            viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+                            viewBinding.errorLayout.messageTv.text = "Not Complaint Found"
+                        } else {
+                            viewBinding.errorLayout.root.setVisibilityGone()
+                            viewBinding.progressBar.setVisibilityGone()
+                            allComplaintRecyclerAdapter.updateViewList(it.content)
+                            if (!viewBinding.refreshLayout.isRefreshing) {
+                                viewBinding.refreshLayout.isRefreshing = false
+                            }
+                        }
+                    }
+                    is Lce.Error->{
+                        viewBinding.progressBar.setVisibilityGone()
+                        viewBinding.refreshLayout.isRefreshing = false
+                        viewBinding.progressBar.setVisibilityGone()
+                        showInformationDialog(it.error)
+
+                    }
+                }
+            })
+
+        }else if (enableestimate == true){
+            viewBinding.outletComplaintsToolbar.setTitle("Estimated Complaints")
+            statusEstimated.let { viewModel.getComplaintWithStatus(it) }
+            viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
+                when(it){
+                    Lce.Loading->{
+                        viewBinding.errorLayout.root.setVisibilityGone()
+                        viewBinding.progressBar.setVisibilityVisible()
+                        viewBinding.refreshLayout.isRefreshing = false
+                    }
+                    is Lce.Content->{
+                        if (it.content.isEmpty()){
+                            viewBinding.progressBar.setVisibilityGone()
+                            viewBinding.refreshLayout.isRefreshing = false
+                            viewBinding.errorLayout.root.setVisibilityVisible()
+                            viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
+                            viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+                            viewBinding.errorLayout.messageTv.text = "Not Complaint Found"
+                        } else {
+                            viewBinding.errorLayout.root.setVisibilityGone()
+                            viewBinding.progressBar.setVisibilityGone()
+                            allComplaintRecyclerAdapter.updateViewList(it.content)
+                            if (!viewBinding.refreshLayout.isRefreshing) {
+                                viewBinding.refreshLayout.isRefreshing = false
+                            }
+                        }
+                    }
+                    is Lce.Error->{
+                        viewBinding.progressBar.setVisibilityGone()
+                        viewBinding.refreshLayout.isRefreshing = false
+                        viewBinding.progressBar.setVisibilityGone()
+                        showInformationDialog(it.error)
+
+                    }
+                }
+            })
+
+        }else if (enablebilled == true){
+            viewBinding.outletComplaintsToolbar.setTitle("Billed Complaints")
+            statusBilled.let { viewModel.getComplaintWithStatus(it) }
+            viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
+                when(it){
+                    Lce.Loading->{
+                        viewBinding.errorLayout.root.setVisibilityGone()
+                        viewBinding.progressBar.setVisibilityVisible()
+                        viewBinding.refreshLayout.isRefreshing = false
+                    }
+                    is Lce.Content->{
+                        if (it.content.isEmpty()){
+                            viewBinding.refreshLayout.isRefreshing = false
+                            viewBinding.progressBar.setVisibilityGone()
+                            viewBinding.errorLayout.root.setVisibilityVisible()
+                            viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
+                            viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+                            viewBinding.errorLayout.messageTv.text = "Not Complaint Found"
+                        } else {
+                            viewBinding.errorLayout.root.setVisibilityGone()
+                            viewBinding.progressBar.setVisibilityGone()
+                            allComplaintRecyclerAdapter.updateViewList(it.content)
+                            if (!viewBinding.refreshLayout.isRefreshing) {
+                                viewBinding.refreshLayout.isRefreshing = false
+                            }
+                        }
+                    }
+                    is Lce.Error->{
+                        viewBinding.progressBar.setVisibilityGone()
+                        viewBinding.refreshLayout.isRefreshing = false
+                        viewBinding.progressBar.setVisibilityGone()
+                        showInformationDialog(it.error)
+
+                    }
+                }
+            })
+
+        }else if (enablepayment == true){
+            viewBinding.outletComplaintsToolbar.setTitle("Payment Complaints")
+            statusPayment.let { viewModel.getComplaintWithStatus(it) }
+            viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
+                when(it){
+                    Lce.Loading->{
+                        viewBinding.errorLayout.root.setVisibilityGone()
+                        viewBinding.progressBar.setVisibilityVisible()
+                        viewBinding.refreshLayout.isRefreshing = false
+                    }
+                    is Lce.Content->{
+                        if (it.content.isEmpty()){
+                            viewBinding.refreshLayout.isRefreshing = false
                             viewBinding.progressBar.setVisibilityGone()
                             viewBinding.errorLayout.root.setVisibilityVisible()
                             viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
@@ -291,6 +458,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
                 }
                 is Lce.Content->{
                     if (it.content.isEmpty()){
+                        viewBinding.refreshLayout.isRefreshing = false
                         viewBinding.progressBar.setVisibilityGone()
                         viewBinding.errorLayout.root.setVisibilityVisible()
                         viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
