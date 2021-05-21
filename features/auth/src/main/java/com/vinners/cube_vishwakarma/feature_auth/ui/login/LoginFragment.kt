@@ -15,6 +15,7 @@ import com.github.razir.progressbutton.showProgress
 import com.vinners.core.BuildConfig.VERSION_NAME
 import com.vinners.cube_vishwakarma.base.AppInfo
 import com.vinners.cube_vishwakarma.core.base.BaseFragment
+import com.vinners.cube_vishwakarma.core.base.CoreApplication
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.feature_auth.BuildConfig
 import com.vinners.cube_vishwakarma.feature_auth.R
@@ -153,6 +154,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
                             Toast.LENGTH_SHORT
                     )
                             .show()
+
+
+                    (requireActivity().application as CoreApplication).reInitCoreDependencies()
                     val intent = Intent(
                             context,
                             Class.forName("com.vinners.cube_vishwakarma.ui.MainActivity")
