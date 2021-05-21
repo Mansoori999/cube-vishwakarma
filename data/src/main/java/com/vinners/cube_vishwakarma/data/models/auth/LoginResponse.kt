@@ -22,6 +22,9 @@ data class LoginResponse(
     @SerializedName("email")
     val email: String? = null,
 
+    @SerializedName("empcode")
+    val empcode: String? = null,
+
     @SerializedName("logintype")
     val logintype: String? = null,
 

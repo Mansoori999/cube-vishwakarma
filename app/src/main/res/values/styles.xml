@@ -70,4 +70,13 @@
         <item name="itemTextColor">?attr/colorNavigationItem</item>
         <item name="itemBackground">?attr/drawableNavigationItemBackground</item>
     </style>
+
+    <style name="MyAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:windowEnterAnimation">@anim/animscale_in</item>
+        <item name="android:windowExitAnimation">@anim/animscale_out</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+    <style name="CircularProgress" parent="Theme.AppCompat.Light">
+        <item name="colorAccent">@color/white</item>
+    </style>
 </resources>

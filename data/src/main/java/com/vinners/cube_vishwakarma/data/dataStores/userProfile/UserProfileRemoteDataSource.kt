@@ -1,6 +1,7 @@
 package com.vinners.cube_vishwakarma.data.dataStores.userProfile
 
 import com.vinners.cube_vishwakarma.data.models.Documents
+import com.vinners.cube_vishwakarma.data.models.auth.LoginResponse
 import com.vinners.cube_vishwakarma.data.models.bank.Bank
 import com.vinners.cube_vishwakarma.data.models.bank.BankDetails
 import com.vinners.cube_vishwakarma.data.models.certificate.Certificate
@@ -42,5 +43,9 @@ interface UserProfileRemoteDataSource {
 
     // for changed password
     suspend fun changedUserPassword(newpassword: String): String
+
+    // refresh profile
+
+    suspend fun refreshProfileData(): LoginResponse
 
 }

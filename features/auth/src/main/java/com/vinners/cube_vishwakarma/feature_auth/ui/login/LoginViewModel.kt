@@ -16,6 +16,7 @@ import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.data.models.auth.LoginResponse
 import com.vinners.cube_vishwakarma.data.models.auth.LoginWithOtpResponse
+import com.vinners.cube_vishwakarma.data.models.auth.LoginWithoutOtpRequest
 import com.vinners.cube_vishwakarma.data.models.auth.UserRegistrationCheckResponse
 import com.vinners.cube_vishwakarma.data.models.mdm.MobileInformation
 import com.vinners.cube_vishwakarma.data.repository.AuthRepository
@@ -43,6 +44,8 @@ interface LoginViewModelEvents {
     val loginStateChange: LiveData<Lce<LoginWithOtpResponse>>
 //    val loginStateChange: LiveData<Lce<LoginResponse>>
 
+    fun loginWithoutOtpConfirmState(): LiveData<Lce<LoginResponse>>
+
     val registerState: LiveData<Lce<UserNameCheckStates>>
 
     val loginWithOtpState: LiveData<Lce<LoginWithOtpResponse>>
@@ -50,6 +53,8 @@ interface LoginViewModelEvents {
     val forgetPasswordState: LiveData<Lse>
 
     val registerWithOtpState: LiveData<Lce<UserRegistrationCheckResponse>>
+
+
 }
 
 class LoginViewModel @Inject constructor(
@@ -134,6 +139,30 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    // login without otp
+    private val _loginWithoutOtpConfirmState = MutableLiveData<Lce<LoginResponse>>()
+    override fun loginWithoutOtpConfirmState(): LiveData<Lce<LoginResponse>> = _loginWithoutOtpConfirmState
+
+    fun loginWithOutOtp(loginid : String,password : String){
+        _loginWithoutOtpConfirmState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+//                _loginWithoutOtpConfirmState.postValue("Unregistering Sms receiver...")
+                val response = authRepository.loginWithOutOtp(
+                        LoginWithoutOtpRequest(
+                                loginid = loginid,
+                                password = password,
+                                mobileInfo = getMobileInformation(),
+                        )
+                )
+                _loginWithoutOtpConfirmState.postValue(Lce.Content(response))
+//                logger.d("Otp confirmed for login")
+            }catch (e: Exception){
+//                _loginWithoutOtpConfirmState.postValue("Registering Sms receiver...")
+                _loginWithoutOtpConfirmState.postValue(Lce.Error(e.localizedMessage))
+            }
+        }
+    }
     fun loginWithOtp(mobile: String) {
         if (!isMobileValid(mobile)) {
             _loginFormState.postValue("Enter Valid Login ID")

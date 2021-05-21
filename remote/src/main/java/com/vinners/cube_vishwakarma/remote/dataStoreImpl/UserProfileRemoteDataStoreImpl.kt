@@ -2,12 +2,15 @@ package com.vinners.cube_vishwakarma.remote.dataStoreImpl
 
 import com.vinners.cube_vishwakarma.data.dataStores.userProfile.UserProfileRemoteDataSource
 import com.vinners.cube_vishwakarma.data.models.Documents
+import com.vinners.cube_vishwakarma.data.models.LoggedInUser
+import com.vinners.cube_vishwakarma.data.models.auth.LoginResponse
 import com.vinners.cube_vishwakarma.data.models.bank.Bank
 import com.vinners.cube_vishwakarma.data.models.bank.BankDetails
 import com.vinners.cube_vishwakarma.data.models.certificate.Certificate
 import com.vinners.cube_vishwakarma.data.models.jobHistory.JobHistory
 import com.vinners.cube_vishwakarma.data.models.profile.*
 import com.vinners.cube_vishwakarma.data.models.refer.ReferResponse
+import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.remote.extensions.bodyOrThrow
 import com.vinners.cube_vishwakarma.remote.retrofitServices.IfscService
 import com.vinners.cube_vishwakarma.remote.retrofitServices.ProfileService
@@ -22,7 +25,8 @@ import javax.inject.Inject
 
 class UserProfileRemoteDataStoreImpl @Inject constructor(
     private val profileService: ProfileService,
-    private val ifscService: IfscService
+    private val ifscService: IfscService,
+    private val userSessionManager: UserSessionManager
 ) : UserProfileRemoteDataSource {
     override suspend fun updateProfileData(profileRequest: UpdateProfileRequest) {
 
@@ -208,5 +212,22 @@ class UserProfileRemoteDataStoreImpl @Inject constructor(
                         newpassword = newpassword
                 )
         ).bodyOrThrow().first()
+    }
+
+    override suspend fun refreshProfileData(): LoginResponse {
+        val  response = profileService.refreshProfileData().bodyOrThrow().first()
+        userSessionManager.startNewSession(
+            LoggedInUser(
+            id = response.id,
+            sessionToken = response.authToken!!,
+            displayName = response.name,
+            mobileNumber = response.mobile!!,
+            email = response.email,
+            pic = response.pic,
+            design = response.designation
+        )
+        )
+        return response
+//        return profileService.refreshProfileData().bodyOrThrow().first()
     }
 }

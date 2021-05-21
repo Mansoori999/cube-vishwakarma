@@ -6,6 +6,8 @@ import com.vinners.cube_vishwakarma.base.AppInfo
 import com.vinners.cube_vishwakarma.data.dataStores.userProfile.UserProfileLocalDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.userProfile.UserProfileRemoteDataSource
 import com.vinners.cube_vishwakarma.data.models.Documents
+import com.vinners.cube_vishwakarma.data.models.auth.LoginResponse
+import com.vinners.cube_vishwakarma.data.models.auth.RegisterRequest
 import com.vinners.cube_vishwakarma.data.models.bank.Bank
 import com.vinners.cube_vishwakarma.data.models.bank.BankDetails
 import com.vinners.cube_vishwakarma.data.models.certificate.Certificate
@@ -27,7 +29,8 @@ class ProfileRepository @Inject constructor(
     private val userSessionManager: UserSessionManager,
     @Named("session_dependent_pref") private val profilePrefs: SharedPreferences,
     private val userProfileLocalDataStore: UserProfileLocalDataStore,
-    private val userProfileRemoteDataSource: UserProfileRemoteDataSource
+    private val userProfileRemoteDataSource: UserProfileRemoteDataSource,
+
 ) {
 
     /**
@@ -111,8 +114,68 @@ class ProfileRepository @Inject constructor(
     suspend fun changedUserPassword(newpassword: String): String{
         return userProfileRemoteDataSource.changedUserPassword(newpassword)
     }
+
+    suspend fun refreshProfileData(): LoginResponse {
+        val loginResponse = userProfileRemoteDataSource.refreshProfileData()
+        userProfileLocalDataStore.updateProfile(
+            RegisterRequest(
+                name = loginResponse.name,
+                nickname = loginResponse.nickname,
+                mobile = loginResponse.mobile,
+                email = loginResponse.email,
+                alternatemobile = loginResponse.alternatemobile,
+                userType = loginResponse.userType,
+                logintype = loginResponse.logintype,
+                dob = loginResponse.dob,
+                gender = loginResponse.gender,
+                loginid = loginResponse.loginid,
+                city = loginResponse.city,
+                pincode = loginResponse.pincode,
+                pic = loginResponse.pic,
+                education = loginResponse.education,
+                aadhaarno = loginResponse.aadhaarno,
+                aadhaarpic = loginResponse.aadhaarpic,
+                pan = loginResponse.pan,
+                panpic = loginResponse.panpic,
+                dlnumber = loginResponse.dlnumber,
+                dlpic = loginResponse.dlpic,
+                pfnumber = loginResponse.pfnumber,
+                designation = loginResponse.designation,
+                esicnumber = loginResponse.esicnumber,
+                voterid = loginResponse.voterid,
+                voteridpic = loginResponse.voteridpic,
+                bankname = loginResponse.bankname,
+                nameonbank = loginResponse.nameonbank,
+                bankbranch = loginResponse.bankbranch,
+                ifsc = loginResponse.ifsc,
+                accountno = loginResponse.accountno,
+                emergencymobile = loginResponse.emergencymobile,
+                state = loginResponse.state,
+                emergencyname = loginResponse.emergencyname,
+                emergencyrelation = loginResponse.emergencyrelation,
+                referencename = loginResponse.referencename,
+
+                referencemobile = loginResponse.referencemobile,
+                referencerelation = loginResponse.referencerelation,
+                address = loginResponse.address,
+                createdby = loginResponse.createdby,
+                createdon = loginResponse.createdon,
+                authToken = loginResponse.authToken,
+                employment = loginResponse.employment,
+                managerid = loginResponse.managerid,
+                deviceid = loginResponse.deviceid,
+                doj = loginResponse.doj,
+                dol = loginResponse.dol,
+                empcode = loginResponse.empcode
+            )
+        )
+        return loginResponse
+//        return userProfileRemoteDataSource.refreshProfileData()
+    }
     companion object {
         private const val LAST_MONEY_OPERATION_TIME = "last_wallet_operation"
         private const val FIVE_SECONDS = 5000
     }
+
+
 }

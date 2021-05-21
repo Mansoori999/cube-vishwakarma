@@ -15,10 +15,12 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import coil.api.load
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.base.AppInfo
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
+import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityProfileBinding
@@ -134,6 +136,9 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityView
             }
 
         }
+        viewBinding.refresh.setOnClickListener {
+            viewModel.refreshProfileData()
+        }
     }
 
     private fun setValidationChangePassword() {
@@ -179,6 +184,27 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityView
 
         })
         viewModel.initViewModel()
+
+        viewModel.refreshProfileState.observe(this, Observer {
+            when(it){
+               Lce.Loading->{
+                   viewBinding.loadingData.setVisibilityVisible()
+                   viewBinding.refresh.setVisibilityGone()
+               }
+                is Lce.Content->{
+                    viewBinding.loadingData.setVisibilityGone()
+                    viewBinding.refresh.setVisibilityVisible()
+                    Toast.makeText(this, "Successfully upDated", Toast.LENGTH_SHORT).show()
+                }
+                is Lce.Error->{
+                    viewBinding.loadingData.setVisibilityGone()
+                    viewBinding.refresh.setVisibilityVisible()
+                    showInformationDialog(it.error)
+
+                }
+
+            }
+        })
 
         viewModel.changeduserpasswordState.observe(this, Observer {
             when(it){

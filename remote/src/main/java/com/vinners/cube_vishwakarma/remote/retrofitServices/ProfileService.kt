@@ -1,6 +1,7 @@
 package com.vinners.cube_vishwakarma.remote.retrofitServices
 
 import com.vinners.cube_vishwakarma.data.models.Documents
+import com.vinners.cube_vishwakarma.data.models.auth.LoginResponse
 import com.vinners.cube_vishwakarma.data.models.bank.Bank
 import com.vinners.cube_vishwakarma.data.models.certificate.Certificate
 import com.vinners.cube_vishwakarma.data.models.jobHistory.JobHistory
@@ -61,4 +62,8 @@ interface ProfileService {
             @Body passwordRequest:PasswordRequest
     ):Response<List<String>>
 
+    // refresh profile
+
+    @GET("api/user/getmyprofile")
+    suspend fun refreshProfileData():Response<List<LoginResponse>>
 }

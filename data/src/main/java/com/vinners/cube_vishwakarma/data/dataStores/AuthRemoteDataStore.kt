@@ -65,5 +65,7 @@ interface AuthRemoteDataStore {
 
     suspend fun getCityAndPincode(stateId: String?): CityAndPincode
 
+    // login without otp
+    suspend fun loginWithoutOtp(loginWithoutOtpRequest: LoginWithoutOtpRequest):LoginResponse
 
 }

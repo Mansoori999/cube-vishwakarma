@@ -143,6 +143,9 @@ data class RegisterRequest(
     @SerializedName("createdby")
     val createdby: String? = null,
 
+    @SerializedName("empcode")
+    val empcode: String? = null,
+
     @SerializedName("authToken")
     val authToken: String? = null,
 

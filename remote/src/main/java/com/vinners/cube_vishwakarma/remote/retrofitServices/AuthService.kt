@@ -85,4 +85,10 @@ interface AuthService {
 
     @GET("api/jobs/getjobcategories")
     suspend fun getWorkCategory(): Response<List<WorkCategory>>
+
+    // login without otp use direct go to dashboard
+    @POST("api/auth/loginwithoutotp")
+    suspend fun loginWithoutOtp(
+            @Body loginWithoutOtpRequest: LoginWithoutOtpRequest
+    ):Response<List<LoginResponse>>
 }

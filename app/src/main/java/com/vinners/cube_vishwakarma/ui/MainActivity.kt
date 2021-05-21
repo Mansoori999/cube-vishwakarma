@@ -166,18 +166,18 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //            val intent = Intent(this, OutletsActivity::class.java)
 //            startActivity(intent)
 //        }
-        val logoutBtn = findViewById<ImageView>(R.id.logout)
-        logoutBtn.setOnClickListener {
-            MaterialAlertDialogBuilder(this)
-                .setTitle("Log Out")
-                .setMessage("Do you want to log out?")
-                .setPositiveButton("Yes") { _, _ ->
-//                        userSessionManager.logOut()
-                    viewModel.logout()
-                }.setNegativeButton("No") { dialog, _ ->
-                    dialog.cancel()
-                }.show()
-        }
+//        val logoutBtn = findViewById<ImageView>(R.id.logout)
+//        logoutBtn.setOnClickListener {
+//            MaterialAlertDialogBuilder(this)
+//                .setTitle("Log Out")
+//                .setMessage("Do you want to log out?")
+//                .setPositiveButton("Yes") { _, _ ->
+////                        userSessionManager.logOut()
+//                    viewModel.logout()
+//                }.setNegativeButton("No") { dialog, _ ->
+//                    dialog.cancel()
+//                }.show()
+//        }
 //        val recyclerView: RecyclerView = findViewById(R.id.Recyclerview_home)
 //
 //        val layoutManager = GridLayoutManager(this, 2)
@@ -369,6 +369,17 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             R.id.nav_outlet ->{
                 val intent = Intent(this, OutletsActivity::class.java)
                 startActivity(intent)
+            }
+            R.id.nav_logout->{
+                MaterialAlertDialogBuilder(this)
+                        .setTitle("Log Out")
+                        .setMessage("Do you want to log out?")
+                        .setPositiveButton("Yes") { _, _ ->
+//                        userSessionManager.logOut()
+                            viewModel.logout()
+                        }.setNegativeButton("No") { dialog, _ ->
+                            dialog.cancel()
+                        }.show()
             }
         }
         return true

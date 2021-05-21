@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
+import com.vinners.cube_vishwakarma.data.models.auth.LoginResponse
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletDetailsList
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
 import com.vinners.cube_vishwakarma.data.repository.ProfileRepository
@@ -20,6 +21,8 @@ interface ProfileEvents {
 
     val profile: LiveData<Profile>
     val changeduserpasswordState: LiveData<Lce<String>>
+    val refreshProfileState: LiveData<Lce<LoginResponse>>
+
     fun initViewModel()
 
 }
@@ -69,4 +72,19 @@ class ProfileActivityViewModel@Inject constructor(
         }
     }
 
+    private val _refreshProfileState = MutableLiveData<Lce<LoginResponse>>()
+    override val refreshProfileState: LiveData<Lce<LoginResponse>> = _refreshProfileState
+
+    fun refreshProfileData() {
+        _refreshProfileState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val response = userProfileRepository.refreshProfileData()
+                _refreshProfileState.postValue(Lce.content(response))
+            } catch (e: Exception) {
+                _refreshProfileState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
 }

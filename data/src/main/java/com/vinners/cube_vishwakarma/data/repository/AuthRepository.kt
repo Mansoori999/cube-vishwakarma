@@ -208,4 +208,60 @@ class AuthRepository @Inject constructor(
     suspend fun getCityAndPincode(stateId: String?): CityAndPincode{
         return authRemoteDataStore.getCityAndPincode(stateId)
     }
+
+    // login without otp
+    suspend fun loginWithOutOtp(loginWithoutOtpRequest: LoginWithoutOtpRequest): LoginResponse {
+        val loginResponse = authRemoteDataStore.loginWithoutOtp(loginWithoutOtpRequest)
+        profileLocalDataStore.updateProfile(
+                RegisterRequest(
+                        name = loginResponse.name,
+                        nickname = loginResponse.nickname,
+                        mobile = loginResponse.mobile,
+                        email = loginResponse.email,
+                        alternatemobile = loginResponse.alternatemobile,
+                        userType = loginResponse.userType,
+                        logintype = loginResponse.logintype,
+                        dob = loginResponse.dob,
+                        gender = loginResponse.gender,
+                        loginid = loginResponse.loginid,
+                        city = loginResponse.city,
+                        pincode = loginResponse.pincode,
+                        pic = loginResponse.pic,
+                        education = loginResponse.education,
+                        aadhaarno = loginResponse.aadhaarno,
+                        aadhaarpic = loginResponse.aadhaarpic,
+                        pan = loginResponse.pan,
+                        panpic = loginResponse.panpic,
+                        dlnumber = loginResponse.dlnumber,
+                        dlpic = loginResponse.dlpic,
+                        pfnumber = loginResponse.pfnumber,
+                        designation = loginResponse.designation,
+                        esicnumber = loginResponse.esicnumber,
+                        voterid = loginResponse.voterid,
+                        voteridpic = loginResponse.voteridpic,
+                        bankname = loginResponse.bankname,
+                        nameonbank = loginResponse.nameonbank,
+                        bankbranch = loginResponse.bankbranch,
+                        ifsc = loginResponse.ifsc,
+                        accountno = loginResponse.accountno,
+                        emergencymobile = loginResponse.emergencymobile,
+                        state = loginResponse.state,
+                        emergencyname = loginResponse.emergencyname,
+                        emergencyrelation = loginResponse.emergencyrelation,
+                        referencename = loginResponse.referencename,
+                        referencemobile = loginResponse.referencemobile,
+                        referencerelation = loginResponse.referencerelation,
+                        address = loginResponse.address,
+                        createdby = loginResponse.createdby,
+                        createdon = loginResponse.createdon,
+                        authToken = loginResponse.authToken,
+                        employment = loginResponse.employment,
+                        managerid = loginResponse.managerid,
+                        deviceid = loginResponse.deviceid,
+                        doj = loginResponse.doj,
+                        dol = loginResponse.dol,
+                )
+        )
+        return loginResponse
+    }
 }

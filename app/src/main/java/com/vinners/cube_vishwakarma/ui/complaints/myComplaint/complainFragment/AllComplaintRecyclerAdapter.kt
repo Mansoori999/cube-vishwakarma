@@ -143,6 +143,8 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
                 status.setTextColor(Color.parseColor("#FFCC33"))
             }else if (complaintList.status!!.toLowerCase().equals("payment")){
                 status.setTextColor(Color.parseColor("#FFCC33"))
+            }else if (complaintList.status!!.toLowerCase().equals("pending letter")){
+                status.setTextColor(Color.parseColor("#FF6633"))
             }
         }
     }

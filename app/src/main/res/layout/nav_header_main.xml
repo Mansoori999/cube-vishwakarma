@@ -41,6 +41,8 @@
         android:layout_centerVertical="true"
         android:layout_centerInParent="true"
         android:text=""
+        android:gravity="center"
+        android:layout_centerHorizontal="true"
         android:id="@+id/username"
         android:textColor="@color/black"
         />

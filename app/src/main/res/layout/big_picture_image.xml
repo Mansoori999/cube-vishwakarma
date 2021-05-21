@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+       <Button
+           android:layout_width="45dp"
+           android:layout_height="45dp"
+           android:layout_marginTop="@dimen/dimension_20dp"
+           android:id="@+id/downloadButton"
+           app:backgroundTint="@color/white"
+           app:background="@drawable/ic_download"
+           android:layout_marginLeft="@dimen/dimension_20dp"
+           android:textSize="12dp"/>
+        <Button
+            android:id="@+id/close_image"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="@dimen/dimension_20dp"
+            android:background="@drawable/cross"
+            android:layout_alignParentRight="true"
+            app:backgroundTint="@color/white"
+            />
+
+    </RelativeLayout>
+    <com.jsibbold.zoomage.ZoomageView
+        android:id="@+id/big_picture"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:zoomage_animateOnReset="true"
+        app:zoomage_autoCenter="true"
+        app:zoomage_autoResetMode="UNDER"
+        app:zoomage_maxScale="8"
+        app:zoomage_minScale="0.6"
+        app:zoomage_restrictBounds="false"
+        app:zoomage_translatable="true"
+        app:zoomage_zoomable="true"/>
+
+
+</LinearLayout>

@@ -160,4 +160,18 @@ class AuthRemoteDataStoreImpl @Inject constructor(
     override suspend fun getCityAndPincode(stateId: String?): CityAndPincode {
         return authService.getCityAndPincode(stateId).bodyOrThrow().first()
     }
+
+    override suspend fun loginWithoutOtp(loginWithoutOtpRequest: LoginWithoutOtpRequest): LoginResponse {
+        val  response = authService.loginWithoutOtp(loginWithoutOtpRequest).bodyOrThrow().first()
+        userSessionManager.startNewSession(LoggedInUser(
+                id = response.id,
+                sessionToken = response.authToken!!,
+                displayName = response.name,
+                mobileNumber = response.mobile!!,
+                email = response.email,
+                pic = response.pic,
+                design = response.designation
+        ))
+        return response
+    }
 }

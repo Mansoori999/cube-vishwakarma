@@ -143,5 +143,8 @@ data class Profile(
         val createdon: String? = null,
 
         @SerializedName("createdby")
-        val createdby: String? = null
+        val createdby: String? = null,
+
+        @SerializedName("empcode")
+        val empcode: String? = null
 )

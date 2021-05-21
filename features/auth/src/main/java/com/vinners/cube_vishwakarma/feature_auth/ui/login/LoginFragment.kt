@@ -5,14 +5,18 @@ import android.content.Intent
 import android.graphics.Color
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import com.github.razir.progressbutton.hideProgress
 import com.github.razir.progressbutton.showProgress
+import com.vinners.core.BuildConfig.VERSION_NAME
+import com.vinners.cube_vishwakarma.base.AppInfo
 import com.vinners.cube_vishwakarma.core.base.BaseFragment
 import com.vinners.cube_vishwakarma.core.taskState.Lce
+import com.vinners.cube_vishwakarma.feature_auth.BuildConfig
 import com.vinners.cube_vishwakarma.feature_auth.R
 import com.vinners.cube_vishwakarma.feature_auth.databinding.FragmentLoginBinding
 import com.vinners.cube_vishwakarma.feature_auth.di.AuthViewModelFactory
@@ -25,6 +29,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
 
     @Inject
     lateinit var viewModelFactory: AuthViewModelFactory
+
+    @Inject
+    lateinit var appInfo: AppInfo
 
     private var highlightedEditTextIndex = 0
     private var previousLength = 0
@@ -77,7 +84,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
            loginId = viewBinding.textEmail.text.toString()
             pin = viewBinding.textPassword.text.toString()
             if (setValidation()== true) {
-                viewModel.login(mobile = loginId, password = pin)
+                viewModel.loginWithOutOtp(loginid = loginId, password = pin)
             }
 //            else{
 //                Toast.makeText(requireContext(), "Enter Valid Login ID and 4 Digit Pin", Toast.LENGTH_LONG).show()
@@ -85,6 +92,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
 
 
             }
+
+        viewBinding.appVersionTV.text = "App Version: ${appInfo.appVersion}"
 
     }
 
@@ -124,7 +133,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
         }
     }
     override fun onInitViewModel() {
-        viewModel.loginStateChange.observe(this, Observer {
+        viewModel.loginWithoutOtpConfirmState().observe(this, Observer {
             when (it) {
                 Lce.Loading -> {
                     viewBinding.loginButton.showProgress {
@@ -138,7 +147,19 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
                             R.string.login
                     )
                     viewBinding.loginButton.isEnabled = true
-                    openConfirmOtpScreen(it.content.otpToken)
+                    Toast.makeText(
+                            context,
+                            "login successfully",
+                            Toast.LENGTH_SHORT
+                    )
+                            .show()
+                    val intent = Intent(
+                            context,
+                            Class.forName("com.vinners.cube_vishwakarma.ui.MainActivity")
+                    )
+                    startActivity(intent)
+                    activity?.finish()
+//                    openConfirmOtpScreen(it.content.otpToken)
                 }
                 is Lce.Error -> {
                     viewBinding.loginButton.isEnabled = true
