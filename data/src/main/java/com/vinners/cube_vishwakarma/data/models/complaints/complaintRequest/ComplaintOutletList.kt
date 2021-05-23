@@ -11,7 +11,7 @@ data class ComplaintOutletList(
 	val address: String? = null,
 
 	@field:SerializedName("outletid")
-	val outletid: String? = null,
+	val outletid: Int? = null,
 
 	@field:SerializedName("gps")
 	val gps: String? = null,

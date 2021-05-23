@@ -2,7 +2,6 @@ package com.vinners.cube_vishwakarma.ui
 
 
 import android.content.Intent
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
@@ -16,9 +15,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import coil.api.load
-import com.androidbuts.multispinnerfilter.KeyPairBoolData
-import com.androidbuts.multispinnerfilter.MultiSpinnerListener
-import com.androidbuts.multispinnerfilter.MultiSpinnerSearch
 import com.devstune.searchablemultiselectspinner.SearchableMultiSelectSpinner
 import com.devstune.searchablemultiselectspinner.SelectionCompleteListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -50,6 +46,7 @@ import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
 import de.hdodenhof.circleimageview.CircleImageView
 import java.lang.String
+import java.util.stream.Collectors
 import javax.inject.Inject
 
 
@@ -62,6 +59,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     lateinit var userSessionManager: UserSessionManager
 
     private lateinit var bottomSheetView:View
+    private lateinit var financialspinner:TextView
     private lateinit var regionalspinner:TextView
 
 
@@ -285,7 +283,9 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         bottomSheetView = layoutInflater.inflate(R.layout.bottomsheet_filter_layout, null)
         val bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setContentView(bottomSheetView)
-        regionalspinner = bottomSheetView.findViewById(R.id.financial_spinner)
+        financialspinner = bottomSheetView.findViewById(R.id.financial_spinner)
+        regionalspinner = bottomSheetView.findViewById(R.id.ro_spinner)
+
 //        regionalspinner.setSearchEnabled(true)
 //        regionalspinner.setClearText("Close & Clear")
 //        regionalspinner.setSearchHint("Select Regioanl Office")
@@ -400,15 +400,14 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
                 }
                 is Lce.Content ->{
-                    val regionalOffice = it.content.map {
+                    val financialdata = it.content.map {
                         RegionalOfficeFilterData(
                             id = it.id,
                             name = it.name,
                             isSelected = false
                         )
                     }.toMutableList()
-                    setRegionalOfficeTypeSpinner(regionalOffice)
-
+                    setFinancialYearTypeSpinner(financialdata)
 
                 }
                 is Lce.Error->{
@@ -417,6 +416,28 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             }
         })
         viewModel.getRinancialYearFilterData()
+        viewModel.regionalOfficeFilterState.observe(this, Observer {
+            when(it){
+                Lce.Loading->{
+
+                }
+                is Lce.Content ->{
+                    val regionalOffice = it.content.map {
+                        RegionalOfficeFilterData(
+                                id = it.outletid!!,
+                                name = it.regionaloffice!!,
+                                isSelected = false
+                        )
+                    }.toMutableList()
+                    setRegionalOfficeTypeSpinner(regionalOffice)
+
+                }
+                is Lce.Error->{
+
+                }
+            }
+        })
+        viewModel.getRegionalOfficeFilterData()
     }
 
     private fun setRegionalOfficeTypeSpinner(regionalOffice: MutableList<RegionalOfficeFilterData>) {
@@ -424,6 +445,51 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         val setItems: Set<RegionalOfficeFilterData> = LinkedHashSet(regionalOffice)
         regionalOffice.clear()
         regionalOffice.addAll(setItems)
+
+//        regionalOffice.add(
+//            0,
+//            RegionalOfficeFilterData(
+//                id = 1,
+//                name = "Select Regional Office",
+//                isSelected = false
+//            )
+//        )
+        regionalspinner.setOnClickListener{
+            SearchableMultiSelectSpinner.show(this, "Select Regional Office", "Done","Cancel", regionalOffice, object :
+                    SelectionCompleteListener {
+                override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
+//                    Log.e("data", selectedItems.toString())
+                    val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
+                    regionalspinner.text = selectedItemList
+                }
+
+            })
+
+        }
+
+
+
+//        val aa = ArrayAdapter(
+//            this,
+//            android.R.layout.simple_spinner_dropdown_item,
+//            regionalOffice
+//        )
+//
+//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        with(regionalspinner) {
+//            adapter = aa
+//            prompt = "Select Regional Office"
+//            gravity = android.view.Gravity.CENTER
+//        }
+
+
+    }
+
+    private fun setFinancialYearTypeSpinner(financialdata: MutableList<RegionalOfficeFilterData>) {
+        financialdata.sortBy { it.name }
+        val setItems: Set<RegionalOfficeFilterData> = LinkedHashSet(financialdata)
+        financialdata.clear()
+        financialdata.addAll(setItems)
 //        regionalOffice.add(
 //            0,
 //            RegionalOfficeFilterData(
@@ -434,12 +500,13 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //        )
 
 //        regionalspinner.hintText = "Select Regional Office"
-        regionalspinner.setOnClickListener{
-            SearchableMultiSelectSpinner.show(this, "Select Regional Office", "Done","Cancel", regionalOffice, object :
+        financialspinner.setOnClickListener{
+            SearchableMultiSelectSpinner.show(this, "Select Financial Year", "Done","Cancel", financialdata, object :
                 SelectionCompleteListener {
                 override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
-                    Log.e("data", selectedItems.toString())
-                    regionalspinner.text = selectedItems.toString()
+//                    Log.e("data", selectedItems.toString())
+                    val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
+                    financialspinner.text = selectedItemList
                 }
 
             })

@@ -100,26 +100,7 @@
 <!--                    android:id="@+id/financial_spinner"-->
 <!--                    android:background="@drawable/spinner_background"-->
 <!--                    android:minHeight="30dp" />-->
-<!--                <androidx.appcompat.widget.AppCompatSpinner-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="10dp"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:layout_marginRight="10dp"-->
-<!--                    android:layout_marginBottom="15dp"-->
-<!--                    android:layout_toRightOf="@+id/statusTxt"-->
-<!--                    android:id="@+id/financial_spinner"-->
-<!--                    android:background="@drawable/spinner_background"-->
-<!--                    android:minHeight="30dp"/>-->
-<!--                <Spinner-->
-<!--                    android:id="@+id/complaints_salesarea_spinner"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="5dp"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:layout_marginRight="5dp"-->
-<!--                    android:layout_marginBottom="15dp"-->
-<!--                    android:gravity="center_horizontal" />-->
+
 
 
             </LinearLayout>
@@ -137,39 +118,34 @@
                     android:layout_marginTop="5dp"
                     android:text="Regional Office"
                     android:textColor="@color/black"/>
-                <com.androidbuts.multispinnerfilter.MultiSpinnerSearch
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
+                    android:padding="10dp"
                     android:layout_marginRight="10dp"
+                    android:hint="Select Regional Office"
                     android:layout_marginBottom="15dp"
-                    app:hintText="Select Regional Office"
                     android:layout_toRightOf="@+id/statusTxt"
                     android:id="@+id/ro_spinner"
                     android:background="@drawable/spinner_background"
                     android:minHeight="30dp"
                     />
-<!--                <androidx.appcompat.widget.AppCompatSpinner-->
+<!--                <com.androidbuts.multispinnerfilter.MultiSpinnerSearch-->
 <!--                    android:layout_width="match_parent"-->
 <!--                    android:layout_height="wrap_content"-->
 <!--                    android:layout_marginLeft="10dp"-->
 <!--                    android:layout_marginTop="5dp"-->
 <!--                    android:layout_marginRight="10dp"-->
 <!--                    android:layout_marginBottom="15dp"-->
+<!--                    app:hintText="Select Regional Office"-->
 <!--                    android:layout_toRightOf="@+id/statusTxt"-->
 <!--                    android:id="@+id/ro_spinner"-->
 <!--                    android:background="@drawable/spinner_background"-->
-<!--                    android:minHeight="30dp"/>-->
-<!--                <Spinner-->
-<!--                    android:id="@+id/complaints_region_spinner"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="5dp"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:layout_marginRight="5dp"-->
-<!--                    android:layout_marginBottom="13dp"-->
-<!--                    android:gravity="center_horizontal" />-->
+<!--                    android:minHeight="30dp"-->
+<!--                    />-->
+
 
 
             </LinearLayout>

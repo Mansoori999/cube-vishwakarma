@@ -23,7 +23,7 @@ class ComplaintRequestRepository @Inject constructor(
     suspend fun submitComplaintRequestData(
             typeid :String,
             work:String,
-            outletid:String,
+            outletid:Int,
             remarks:String,
             orderby:String
     ):List<String>{

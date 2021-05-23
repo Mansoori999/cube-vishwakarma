@@ -10,7 +10,7 @@ data class ComplaintSubmitRequest(
         val work: String? = null,
 
         @field:SerializedName("outletid")
-        val outletid: String? = null,
+        val outletid: Int? = null,
 
         @field:SerializedName("remarks")
         val remarks: String? = null,

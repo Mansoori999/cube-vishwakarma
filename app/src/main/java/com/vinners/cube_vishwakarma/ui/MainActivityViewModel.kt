@@ -7,12 +7,15 @@ import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
 import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponse
 import com.vinners.cube_vishwakarma.data.models.dashboardFilter.DashboardFilterList
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
+import com.vinners.cube_vishwakarma.data.repository.ComplaintRequestRepository
 import com.vinners.cube_vishwakarma.data.repository.DashBoardRepository
 import com.vinners.cube_vishwakarma.data.repository.ProfileRepository
 import com.vinners.cube_vishwakarma.feature_auth.ui.ObserveProfileInteractor
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.LoadMetaForAddComplaintState
 import io.reactivex.observers.DisposableObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,7 +29,7 @@ interface ProfileEvents {
     fun initViewModel()
 
     val financialFilterState: LiveData<Lce<List<DashboardFilterList>>>
-
+    val regionalOfficeFilterState: LiveData<Lce<List<ComplaintOutletList>>>
     val dashboardState : LiveData<Lce<DashBoardResponse>>
 
 
@@ -34,6 +37,7 @@ interface ProfileEvents {
 class MainActivityViewModel@Inject constructor(
     private val userProfileRepository: ProfileRepository,
     private val dashBoardRepository: DashBoardRepository,
+    private val complaintRequestRepository: ComplaintRequestRepository,
     private val observeProfileInteractor: ObserveProfileInteractor
 ) : ViewModel(), ProfileEvents  {
 
@@ -105,6 +109,25 @@ class MainActivityViewModel@Inject constructor(
                 _financialFilterState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _financialFilterState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    //Regional office
+    private val _regionalOfficeFilterState = MutableLiveData<Lce<List<ComplaintOutletList>>>()
+    override val regionalOfficeFilterState: LiveData<Lce<List<ComplaintOutletList>>>  = _regionalOfficeFilterState
+
+
+    fun getRegionalOfficeFilterData() = viewModelScope.launch {
+
+        _regionalOfficeFilterState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = complaintRequestRepository.getComplaintList()
+                _regionalOfficeFilterState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _regionalOfficeFilterState.postValue(Lce.error(e.localizedMessage))
 
             }
         }

@@ -26,7 +26,7 @@ private val complaintRequestService: ComplaintRequestService
     override suspend fun submitComplaintRequestData(
             typeid: String,
             work: String,
-            outletid: String,
+            outletid: Int,
             remarks: String,
             orderby: String): List<String> {
         return complaintRequestService.submitComplaintRequestData(

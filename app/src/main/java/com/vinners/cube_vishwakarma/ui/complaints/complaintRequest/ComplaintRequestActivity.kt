@@ -85,7 +85,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
                 val regionalData = viewBinding.addComplaintDataMainLayout.regionalSpinner.selectedItem as RegionalOfficeData
                 val salesData = viewBinding.addComplaintDataMainLayout.salesareaSpinner.selectedItem as SalesAreaData
                 val outletData =  viewBinding.addComplaintDataMainLayout.outletSpinner.selectedItem as OutletAreaData
-                outletAreaInfo(outletData.id!!)
+                outletAreaInfo(outletData.id)
 
             }
         }
@@ -134,7 +134,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 
         viewModel.submitComplaintRequest(
                 typeid = complaintTypeid!!,
-                outletid = outletid!!,
+                outletid = outletid,
                 orderby = orderByid!!,
                 work = viewBinding.addComplaintDataMainLayout.wordEt.text.toString(),
                 remarks = viewBinding.addComplaintDataMainLayout.editRemarks.text.toString()
@@ -143,7 +143,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 
     }
 
-    private fun outletAreaInfo(id: String) {
+    private fun outletAreaInfo(id: Int) {
         val complaintList = viewModel.complaintRequestList ?: return
         val outletData = complaintList.filter {
             it.outletid == id
@@ -493,7 +493,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
             it.said == salesId && it.roid == reagionalId
         }.map {
             OutletAreaData(
-                it.outletid,
+                    it.outletid!!,
                 "${ it.outlet!! } - ${it.customercode}"
             )
         }.distinctBy {
@@ -507,7 +507,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
         outlets.add(
             0,
             OutletAreaData(
-                id = "XX",
+                id = 0,
                 name = "Select Outlet Area"
             )
         )

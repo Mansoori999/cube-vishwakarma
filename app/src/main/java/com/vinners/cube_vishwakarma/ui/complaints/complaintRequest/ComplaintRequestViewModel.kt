@@ -110,7 +110,7 @@ private val complaintRequestRepository: ComplaintRequestRepository
     fun submitComplaintRequest(
             typeid :String,
             work:String,
-            outletid:String,
+            outletid:Int,
             remarks:String,
             orderby:String){
         _submitListState.value = Lce.Loading

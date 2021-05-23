@@ -73,16 +73,16 @@ class SearchableMultiSelectSpinner {
             })
 
             alertDialog.setNegativeButton(cancelButtonText){ dialogInterface, i ->
-
-                val resultList=ArrayList<RegionalOfficeFilterData>()
-                for (i in 0 until searchableItems.size) {
-                    if (searchableItems[i].isSelected) {
-                        resultList.clear()
-                    }
-                }
-                selectionCompleteListener.onCompleteSelection(resultList)
-
-                adapter.notifyDataSetChanged()
+//
+//                val resultList=ArrayList<RegionalOfficeFilterData>()
+//                for (i in 0 until searchableItems.size) {
+//                    if (searchableItems[i].isSelected) {
+//                        resultList.clear()
+//                    }
+//                }
+//                selectionCompleteListener.onCompleteSelection(resultList)
+//
+//                adapter.notifyDataSetChanged()
                 dialogInterface.cancel()
 
             }
