@@ -8,6 +8,7 @@ import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponse
+import com.vinners.cube_vishwakarma.data.models.dashboardFilter.DashboardFilterList
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
 import com.vinners.cube_vishwakarma.data.repository.DashBoardRepository
 import com.vinners.cube_vishwakarma.data.repository.ProfileRepository
@@ -23,6 +24,8 @@ interface ProfileEvents {
 
     val profile: LiveData<Profile>
     fun initViewModel()
+
+    val financialFilterState: LiveData<Lce<List<DashboardFilterList>>>
 
     val dashboardState : LiveData<Lce<DashBoardResponse>>
 
@@ -89,5 +92,22 @@ class MainActivityViewModel@Inject constructor(
         }
     }
 
+    /* DashBoard Financial year filter*/
+
+    private val _financialFilterState =  MutableLiveData<Lce<List<DashboardFilterList>>>()
+    override val financialFilterState: LiveData<Lce<List<DashboardFilterList>>> = _financialFilterState
+
+    fun getRinancialYearFilterData() {
+        _financialFilterState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = dashBoardRepository.getFinancialData()
+                _financialFilterState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _financialFilterState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
 
 }

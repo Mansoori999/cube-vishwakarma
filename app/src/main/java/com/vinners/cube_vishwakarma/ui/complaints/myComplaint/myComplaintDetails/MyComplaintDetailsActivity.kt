@@ -1,36 +1,86 @@
 package com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails
 
 
+import android.Manifest
+import android.annotation.TargetApi
+import android.app.Dialog
+import android.app.DownloadManager
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
-import android.view.Gravity
+import android.content.pm.PackageManager
+import android.database.Cursor
+import android.net.Uri
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.os.PersistableBundle
+import android.provider.MediaStore
+import android.view.*
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import coil.api.load
+import com.himanshu.cameraintegrator.ImageCallback
+import com.himanshu.cameraintegrator.ImagesSizes
+import com.himanshu.cameraintegrator.Result
+import com.himanshu.cameraintegrator.integrator.CameraIntegrator
+import com.himanshu.cameraintegrator.integrator.GalleryIntegrator
+import com.himanshu.cameraintegrator.storage.StorageMode
+import com.jsibbold.zoomage.ZoomageView
 import com.vinners.cube_vishwakarma.R
+import com.vinners.cube_vishwakarma.base.AppInfo
+import com.vinners.cube_vishwakarma.core.AppConstants
 import com.vinners.cube_vishwakarma.core.DateTimeHelper
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
 import com.vinners.cube_vishwakarma.core.extensions.onItemSelected
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
+import com.vinners.cube_vishwakarma.data.models.Location
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplainDetailsList
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityMyComplaintDetailsBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
-import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_STATUS
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_VIEW
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.AllFragment
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.DueFragment
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.HoldFragment
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.WorkingFragment
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
+import com.vinners.cube_vishwakarma.ui.outlets.EditOutletActivity
+import com.vinners.cube_vishwakarma.ui.profile.ProfileDetailsActivity
+import java.io.File
 import javax.inject.Inject
 
+
 class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBinding,AllComplaintFragmentViewModel>(R.layout.activity_my_complaint_details) {
+    companion object{
+        private const val PERMISSION_REQUEST_STORAGE = 233
+        private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1
+
+    }
+
+    val REQUEST_GALLERY_PHOTO = 2
+    @Inject
+    lateinit var appInfo : AppInfo
+
+    private lateinit var imageClickLabel : TextView
+    private lateinit var ImageStoreView : ImageView
+
+    private val REQUEST_PERMISSION = 100
+    private val REQUEST_IMAGE_CAPTURE = 1
+    private val REQUEST_PICK_IMAGE = 2
+
+    var pic :String?=null
+
+    private var imagesMap: MutableMap<Int, Result> = mutableMapOf()
+
+    private var currentlyClickingImageForIndex: Int = -1
+
 
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
@@ -56,6 +106,8 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
     private lateinit var reason:EditText
     private lateinit var tv:TextView
+
+    private lateinit var donecontainer:CardView
 
 
 
@@ -87,15 +139,26 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
             onBackPressed()
         }
         viewBinding.changeStatus.setOnClickListener {
-
-            val dialogView = layoutInflater.inflate(R.layout.complaint_details_dialog_layout,null)
+            val inflater: LayoutInflater = LayoutInflater.from(this)
+            val dialogView = inflater.inflate(R.layout.complaint_details_dialog_layout,null)
             val mBuilder = AlertDialog.Builder(this)
                     .setView(dialogView)
                     .setTitle("Update Status - ${complaintid}")
 
             val  mAlertDialog = mBuilder.show()
             val statusSpinner = dialogView.findViewById<Spinner>(R.id.status_spinner)
+
             reason = dialogView.findViewById<EditText>(R.id.reason)
+            donecontainer = dialogView.findViewById(R.id.doneImage)
+            val imangelayout= inflater.inflate(R.layout.layout_click_image, dialogView as ViewGroup, false)
+            imageClickLabel = imangelayout.findViewById(R.id.clickImageLabel)
+            ImageStoreView = imangelayout.findViewById(R.id.imageView)
+            imageClickLabel.setOnClickListener(ClickOutletImageOnClickListener())
+            donecontainer.addView(imangelayout)
+
+
+
+
 //             reasonEt = reason.text.toString()
 //            val spinnerlist = arrayOf("Select Status","Working", "Hold", "Done","Cancelled")
 //            val statusArrayList = status!!.split(",")
@@ -138,17 +201,15 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
                             reason.setVisibilityGone()
                         }
 
+                    if(statusValue!!.toLowerCase().equals("done")){
+                        donecontainer.setVisibilityVisible()
+
+                    }else{
+                        donecontainer.setVisibilityGone()
+                    }
+
                 }
 
-//                if (statusSpinner.childCount != 0 && statusSpinner.selectedItemPosition != 0) {
-//                    val statusData = statusSpinner.selectedItem as StatusData
-//
-//                    if (statusData.name?.toLowerCase().equals("cancelled")){
-//                        reason.setVisibilityVisible()
-//                    }else{
-//                        reason.setVisibilityGone()
-//                    }
-//                }
             }
 
             val cancle = dialogView.findViewById<Button>(R.id.cancelbtn)
@@ -164,8 +225,26 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
         }
 
+
+
     }
 
+    private inner class ClickOutletImageOnClickListener : View.OnClickListener {
+        override fun onClick(v: View?) {
+            val clickedView = v ?: return
+            currentlyClickingImageForIndex = when (clickedView.id) {
+                R.id.clickImageLabel -> 0
+
+                else -> -1
+            }
+            showCameraOptionDialog()
+//            if (storagePermissions())
+//                cameraIntegrator.initiateCapture()
+//            else
+//                requestStoragePermissions()
+        }
+
+    }
     private fun setValidationUpdate() {
         if  (reason.isVisible && reason.text.isNullOrBlank()){
             showInformationDialog("Please Write Reason")
@@ -175,13 +254,156 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
             showInformationDialog("Please Select Status")
             return
         }
+        if (donecontainer.isVisible && imagesMap.isEmpty()) {
+            showInformationDialog("Please Click Image  First")
+            return
+        }
         viewModel.upDateComplaints(
                 statusremarks = reason.text.toString(),
                 id = detailsId!!.toInt(),
-                status = statusValue.toString()
+                status = statusValue.toString(),
+                image = imagesMap.values.map { it.imagePath!! }
 
         )
 
+    }
+    private fun requestStoragePermissions() {
+        ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
+                PERMISSION_REQUEST_STORAGE
+        )
+    }
+    private fun storagePermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+                this, Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                &&
+                ContextCompat.checkSelfPermission(
+                        this, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+    }
+
+
+    private val imageCallback = ImageCallback { _, result, error ->
+
+        if (result?.imagePath != null) {
+            if (currentlyClickingImageForIndex == -1)
+                return@ImageCallback
+
+            imagesMap.put(currentlyClickingImageForIndex, result)
+            when (currentlyClickingImageForIndex) {
+                0 ->ImageStoreView.load(result.bitmap)
+                else -> {
+                }
+            }
+
+
+        }
+
+
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        cameraIntegrator.saveState(outState)
+
+    }
+    override fun onRestoreInstanceState(
+            savedInstanceState: Bundle?,
+            persistentState: PersistableBundle?
+    ) {
+        super.onRestoreInstanceState(savedInstanceState, persistentState)
+        savedInstanceState?.let {
+
+            cameraIntegrator.restoreState(it)
+
+
+        }
+
+
+    }
+
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            PERMISSION_REQUEST_STORAGE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    cameraIntegrator.initiateCapture()
+                }
+            }
+        }
+    }
+
+
+
+override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CameraIntegrator.REQUEST_IMAGE_CAPTURE)
+            cameraIntegrator.parseResults(requestCode, resultCode, data, imageCallback)
+        else if (requestCode == GalleryIntegrator.REQUEST_IMAGE_PICK)
+            galleryIntegrator.parseResults(requestCode, resultCode, data, imageCallback)
+    }
+    fun showCameraOptionDialog() {
+        val optionsForDialog = arrayOf<CharSequence>("Open Camera", "Select from Gallery")
+        val alertBuilder = AlertDialog.Builder(this)
+        alertBuilder.setTitle("Select An Option")
+        alertBuilder.setIcon(R.drawable.ic_camera)
+        alertBuilder.setItems(optionsForDialog, DialogInterface.OnClickListener { dialog, which ->
+            when (which) {
+                0 -> openCamera()
+                1 -> openGallery()
+            }
+        })
+        alertBuilder.setNegativeButton("Cancel") { dialog12, _ -> dialog12.dismiss() }
+        alertBuilder.show()
+    }
+
+    fun openCamera() {
+        if (storagePermissions())
+            cameraIntegrator.initiateCapture()
+        else
+            requestStoragePermissions()
+//        try {
+//            cameraIntegrator.initiateCapture()
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+    }
+
+    fun openGallery() {
+        if (storagePermissions())
+            galleryIntegrator.initiateImagePick()
+        else
+            requestStoragePermissions()
+//        try {
+//            galleryIntegrator.initiateImagePick()
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+    }
+    private val cameraIntegrator: CameraIntegrator by lazy {
+        CameraIntegrator(this)
+                .apply {
+                    setStorageMode(StorageMode.EXTERNAL_PUBLIC_STORAGE)
+                    setPublicDirectoryName(AppConstants.PUBLIC_FILE_FOLDER)
+                    setRequiredImageSize(ImagesSizes.OPTIMUM_MEDIUM)
+                }
+    }
+
+
+    private val galleryIntegrator: GalleryIntegrator by lazy {
+        GalleryIntegrator(this)
+                .apply {
+                    setStorageMode(StorageMode.EXTERNAL_PUBLIC_STORAGE)
+                    setPublicDirectoryName(AppConstants.PUBLIC_FILE_FOLDER)
+                    setRequiredImageSize(ImagesSizes.OPTIMUM_MEDIUM)
+                }
     }
 
 
@@ -418,13 +640,13 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
         })
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        for (fragment in supportFragmentManager.fragments) {
-            fragment.onActivityResult(requestCode, resultCode, data)
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+//
+//        for (fragment in supportFragmentManager.fragments) {
+//            fragment.onActivityResult(requestCode, resultCode, data)
+//        }
+//    }
     private fun setChangeStatus(content: MyComplainDetailsList) {
 
         if (content.status?.toLowerCase().equals("due") ||
@@ -436,6 +658,23 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
             viewBinding.changeStatus.setVisibilityGone()
         }
 
+        if (content.status?.toLowerCase().equals("done")){
+            if (content.letterpic != null) {
+                viewBinding.imageContainer.setVisibilityVisible()
+                viewBinding.letterpic.imageView.load(appInfo.getFullAttachmentUrl(content.letterpic!!))
+            }else{
+                viewBinding.imageContainer.setVisibilityGone()
+            }
+
+         }else{
+            viewBinding.imageContainer.setVisibilityGone()
+
+        }
+
+        viewBinding.letterpic.imageView.setOnClickListener {
+            val imageUrl :String = content.letterpic.toString()
+            imageOpenDialog(imageUrl)
+        }
         detailsId = content.id
         statusremarks = content.statusremarks
         complaintid = content.complaintid
@@ -443,5 +682,146 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    fun askPermissions(url: String) {
+        if (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // Permission is not granted
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                            this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
+            ) {
+                // Show an explanation to the user *asynchronously* -- don't block
+                // this thread waiting for the user's response! After the user
+                // sees the explanation, try again to request the permission.
+                AlertDialog.Builder(this)
+                        .setTitle("Permission required")
+                        .setMessage("Permission required to save photos from the Web.")
+                        .setPositiveButton("Allow") { dialog, id ->
+                            ActivityCompat.requestPermissions(
+                                    this,
+                                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                            )
+                            finish()
+                        }
+                        .setNegativeButton("Deny") { dialog, id -> dialog.cancel() }
+                        .show()
+            } else {
+                // No explanation needed, we can request the permission.
+                ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                )
+                // MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE is an
+                // app-defined int constant. The callback method gets the
+                // result of the request.
+
+            }
+        } else {
+            // Permission has already been granted
+            downloadImage(url)
+        }
+    }
+
+    private var msg: String? = ""
+    private var lastMsg = ""
+
+    private fun downloadImage(url: String) {
+        val directory = File(Environment.DIRECTORY_PICTURES)
+
+        if (!directory.exists()) {
+            directory.mkdirs()
+        }
+
+        val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+
+        val downloadUri = Uri.parse(url)
+
+        val request = DownloadManager.Request(downloadUri).apply {
+            setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+                    .setAllowedOverRoaming(false)
+                    .setTitle(url.substring(url.lastIndexOf("/") + 1))
+                    .setDescription("")
+                    .setDestinationInExternalPublicDir(
+                            directory.toString(),
+                            url.substring(url.lastIndexOf("/") + 1)
+                    )
+        }
+
+        val downloadId = downloadManager.enqueue(request)
+        val query = DownloadManager.Query().setFilterById(downloadId)
+        Thread(Runnable {
+            var downloading = true
+            while (downloading) {
+                val cursor: Cursor = downloadManager.query(query)
+                cursor.moveToFirst()
+                if (cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                    downloading = false
+                }
+                val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+                msg = statusMessage(url, directory, status)
+                if (msg != lastMsg) {
+                    this.runOnUiThread {
+                        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+                    }
+                    lastMsg = msg ?: ""
+                }
+                cursor.close()
+            }
+        }).start()
+    }
+
+    private fun statusMessage(url: String, directory: File, status: Int): String? {
+        var msg = ""
+        msg = when (status) {
+            DownloadManager.STATUS_FAILED -> "Download has been failed, please try again"
+            DownloadManager.STATUS_PAUSED -> "Paused"
+//            DownloadManager.STATUS_PENDING -> "Pending"
+            DownloadManager.STATUS_RUNNING -> "Downloading..."
+            DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully in $directory" + File.separator + url.substring(
+                    url.lastIndexOf("/") + 1
+            )
+            else -> ""
+        }
+        return msg
+    }
+
+    private fun imageOpenDialog(imageUrl: String){
+        val dialog = Dialog(this, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(R.layout.big_picture_image)
+        val downloadButton = dialog.findViewById<Button>(R.id.downloadButton)
+        downloadButton.setBackgroundResource(R.drawable.ic_download)
+        downloadButton.setOnClickListener { view ->
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                val fullImagePath = appInfo.getFullAttachmentUrl(imageUrl)
+                askPermissions(fullImagePath)
+
+            } else {
+                val fullImagePath = appInfo.getFullAttachmentUrl(imageUrl)
+                downloadImage(fullImagePath)
+            }
+        }
+        val close_btn = dialog.findViewById<Button>(R.id.close_image)
+        close_btn.setBackgroundResource(R.drawable.cross)
+        close_btn.setOnClickListener { view ->
+            dialog.dismiss()
+
+        }
+        val fullPic = dialog.findViewById<ZoomageView>(R.id.big_picture)
+        fullPic.load(appInfo.getFullAttachmentUrl(imageUrl))
+
+
+        dialog.window!!.attributes.windowAnimations = R.style.MyAlertDialogStyle
+        dialog.show()
+    }
 }
 

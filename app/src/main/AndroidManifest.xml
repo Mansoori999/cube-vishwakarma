@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+
+
     <application
         android:name=".TrumanApp"
         android:allowBackup="true"
@@ -20,6 +22,7 @@
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.Truman"
         tools:ignore="UnusedAttribute">
         <activity android:name=".ui.profile.BankDetailsAndOtherDetailsActivity"></activity>

@@ -1,7 +1,6 @@
 package com.vinners.cube_vishwakarma.core
 
 import java.text.SimpleDateFormat
-import java.time.Year
 import java.util.*
 
 object DateTimeHelper {
@@ -45,6 +44,7 @@ object DateTimeHelper {
         dateFormatter = SimpleDateFormat(DATE_TIME_FORMAT_SHORT, Locale.getDefault())
         return dateFormatter.format(todaysCalendar.time)
     }
+
 
 
 
@@ -120,6 +120,12 @@ object DateTimeHelper {
         return dateFormatter.format(date.time)
     }
 
+//    //-------------------Current Date Related Methods ------------------------//
+//    fun getTodaysDateInDDMMYYYY(): String {
+//        dateFormatter = SimpleDateFormat("dd-MM-yyyy", Locale.US)
+//        val newCalendar = Calendar.getInstance()
+//        return dateFormatter.format(newCalendar.time)
+//    }
     /**
      * Return Current Date in YYYY-MM-DD format ex 2018-06-04
      */

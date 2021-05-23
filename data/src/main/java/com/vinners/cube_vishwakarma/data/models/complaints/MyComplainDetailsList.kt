@@ -22,6 +22,10 @@ data class MyComplainDetailsList (
     @SerializedName("letterstatus")
     val letterstatus : String? =null,
 
+    @SerializedName("letterpic")
+    val letterpic : String? =null,
+
+
     @SerializedName("status")
     val status : String? =null,
 

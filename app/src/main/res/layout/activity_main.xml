@@ -18,13 +18,14 @@
             android:id="@+id/nav_view"
             android:layout_width="185dp"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
             android:fitsSystemWindows="true"
+            android:layout_gravity="start"
             app:itemIconSize="30dp"
             app:itemTextColor="@color/white"
             android:backgroundTint="@color/Blue"
             app:headerLayout="@layout/nav_header_main"
             app:menu="@menu/activity_main_drawer">
+
             <TextView
                 android:id="@+id/appVersionTV"
                 android:layout_width="match_parent"

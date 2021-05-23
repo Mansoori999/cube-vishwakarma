@@ -52,12 +52,24 @@
             android:id="@+id/reason"
             android:textColor="@color/black"
             />
-
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/reason"
+        android:id="@+id/doneImage"
+        android:layout_marginLeft="-10dp"
+        android:visibility="gone">
+        ​
+        <include layout="@layout/layout_click_image"
+            android:id="@+id/complaintDoneImage"
+            />
+        ​
+    </com.google.android.material.card.MaterialCardView>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_marginTop="30dp"
-        android:layout_below="@+id/reason"
+        android:layout_below="@+id/doneImage"
         android:layout_height="wrap_content">
 
         <com.google.android.material.button.MaterialButton

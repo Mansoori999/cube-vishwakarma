@@ -1,12 +1,10 @@
 package com.vinners.cube_vishwakarma.ui
 
 
-import android.content.Context
 import android.content.Intent
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
@@ -18,6 +16,13 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import coil.api.load
+import com.androidbuts.multispinnerfilter.KeyPairBoolData
+import com.androidbuts.multispinnerfilter.MultiSpinnerListener
+import com.androidbuts.multispinnerfilter.MultiSpinnerSearch
+import com.devstune.searchablemultiselectspinner.SearchableMultiSelectSpinner
+import com.devstune.searchablemultiselectspinner.SelectionCompleteListener
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.vinners.cube_vishwakarma.BuildConfig
@@ -36,6 +41,7 @@ import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.feature_auth.ui.AuthActivity
 import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
+import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletComplaintsActivity
@@ -54,6 +60,10 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
     @Inject
     lateinit var userSessionManager: UserSessionManager
+
+    private lateinit var bottomSheetView:View
+    private lateinit var regionalspinner:TextView
+
 
     @Inject
     lateinit var appInfo : AppInfo
@@ -262,7 +272,49 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
         }
 
+        initBottomsheetFileterView()
+
+
     }
+
+    private fun initBottomsheetFileterView() {
+        val bottomSheetCallback = object: BottomSheetBehavior.BottomSheetCallback() {
+            override fun onSlide(p0: View, p1: Float) {}
+            override fun onStateChanged(p0: View, p1: Int) {}
+        }
+        bottomSheetView = layoutInflater.inflate(R.layout.bottomsheet_filter_layout, null)
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(bottomSheetView)
+        regionalspinner = bottomSheetView.findViewById(R.id.financial_spinner)
+//        regionalspinner.setSearchEnabled(true)
+//        regionalspinner.setClearText("Close & Clear")
+//        regionalspinner.setSearchHint("Select Regioanl Office")
+//        regionalspinner.setEmptyTitle("Not Data Found!")
+//        for (i in regionalOffice) {
+//            regionalOffice.add(RegionalOfficeFilterData(i.id, i.name, i.isSelected))
+//        }
+        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView.parent as View)
+        bottomSheetBehavior.setBottomSheetCallback(bottomSheetCallback)
+        viewBinding.contentMainContainer.filter.setOnClickListener {
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            bottomSheetDialog.show()
+
+        }
+//        regionalspinner.onItemSelected { adapterView, _, _, _ ->
+//            adapterView ?: return@onItemSelected
+//
+//            if (regionalspinner.childCount != 0 && regionalspinner.selectedItemPosition != 0) {
+//                val regionalData = regionalspinner.selectedItem as RegionalOfficeData
+//
+//
+//
+//
+//            }
+//        }
+
+
+    }
+
 
     private fun setProfilePicture() {
 //        val profilepic = findViewById<CircleImageView>(R.id.profile_pic)
@@ -341,6 +393,75 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             }
         })
         viewModel.dashBoardData()
+
+        viewModel.financialFilterState.observe(this, Observer {
+            when(it){
+                Lce.Loading->{
+
+                }
+                is Lce.Content ->{
+                    val regionalOffice = it.content.map {
+                        RegionalOfficeFilterData(
+                            id = it.id,
+                            name = it.name,
+                            isSelected = false
+                        )
+                    }.toMutableList()
+                    setRegionalOfficeTypeSpinner(regionalOffice)
+
+
+                }
+                is Lce.Error->{
+
+                }
+            }
+        })
+        viewModel.getRinancialYearFilterData()
+    }
+
+    private fun setRegionalOfficeTypeSpinner(regionalOffice: MutableList<RegionalOfficeFilterData>) {
+        regionalOffice.sortBy { it.name }
+        val setItems: Set<RegionalOfficeFilterData> = LinkedHashSet(regionalOffice)
+        regionalOffice.clear()
+        regionalOffice.addAll(setItems)
+//        regionalOffice.add(
+//            0,
+//            RegionalOfficeFilterData(
+//                id = 1,
+//                name = "Select Regional Office",
+//                isSelected = false
+//            )
+//        )
+
+//        regionalspinner.hintText = "Select Regional Office"
+        regionalspinner.setOnClickListener{
+            SearchableMultiSelectSpinner.show(this, "Select Regional Office", "Done","Cancel", regionalOffice, object :
+                SelectionCompleteListener {
+                override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
+                    Log.e("data", selectedItems.toString())
+                    regionalspinner.text = selectedItems.toString()
+                }
+
+            })
+
+        }
+
+
+
+//        val aa = ArrayAdapter(
+//            this,
+//            android.R.layout.simple_spinner_dropdown_item,
+//            regionalOffice
+//        )
+//
+//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+//        with(regionalspinner) {
+//            adapter = aa
+//            prompt = "Select Regional Office"
+//            gravity = android.view.Gravity.CENTER
+//        }
+
+
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

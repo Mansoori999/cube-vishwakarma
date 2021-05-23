@@ -79,4 +79,5 @@
     <style name="CircularProgress" parent="Theme.AppCompat.Light">
         <item name="colorAccent">@color/white</item>
     </style>
+
 </resources>

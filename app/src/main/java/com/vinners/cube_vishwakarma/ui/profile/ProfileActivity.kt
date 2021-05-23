@@ -194,7 +194,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityView
                 is Lce.Content->{
                     viewBinding.loadingData.setVisibilityGone()
                     viewBinding.refresh.setVisibilityVisible()
-                    Toast.makeText(this, "Successfully upDated", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Successfully Updated", Toast.LENGTH_SHORT).show()
                 }
                 is Lce.Error->{
                     viewBinding.loadingData.setVisibilityGone()

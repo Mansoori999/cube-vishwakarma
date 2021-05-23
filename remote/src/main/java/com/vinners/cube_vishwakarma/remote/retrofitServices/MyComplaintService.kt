@@ -1,11 +1,11 @@
 package com.vinners.cube_vishwakarma.remote.retrofitServices
 
 import com.vinners.cube_vishwakarma.data.models.complaints.*
+import com.vinners.cube_vishwakarma.data.models.outlets.EditOutletRequest
+import com.vinners.cube_vishwakarma.data.models.outlets.OutletResponse
+import okhttp3.MultipartBody
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface MyComplaintService {
 
@@ -19,9 +19,12 @@ interface MyComplaintService {
         @Query("id")id:String
     ):Response<List<MyComplainDetailsList>>
 
+    @Multipart
     @POST("api/complaint/updatecomplaint")
     suspend fun upDateComplaint(
-         @Body upDateComplaintRequest: UpDateComplaintRequest
+            @Part("data") upDateComplaintRequest: UpDateComplaintRequest,
+            @Part image: List<MultipartBody.Part>
     ):Response<List<String>>
+
 
 }

@@ -14,7 +14,7 @@ class MyComplaintRepository @Inject constructor(
     suspend fun getComplaintDetails(id :String):MyComplainDetailsList{
         return myComplaintRemoteDataStore.getComplaintetails(id)
     }
-    suspend fun upDateComplaints(statusremarks:String, status:String, id:Int):List<String>{
-        return myComplaintRemoteDataStore.upDateComplaint(statusremarks,status,id)
+    suspend fun upDateComplaints(statusremarks:String, status:String, id:Int,image: List<String>):List<String>{
+        return myComplaintRemoteDataStore.upDateComplaint(statusremarks,status,id,image)
     }
 }
