@@ -6,7 +6,9 @@ import com.vinners.cube_vishwakarma.data.models.dashboardFilter.DashboardFilterL
 
 interface DashBoardRemoteDataStore {
 
-    suspend fun getDashboard(): DashBoardResponse
-
     suspend fun getFinancialData():List<DashboardFilterList>
+
+    suspend fun getDashboard(startDate:String,endDate:String,regionalOfficeids:String?): DashBoardResponse
+
+
 }

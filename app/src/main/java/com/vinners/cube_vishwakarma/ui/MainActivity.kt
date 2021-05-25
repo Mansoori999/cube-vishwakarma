@@ -6,11 +6,13 @@ import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
@@ -21,14 +23,18 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
+import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import com.vinners.cube_vishwakarma.BuildConfig
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.base.AppInfo
+import com.vinners.cube_vishwakarma.core.DateTimeHelper
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
+import com.vinners.cube_vishwakarma.core.extensions.onItemSelected
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
+import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
 import com.vinners.cube_vishwakarma.data.models.homeScreen.MainActivityListModel
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityMainBinding
@@ -37,6 +43,7 @@ import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.feature_auth.ui.AuthActivity
 import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
+import com.vinners.cube_vishwakarma.ui.dashboardFilter.FinancialYearData
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
@@ -45,9 +52,10 @@ import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
 import de.hdodenhof.circleimageview.CircleImageView
-import java.lang.String
-import java.util.stream.Collectors
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.ArrayList
+import kotlin.collections.LinkedHashSet
 
 
 class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R.layout.activity_main),
@@ -58,9 +66,19 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     @Inject
     lateinit var userSessionManager: UserSessionManager
 
+
     private lateinit var bottomSheetView:View
-    private lateinit var financialspinner:TextView
+    private lateinit var financialspinner: SearchableSpinner
     private lateinit var regionalspinner:TextView
+
+    var financialyd : Int? = null
+    var startDate : String? = null
+    var endDate : String?=null
+    val currentDate : String? =null
+    var regionalOfficeIds : String? =null
+    var fyearDateId :Int ?= null
+    var fyearDateName:String?= null
+
 
 
     @Inject
@@ -88,7 +106,6 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     }
 
     override fun onInitDataBinding() {
-
         val hiuserTV = findViewById<TextView>(R.id.hiuserTV)
         hiuserTV.setText(String.format("Hii, %s", userSessionManager.userName))
         val hiuserMobileTV = findViewById<TextView>(R.id.hiuserMobileTV)
@@ -285,14 +302,8 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         bottomSheetDialog.setContentView(bottomSheetView)
         financialspinner = bottomSheetView.findViewById(R.id.financial_spinner)
         regionalspinner = bottomSheetView.findViewById(R.id.ro_spinner)
+        regionalspinner.setHintTextColor(getResources().getColor(R.color.black));
 
-//        regionalspinner.setSearchEnabled(true)
-//        regionalspinner.setClearText("Close & Clear")
-//        regionalspinner.setSearchHint("Select Regioanl Office")
-//        regionalspinner.setEmptyTitle("Not Data Found!")
-//        for (i in regionalOffice) {
-//            regionalOffice.add(RegionalOfficeFilterData(i.id, i.name, i.isSelected))
-//        }
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView.parent as View)
         bottomSheetBehavior.setBottomSheetCallback(bottomSheetCallback)
         viewBinding.contentMainContainer.filter.setOnClickListener {
@@ -300,17 +311,21 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             bottomSheetDialog.show()
 
         }
-//        regionalspinner.onItemSelected { adapterView, _, _, _ ->
-//            adapterView ?: return@onItemSelected
-//
-//            if (regionalspinner.childCount != 0 && regionalspinner.selectedItemPosition != 0) {
-//                val regionalData = regionalspinner.selectedItem as RegionalOfficeData
-//
-//
-//
-//
-//            }
-//        }
+
+
+
+
+        financialspinner.onItemSelected { adapterView, _, _, _ ->
+            adapterView ?: return@onItemSelected
+            if (financialspinner.childCount == 0 && financialspinner.selectedItemPosition == 0) {
+                val financialData = financialspinner.selectedItem as FinancialYearData
+                startDate = financialData.startdate
+                endDate = financialData.enddate
+
+            }
+        }
+
+
 
 
     }
@@ -363,10 +378,34 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             if (it.pic.isNullOrEmpty().not())
                 profilepic.load(appInfo.getFullAttachmentUrl(it.pic!!))
             else
-                profilepic.setImageDrawable(getResources().getDrawable(R.drawable.user))
+                profilepic.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.user, null))
 
         })
         viewModel.initViewModel()
+
+        viewModel.financialFilterState.observe(this, Observer {
+            when(it){
+                Lce.Loading->{
+
+                }
+                is Lce.Content -> {
+                    val financialdata = it.content.map {
+                        FinancialYearData(
+                                id = it.id,
+                                name = it.name,
+                                startdate = it.startdate!!,
+                                enddate = it.enddate!!
+                        )
+                    }.toMutableList()
+                    setFinancialYearTypeSpinner(financialdata)
+
+                }
+                is Lce.Error->{
+
+                }
+            }
+        })
+        viewModel.getRinancialYearFilterData()
         viewModel.dashboardState.observe(this, Observer {
             when(it){
                 Lce.Loading ->{
@@ -392,30 +431,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 }
             }
         })
-        viewModel.dashBoardData()
-
-        viewModel.financialFilterState.observe(this, Observer {
-            when(it){
-                Lce.Loading->{
-
-                }
-                is Lce.Content ->{
-                    val financialdata = it.content.map {
-                        RegionalOfficeFilterData(
-                            id = it.id,
-                            name = it.name,
-                            isSelected = false
-                        )
-                    }.toMutableList()
-                    setFinancialYearTypeSpinner(financialdata)
-
-                }
-                is Lce.Error->{
-
-                }
-            }
-        })
-        viewModel.getRinancialYearFilterData()
+        viewModel.dashBoardData(startDate!!, endDate!!,regionalOfficeIds)
         viewModel.regionalOfficeFilterState.observe(this, Observer {
             when(it){
                 Lce.Loading->{
@@ -442,20 +458,16 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
     private fun setRegionalOfficeTypeSpinner(regionalOffice: MutableList<RegionalOfficeFilterData>) {
         regionalOffice.sortBy { it.name }
-        val setItems: Set<RegionalOfficeFilterData> = LinkedHashSet(regionalOffice)
+//        val setItems: Set<RegionalOfficeFilterData> = LinkedHashSet(regionalOffice)
+//        regionalOffice.clear()
+//        regionalOffice.addAll(setItems)
+        val setItems = regionalOffice.distinctBy { it.name }
         regionalOffice.clear()
         regionalOffice.addAll(setItems)
 
-//        regionalOffice.add(
-//            0,
-//            RegionalOfficeFilterData(
-//                id = 1,
-//                name = "Select Regional Office",
-//                isSelected = false
-//            )
-//        )
+
         regionalspinner.setOnClickListener{
-            SearchableMultiSelectSpinner.show(this, "Select Regional Office", "Done","Cancel", regionalOffice, object :
+            SearchableMultiSelectSpinner.show(this, "Select Regional Office", "Done", regionalOffice, object :
                     SelectionCompleteListener {
                 override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
 //                    Log.e("data", selectedItems.toString())
@@ -466,30 +478,6 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             })
 
         }
-
-
-
-//        val aa = ArrayAdapter(
-//            this,
-//            android.R.layout.simple_spinner_dropdown_item,
-//            regionalOffice
-//        )
-//
-//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        with(regionalspinner) {
-//            adapter = aa
-//            prompt = "Select Regional Office"
-//            gravity = android.view.Gravity.CENTER
-//        }
-
-
-    }
-
-    private fun setFinancialYearTypeSpinner(financialdata: MutableList<RegionalOfficeFilterData>) {
-        financialdata.sortBy { it.name }
-        val setItems: Set<RegionalOfficeFilterData> = LinkedHashSet(financialdata)
-        financialdata.clear()
-        financialdata.addAll(setItems)
 //        regionalOffice.add(
 //            0,
 //            RegionalOfficeFilterData(
@@ -498,23 +486,6 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //                isSelected = false
 //            )
 //        )
-
-//        regionalspinner.hintText = "Select Regional Office"
-        financialspinner.setOnClickListener{
-            SearchableMultiSelectSpinner.show(this, "Select Financial Year", "Done","Cancel", financialdata, object :
-                SelectionCompleteListener {
-                override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
-//                    Log.e("data", selectedItems.toString())
-                    val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
-                    financialspinner.text = selectedItemList
-                }
-
-            })
-
-        }
-
-
-
 //        val aa = ArrayAdapter(
 //            this,
 //            android.R.layout.simple_spinner_dropdown_item,
@@ -530,6 +501,66 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
 
     }
+
+    private fun setFinancialYearTypeSpinner(financialdata: MutableList<FinancialYearData>) {
+        financialdata.sortBy { it.name }
+
+        val calendar = Calendar.getInstance()
+        val currentDate = DateTimeHelper.getDDMMYYYYDate(calendar.time)
+        financialdata.forEach {
+            startDate = it.startdate
+            endDate = it.enddate
+        }
+        for (i in 0 until financialdata.size){
+
+            if (currentDate.compareTo(DateTimeHelper.getDDMMYYYYDateFromString(startDate!!)) >= 0 && currentDate.compareTo(DateTimeHelper.getDDMMYYYYDateFromString(endDate!!)) <= 0) {
+
+                val financialyeardata = financialdata[i]
+                fyearDateId = financialyeardata.id
+               fyearDateName = financialyeardata.name
+//                val fny = financialyeardata.id.toString().trim().split(",")
+//                val financial = fny.map {
+//                    FinancialYearData(
+//                            id = financialyeardata.id,
+//                            name = financialyeardata.name,
+//                            startdate =financialyeardata.startdate ,
+//                            enddate =financialyeardata.enddate
+//
+//                    )
+//                }.toMutableList()
+
+            }
+        }
+
+        financialdata.add(
+                0,
+                FinancialYearData(
+                        id = fyearDateId!!,
+                        name = fyearDateName!!,
+                        startdate = "",
+                        enddate = ""
+                )
+        )
+
+        val setItems = financialdata.distinctBy { it.name }
+        financialdata.clear()
+        financialdata.addAll(setItems)
+
+        val aa = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                financialdata
+        )
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        with(financialspinner) {
+            adapter = aa
+            prompt = "Select Financial Year"
+            gravity = android.view.Gravity.CENTER
+        }
+
+
+    }
+
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
@@ -604,3 +635,5 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
 
 }
+
+

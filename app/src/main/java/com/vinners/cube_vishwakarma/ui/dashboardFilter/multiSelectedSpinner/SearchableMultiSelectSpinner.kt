@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
+import java.util.stream.Collectors
 
 class SearchableMultiSelectSpinner {
     companion object {
@@ -14,10 +15,10 @@ class SearchableMultiSelectSpinner {
             context: Context,
             title: String,
             doneButtonText:String,
-            cancelButtonText:String,
             searchableItems: MutableList<RegionalOfficeFilterData>,
             selectionCompleteListener: SelectionCompleteListener
         ) {
+
             val alertDialog = AlertDialog.Builder(context)
             val inflater = LayoutInflater.from(context)
             val convertView = inflater.inflate(R.layout.searchable_list_layout, null)
@@ -29,6 +30,7 @@ class SearchableMultiSelectSpinner {
             val recyclerView =
                 convertView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
             val mLayoutManager = LinearLayoutManager(context)
+
             val adapter =
                 SearchableAdapter(
                     context,
@@ -55,6 +57,8 @@ class SearchableMultiSelectSpinner {
                         }
 
                     },false)
+
+
             recyclerView.itemAnimator = null
             recyclerView.layoutManager = mLayoutManager
             recyclerView.adapter = adapter
@@ -72,20 +76,6 @@ class SearchableMultiSelectSpinner {
                 }
             })
 
-            alertDialog.setNegativeButton(cancelButtonText){ dialogInterface, i ->
-//
-//                val resultList=ArrayList<RegionalOfficeFilterData>()
-//                for (i in 0 until searchableItems.size) {
-//                    if (searchableItems[i].isSelected) {
-//                        resultList.clear()
-//                    }
-//                }
-//                selectionCompleteListener.onCompleteSelection(resultList)
-//
-//                adapter.notifyDataSetChanged()
-                dialogInterface.cancel()
-
-            }
             alertDialog.setPositiveButton(doneButtonText) { dialogInterface, i ->
                 dialogInterface.dismiss()
                 val resultList=ArrayList<RegionalOfficeFilterData>()

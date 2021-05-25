@@ -3,6 +3,7 @@ package com.vinners.cube_vishwakarma.remote.dataStoreImpl
 import com.vinners.cube_vishwakarma.data.dataStores.dashboard.DashBoardRemoteDataStore
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.dashboard.ComplaintRequestWithStatus
+import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardRequest
 import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponse
 import com.vinners.cube_vishwakarma.data.models.dashboardFilter.DashboardFilterList
 import com.vinners.cube_vishwakarma.remote.extensions.bodyOrThrow
@@ -13,13 +14,24 @@ class DashBoardRemoteDataStoreImpl @Inject constructor(
     private val dashBoardService: DashBoardService
 ) : DashBoardRemoteDataStore {
 
-    override suspend fun getDashboard(): DashBoardResponse {
-        return dashBoardService.getDashboard().bodyOrThrow().first()
-    }
-
     override suspend fun getFinancialData(): List<DashboardFilterList> {
         return dashBoardService.getFinancialData().bodyOrThrow()
     }
+
+    override suspend fun getDashboard(
+            startDate:String,
+            endDate:String,
+            regionalOfficeids:String?
+    ): DashBoardResponse {
+        return dashBoardService.getDashboard(
+                DashBoardRequest(
+                        startDate = startDate,
+                        endDate = endDate,
+                        regionalOfficeids = regionalOfficeids
+                )
+        ).bodyOrThrow().first()
+    }
+
 
 
 }

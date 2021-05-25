@@ -23,6 +23,8 @@ class SearchableAdapter(
 ) : Filterable, RecyclerView.Adapter<SearchableAdapter.ViewHolder>() {
     private var itemClickListener: ItemClickListener = clickListener
 
+
+
     inner class ViewHolder(val mView: View) :
         RecyclerView.ViewHolder(mView) {
 //        val titleTextView = mView.findViewById<TextView>(R.id.titleTextView)
@@ -31,6 +33,7 @@ class SearchableAdapter(
         internal var checkBox = mView.findViewById<CheckBox>(R.id.checkBox)
 
         var mItem: RegionalOfficeFilterData? = null
+
 
     }
 
@@ -51,6 +54,7 @@ class SearchableAdapter(
         }else{
             holder.checkBox.visibility=View.VISIBLE
         }
+
         var productPosition = 0
         for (i in 0 until mValues.size) {
             if (mValues[i].id.equals(holder.mItem!!.id)) {
@@ -114,6 +118,7 @@ class SearchableAdapter(
     override fun getItemCount(): Int {
         return filteredList.size
     }
+
 
     companion object {
         lateinit var itemClickListener: ItemClickListener

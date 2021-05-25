@@ -78,24 +78,6 @@ class MainActivityViewModel@Inject constructor(
         }
     }
 
-    /* DashBoard */
-
-    private val _dashboardState =  MutableLiveData<Lce<DashBoardResponse>>()
-    override val dashboardState: LiveData<Lce<DashBoardResponse>> = _dashboardState
-
-    fun dashBoardData() {
-        _dashboardState.value = Lce.Loading
-        viewModelScope.launch(Dispatchers.IO){
-            try {
-                val response = dashBoardRepository.getDashBoard()
-                _dashboardState.postValue(Lce.content(response))
-            }catch (e : Exception){
-                _dashboardState.postValue(Lce.error(e.localizedMessage))
-
-            }
-        }
-    }
-
     /* DashBoard Financial year filter*/
 
     private val _financialFilterState =  MutableLiveData<Lce<List<DashboardFilterList>>>()
@@ -113,6 +95,26 @@ class MainActivityViewModel@Inject constructor(
             }
         }
     }
+
+    /* DashBoard */
+
+    private val _dashboardState =  MutableLiveData<Lce<DashBoardResponse>>()
+    override val dashboardState: LiveData<Lce<DashBoardResponse>> = _dashboardState
+
+    fun dashBoardData(startDate:String,endDate:String,regionalOfficeids:String?) {
+        _dashboardState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = dashBoardRepository.getDashBoard(startDate,endDate,regionalOfficeids)
+                _dashboardState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _dashboardState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+
 
     //Regional office
     private val _regionalOfficeFilterState = MutableLiveData<Lce<List<ComplaintOutletList>>>()
