@@ -2,6 +2,7 @@ package com.vinners.cube_vishwakarma.ui
 
 
 import android.content.Intent
+import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
@@ -27,14 +28,12 @@ import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import com.vinners.cube_vishwakarma.BuildConfig
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.base.AppInfo
-import com.vinners.cube_vishwakarma.core.DateTimeHelper
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
 import com.vinners.cube_vishwakarma.core.extensions.onItemSelected
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
-import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
 import com.vinners.cube_vishwakarma.data.models.homeScreen.MainActivityListModel
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityMainBinding
@@ -52,10 +51,10 @@ import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
 import de.hdodenhof.circleimageview.CircleImageView
+import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
-import kotlin.collections.LinkedHashSet
 
 
 class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R.layout.activity_main),
@@ -66,18 +65,30 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     @Inject
     lateinit var userSessionManager: UserSessionManager
 
+    var list: MutableList<String> = ArrayList()
 
-    private lateinit var bottomSheetView:View
+    private lateinit var bottomSheetDialog:BottomSheetDialog
+
+    private lateinit var sheetBehavior: BottomSheetBehavior<View>
+
     private lateinit var financialspinner: SearchableSpinner
     private lateinit var regionalspinner:TextView
+    private lateinit var applyBtn:TextView
 
-    var financialyd : Int? = null
-    var startDate : String? = null
-    var endDate : String?=null
-    val currentDate : String? =null
+    var roselectedId:String? = null
+
+    lateinit var  defaultStartDate : String
+    lateinit var  defaultEndDate : String
+    lateinit var  startDateF : String
+    lateinit var  endDateF : String
+    var startdate:String? = null
+    var enddate : String? =null
+    var startdatef:String? = null
+    var enddatef : String? =null
     var regionalOfficeIds : String? =null
     var fyearDateId :Int ?= null
     var fyearDateName:String?= null
+    var roIds : String? =null
 
 
 
@@ -106,6 +117,8 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     }
 
     override fun onInitDataBinding() {
+
+
         val hiuserTV = findViewById<TextView>(R.id.hiuserTV)
         hiuserTV.setText(String.format("Hii, %s", userSessionManager.userName))
         val hiuserMobileTV = findViewById<TextView>(R.id.hiuserMobileTV)
@@ -119,17 +132,17 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             startActivity(intent)
         }
         hiuserMobileTV.text = userSessionManager.mobile
-        setProfilePicture()
+//        setProfilePicture()
         val drawerLayout: DrawerLayout = findViewById(R.id.drawer_layout)
-        val drawermenu : ImageView = findViewById(R.id.drawer_menu)
+        val drawermenu: ImageView = findViewById(R.id.drawer_menu)
         drawermenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
         val toggle =
-            ActionBarDrawerToggle(
-                this, drawerLayout,
-                R.string.nav_app_bar_open_drawer_description, R.string.navigation_drawer_close
-            )
+                ActionBarDrawerToggle(
+                        this, drawerLayout,
+                        R.string.nav_app_bar_open_drawer_description, R.string.navigation_drawer_close
+                )
         drawerLayout.setDrawerListener(toggle)
         toggle.syncState()
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
@@ -220,7 +233,8 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //        mainActivityRecyclerAdapter.updateViewList(homeList)
 //        recyclerView.adapter = mainActivityRecyclerAdapter
 //        preparehomeData()
-        val  myAnim : Animation = AnimationUtils.loadAnimation(this, R.anim.card_anim)
+
+        val myAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.card_anim)
         viewBinding.contentMainContainer.totalCardView.setOnClickListener {
             viewBinding.contentMainContainer.totalCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
@@ -286,63 +300,52 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             startActivity(intent)
 
         }
-
-        initBottomsheetFileterView()
-
-
-    }
-
-    private fun initBottomsheetFileterView() {
+//        sheetBehavior = BottomSheetBehavior.from(complaints_filter_bottomsheet)
+//        sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+//        val bottomSheetDialog = BottomSheetDialog(this)
+//        bottomSheetDialog.setContentView(bottomSheetView)
         val bottomSheetCallback = object: BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(p0: View, p1: Float) {}
             override fun onStateChanged(p0: View, p1: Int) {}
         }
-        bottomSheetView = layoutInflater.inflate(R.layout.bottomsheet_filter_layout, null)
-        val bottomSheetDialog = BottomSheetDialog(this)
+        val bottomSheetView = layoutInflater.inflate(R.layout.bottomsheet_filter_layout, null)
+        bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setContentView(bottomSheetView)
         financialspinner = bottomSheetView.findViewById(R.id.financial_spinner)
         regionalspinner = bottomSheetView.findViewById(R.id.ro_spinner)
-        regionalspinner.setHintTextColor(getResources().getColor(R.color.black));
-
-        val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetView.parent as View)
-        bottomSheetBehavior.setBottomSheetCallback(bottomSheetCallback)
+        regionalspinner.setHintTextColor(getResources().getColor(R.color.black))
+        sheetBehavior = BottomSheetBehavior.from(bottomSheetView.parent as View)
+        sheetBehavior.setBottomSheetCallback(bottomSheetCallback)
         viewBinding.contentMainContainer.filter.setOnClickListener {
-            bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
+            if (sheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED)
+            } else {
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+            }
+//            if (newState == BottomSheetBehavior.STATE_HIDDEN)
+//                sheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
             bottomSheetDialog.show()
 
         }
 
+        applyBtn = bottomSheetView.findViewById(R.id.apply_textview)
 
-
-
-        financialspinner.onItemSelected { adapterView, _, _, _ ->
-            adapterView ?: return@onItemSelected
-            if (financialspinner.childCount == 0 && financialspinner.selectedItemPosition == 0) {
-                val financialData = financialspinner.selectedItem as FinancialYearData
-                startDate = financialData.startdate
-                endDate = financialData.enddate
-
-            }
-        }
-
-
-
-
+        initBottomsheetFileterView()
     }
 
 
-    private fun setProfilePicture() {
-//        val profilepic = findViewById<CircleImageView>(R.id.profile_pic)
-//        val profilePicUrl= userSessionManager.profilepic
-//
-//        if (profilePicUrl != null) {
-//            val picUrl = appInfo.getFullAttachmentUrl(profilePicUrl)
-//            profilepic.load(File(picUrl))
-//
-//       }else{
-//            profilepic.setImageDrawable(getResources().getDrawable(R.drawable.user))
-//        }
-    }
+//    private fun setProfilePicture() {
+////        val profilepic = findViewById<CircleImageView>(R.id.profile_pic)
+////        val profilePicUrl= userSessionManager.profilepic
+////
+////        if (profilePicUrl != null) {
+////            val picUrl = appInfo.getFullAttachmentUrl(profilePicUrl)
+////            profilepic.load(File(picUrl))
+////
+////       }else{
+////            profilepic.setImageDrawable(getResources().getDrawable(R.drawable.user))
+////        }
+//    }
 
     private fun preparehomeData() {
         homeList.add(MainActivityListModel("Totals","#99CC33"))
@@ -386,9 +389,9 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         viewModel.financialFilterState.observe(this, Observer {
             when(it){
                 Lce.Loading->{
-
                 }
                 is Lce.Content -> {
+
                     val financialdata = it.content.map {
                         FinancialYearData(
                                 id = it.id,
@@ -401,27 +404,29 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
                 }
                 is Lce.Error->{
-
                 }
             }
         })
         viewModel.getRinancialYearFilterData()
+
         viewModel.dashboardState.observe(this, Observer {
             when(it){
                 Lce.Loading ->{
                     viewBinding.contentMainContainer.loadingData.setVisibilityVisible()
                 }
-                is Lce.Content ->{
+                is Lce.Content -> {
+
                     viewBinding.contentMainContainer.loadingData.setVisibilityGone()
-                    viewBinding.contentMainContainer.totals.text = it.content.total
-                    viewBinding.contentMainContainer.due.text = it.content.due
-                    viewBinding.contentMainContainer.working.text = it.content.working
-                    viewBinding.contentMainContainer.pending.text = it.content.pendingletter
-                    viewBinding.contentMainContainer.done.text = it.content.done
-                    viewBinding.contentMainContainer.draft.text = it.content.draft
-                    viewBinding.contentMainContainer.estimated.text = it.content.estimated
-                    viewBinding.contentMainContainer.billed.text = it.content.billed
-                    viewBinding.contentMainContainer.payment.text = it.content.payment
+                        viewBinding.contentMainContainer.totals.text = it.content.total
+                        viewBinding.contentMainContainer.due.text = it.content.due
+                        viewBinding.contentMainContainer.working.text = it.content.working
+                        viewBinding.contentMainContainer.pending.text = it.content.pendingletter
+                        viewBinding.contentMainContainer.done.text = it.content.done
+                        viewBinding.contentMainContainer.draft.text = it.content.draft
+                        viewBinding.contentMainContainer.estimated.text = it.content.estimated
+                        viewBinding.contentMainContainer.billed.text = it.content.billed
+                        viewBinding.contentMainContainer.payment.text = it.content.payment
+
 
                 }
                 is Lce.Error ->{
@@ -431,11 +436,10 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 }
             }
         })
-        viewModel.dashBoardData(startDate!!, endDate!!,regionalOfficeIds)
+
         viewModel.regionalOfficeFilterState.observe(this, Observer {
             when(it){
                 Lce.Loading->{
-
                 }
                 is Lce.Content ->{
                     val regionalOffice = it.content.map {
@@ -458,9 +462,6 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
     private fun setRegionalOfficeTypeSpinner(regionalOffice: MutableList<RegionalOfficeFilterData>) {
         regionalOffice.sortBy { it.name }
-//        val setItems: Set<RegionalOfficeFilterData> = LinkedHashSet(regionalOffice)
-//        regionalOffice.clear()
-//        regionalOffice.addAll(setItems)
         val setItems = regionalOffice.distinctBy { it.name }
         regionalOffice.clear()
         regionalOffice.addAll(setItems)
@@ -472,7 +473,10 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
 //                    Log.e("data", selectedItems.toString())
                     val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
+                   roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
+                    Log.d("nja",roselectedId)
                     regionalspinner.text = selectedItemList
+
                 }
 
             })
@@ -505,32 +509,41 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     private fun setFinancialYearTypeSpinner(financialdata: MutableList<FinancialYearData>) {
         financialdata.sortBy { it.name }
 
-        val calendar = Calendar.getInstance()
-        val currentDate = DateTimeHelper.getDDMMYYYYDate(calendar.time)
-        financialdata.forEach {
-            startDate = it.startdate
-            endDate = it.enddate
-        }
         for (i in 0 until financialdata.size){
 
-            if (currentDate.compareTo(DateTimeHelper.getDDMMYYYYDateFromString(startDate!!)) >= 0 && currentDate.compareTo(DateTimeHelper.getDDMMYYYYDateFromString(endDate!!)) <= 0) {
+            var startDate = financialdata.get(i).startdate
+            val endDate = financialdata.get(i).enddate
+            val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-                val financialyeardata = financialdata[i]
-                fyearDateId = financialyeardata.id
-               fyearDateName = financialyeardata.name
-//                val fny = financialyeardata.id.toString().trim().split(",")
-//                val financial = fny.map {
-//                    FinancialYearData(
-//                            id = financialyeardata.id,
-//                            name = financialyeardata.name,
-//                            startdate =financialyeardata.startdate ,
-//                            enddate =financialyeardata.enddate
-//
-//                    )
-//                }.toMutableList()
+//          val stDate =DateTimeHelper.getDDMMYYYYDateFromString(startdate)
+//            val enDate = DateTimeHelper.getDDMMYYYYDateFromString(endDate)
+            val stDate = dateFormat.parse(startDate)
+           val enDate = dateFormat.parse(endDate)
+            val currentdate = Calendar.getInstance().time
+//            val currentdate = dateFormat.format(cdate)
 
+
+
+
+
+            Log.d("sjh", enDate.toString())
+
+
+            if (currentdate.after(stDate) && currentdate.before(enDate)) {
+
+                fyearDateName = financialdata.get(i).name
+                fyearDateId = financialdata.get(i).id
+                startdate = financialdata.get(i).startdate
+                enddate = financialdata.get(i).enddate
+
+            }else{
+//               Toast.makeText(this,"nxjj",Toast.LENGTH_LONG).show()
             }
+
+
         }
+
+        startDateAndEndDatePassForDashBoard()
 
         financialdata.add(
                 0,
@@ -560,6 +573,50 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
 
     }
+    private fun startDateAndEndDatePassForDashBoard() {
+
+            defaultStartDate = startdate.toString()
+            defaultEndDate = enddate.toString()
+
+            viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds)
+
+
+
+
+    }
+
+
+    private fun initBottomsheetFileterView() {
+
+
+        applyBtn.setOnClickListener {
+            var sdate:String?=null
+            var eDate:String?=null
+            financialspinner.onItemSelected { adapterView, _, _, _ ->
+                adapterView ?: return@onItemSelected
+                val financialData = financialspinner.selectedItem as FinancialYearData
+//                startdatef = financialData.startdate
+//                enddatef  = financialData.enddate
+            }
+            val financialData = financialspinner.selectedItem as FinancialYearData
+            startdatef = financialData.startdate
+            enddatef  = financialData.enddate
+
+            startDateF = startdatef.toString()
+            endDateF = enddatef.toString()
+            val roIds = roselectedId
+            viewModel.dashBoardData(startDateF, endDateF,roselectedId)
+            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+            bottomSheetDialog.dismiss()
+
+        }
+
+
+
+    }
+
+
+
 
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

@@ -7,6 +7,7 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
 
+
 def getGitHash = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
@@ -116,6 +117,8 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+
 
     kotlinOptions {
         jvmTarget = "1.8"

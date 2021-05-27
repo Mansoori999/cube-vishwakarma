@@ -14,6 +14,7 @@ import com.vinners.cube_vishwakarma.data.dataStores.jobs.JobsRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.money.MoneyRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.notification.NotificationRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.outlets.OutletRemoteDataStore
+import com.vinners.cube_vishwakarma.data.dataStores.tutorials.TutorialsRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.userProfile.UserProfileRemoteDataSource
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.remote.RetrofitServiceFactory
@@ -177,6 +178,14 @@ abstract class RemoteModule {
         }
 
 
+        @Provides
+        @JvmStatic
+        fun provideTutorialsService(
+                retrofitServiceFactory: RetrofitServiceFactory
+        ): TutorialsService {
+            return retrofitServiceFactory.prepareService(TutorialsService::class.java)
+        }
+
     }
 
     @Binds
@@ -208,6 +217,9 @@ abstract class RemoteModule {
 
     @Binds
     abstract fun bindDashBoardRemoteDataStore(dashBoardRemoteDataStoreImpl: DashBoardRemoteDataStoreImpl): DashBoardRemoteDataStore
+
+    @Binds
+    abstract fun bindTutorialsRemoteDataStore(tutorialsRemoteDataStoreImpl: TutorialsRemoteDataStoreImpl): TutorialsRemoteDataStore
 
 
 }

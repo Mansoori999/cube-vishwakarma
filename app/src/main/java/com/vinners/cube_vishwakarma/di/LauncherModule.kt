@@ -11,6 +11,7 @@ import com.vinners.cube_vishwakarma.ui.languageSelection.LanguageViewModel
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsViewModel
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivityViewModel
 import com.vinners.cube_vishwakarma.ui.splash.SplashViewModel
+import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
@@ -60,6 +61,11 @@ abstract class LauncherModule {
     @IntoMap
     @ViewModelKey(ProfileActivityViewModel::class)
     abstract fun bindProfileActivityViewModel(viewModel: ProfileActivityViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(TutorialsViewModel::class)
+    abstract fun bindTutorialsViewModel(viewModel: TutorialsViewModel): ViewModel
 
 
 }

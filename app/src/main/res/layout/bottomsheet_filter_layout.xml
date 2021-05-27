@@ -1,158 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/complaints_filter_bottomsheet"
+    app:behavior_hideable="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#fff"
+    android:orientation="vertical">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/complaints_filter_bottomsheet"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#fff"
-        android:orientation="vertical"
-        app:behavior_hideable="true"
-        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingTop="15dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="15dp">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="Filters"
+            android:textColor="@android:color/black"
+            android:textSize="18dp" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+
+        <TextView
+            android:id="@+id/apply_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="5dp"
+            android:text=" Apply " />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingTop="15dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="15dp">
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="Filters"
-                android:textColor="@android:color/black"
-                android:textSize="18dp" />
-
-            <Space
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1" />
-
-
-            <TextView
-                android:id="@+id/apply_textview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="?android:attr/selectableItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="5dp"
-                android:text=" Apply " />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
             android:orientation="vertical">
 
 
-            <LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Financial Year"
+                android:textColor="@color/black" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/financial_spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical">
+                android:layout_gravity="left"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/spinner_background"
+                android:gravity="left"
+                android:minHeight="28dp" />
 
+            <!--                android:drawableEnd="@android:drawable/arrow_down_float"-->
+            <!--                android:background="@android:drawable/editbox_background"-->
+            <!--                <com.androidbuts.multispinnerfilter.MultiSpinnerSearch-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginLeft="10dp"-->
+            <!--                    android:layout_marginTop="5dp"-->
+            <!--                    android:padding="10dp"-->
+            <!--                    android:layout_marginRight="10dp"-->
+            <!--                    android:hintText="Select Financial Year"-->
+            <!--                    android:layout_marginBottom="15dp"-->
+            <!--                    android:layout_toRightOf="@+id/statusTxt"-->
+            <!--                    android:id="@+id/financial_spinner"-->
+            <!--                    android:background="@drawable/spinner_background"-->
+            <!--                    android:minHeight="30dp" />-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Financial Year"
-                    android:textColor="@color/black"/>
-                <com.toptoche.searchablespinnerlibrary.SearchableSpinner
-                    android:id="@+id/financial_spinner"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="28dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_gravity="left"
-                    android:gravity="left"
-                    android:background="@drawable/spinner_background"
-                    />
-
-                <!--                android:drawableEnd="@android:drawable/arrow_down_float"-->
-<!--                android:background="@android:drawable/editbox_background"-->
-<!--                <com.androidbuts.multispinnerfilter.MultiSpinnerSearch-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="10dp"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:padding="10dp"-->
-<!--                    android:layout_marginRight="10dp"-->
-<!--                    android:hintText="Select Financial Year"-->
-<!--                    android:layout_marginBottom="15dp"-->
-<!--                    android:layout_toRightOf="@+id/statusTxt"-->
-<!--                    android:id="@+id/financial_spinner"-->
-<!--                    android:background="@drawable/spinner_background"-->
-<!--                    android:minHeight="30dp" />-->
-
-
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="15dp"
-                android:orientation="vertical">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="Regional Office"
-                    android:textColor="@color/black"/>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:gravity="center_vertical"
-                    android:textColor="@color/black"
-                    android:padding="12dp"
-                    android:textSize="16sp"
-                    android:hint="Select Regional Office"
-                    android:id="@+id/ro_spinner"
-                    android:background="@drawable/spinner_background"
-                    android:minHeight="30dp"
-                    />
-<!--                <com.androidbuts.multispinnerfilter.MultiSpinnerSearch-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginLeft="10dp"-->
-<!--                    android:layout_marginTop="5dp"-->
-<!--                    android:layout_marginRight="10dp"-->
-<!--                    android:layout_marginBottom="15dp"-->
-<!--                    app:hintText="Select Regional Office"-->
-<!--                    android:layout_toRightOf="@+id/statusTxt"-->
-<!--                    android:id="@+id/ro_spinner"-->
-<!--                    android:background="@drawable/spinner_background"-->
-<!--                    android:minHeight="30dp"-->
-<!--                    />-->
-
-
-
-            </LinearLayout>
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Regional Office"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/ro_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/spinner_background"
+                android:gravity="center_vertical"
+                android:hint="Select Regional Office"
+                android:minHeight="30dp"
+                android:padding="12dp"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+            <!--                <com.androidbuts.multispinnerfilter.MultiSpinnerSearch-->
+            <!--                    android:layout_width="match_parent"-->
+            <!--                    android:layout_height="wrap_content"-->
+            <!--                    android:layout_marginLeft="10dp"-->
+            <!--                    android:layout_marginTop="5dp"-->
+            <!--                    android:layout_marginRight="10dp"-->
+            <!--                    android:layout_marginBottom="15dp"-->
+            <!--                    app:hintText="Select Regional Office"-->
+            <!--                    android:layout_toRightOf="@+id/statusTxt"-->
+            <!--                    android:id="@+id/ro_spinner"-->
+            <!--                    android:background="@drawable/spinner_background"-->
+            <!--                    android:minHeight="30dp"-->
+            <!--                    />-->
+
+
+        </LinearLayout>
 
     </LinearLayout>
-</layout>
+
+
+</LinearLayout>

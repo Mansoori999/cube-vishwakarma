@@ -13,12 +13,14 @@ import retrofit2.http.POST
 
 interface DashBoardService {
 
+    @GET("api/common/getfinancialyears")
+    suspend fun getFinancialData():Response<List<DashboardFilterList>>
+
     @POST("api/dashboard/mydashboard")
     suspend fun getDashboard(
             @Body dashBoardRequest: DashBoardRequest
     ): Response<List<DashBoardResponse>>
 
-    @GET("api/common/getfinancialyears")
-    suspend fun getFinancialData():Response<List<DashboardFilterList>>
+
 
 }

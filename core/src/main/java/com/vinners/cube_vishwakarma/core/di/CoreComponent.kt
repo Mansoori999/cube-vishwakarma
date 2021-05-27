@@ -101,6 +101,8 @@ interface CoreComponent {
 
     fun getGeocode(): Geocoder
 
+    fun getTutorialsRepository():TutorialsRepository
+
 
 
 }

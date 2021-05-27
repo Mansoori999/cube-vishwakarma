@@ -1,6 +1,7 @@
 package com.vinners.cube_vishwakarma.di
 
 
+import android.view.View
 import com.vinners.cube_vishwakarma.core.di.CoreComponent
 import com.vinners.cube_vishwakarma.core.di.scopes.FeatureScope
 import com.vinners.cube_vishwakarma.notification.NotificationService
@@ -102,4 +103,6 @@ interface LauncherComponent {
     fun inject(profileDetailsActivity: ProfileDetailsActivity)
 
     fun inject(bankDetailsAndOtheretailsActivity: BankDetailsAndOtherDetailsActivity)
+
+
 }
