@@ -71,10 +71,13 @@ class OutletRemoteDataStoreImpl @Inject constructor(
         ).bodyOrThrow()
     }
 
-    override suspend fun getComplaintWithStatus(status : String): List<MyComplaintList> {
+    override suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?): List<MyComplaintList> {
         return outletService.getComplaintWithStatus(
             ComplaintRequestWithStatus(
-                status = status
+                status = status,
+                startDate = startDate,
+                endDate = endDate,
+                regionalOfficeIds = regionalOfficeIds
             )
         ).bodyOrThrow()
     }

@@ -101,11 +101,11 @@ class MainActivityViewModel@Inject constructor(
     private val _dashboardState =  MutableLiveData<Lce<DashBoardResponse>>()
     override val dashboardState: LiveData<Lce<DashBoardResponse>> = _dashboardState
 
-    fun dashBoardData(startDate:String,endDate:String,regionalOfficeids:String?) {
+    fun dashBoardData(startDate:String,endDate:String,regionalOfficeIds:String?) {
         _dashboardState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {
-                val response = dashBoardRepository.getDashBoard(startDate,endDate,regionalOfficeids)
+                val response = dashBoardRepository.getDashBoard(startDate,endDate,regionalOfficeIds)
                 _dashboardState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _dashboardState.postValue(Lce.error(e.localizedMessage))

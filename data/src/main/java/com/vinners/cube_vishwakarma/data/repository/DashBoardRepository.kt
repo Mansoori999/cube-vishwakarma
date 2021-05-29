@@ -13,8 +13,8 @@ class DashBoardRepository @Inject constructor(
         return dashBoardRemoteDataStore.getFinancialData()
     }
 
-    suspend fun getDashBoard(startDate:String,endDate:String,regionalOfficeids:String?):DashBoardResponse{
-        return dashBoardRemoteDataStore.getDashboard(startDate,endDate,regionalOfficeids)
+    suspend fun getDashBoard(startDate:String,endDate:String,regionalOfficeIds:String?):DashBoardResponse{
+        return dashBoardRemoteDataStore.getDashboard(startDate,endDate,regionalOfficeIds)
     }
 
 

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_marginLeft="2dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginRight="2dp"
+    android:background="@android:color/white"
+    android:elevation="4dp"
+    android:padding="8dp"
+    app:layout_goneMarginTop="7dp">
+
+    <RelativeLayout
+        android:id="@+id/category_relayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/imagepath"
+            card_view:cardElevation="2dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:elevation="2dp"
+            app:cardBackgroundColor="#fcfcfc"
+            app:cardCornerRadius="5dp"
+            app:cardPreventCornerOverlap="false"
+            app:cardUseCompatPadding="false">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_gravity="center"
+                android:background="@drawable/default_border">
+
+            <ImageView
+                android:id="@+id/path"
+                android:layout_width="57dp"
+                android:layout_gravity="center"
+                android:layout_height="57dp"
+                android:scaleType="fitXY" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_toRightOf="@+id/imagepath"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/category"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="sans-serif"
+                android:gravity="center_vertical"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="category"
+                android:textColor="#CC000000"
+                android:textSize="16sp"
+                android:visibility="visible" />
+
+<!--            <TextView-->
+<!--                android:id="@+id/description"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center_vertical"-->
+<!--                android:fontFamily="sans-serif"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:paddingLeft="3dp"-->
+<!--                android:paddingRight="3dp"-->
+<!--                android:text="Description"-->
+<!--                android:textColor="#CC000000"-->
+<!--                android:textSize="13sp"-->
+<!--                android:visibility="visible" />-->
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+</RelativeLayout>
+

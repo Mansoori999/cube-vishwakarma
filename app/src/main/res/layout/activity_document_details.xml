@@ -4,10 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.documents.DocumentsActivity">
-
+    android:layout_height="match_parent"
+    tools:context=".ui.documents.DocumentDetailsActivity">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -22,7 +21,7 @@
             android:background="?attr/colorPrimaryDark"
             app:navigationIcon="@drawable/ic_arrow_left"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Documents"
+            app:title="Document Details"
             style="@style/ToolbarTheme"
             app:elevation="0dp"
             app:titleTextColor="@android:color/white" />

@@ -8,7 +8,7 @@ interface DashBoardRemoteDataStore {
 
     suspend fun getFinancialData():List<DashboardFilterList>
 
-    suspend fun getDashboard(startDate:String,endDate:String,regionalOfficeids:String?): DashBoardResponse
+    suspend fun getDashboard(startDate:String,endDate:String,regionalOfficeIds:String?): DashBoardResponse
 
 
 }

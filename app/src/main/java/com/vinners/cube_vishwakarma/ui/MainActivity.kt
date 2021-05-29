@@ -85,7 +85,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     var enddate : String? =null
     var startdatef:String? = null
     var enddatef : String? =null
-    var regionalOfficeIds : String? =null
+    var regionalOfficeIds : String? = null
     var fyearDateId :Int ?= null
     var fyearDateName:String?= null
     var roIds : String? =null
@@ -234,11 +234,20 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //        recyclerView.adapter = mainActivityRecyclerAdapter
 //        preparehomeData()
 
+
+        startDateF = startdatef.toString()
+        endDateF = enddatef.toString()
         val myAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.card_anim)
         viewBinding.contentMainContainer.totalCardView.setOnClickListener {
             viewBinding.contentMainContainer.totalCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_TOTAL_ACTIVITY, true)
+            intent.putExtra("startDate", defaultStartDate)
+            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("startDateF", startDateF)
+            intent.putExtra("endDateF",endDateF)
+            intent.putExtra("regionalOfficeId",regionalOfficeIds)
+            intent.putExtra("regionalOfficeId",roselectedId)
             startActivity(intent)
 
         }
@@ -246,6 +255,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             viewBinding.contentMainContainer.dueCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_DUE_ACTIVITY, true)
+            intent.putExtra("startDate", defaultStartDate)
+            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("startDateF", startDateF)
+            intent.putExtra("endDateF",endDateF)
+            intent.putExtra("regionalOfficeId",regionalOfficeIds)
+            intent.putExtra("regionalOfficeId",roselectedId)
             startActivity(intent)
 
         }
@@ -253,6 +268,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             viewBinding.contentMainContainer.workingCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_WORKING_ACTIVITY, true)
+            intent.putExtra("startDate", defaultStartDate)
+            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("startDateF", startDateF)
+            intent.putExtra("endDateF",endDateF)
+            intent.putExtra("regionalOfficeId",regionalOfficeIds)
+            intent.putExtra("regionalOfficeId",roselectedId)
             startActivity(intent)
 
         }
@@ -260,6 +281,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             viewBinding.contentMainContainer.pendingCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_PENDING_ACTIVITY, true)
+            intent.putExtra("startDate", defaultStartDate)
+            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("startDateF", startDateF)
+            intent.putExtra("endDateF",endDateF)
+            intent.putExtra("regionalOfficeId",regionalOfficeIds)
+            intent.putExtra("regionalOfficeId",roselectedId)
             startActivity(intent)
 
         }
@@ -268,6 +295,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             viewBinding.contentMainContainer.doneCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_DONE_ACTIVITY, true)
+            intent.putExtra("startDate", defaultStartDate)
+            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("startDateF", startDateF)
+            intent.putExtra("endDateF",endDateF)
+            intent.putExtra("regionalOfficeId",regionalOfficeIds)
+            intent.putExtra("regionalOfficeId",roselectedId)
             startActivity(intent)
 
         }
@@ -276,6 +309,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             viewBinding.contentMainContainer.draftCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_DRAFT_ACTIVITY, true)
+            intent.putExtra("startDate", defaultStartDate)
+            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("startDateF", startDateF)
+            intent.putExtra("endDateF",endDateF)
+            intent.putExtra("regionalOfficeId",regionalOfficeIds)
+            intent.putExtra("regionalOfficeId",roselectedId)
             startActivity(intent)
 
         }
@@ -283,6 +322,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             viewBinding.contentMainContainer.estimatedCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_ESTIMATE_ACTIVITY, true)
+            intent.putExtra("startDate", defaultStartDate)
+            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("startDateF", startDateF)
+            intent.putExtra("endDateF",endDateF)
+            intent.putExtra("regionalOfficeId",regionalOfficeIds)
+            intent.putExtra("regionalOfficeId",roselectedId)
             startActivity(intent)
 
         }
@@ -290,6 +335,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             viewBinding.contentMainContainer.billedCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_BILLED_ACTIVITY, true)
+            intent.putExtra("startDate", defaultStartDate)
+            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("startDateF", startDateF)
+            intent.putExtra("endDateF",endDateF)
+            intent.putExtra("regionalOfficeId",regionalOfficeIds)
+            intent.putExtra("regionalOfficeId",roselectedId)
             startActivity(intent)
 
         }
@@ -297,6 +348,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             viewBinding.contentMainContainer.paymentCardView.startAnimation(myAnim)
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_PAYMENT_ACTIVITY, true)
+            intent.putExtra("startDate", defaultStartDate)
+            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("startDateF", startDateF)
+            intent.putExtra("endDateF",endDateF)
+            intent.putExtra("regionalOfficeId",regionalOfficeIds)
+            intent.putExtra("regionalOfficeId",roselectedId)
             startActivity(intent)
 
         }
@@ -550,8 +607,8 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 FinancialYearData(
                         id = fyearDateId!!,
                         name = fyearDateName!!,
-                        startdate = "",
-                        enddate = ""
+                        startdate = startdate!!,
+                        enddate = enddate!!
                 )
         )
 

@@ -21,13 +21,13 @@ class DashBoardRemoteDataStoreImpl @Inject constructor(
     override suspend fun getDashboard(
             startDate:String,
             endDate:String,
-            regionalOfficeids:String?
+            regionalOfficeIds:String?
     ): DashBoardResponse {
         return dashBoardService.getDashboard(
                 DashBoardRequest(
                         startDate = startDate,
                         endDate = endDate,
-                        regionalOfficeids = regionalOfficeids
+                    regionalOfficeIds = regionalOfficeIds
                 )
         ).bodyOrThrow().first()
     }

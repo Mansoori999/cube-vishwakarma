@@ -9,6 +9,7 @@ import com.vinners.cube_vishwakarma.data.dataStores.AuthRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.complaint.ComplaintRequestRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.complaint.MyComplaintRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.dashboard.DashBoardRemoteDataStore
+import com.vinners.cube_vishwakarma.data.dataStores.documents.DocumentsRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.help.HelpRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.jobs.JobsRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.money.MoneyRemoteDataStore
@@ -185,6 +186,13 @@ abstract class RemoteModule {
         ): TutorialsService {
             return retrofitServiceFactory.prepareService(TutorialsService::class.java)
         }
+        @Provides
+        @JvmStatic
+        fun provideDocumentsService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): DocumentsService {
+            return retrofitServiceFactory.prepareService(DocumentsService::class.java)
+        }
 
     }
 
@@ -220,6 +228,9 @@ abstract class RemoteModule {
 
     @Binds
     abstract fun bindTutorialsRemoteDataStore(tutorialsRemoteDataStoreImpl: TutorialsRemoteDataStoreImpl): TutorialsRemoteDataStore
+
+    @Binds
+    abstract fun bindDocumentsRemoteDataStore(documentsRemoteDataStoreImpl: DocumentsRemoteDataStoreImpl): DocumentsRemoteDataStore
 
 
 }

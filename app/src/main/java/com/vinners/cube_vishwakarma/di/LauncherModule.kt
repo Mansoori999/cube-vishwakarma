@@ -7,6 +7,7 @@ import com.vinners.cube_vishwakarma.ui.MainActivityViewModel
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.ComplaintRequestViewModel
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintViewModel
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
+import com.vinners.cube_vishwakarma.ui.documents.DocumentsViewModel
 import com.vinners.cube_vishwakarma.ui.languageSelection.LanguageViewModel
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsViewModel
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivityViewModel
@@ -67,5 +68,9 @@ abstract class LauncherModule {
     @ViewModelKey(TutorialsViewModel::class)
     abstract fun bindTutorialsViewModel(viewModel: TutorialsViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(DocumentsViewModel::class)
+    abstract fun bindDocumentsViewModel(viewModel: DocumentsViewModel): ViewModel
 
 }

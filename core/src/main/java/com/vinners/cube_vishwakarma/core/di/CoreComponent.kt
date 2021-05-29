@@ -103,6 +103,6 @@ interface CoreComponent {
 
     fun getTutorialsRepository():TutorialsRepository
 
-
+    fun getDocumentsRepository():DocumentsRepository
 
 }

@@ -66,7 +66,6 @@ class TutorialsActivity : BaseActivity<ActivityTutorialsBinding, TutorialsViewMo
                 }
                 is Lce.Content->
                 {
-
                     if (it.content.isEmpty()){
                         viewBinding.errorLayout.root.setVisibilityVisible()
                         viewBinding.progressBar.setVisibilityGone()

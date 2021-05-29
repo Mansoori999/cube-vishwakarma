@@ -22,5 +22,5 @@ interface OutletRemoteDataStore {
 
     suspend fun getComplaints(outletid :String):List<MyComplaintList>
 
-    suspend fun getComplaintWithStatus(status : String):List<MyComplaintList>
+    suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?):List<MyComplaintList>
 }

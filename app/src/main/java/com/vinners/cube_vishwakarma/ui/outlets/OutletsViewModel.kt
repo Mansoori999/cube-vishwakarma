@@ -145,11 +145,11 @@ class OutletsViewModel @Inject constructor(
     private val _complaintStatusState =  MutableLiveData<Lce<List<MyComplaintList>>>()
     override val complaintStatusState: LiveData<Lce<List<MyComplaintList>>> = _complaintStatusState
 
-    fun getComplaintWithStatus(status : String) {
+    fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?) {
         _complaintStatusState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {
-                val response = outletRepository.getComplaintWithStatus(status)
+                val response = outletRepository.getComplaintWithStatus(status,startDate,endDate,regionalOfficeIds)
                 _complaintStatusState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _complaintStatusState.postValue(Lce.error(e.localizedMessage))

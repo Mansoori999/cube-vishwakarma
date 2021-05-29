@@ -11,11 +11,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
-import android.os.PersistableBundle
-import android.provider.MediaStore
+import android.os.*
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.viewModels
@@ -25,6 +22,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
+import androidx.room.util.FileUtil
 import coil.api.load
 import com.himanshu.cameraintegrator.ImageCallback
 import com.himanshu.cameraintegrator.ImagesSizes
@@ -42,7 +40,6 @@ import com.vinners.cube_vishwakarma.core.extensions.onItemSelected
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
-import com.vinners.cube_vishwakarma.data.models.Location
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplainDetailsList
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityMyComplaintDetailsBinding
@@ -51,8 +48,6 @@ import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_STATUS
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_VIEW
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
-import com.vinners.cube_vishwakarma.ui.outlets.EditOutletActivity
-import com.vinners.cube_vishwakarma.ui.profile.ProfileDetailsActivity
 import java.io.File
 import javax.inject.Inject
 
@@ -61,7 +56,9 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     companion object{
         private const val PERMISSION_REQUEST_STORAGE = 233
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1
-
+        private const val MY_REQUEST_CODE_PERMISSION = 1000
+        private const val MY_RESULT_CODE_FILECHOOSER = 2000
+        private const val LOG_TAG = "filechooser"
     }
 
     val REQUEST_GALLERY_PHOTO = 2
@@ -337,6 +334,19 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
                     cameraIntegrator.initiateCapture()
                 }
             }
+            MY_REQUEST_CODE_PERMISSION->{
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+//                    Log.i( LOG_TAG,"Permission granted!");
+                    Toast.makeText(this, "Permission granted!", Toast.LENGTH_SHORT).show()
+                    doBrowseFile();
+                }
+                // Cancelled or denied.
+                else {
+                    Log.i(LOG_TAG,"Permission denied!");
+                    Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -344,11 +354,33 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CameraIntegrator.REQUEST_IMAGE_CAPTURE)
+        if (requestCode == CameraIntegrator.REQUEST_IMAGE_CAPTURE) {
             cameraIntegrator.parseResults(requestCode, resultCode, data, imageCallback)
-        else if (requestCode == GalleryIntegrator.REQUEST_IMAGE_PICK)
+        }else if (requestCode == GalleryIntegrator.REQUEST_IMAGE_PICK){
             galleryIntegrator.parseResults(requestCode, resultCode, data, imageCallback)
+        }
+        when(requestCode){
+            MY_RESULT_CODE_FILECHOOSER->{
+                if (resultCode === RESULT_OK) {
+                    if (data != null) {
+                        val fileUri = data.data
+                        Log.i(LOG_TAG, "Uri: $fileUri")
+                        var filePath: String? = null
+                        try {
+//                           filePath = FileUtils.getPath(this, fileUri)
+
+                        } catch (e: Exception) {
+                            Log.e(LOG_TAG, "Error: $e")
+                            Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+                        }
+//                        editTextPath.setText(filePath)
+                    }
+                }
+            }
+        }
+
     }
+
     fun showCameraOptionDialog() {
         val optionsForDialog = arrayOf<CharSequence>("Open Camera", "Select from Gallery")
         val alertBuilder = AlertDialog.Builder(this)
@@ -358,6 +390,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             when (which) {
                 0 -> openCamera()
                 1 -> openGallery()
+                2 ->  openFile()
             }
         })
         alertBuilder.setNegativeButton("Cancel") { dialog12, _ -> dialog12.dismiss() }
@@ -387,6 +420,46 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //            e.printStackTrace()
 //        }
     }
+    fun openFile() {
+        askPermissionAndBrowseFile()
+//        if (storagePermissions())
+//            galleryIntegrator.initiateImagePick()
+//        else
+//            requestStoragePermissions()
+//        try {
+//            galleryIntegrator.initiateImagePick()
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//        }
+    }
+
+    private fun askPermissionAndBrowseFile() {
+        // for permission to access External Storage.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // Level 23
+
+            // Check if we have Call permission
+            val permisson = ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE)
+            if (permisson != PackageManager.PERMISSION_GRANTED) {
+                // If don't have permission so prompt the user.
+                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        MY_REQUEST_CODE_PERMISSION
+                )
+                return
+            }
+        }
+        doBrowseFile()
+
+    }
+
+    private fun doBrowseFile() {
+        var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
+        chooseFile.type = "*/*"
+        chooseFile = Intent.createChooser(chooseFile, "Choose a file")
+        startActivityForResult(chooseFile, MY_RESULT_CODE_FILECHOOSER)
+
+    }
+
     private val cameraIntegrator: CameraIntegrator by lazy {
         CameraIntegrator(this)
                 .apply {

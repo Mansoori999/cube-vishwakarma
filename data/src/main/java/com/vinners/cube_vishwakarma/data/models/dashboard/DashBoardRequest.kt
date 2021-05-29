@@ -9,7 +9,7 @@ data class DashBoardRequest(
         @field:SerializedName("endDate")
         val endDate: String,
 
-        @field:SerializedName("regionalOfficeids")
-        val regionalOfficeids: String? = null
+        @field:SerializedName("regionalOfficeIds")
+        val regionalOfficeIds: String? = null
 ) {
 }
