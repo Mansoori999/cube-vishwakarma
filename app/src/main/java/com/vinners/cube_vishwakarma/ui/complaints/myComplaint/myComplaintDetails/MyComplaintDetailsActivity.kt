@@ -11,7 +11,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Environment
+import android.os.PersistableBundle
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -22,7 +25,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
-import androidx.room.util.FileUtil
 import coil.api.load
 import com.himanshu.cameraintegrator.ImageCallback
 import com.himanshu.cameraintegrator.ImagesSizes
@@ -49,7 +51,11 @@ import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.Complaint
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_VIEW
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
 import java.io.File
+import java.io.InputStream
+import java.util.*
+import java.util.stream.Collectors.toList
 import javax.inject.Inject
+import kotlin.collections.ArrayList
 
 
 class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBinding,AllComplaintFragmentViewModel>(R.layout.activity_my_complaint_details) {
@@ -73,6 +79,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private val REQUEST_PICK_IMAGE = 2
 
     var pic :String?=null
+
 
     private var imagesMap: MutableMap<Int, Result> = mutableMapOf()
 
@@ -104,7 +111,17 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private lateinit var reason:EditText
     private lateinit var tv:TextView
 
+    var ret:String? = null
     private lateinit var donecontainer:CardView
+    private lateinit var filename : TextView
+
+
+    private lateinit var bytes:ByteArray
+     var inputStream : InputStream? = null
+    private lateinit var uri:Uri
+    var filePath:String ? = null
+    private lateinit var path:String
+
 
 
 
@@ -147,6 +164,8 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
             reason = dialogView.findViewById<EditText>(R.id.reason)
             donecontainer = dialogView.findViewById(R.id.doneImage)
+            filename = dialogView.findViewById<TextView>(R.id.file_name)
+
             val imangelayout= inflater.inflate(R.layout.layout_click_image, dialogView as ViewGroup, false)
             imageClickLabel = imangelayout.findViewById(R.id.clickImageLabel)
             ImageStoreView = imangelayout.findViewById(R.id.imageView)
@@ -201,6 +220,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
                     if(statusValue!!.toLowerCase().equals("done")){
                         donecontainer.setVisibilityVisible()
 
+
                     }else{
                         donecontainer.setVisibilityGone()
                     }
@@ -242,28 +262,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
         }
 
     }
-    private fun setValidationUpdate() {
-        if  (reason.isVisible && reason.text.isNullOrBlank()){
-            showInformationDialog("Please Write Reason")
-            return
-        }
-        if (statusValue == null){
-            showInformationDialog("Please Select Status")
-            return
-        }
-        if (donecontainer.isVisible && imagesMap.isEmpty()) {
-            showInformationDialog("Please Click Image  First")
-            return
-        }
-        viewModel.upDateComplaints(
-                statusremarks = reason.text.toString(),
-                id = detailsId!!.toInt(),
-                status = statusValue.toString(),
-                image = imagesMap.values.map { it.imagePath!! }
 
-        )
-
-    }
     private fun requestStoragePermissions() {
         ActivityCompat.requestPermissions(
                 this,
@@ -363,17 +362,18 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             MY_RESULT_CODE_FILECHOOSER->{
                 if (resultCode === RESULT_OK) {
                     if (data != null) {
-                        val fileUri = data.data
-                        Log.i(LOG_TAG, "Uri: $fileUri")
-                        var filePath: String? = null
+                        uri = data.data!!
+                        val uriString = uri.toString()
+                        val file =  File(uri.getPath().toString())
+                        val uploadedFileName = file.getName().toString()
                         try {
-//                           filePath = FileUtils.getPath(this, fileUri)
-
+                            filePath = FileUtils.getPath(this,uri).toString()
                         } catch (e: Exception) {
                             Log.e(LOG_TAG, "Error: $e")
                             Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
                         }
-//                        editTextPath.setText(filePath)
+                        filename.setText(uploadedFileName)
+
                     }
                 }
             }
@@ -381,8 +381,54 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
     }
 
+
+
+
+    private fun setValidationUpdate() {
+        if  (reason.isVisible && reason.text.isNullOrBlank()){
+            showInformationDialog("Please Write Reason")
+            return
+        }
+        if (statusValue == null){
+            showInformationDialog("Please Select Status")
+            return
+        }
+
+
+//       if (donecontainer.isVisible && imagesMap.isEmpty()){
+//           showInformationDialog("Please Click Image First")
+//           return
+//       }
+        val fileurl= filePath
+
+
+        if (donecontainer.isVisible && (imagesMap.isEmpty() && fileurl.isNullOrEmpty()))  {
+            showInformationDialog("Please Click Image First OR Select File")
+            return
+        }
+
+
+        var value : List<String> = mutableListOf()
+        if (donecontainer.isVisible && imagesMap.isEmpty().not()){
+            value = imagesMap.values.map { it.imagePath!! }
+        }else{
+            if(fileurl != null) {
+                val encodefile = filePath!!.trim().split(",")
+                value = encodefile
+            }
+        }
+
+        viewModel.upDateComplaints(
+                statusremarks = reason.text.toString(),
+                id = detailsId!!.toInt(),
+                status = statusValue.toString(),
+                image = value
+
+        )
+
+    }
     fun showCameraOptionDialog() {
-        val optionsForDialog = arrayOf<CharSequence>("Open Camera", "Select from Gallery")
+        val optionsForDialog = arrayOf<CharSequence>("Open Camera", "Select from Gallery","Select File")
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.setTitle("Select An Option")
         alertBuilder.setIcon(R.drawable.ic_camera)
@@ -421,11 +467,13 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //        }
     }
     fun openFile() {
-        askPermissionAndBrowseFile()
-//        if (storagePermissions())
+
+//        askPermissionAndBrowseFile()
+        if (storagePermissions())
+            doBrowseFile()
 //            galleryIntegrator.initiateImagePick()
-//        else
-//            requestStoragePermissions()
+        else
+            requestStoragePermissions()
 //        try {
 //            galleryIntegrator.initiateImagePick()
 //        } catch (e: Exception) {
@@ -733,8 +781,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
         if (content.status?.toLowerCase().equals("done")){
             if (content.letterpic != null) {
-                viewBinding.imageContainer.setVisibilityVisible()
-                viewBinding.letterpic.imageView.load(appInfo.getFullAttachmentUrl(content.letterpic!!))
+                viewBinding.imageContainer.setVisibilityGone()
+//                viewBinding.letterpic.imageView.load(appInfo.getFullAttachmentUrl(content.letterpic!!))
             }else{
                 viewBinding.imageContainer.setVisibilityGone()
             }
