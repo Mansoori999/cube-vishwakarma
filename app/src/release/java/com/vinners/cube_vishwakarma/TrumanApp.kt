@@ -1,8 +1,9 @@
-package com.vinners.trumanms
+package com.vinners.cube_vishwakarma
 
 import androidx.multidex.MultiDex
-import com.vinners.trumanms.base.AppInfo
-import com.vinners.trumanms.core.base.CoreApplication
+import com.vinners.cube_vishwakarma.base.AppInfo
+import com.vinners.cube_vishwakarma.core.base.CoreApplication
+import java.time.format.DateTimeFormatter
 
 val RELEASE_APP_INFO = AppInfo(
     debugBuild = false,
