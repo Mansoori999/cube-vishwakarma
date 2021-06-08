@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.12"
-        android:src="@drawable/truman_logo" />
+        android:src="@drawable/cube_logo_ve" />
 
     <ImageView
         android:id="@+id/slideImg"
@@ -19,7 +19,7 @@
         android:layout_height="0dp"
         android:layout_below="@id/logo"
         android:layout_weight="0.8"
-        android:src="@drawable/info_slide_img_3" />
+        android:src="@drawable/cube_logo_ve" />
 
     <TextView
         android:id="@+id/title"
