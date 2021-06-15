@@ -213,6 +213,8 @@ dependencies {
 
     //These two are here just to make dagger 2 happy
     implementation Libs.AndroidX.Room.runtime
+
+    implementation platform(Libs.Square.OkHttp.okhttpBom)
     implementation Libs.Square.OkHttp.loggingInterceptor
 
     //coil imageLoder
