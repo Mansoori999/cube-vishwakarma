@@ -13,7 +13,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
-import android.os.StrictMode
 import android.view.Window
 import android.widget.Button
 import android.widget.Toast
@@ -148,15 +147,17 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
         val link = pathurl?.substringAfter(".")
         if (link.equals("ppt") || link.equals("pptx")){
             val url = appInfo.getFullAttachmentUrl(documentsResponse.path!!)
-            val uri = Uri.parse(url);
-            val file = File(uri.path)
+//            val uri = Uri.parse(url);
+//            val file = File(uri.path)
 //            val file:File = File(URL(uri.toString()).toURI());
-            openFile(file)
+//            openFile(file)
+          showPdfOnClick(url)
         }else if (link.equals("pdf")){
             val url = appInfo.getFullAttachmentUrl(documentsResponse.path!!)
-            val uri = Uri.parse(url);
-            val file = File(uri.path)
-            openFile(file)
+//            val uri = Uri.parse(url);
+//            val file = File(uri.path)
+//            openFile(file)
+            showPdfOnClick(url)
         }else{
             val imageUrl : String = documentsResponse?.path.toString()
             imageOpenDialog(imageUrl)
@@ -164,26 +165,57 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
 
     }
 
-//    private fun openPDF(url: File){
-//        val path = Uri.fromFile(url)
-//        val intent = Intent(Intent.ACTION_VIEW)
-//        intent.setDataAndType(path, "application/pdf")
-//        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-//
-//        try {
-//            startActivity(intent)
-//        } catch (e: ActivityNotFoundException) {
-//            Toast.makeText(this, "No application available to view PDF", Toast.LENGTH_LONG).show()
-//        }
-//    }
+    private fun showPdfOnClick(url: String) {
+        try {
+            val intent = Intent(Intent.ACTION_VIEW)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            val f = File(url)
+            var uri: Uri? = null
+
+            // So you have to use Provider
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                uri = FileProvider.getUriForFile(this, application.packageName + ".provider", f)
+
+                // Add in case of if We get Uri from fileProvider.
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            } else {
+                uri = Uri.fromFile(f)
+            }
+            if (f.toString().contains(".pdf")) {
+                // PDF file
+                intent.setDataAndType(uri, "application/pdf")
+            } else if (f.toString().contains(".ppt") || url.toString().contains(".pptx")) {
+                // Powerpoint file
+                intent.setDataAndType(uri, "application/vnd.ms-powerpoint")
+            } else if (f.toString().contains(".jpg") || url.toString().contains(".jpeg") || url.toString().contains(".png")) {
+                // JPG file
+                intent.setDataAndType(uri, "image/jpeg")
+            } else {
+                intent.setDataAndType(uri, "*/*")
+            }
+//            intent.setDataAndType(uri, "application/pdf")
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(this, "No application found which can open the file", Toast.LENGTH_SHORT).show()
+        }
+
+
+    }
+
 
     private fun openFile(url: File) {
         try {
 //          val uri = Uri.fromFile(url)
-           val uri: Uri = FileProvider.getUriForFile(this, packageName + ".provider", url)
+
             val intent = Intent(Intent.ACTION_VIEW)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+           val uri: Uri = FileProvider.getUriForFile(this, application.packageName + ".provider", url)
+//            val intent = Intent(Intent.ACTION_VIEW)
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or FLAG_GRANT_WRITE_URI_PERMISSION)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
            if (url.toString().contains(".pdf")) {
                 // PDF file
                 intent.setDataAndType(uri, "application/pdf")
@@ -198,7 +230,6 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
             }
 //            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-//            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             startActivity(intent)
         } catch (e: ActivityNotFoundException) {
             Toast.makeText(this, "No application found which can open the file", Toast.LENGTH_SHORT).show()

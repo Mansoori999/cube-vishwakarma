@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="#fff">
 
         <RelativeLayout
@@ -563,21 +563,25 @@
 <!--&lt;!&ndash;                <include layout="@layout/dashboard_layout"/>&ndash;&gt;-->
 <!--            </LinearLayout>-->
 
-            <View
-                android:id="@+id/shadow"
-                android:layout_width="match_parent"
-                android:layout_height="16dp"
-                android:background="@drawable/shape_gradient_top_shadow"
-                android:visibility="visible"
-                app:layout_anchor="@id/complaints_filter" />
 
-            <include
-                android:id="@+id/complaints_filter"
-                layout="@layout/bottomsheet_filter_layout"
-                android:visibility="visible" />
         </LinearLayout>
         </LinearLayout>
 
+<!--        <View-->
+<!--            android:id="@+id/shadow"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="16dp"-->
+<!--            android:background="@drawable/shape_gradient_top_shadow"-->
+<!--            android:visibility="gone"-->
+<!--            app:layout_anchor="@id/complaints_filter" />-->
+
+        <include
+            android:id="@+id/complaints_filter"
+            layout="@layout/bottomsheet_filter_layout"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"/>
     </RelativeLayout>
 
 

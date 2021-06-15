@@ -27,20 +27,6 @@
         <activity android:name=".ui.profile.BankDetailsAndOtherDetailsActivity" />
         <activity android:name=".ui.profile.ProfileDetailsActivity" />
         <activity android:name=".ui.outlets.OutletComplaintsActivity" />
-<!--        ${applicationId}.provider-->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true"
-            >
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/provider_paths_app"
-                tools:replace="android:resource"
-                />
-        </provider>
-
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
             android:value="${enableCrashReporting}" />
@@ -127,6 +113,19 @@
             </intent-filter>
         </service>
 
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+
+            >
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths_app"
+                tools:replace="android:resource"
+                />
+        </provider>
     </application>
 
 </manifest>

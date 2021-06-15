@@ -372,6 +372,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         regionalspinner = bottomSheetView.findViewById(R.id.ro_spinner)
         regionalspinner.setHintTextColor(getResources().getColor(R.color.black))
         sheetBehavior = BottomSheetBehavior.from(bottomSheetView.parent as View)
+        sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         sheetBehavior.setBottomSheetCallback(bottomSheetCallback)
         viewBinding.contentMainContainer.filter.setOnClickListener {
             if (sheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
