@@ -133,10 +133,24 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
                 viewBinding.refreshLayout.isRefreshing = true
             }
 
-            if (enableTotal == true || enableDue == true || enableWorking == true || enablePending == true||
-                enabledone == true || enabledraft == true || enableestimate == true || enablebilled == true ||
-                enablepayment == true){
+            if (enableTotal == true ){
                 viewModel.getComplaintWithStatus(statustotal,startDate,endDate, regionalOfficeIds)
+            } else if(enableDue == true ){
+                viewModel.getComplaintWithStatus(statusdue,startDate,endDate, regionalOfficeIds)
+            } else if(enableWorking == true ) {
+                viewModel.getComplaintWithStatus(statusworking,startDate,endDate, regionalOfficeIds)
+            }else if(enablePending == true) {
+                viewModel.getComplaintWithStatus(statuspending,startDate,endDate, regionalOfficeIds)
+            }else if(enabledone == true) {
+                viewModel.getComplaintWithStatus(statusDone,startDate,endDate, regionalOfficeIds)
+            }else if (enabledraft == true ) {
+                viewModel.getComplaintWithStatus(statusDraft,startDate,endDate, regionalOfficeIds)
+            }else if(enableestimate == true) {
+                viewModel.getComplaintWithStatus(statusEstimated,startDate,endDate, regionalOfficeIds)
+            }else if(enablebilled == true) {
+                viewModel.getComplaintWithStatus(statusBilled,startDate,endDate, regionalOfficeIds)
+            }else if(enablepayment == true){
+                viewModel.getComplaintWithStatus(statusPayment,startDate,endDate, regionalOfficeIds)
             }else {
                 viewModel.getComplaintByOutletId(outletid!!)
             }

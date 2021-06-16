@@ -13,6 +13,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.util.Log
 import android.view.Window
 import android.widget.Button
 import android.widget.Toast
@@ -142,22 +143,50 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
 
     }
 
+
     override fun OnDocumentsClick(documentsResponse: DocumentsResponse) {
         val pathurl = documentsResponse.path
         val link = pathurl?.substringAfter(".")
         if (link.equals("ppt") || link.equals("pptx")){
             val url = appInfo.getFullAttachmentUrl(documentsResponse.path!!)
+            val startwith = "/storage/emulated/0/"
 //            val uri = Uri.parse(url);
 //            val file = File(uri.path)
 //            val file:File = File(URL(uri.toString()).toURI());
 //            openFile(file)
-          showPdfOnClick(url)
+            val pathUrl = startwith+documentsResponse.path
+          showPdfOnClick(pathUrl)
         }else if (link.equals("pdf")){
             val url = appInfo.getFullAttachmentUrl(documentsResponse.path!!)
+            val startwith = "/storage/emulated/0/"
+            val pathUrl = startwith+documentsResponse.path
+            Log.d("ff",pathUrl)
+            showPdfOnClick(pathUrl)
 //            val uri = Uri.parse(url);
 //            val file = File(uri.path)
 //            openFile(file)
-            showPdfOnClick(url)
+//                if (Build.VERSION.SDK_INT >= 23) {
+//                    if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+//                            == PackageManager.PERMISSION_GRANTED) {
+//                        Toast.makeText(this, "Please Wait until the file is download", Toast.LENGTH_LONG).show()
+//                        val downloadManager = getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+//                        val uri = Uri.parse(url)
+//                        val request = DownloadManager.Request(uri)
+//                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+//                            request.allowScanningByMediaScanner()
+//                            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+//                        }
+//                        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, "/" + "pdf")
+//                        request.setMimeType("application/pdf")
+//                        request.allowScanningByMediaScanner()
+//                        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI or DownloadManager.Request.NETWORK_MOBILE)
+//                        downloadManager.enqueue(request)
+//
+//                    }else{
+//                        ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+//                    }
+//                }
+//           showPdfOnClick(url)
         }else{
             val imageUrl : String = documentsResponse?.path.toString()
             imageOpenDialog(imageUrl)
@@ -165,19 +194,38 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
 
     }
 
+    private fun haveStoragePermission(): Boolean {
+        return if (Build.VERSION.SDK_INT >= 23) {
+            if (checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    == PackageManager.PERMISSION_GRANTED) {
+                Log.e("Permission error", "You have permission")
+                true
+            } else {
+                Log.e("Permission error", "You have asked for permission")
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE), 1)
+                false
+            }
+        } else { //you dont need to worry about these stuff below api level 23
+            Log.e("Permission error", "You already have the permission")
+            true
+        }
+    }
+
     private fun showPdfOnClick(url: String) {
         try {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             val f = File(url)
+//            val rootPath: String = root.value.getPath()
             var uri: Uri? = null
-
             // So you have to use Provider
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+
                 uri = FileProvider.getUriForFile(this, application.packageName + ".provider", f)
 
                 // Add in case of if We get Uri from fileProvider.
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                intent.putExtra(Intent.EXTRA_STREAM, uri)
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             } else {
                 uri = Uri.fromFile(f)
@@ -188,17 +236,18 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
             } else if (f.toString().contains(".ppt") || url.toString().contains(".pptx")) {
                 // Powerpoint file
                 intent.setDataAndType(uri, "application/vnd.ms-powerpoint")
-            } else if (f.toString().contains(".jpg") || url.toString().contains(".jpeg") || url.toString().contains(".png")) {
-                // JPG file
-                intent.setDataAndType(uri, "image/jpeg")
-            } else {
-                intent.setDataAndType(uri, "*/*")
             }
+//            else if (f.toString().contains(".jpg") || url.toString().contains(".jpeg") || url.toString().contains(".png")) {
+//                // JPG file
+//                intent.setDataAndType(uri, "image/jpeg")
+//            } else {
+//                intent.setDataAndType(uri, "*/*")
+//            }
 //            intent.setDataAndType(uri, "application/pdf")
             startActivity(intent)
         } catch (e: Exception) {
             e.printStackTrace()
-            Toast.makeText(this, "No application found which can open the file", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this, "No application found which can open the file", Toast.LENGTH_SHORT).show()
         }
 
 
