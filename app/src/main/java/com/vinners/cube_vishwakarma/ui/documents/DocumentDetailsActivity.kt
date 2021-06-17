@@ -7,7 +7,6 @@ import android.app.DownloadManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.FLAG_GRANT_WRITE_URI_PERMISSION
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
@@ -149,19 +148,37 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
         val link = pathurl?.substringAfter(".")
         if (link.equals("ppt") || link.equals("pptx")){
             val url = appInfo.getFullAttachmentUrl(documentsResponse.path!!)
-            val startwith = "/storage/emulated/0/"
+            val intent = Intent(Intent.ACTION_VIEW,Uri.parse(url))
+            startActivity(intent)
+
+//            val intent = Intent(Intent.ACTION_VIEW)
+//            val file = File(url)
+//            val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+//            val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+//            if (extension.equals("", ignoreCase = true) || mimetype == null) {
+//                // if there is no extension or there is no definite mimetype, still try to open the file
+//                intent.setDataAndType(Uri.fromFile(file),"application/vnd.ms-powerpoint")
+//            } else {
+//                intent.setDataAndType(Uri.fromFile(file), mimetype)
+//            }
+//            startActivity(Intent.createChooser(intent, "Choose an Application:"))
+//            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+//            startActivity(intent)
+//            val startwith = "/storage/emulated/0/"
 //            val uri = Uri.parse(url);
 //            val file = File(uri.path)
 //            val file:File = File(URL(uri.toString()).toURI());
 //            openFile(file)
-            val pathUrl = startwith+documentsResponse.path
-          showPdfOnClick(pathUrl)
+//            val pathUrl = startwith+documentsResponse.path
+//          showPdfOnClick(pathUrl)
         }else if (link.equals("pdf")){
             val url = appInfo.getFullAttachmentUrl(documentsResponse.path!!)
-            val startwith = "/storage/emulated/0/"
-            val pathUrl = startwith+documentsResponse.path
-            Log.d("ff",pathUrl)
-            showPdfOnClick(pathUrl)
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+            startActivity(intent)
+//            val startwith = "/storage/emulated/0/"
+//            val pathUrl = startwith+documentsResponse.path
+//            Log.d("ff",pathUrl)
+//            showPdfOnClick(pathUrl)
 //            val uri = Uri.parse(url);
 //            val file = File(uri.path)
 //            openFile(file)
@@ -215,6 +232,7 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
         try {
             val intent = Intent(Intent.ACTION_VIEW)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             val f = File(url)
 //            val rootPath: String = root.value.getPath()
             var uri: Uri? = null
@@ -226,6 +244,7 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
                 // Add in case of if We get Uri from fileProvider.
                 intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
                 intent.putExtra(Intent.EXTRA_STREAM, uri)
+
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             } else {
                 uri = Uri.fromFile(f)
@@ -233,7 +252,7 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
             if (f.toString().contains(".pdf")) {
                 // PDF file
                 intent.setDataAndType(uri, "application/pdf")
-            } else if (f.toString().contains(".ppt") || url.toString().contains(".pptx")) {
+            } else if (f.toString().contains(".ppt") || f.toString().contains(".pptx")) {
                 // Powerpoint file
                 intent.setDataAndType(uri, "application/vnd.ms-powerpoint")
             }
@@ -251,38 +270,6 @@ class DocumentDetailsActivity : BaseActivity<ActivityDocumentDetailsBinding, Doc
         }
 
 
-    }
-
-
-    private fun openFile(url: File) {
-        try {
-//          val uri = Uri.fromFile(url)
-
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-           val uri: Uri = FileProvider.getUriForFile(this, application.packageName + ".provider", url)
-//            val intent = Intent(Intent.ACTION_VIEW)
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION or FLAG_GRANT_WRITE_URI_PERMISSION)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-           if (url.toString().contains(".pdf")) {
-                // PDF file
-                intent.setDataAndType(uri, "application/pdf")
-            } else if (url.toString().contains(".ppt") || url.toString().contains(".pptx")) {
-                // Powerpoint file
-                intent.setDataAndType(uri, "application/vnd.ms-powerpoint")
-            } else if (url.toString().contains(".jpg") || url.toString().contains(".jpeg") || url.toString().contains(".png")) {
-                // JPG file
-                intent.setDataAndType(uri, "image/jpeg")
-            } else {
-                intent.setDataAndType(uri, "*/*")
-            }
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            Toast.makeText(this, "No application found which can open the file", Toast.LENGTH_SHORT).show()
-        }
     }
 
     private fun imageOpenDialog(imageUrl: String){

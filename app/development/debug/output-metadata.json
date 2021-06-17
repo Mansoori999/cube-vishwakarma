@@ -1,19 +1,17 @@
 {
-  "version": 1,
+  "version": 2,
   "artifactType": {
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.vinners.trumanms.development.debug",
-  "variantName": "developmentDebug",
+  "applicationId": "com.vinners.cube_vishwakarma.development.debug",
+  "variantName": "processDevelopmentDebugResources",
   "elements": [
     {
       "type": "SINGLE",
       "filters": [],
-      "properties": [],
-      "versionCode": 3,
-      "versionName": "1.0.3-beta-Debug",
-      "enabled": true,
+      "versionCode": 1,
+      "versionName": "1.0.0-beta-Debug",
       "outputFile": "app-development-debug.apk"
     }
   ]
