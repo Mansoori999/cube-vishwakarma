@@ -90,8 +90,6 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     var fyearDateName:String?= null
     var roIds : String? =null
 
-
-
     @Inject
     lateinit var appInfo : AppInfo
 

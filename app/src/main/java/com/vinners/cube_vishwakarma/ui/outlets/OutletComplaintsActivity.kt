@@ -13,6 +13,7 @@ import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityEditOutletBinding
 import com.vinners.cube_vishwakarma.databinding.ActivityOutletComplaintsBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
@@ -54,6 +55,8 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
     lateinit var endDate:String
     var regionalOfficeIds:String ?= null
 
+    @Inject
+    lateinit var userSessionManager: UserSessionManager
 
 
     @Inject

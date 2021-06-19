@@ -136,115 +136,6 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
     }
 
-    override fun onInitDataBinding() {
-        id = intent.getStringExtra("complaintId")
-        enabledComplaintRequest = intent.getBooleanExtra(COMPLAINT_REQUEST_VIEW, false)
-        complaintRequestStatus = intent.getStringExtra(COMPLAINT_REQUEST_STATUS)
-
-        if (enabledComplaintRequest == true) {
-            viewBinding.detailsToolbar.setTitle("Complaint Request Details ")
-            viewBinding.changeStatus.setVisibilityGone()
-
-        }else{
-            viewBinding.detailsToolbar.setTitle("Complaint Details ")
-        }
-
-        viewBinding.detailsToolbar.setNavigationOnClickListener {
-            onBackPressed()
-        }
-        viewBinding.changeStatus.setOnClickListener {
-            val inflater: LayoutInflater = LayoutInflater.from(this)
-            val dialogView = inflater.inflate(R.layout.complaint_details_dialog_layout,null)
-            val mBuilder = AlertDialog.Builder(this)
-                    .setView(dialogView)
-                    .setTitle("Update Status - ${complaintid}")
-
-            val  mAlertDialog = mBuilder.show()
-            val statusSpinner = dialogView.findViewById<Spinner>(R.id.status_spinner)
-
-            reason = dialogView.findViewById<EditText>(R.id.reason)
-            donecontainer = dialogView.findViewById(R.id.doneImage)
-            filename = dialogView.findViewById<TextView>(R.id.file_name)
-
-            val imangelayout= inflater.inflate(R.layout.layout_click_image, dialogView as ViewGroup, false)
-            imageClickLabel = imangelayout.findViewById(R.id.clickImageLabel)
-            ImageStoreView = imangelayout.findViewById(R.id.imageView)
-            imageClickLabel.setOnClickListener(ClickOutletImageOnClickListener())
-            donecontainer.addView(imangelayout)
-
-
-
-
-//             reasonEt = reason.text.toString()
-//            val spinnerlist = arrayOf("Select Status","Working", "Hold", "Done","Cancelled")
-//            val statusArrayList = status!!.split(",")
-            statusList.clear()
-            statusList.add(0,"Select Status")
-            if (status!!.equals("Working")){
-                statusList.add("Hold")
-                statusList.add("Done")
-                statusList.add("Cancelled")
-            }else if (status!!.equals("Hold")){
-                statusList.add("Working")
-                statusList.add("Done")
-                statusList.add("Cancelled")
-            }else if (status!!.equals("Due")){
-                statusList.add("Working")
-                statusList.add("Hold")
-                statusList.add("Done")
-                statusList.add("Cancelled")
-            }
-
-            val aa = ArrayAdapter(
-                    this,
-                    android.R.layout.simple_spinner_dropdown_item,
-                    statusList
-            )
-            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            with(statusSpinner) {
-                prompt = "Select Status"
-                adapter = aa
-                gravity = Gravity.CENTER
-            }
-
-            statusSpinner.onItemSelected { adapterView, _, position, _ ->
-                adapterView ?: return@onItemSelected
-                if (statusSpinner.childCount != 0 && statusSpinner.selectedItemPosition != 0) {
-                    statusValue = adapterView.getItemAtPosition(position).toString()
-                        if (statusValue!!.toLowerCase().equals("cancelled")) {
-                            reason.setVisibilityVisible()
-                        } else {
-                            reason.setVisibilityGone()
-                        }
-
-                    if(statusValue!!.toLowerCase().equals("done")){
-                        donecontainer.setVisibilityVisible()
-
-
-                    }else{
-                        donecontainer.setVisibilityGone()
-                    }
-
-                }
-
-            }
-
-            val cancle = dialogView.findViewById<Button>(R.id.cancelbtn)
-            val update = dialogView.findViewById<Button>(R.id.uploadbtn)
-            cancle.setOnClickListener {
-                //dismiss dialog
-                mAlertDialog.dismiss()
-            }
-            update.setOnClickListener{
-                setValidationUpdate()
-                mAlertDialog.dismiss()
-            }
-
-        }
-
-
-
-    }
 
     private inner class ClickOutletImageOnClickListener : View.OnClickListener {
         override fun onClick(v: View?) {
@@ -770,28 +661,36 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //    }
     private fun setChangeStatus(content: MyComplainDetailsList) {
 
-        if (content.status?.toLowerCase().equals("due") ||
+    if (userSessionManager.designation!!.toLowerCase().equals("admin")&&
+            (content.status?.toLowerCase().equals("due") ||
                 content.status?.toLowerCase().equals("working") ||
-                content.status?.toLowerCase().equals("hold")){
+                content.status?.toLowerCase().equals("hold")
+                 )){
+        viewBinding.changeStatus.setVisibilityGone()
+    }else {
+        if (content.status?.toLowerCase().equals("due") ||
+            content.status?.toLowerCase().equals("working") ||
+            content.status?.toLowerCase().equals("hold")
+        ) {
             viewBinding.changeStatus.setVisibilityVisible()
 
-        }else{
+        } else {
             viewBinding.changeStatus.setVisibilityGone()
         }
 
-        if (content.status?.toLowerCase().equals("done")){
+        if (content.status?.toLowerCase().equals("done")) {
             if (content.letterpic != null) {
                 viewBinding.imageContainer.setVisibilityGone()
 //                viewBinding.letterpic.imageView.load(appInfo.getFullAttachmentUrl(content.letterpic!!))
-            }else{
+            } else {
                 viewBinding.imageContainer.setVisibilityGone()
             }
 
-         }else{
+        } else {
             viewBinding.imageContainer.setVisibilityGone()
 
         }
-
+    }
         viewBinding.letterpic.imageView.setOnClickListener {
             val imageUrl :String = content.letterpic.toString()
             imageOpenDialog(imageUrl)
@@ -800,6 +699,116 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         statusremarks = content.statusremarks
         complaintid = content.complaintid
         status = content.status
+
+    }
+
+    override fun onInitDataBinding() {
+        id = intent.getStringExtra("complaintId")
+        enabledComplaintRequest = intent.getBooleanExtra(COMPLAINT_REQUEST_VIEW, false)
+        complaintRequestStatus = intent.getStringExtra(COMPLAINT_REQUEST_STATUS)
+
+        if (enabledComplaintRequest == true) {
+            viewBinding.detailsToolbar.setTitle("Complaint Request Details ")
+            viewBinding.changeStatus.setVisibilityGone()
+
+        }else{
+            viewBinding.detailsToolbar.setTitle("Complaint Details ")
+        }
+
+        viewBinding.detailsToolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+        viewBinding.changeStatus.setOnClickListener {
+            val inflater: LayoutInflater = LayoutInflater.from(this)
+            val dialogView = inflater.inflate(R.layout.complaint_details_dialog_layout,null)
+            val mBuilder = AlertDialog.Builder(this)
+                .setView(dialogView)
+                .setTitle("Update Status - ${complaintid}")
+
+            val  mAlertDialog = mBuilder.show()
+            val statusSpinner = dialogView.findViewById<Spinner>(R.id.status_spinner)
+
+            reason = dialogView.findViewById<EditText>(R.id.reason)
+            donecontainer = dialogView.findViewById(R.id.doneImage)
+            filename = dialogView.findViewById<TextView>(R.id.file_name)
+
+            val imangelayout= inflater.inflate(R.layout.layout_click_image, dialogView as ViewGroup, false)
+            imageClickLabel = imangelayout.findViewById(R.id.clickImageLabel)
+            ImageStoreView = imangelayout.findViewById(R.id.imageView)
+            imageClickLabel.setOnClickListener(ClickOutletImageOnClickListener())
+            donecontainer.addView(imangelayout)
+
+
+
+
+//             reasonEt = reason.text.toString()
+//            val spinnerlist = arrayOf("Select Status","Working", "Hold", "Done","Cancelled")
+//            val statusArrayList = status!!.split(",")
+            statusList.clear()
+            statusList.add(0,"Select Status")
+            if (status!!.toLowerCase().equals("working")){
+                statusList.add("Hold")
+                statusList.add("Done")
+                statusList.add("Cancelled")
+            }else if (status!!.toLowerCase().equals("hold")){
+                statusList.add("Working")
+                statusList.add("Done")
+                statusList.add("Cancelled")
+            }else if (status!!.toLowerCase().equals("due")){
+                statusList.add("Working")
+                statusList.add("Hold")
+                statusList.add("Done")
+                statusList.add("Cancelled")
+            }
+
+            val aa = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                statusList
+            )
+            aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            with(statusSpinner) {
+                prompt = "Select Status"
+                adapter = aa
+                gravity = Gravity.CENTER
+            }
+
+            statusSpinner.onItemSelected { adapterView, _, position, _ ->
+                adapterView ?: return@onItemSelected
+                if (statusSpinner.childCount != 0 && statusSpinner.selectedItemPosition != 0) {
+                    statusValue = adapterView.getItemAtPosition(position).toString()
+                    if (statusValue!!.toLowerCase().equals("cancelled")) {
+                        reason.setVisibilityVisible()
+                    } else {
+                        reason.setVisibilityGone()
+                    }
+
+                    if(statusValue!!.toLowerCase().equals("done")){
+                        donecontainer.setVisibilityVisible()
+
+
+                    }else{
+                        donecontainer.setVisibilityGone()
+                    }
+
+                }
+
+            }
+
+            val cancle = dialogView.findViewById<Button>(R.id.cancelbtn)
+            val update = dialogView.findViewById<Button>(R.id.uploadbtn)
+            cancle.setOnClickListener {
+                //dismiss dialog
+                mAlertDialog.dismiss()
+            }
+            update.setOnClickListener{
+                setValidationUpdate()
+                mAlertDialog.dismiss()
+            }
+
+        }
+
+
 
     }
 
