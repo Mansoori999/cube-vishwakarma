@@ -3,15 +3,19 @@ package com.vinners.cube_vishwakarma.ui.outlets
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.DateTimeHelper
+import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
+import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import java.text.ParseException
@@ -30,6 +34,7 @@ class OutletRecyclerAdapter() : RecyclerView.Adapter<OutletRecyclerAdapter.Outle
     private lateinit var outletsClickListener: OutletsClickListener
     var mFilteredItemList = listOf<OutletsList>()
     private var searchFilter: SearchFilters? = null
+    private var gps : String ? = null
 
 
     fun updateViewList (outletList: List<OutletsList>){
@@ -99,12 +104,18 @@ class OutletRecyclerAdapter() : RecyclerView.Adapter<OutletRecyclerAdapter.Outle
         private val code = itemView.findViewById<TextView>(R.id.code)
         private val district = itemView.findViewById<TextView>(R.id.district)
         private val sales = itemView.findViewById<TextView>(R.id.sales)
+        private var gpslocation = itemView.findViewById<ImageView>(R.id.gps)
         private val  regionalOffice = itemView.findViewById<TextView>(R.id.regional_office)
 
         init {
 
             itemView.setOnClickListener {
                 outletsClickListener.OnOutletClick(mFilteredItemList[adapterPosition])
+            }
+            val mapUrl = "http://maps.google.co.in/maps?q="+ gps
+            gpslocation.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("http://maps.google.co.in/maps?q="+ gps))
+                context.startActivity(intent)
             }
         }
 
@@ -115,6 +126,12 @@ class OutletRecyclerAdapter() : RecyclerView.Adapter<OutletRecyclerAdapter.Outle
             district.text = "${outletsList.districtname}"
             sales.text = outletsList.salesarea
             regionalOffice.text = outletsList.regionaloffice
+            if (outletsList.gps != null && outletsList.gps != "," ) {
+                gpslocation.setVisibilityVisible()
+                gps = outletsList.gps
+            }else{
+                gpslocation.setVisibilityGone()
+            }
 
 
         }

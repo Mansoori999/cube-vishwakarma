@@ -178,7 +178,7 @@ class SplashViewModel @Inject constructor(
                 } catch (e: Exception) {
                     logger.d("Refer failed",e.localizedMessage)
                 }
-                Log.d("ReferCode",referCode)
+//                Log.d("ReferCode",referCode)
                 if (appIntroShown)
                     _loginState.postValue(Lce.Content(LoginData(referCode)))
                 else

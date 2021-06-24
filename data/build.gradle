@@ -29,11 +29,13 @@ android {
 
 dependencies {
     implementation project(':base')
+    implementation 'androidx.room:room-runtime:2.3.0'
 
     testImplementation Libs.junit
     testImplementation Libs.mockitoInline
     testImplementation Libs.mockitoKotlin
     testImplementation Libs.Coroutines.test
+    annotationProcessor 'androidx.room:room-compiler:2.3.0'
 
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.1.5'
 

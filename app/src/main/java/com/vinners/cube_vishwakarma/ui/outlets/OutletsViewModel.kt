@@ -22,6 +22,8 @@ interface OutletEvents {
 
     val outletListState: LiveData<Lce<List<OutletsList>>>
 
+    val outletState: LiveData<Lce<List<OutletsList>>>
+
     val outletDetailsListState : LiveData<Lce<OutletDetailsList>>
 
     val  complaintsbyoutletListState: LiveData<Lce<List<MyComplaintList>>>
@@ -59,6 +61,35 @@ class OutletsViewModel @Inject constructor(
             }
         }
     }
+    //    //databae getDataByID
+    private val _outletState = MutableLiveData<Lce<List<OutletsList>>>()
+    override val outletState: LiveData<Lce<List<OutletsList>>> = _outletState
+    fun getOutletsById(regionalOffice: String, salesArea: String){
+        _outletState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = outletRepository.getOutletsBYID(regionalOffice,salesArea)
+                _outletState.postValue(Lce.content(response))
+            }catch (e:Exception){
+                _outletState.postValue(Lce.error(e.localizedMessage))
+            }
+        }
+    }
+//    private val _outletInsertState = MutableLiveData<Lce<List<OutletsList>>>()
+//    override val outletInsertState: LiveData<Lce<List<OutletsList>>> = _outletInsertState
+//
+//    fun insertOutlets(outlets :List<OutletsList>){
+//        _outletInsertState.value = Lce.Loading
+//        viewModelScope.launch(Dispatchers.IO){
+//            try {
+//                val response = outletRepository.insertOutlets(outlets)
+//                _outletState.postValue(Lce.content(response))
+//            }catch (e:Exception){
+//                _outletInsertState.postValue(Lce.error(e.localizedMessage))
+//            }
+//        }
+//    }
+
 
     /* Outlet Details*/
     private val _outletDetailsListState = MutableLiveData<Lce<OutletDetailsList>>()

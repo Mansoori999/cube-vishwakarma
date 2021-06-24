@@ -3,9 +3,14 @@ package com.vinners.cube_vishwakarma.core.di.modules
 import android.app.Application
 import androidx.room.Room
 import com.vinners.cube_vishwakarma.cache.LocalDatabase
+import com.vinners.cube_vishwakarma.cache.OutletsLocalDatabase
+import com.vinners.cube_vishwakarma.cache.dao.OutletsDao
 import com.vinners.cube_vishwakarma.cache.dao.ProfileDao
+import com.vinners.cube_vishwakarma.cache.localDataStoreImpl.OutletLocalDataStoreImpl
 import com.vinners.cube_vishwakarma.cache.localDataStoreImpl.UserProfileLocalDataStoreImpl
+import com.vinners.cube_vishwakarma.data.dataStores.outlets.OutletsLocalDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.userProfile.UserProfileLocalDataStore
+import com.vinners.cube_vishwakarma.data.repository.OutletRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -35,13 +40,38 @@ abstract class CacheModule {
         @Singleton
         @Provides
         @JvmStatic
+        fun provideOutletsLocalDatabase(application: Application): OutletsLocalDatabase {
+            return Room.databaseBuilder(
+                application.applicationContext,
+                OutletsLocalDatabase::class.java,
+                OutletsLocalDatabase.DATABASE_NAME
+            ).build()
+        }
+
+        @Singleton
+        @Provides
+        @JvmStatic
         fun provideProfileDao(localDatabase: LocalDatabase): ProfileDao {
             return localDatabase.profileDao()
         }
+
+        @Singleton
+        @Provides
+        @JvmStatic
+        fun provideOutletsDao(outletsLocalDatabase: OutletsLocalDatabase): OutletsDao {
+            return outletsLocalDatabase.getOutletsDao()
+        }
+
+
     }
 
     @Singleton
     @Binds
     abstract fun bindProfileLocalStore(profileLocalDataStoreImpl: UserProfileLocalDataStoreImpl): UserProfileLocalDataStore
+
+    @Singleton
+    @Binds
+    abstract fun bindOutletsLocalStore(outletLocalDataStoreImpl: OutletLocalDataStoreImpl): OutletsLocalDataStore
+
 
 }

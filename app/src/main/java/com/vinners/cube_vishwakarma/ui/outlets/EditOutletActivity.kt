@@ -401,6 +401,7 @@ class EditOutletActivity : BaseActivity<ActivityEditOutletBinding, OutletsViewMo
 
     }
 
+
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
         super.onRestoreInstanceState(savedInstanceState)
         savedInstanceState?.let {

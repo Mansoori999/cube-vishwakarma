@@ -530,7 +530,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //                    Log.e("data", selectedItems.toString())
                     val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
                    roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
-                    Log.d("nja",roselectedId)
+                    Log.d("nja", roselectedId)
                     regionalspinner.text = selectedItemList
 
                 }
@@ -681,6 +681,9 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 val intent = Intent(this, ComplaintsActivity::class.java)
                 startActivity(intent)
 
+            }
+            R.id.nav_billing->{
+                Toast.makeText(this,"Comming soon",Toast.LENGTH_LONG).show()
             }
             R.id.nav_doc ->{
                 val intent = Intent(this, DocumentsActivity::class.java)

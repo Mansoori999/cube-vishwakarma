@@ -1,5 +1,6 @@
 package com.vinners.cube_vishwakarma.cache.entityMappers
 
+import com.vinners.cube_vishwakarma.cache.entities.CachedOutlets
 import com.vinners.cube_vishwakarma.cache.entities.CachedProfile
 import com.vinners.cube_vishwakarma.cache.entityMappers.EntityMapper
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
