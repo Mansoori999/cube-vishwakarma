@@ -17,8 +17,8 @@ class OutletRepository @Inject constructor(
 
 
 
-    suspend fun getOutletsBYID(regionalOffice: String, salesArea: String):List<OutletsList> {
-        return OutletsLocalDataStore.getOutletsBYID(regionalOffice,salesArea)
+    suspend fun getOutletsBYID(roid:String , said:String):List<OutletsList> {
+        return OutletsLocalDataStore.getOutletsBYID(roid,said)
     }
 
 //    suspend fun insertOutlets(outlets : List<OutletsList>){

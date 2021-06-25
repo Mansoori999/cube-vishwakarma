@@ -74,7 +74,13 @@ data class OutletsList(
                 const val COLUMN_REGIONAL_OFFICE :String = "regionaloffice"
 
                 @Ignore
+                const val COLUMN_REGIONAL_OFFICE_ID :String = "roid"
+
+                @Ignore
                 const val COLUMN_SALES_AREA :String = "salesarea"
+
+                @Ignore
+                const val COLUMN_SALES_AREA_ID :String = "said"
 
                 @Ignore
                 const val COLUMN_OUTLET_NAME :String = "name"

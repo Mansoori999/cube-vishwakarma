@@ -24,8 +24,8 @@ class OutletLocalDataStoreImpl @Inject constructor(
         return outletsDao.deleteAllOutlets()
     }
 
-    override suspend fun getOutletsBYID(regionalOffice: String, salesArea: String): List<OutletsList> {
-        return outletsDao.getOutletsByID(regionalOffice,salesArea)
+    override suspend fun getOutletsBYID(roid:String , said:String): List<OutletsList> {
+        return outletsDao.getOutletsByID(roid,said)
     }
 //    override suspend fun insertAllOutlets(): List<OutletsList> {
 //        return outletsLocalDatabase.getOutletsDao().insertOutlet()

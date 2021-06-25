@@ -32,10 +32,14 @@ public interface OutletsDao {
     List<OutletsList> getAllOutlets();
 
 
+//@Query("SELECT * FROM " + OutletsList.TABLE_NAME +
+//        " WHERE " + OutletsList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " OR " +
+//        OutletsList.COLUMN_SALES_AREA_ID + " IN (:said)" +"")
+
 @Query("SELECT * FROM " + OutletsList.TABLE_NAME +
-        " WHERE " + OutletsList.COLUMN_REGIONAL_OFFICE + " IN (:regionalOffice)" + " OR " +
-        OutletsList.COLUMN_SALES_AREA + " IN (:salesArea)" +"")
-    List<OutletsList>getOutletsByID(@Nullable String regionalOffice, @Nullable String salesArea);
+            " WHERE " + OutletsList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " AND "
+        + OutletsList.COLUMN_SALES_AREA_ID + " IN (:said)" + "")
+    List<OutletsList>getOutletsByID(@Nullable String roid, @Nullable String said);
 
 
 //    @Query("SELECT * FROM " + OutletsList.TABLE_NAME +

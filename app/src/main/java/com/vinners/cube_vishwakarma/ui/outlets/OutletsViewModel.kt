@@ -64,11 +64,11 @@ class OutletsViewModel @Inject constructor(
     //    //databae getDataByID
     private val _outletState = MutableLiveData<Lce<List<OutletsList>>>()
     override val outletState: LiveData<Lce<List<OutletsList>>> = _outletState
-    fun getOutletsById(regionalOffice: String, salesArea: String){
+    fun getOutletsById(roid:String , said:String){
         _outletState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {
-                val response = outletRepository.getOutletsBYID(regionalOffice,salesArea)
+                val response = outletRepository.getOutletsBYID(roid,said)
                 _outletState.postValue(Lce.content(response))
             }catch (e:Exception){
                 _outletState.postValue(Lce.error(e.localizedMessage))

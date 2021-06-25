@@ -59,8 +59,8 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
     private lateinit var salesspinner: TextView
     private lateinit var applyBtn:TextView
 
-    var roselectedId:String? = null
-    var saleselectedId:String? = null
+    var roselectedId:String = ""
+    var saleselectedId:String = ""
     var selectedItemList:String? = ""
     var saleselectedItemList:String? = ""
 
@@ -245,12 +245,8 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
 
                     saleselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
 
+
                     salesspinner.text = saleselectedItemList
-                    for (i in 0 until selectedItems.size){
-                        val data = selectedItems[i]
-                    }
-                    val joiner = StringJoiner("','", "'", "'")
-                    joiner.add("${selectedItems.toString().substring(1, selectedItems.toString().length - 1)}")
 
                     val stream = Stream.of(selectedItems.toString()).collect(Collectors.joining("','", "'", "'"))
                     Log.d("njabjj", stream)
@@ -279,7 +275,8 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
 
                     selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
                     roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
-                    Log.d("nja", roselectedId)
+
+                    Log.d("nja", roselectedId.toString())
                     regionalspinner.text = selectedItemList
 
                 }
@@ -293,7 +290,7 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
     private fun initBottomsheetFileterView() {
         applyBtn.setOnClickListener {
 
-            viewModel.getOutletsById(selectedItemList.toString(), saleselectedItemList.toString())
+            viewModel.getOutletsById(roselectedId, saleselectedId)
 //            doAsync {
 //                // Get the student list from database
 //                val database = mDb.getOutletsDao().getOutletsByID(roselectedId, saleselectedId)
