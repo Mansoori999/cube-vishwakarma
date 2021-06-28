@@ -420,7 +420,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
         regionals.add(
             0,
             RegionalOfficeData(
-                id = "XX",
+                id = 0,
                 name = "Select Regional Office"
             )
         )
@@ -440,7 +440,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 
 
 
-    private fun setSalesOnSpinner(id: String) {
+    private fun setSalesOnSpinner(id: Int) {
 
         val complaintList = viewModel.complaintRequestList ?: return
 
@@ -464,7 +464,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
         sales.add(
             0,
             SalesAreaData(
-                id = "XX",
+                id = 0,
                 name = "Select Sales Area"
             )
         )
@@ -482,7 +482,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 
     }
 
-    private fun setOutletOnSpinner(reagionalId: String, salesId: String?) {
+    private fun setOutletOnSpinner(reagionalId: Int, salesId: Int?) {
         val complaintList = viewModel.complaintRequestList ?: return
 
 //        val campaignData = complaintList.find {

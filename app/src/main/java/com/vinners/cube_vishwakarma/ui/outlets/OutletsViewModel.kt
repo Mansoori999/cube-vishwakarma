@@ -13,7 +13,6 @@ import com.vinners.cube_vishwakarma.data.repository.OutletRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mobile.androidbase.location.LocationUtils
-import java.io.File
 import javax.inject.Inject
 
 
@@ -64,7 +63,7 @@ class OutletsViewModel @Inject constructor(
     //    //databae getDataByID
     private val _outletState = MutableLiveData<Lce<List<OutletsList>>>()
     override val outletState: LiveData<Lce<List<OutletsList>>> = _outletState
-    fun getOutletsById(roid:String , said:String){
+    fun getOutletsById(roid:List<Int> , said:List<Int>){
         _outletState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {

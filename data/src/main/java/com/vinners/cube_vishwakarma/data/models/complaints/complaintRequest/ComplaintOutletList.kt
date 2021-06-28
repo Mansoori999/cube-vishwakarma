@@ -20,7 +20,7 @@ data class ComplaintOutletList(
 	val primarymail: String? = null,
 
 	@field:SerializedName("roid")
-	val roid: String? = null,
+	val roid: Int? = null,
 
 	@field:SerializedName("secondarymail")
 	val secondarymail: String? = null,
@@ -56,7 +56,7 @@ data class ComplaintOutletList(
 	val category: String? = null,
 
 	@field:SerializedName("said")
-	val said: String? = null,
+	val said: Int? = null,
 
 	@field:SerializedName("regionaloffice")
 	val regionaloffice: String? = null,

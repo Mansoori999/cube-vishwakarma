@@ -10,20 +10,26 @@ import android.widget.Filterable
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.vinners.cube_vishwakarma.R
+import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 
 import java.util.*
 
 class SearchableAdapter(
-    internal var context: Context,
-    private val mValues: List<RegionalOfficeFilterData>,
-    private var filteredList: List<RegionalOfficeFilterData>,
-    clickListener: ItemClickListener,
-    var singleSelection:Boolean=false
+        internal var context: Context,
+        private var mValues: List<RegionalOfficeFilterData>,
+        private var filteredList: List<RegionalOfficeFilterData>,
+        clickListener: ItemClickListener,
+        var singleSelection:Boolean=false
 ) : Filterable, RecyclerView.Adapter<SearchableAdapter.ViewHolder>() {
     private var itemClickListener: ItemClickListener = clickListener
 
 
+    fun updateViewList (mValues: List<RegionalOfficeFilterData>){
+        this.mValues = mValues
+        filteredList = mValues
+        notifyDataSetChanged()
+    }
 
     inner class ViewHolder(val mView: View) :
         RecyclerView.ViewHolder(mView) {
@@ -34,6 +40,10 @@ class SearchableAdapter(
 
         var mItem: RegionalOfficeFilterData? = null
 
+        init {
+
+            checkBox.isSelected = false
+        }
 
     }
 
@@ -43,6 +53,7 @@ class SearchableAdapter(
         return ViewHolder(view)
     }
 
+    var productPosition = 0
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.mItem = filteredList[holder.adapterPosition]
 
@@ -55,7 +66,7 @@ class SearchableAdapter(
             holder.checkBox.visibility=View.VISIBLE
         }
 
-        var productPosition = 0
+
         for (i in 0 until mValues.size) {
             if (mValues[i].id.equals(holder.mItem!!.id)) {
                 productPosition = i
@@ -68,7 +79,6 @@ class SearchableAdapter(
                 productPosition,
                 isChecked
             )
-
         }
 
         holder.mView.setOnClickListener { view ->
@@ -127,5 +137,6 @@ class SearchableAdapter(
 
     interface ItemClickListener {
         fun onItemClicked(item:RegionalOfficeFilterData,position: Int, b: Boolean)
+
     }
 }

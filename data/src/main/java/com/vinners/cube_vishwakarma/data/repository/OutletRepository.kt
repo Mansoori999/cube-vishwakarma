@@ -17,7 +17,7 @@ class OutletRepository @Inject constructor(
 
 
 
-    suspend fun getOutletsBYID(roid:String , said:String):List<OutletsList> {
+    suspend fun getOutletsBYID(roid:List<Int> , said:List<Int>):List<OutletsList> {
         return OutletsLocalDataStore.getOutletsBYID(roid,said)
     }
 

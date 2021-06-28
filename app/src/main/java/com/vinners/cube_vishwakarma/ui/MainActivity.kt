@@ -3,6 +3,7 @@ package com.vinners.cube_vishwakarma.ui
 
 import android.content.Intent
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
@@ -13,17 +14,22 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
+import com.devstune.searchablemultiselectspinner.SearchableAdapter
 import com.devstune.searchablemultiselectspinner.SearchableMultiSelectSpinner
 import com.devstune.searchablemultiselectspinner.SelectionCompleteListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
+import com.google.common.io.Files.append
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import com.vinners.cube_vishwakarma.BuildConfig
 import com.vinners.cube_vishwakarma.R
@@ -51,6 +57,7 @@ import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
 import de.hdodenhof.circleimageview.CircleImageView
+
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -58,7 +65,7 @@ import kotlin.collections.ArrayList
 
 
 class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R.layout.activity_main),
-    NavigationView.OnNavigationItemSelectedListener,MainActivityRecyclerAdapter.ClickListener{
+    NavigationView.OnNavigationItemSelectedListener,SelectionCompleteListener ,MainActivityRecyclerAdapter.ClickListener{
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
 
@@ -66,14 +73,19 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     lateinit var userSessionManager: UserSessionManager
 
     var list: MutableList<String> = ArrayList()
+    var searchableItems= listOf<RegionalOfficeFilterData>()
 
+    private var selectionCompleteListener: SelectionCompleteListener? = null
     private lateinit var bottomSheetDialog:BottomSheetDialog
 
     private lateinit var sheetBehavior: BottomSheetBehavior<View>
 
+    var afterResetRO = mutableListOf<RegionalOfficeFilterData>()
     private lateinit var financialspinner: SearchableSpinner
     private lateinit var regionalspinner:TextView
     private lateinit var applyBtn:TextView
+    private lateinit var resestTV : TextView
+//    var afterResetRO = listOf<RegionalOfficeFilterData>()
 
     var roselectedId:String? = null
 
@@ -89,6 +101,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     var fyearDateId :Int ?= null
     var fyearDateName:String?= null
     var roIds : String? =null
+    val isClicked:Boolean = false
 
     @Inject
     lateinit var appInfo : AppInfo
@@ -385,6 +398,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         }
 
         applyBtn = bottomSheetView.findViewById(R.id.apply_textview)
+        resestTV = bottomSheetView.findViewById(R.id.resestTV)
 
         initBottomsheetFileterView()
     }
@@ -500,12 +514,20 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 is Lce.Content ->{
                     val regionalOffice = it.content.map {
                         RegionalOfficeFilterData(
-                                id = it.outletid!!,
+                                id = it.roid!!,
                                 name = it.regionaloffice!!,
                                 isSelected = false
                         )
                     }.toMutableList()
                     setRegionalOfficeTypeSpinner(regionalOffice)
+//                    val regionalOffice = it.content.map {
+//                        ROModel(
+//                            id = it.roid!!,
+//                            name = it.regionaloffice!!,
+//                        )
+//                    }.toMutableList()
+//                    setRegionalOfficeTypeSpinner(regionalOffice)
+
 
                 }
                 is Lce.Error->{
@@ -521,47 +543,155 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         val setItems = regionalOffice.distinctBy { it.name }
         regionalOffice.clear()
         regionalOffice.addAll(setItems)
+        afterResetRO.addAll(regionalOffice)
+        val itemChecked = BooleanArray(regionalOffice.size)
+        var dayList = java.util.ArrayList<Int>()
+
+        regionalspinner.setOnClickListener {
+            val alertDialog = AlertDialog.Builder(this)
+            val inflater = LayoutInflater.from(this)
+            val convertView = inflater.inflate(R.layout.searchable_list_layout, null)
+
+            alertDialog.setView(convertView)
+            alertDialog.setTitle("Select Regional Office")
+
+            val searchView = convertView.findViewById<SearchView>(R.id.searchView)
+            val recyclerView =
+                    convertView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
+            val mLayoutManager = LinearLayoutManager(this)
+
+            val adapter =
+                    SearchableAdapter(
+                            this,
+                            regionalOffice,
+                            regionalOffice,
+                            object : SearchableAdapter.ItemClickListener {
+                                override fun onItemClicked(
+                                        item: RegionalOfficeFilterData,
+                                        position: Int,
+                                        b: Boolean
+                                ) {
+                                    for(i in 0 until regionalOffice.size) {
+                                        if (regionalOffice[i].id == item.id) {
+                                            regionalOffice[i].isSelected = b
+                                            break
+                                        }
+                                    }
+                                }
+
+                            },false)
+
+            adapter.notifyDataSetChanged()
 
 
-        regionalspinner.setOnClickListener{
-            SearchableMultiSelectSpinner.show(this, "Select Regional Office", "Done", regionalOffice, object :
-                    SelectionCompleteListener {
-                override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
-//                    Log.e("data", selectedItems.toString())
-                    val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
-                   roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
-                    Log.d("nja", roselectedId)
-                    regionalspinner.text = selectedItemList
+            recyclerView.itemAnimator = null
+            recyclerView.layoutManager = mLayoutManager
+            recyclerView.adapter = adapter
 
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    // do something on text submit
+                    return false
                 }
 
+                override fun onQueryTextChange(newText: String): Boolean {
+                    // do something when text changes
+                    adapter.filter.filter(newText)
+                    return false
+                }
             })
 
-        }
-//        regionalOffice.add(
-//            0,
-//            RegionalOfficeFilterData(
-//                id = 1,
-//                name = "Select Regional Office",
-//                isSelected = false
-//            )
-//        )
-//        val aa = ArrayAdapter(
-//            this,
-//            android.R.layout.simple_spinner_dropdown_item,
-//            regionalOffice
-//        )
-//
-//        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//        with(regionalspinner) {
-//            adapter = aa
-//            prompt = "Select Regional Office"
-//            gravity = android.view.Gravity.CENTER
-//        }
+            alertDialog.setPositiveButton("Done") { dialogInterface, i ->
+                dialogInterface.dismiss()
+                val resultList =ArrayList<RegionalOfficeFilterData>()
+                for (i in 0 until regionalOffice.size) {
+                    if (regionalOffice[i].isSelected) {
+                        resultList.add(regionalOffice[i])
+                    }
+                }
+                regionalspinner.text = resultList.toString().substring(1, resultList.toString().length - 1)
+                roselectedId= resultList.joinToString (separator = ","){ "${it.id}" }
 
+//                selectionCompleteListener?.onCompleteSelection(resultList)
+            }
+//            alertDialog.setNegativeButton("clear"){ DialogInterface, i: Int ->
+//                val resultList =ArrayList<RegionalOfficeFilterData>()
+//                for (i in 0 until regionalOffice.size) {
+//                    if (regionalOffice[i].isSelected) {
+//                        regionalOffice[i].isSelected = false
+//                        resultList.remove(regionalOffice[i])
+//                    }
+//                }
+//                regionalspinner.text = ""
+//                selectionCompleteListener?.onCompleteSelection(resultList)
+//            }
+
+            alertDialog.show()
+        }
+
+//        regionalspinner.setOnClickListener{
+//            SearchableMultiSelectSpinner.show(this, "Select Regional Office", "Done", regionalOffice, object :
+//                SelectionCompleteListener {
+//                override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
+////                    Log.e("data", selectedItems.toString())
+//                    val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
+//                    roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
+//                    Log.d("nja", roselectedId)
+//                    regionalspinner.text = selectedItemList
+//                }
+//            })
+//        }
+        resestTV.setOnClickListener {
+//            regionalspinner.text = ""//TODO
+//            roselectedId = ""
+            val resultList =ArrayList<RegionalOfficeFilterData>()
+            val stringBuilder = StringBuilder()
+            for (i in 0 until regionalOffice.size) {
+                if (regionalOffice[i].isSelected) {
+                    regionalOffice[i].isSelected = false
+                    resultList.remove(regionalOffice[i])
+                    regionalspinner.setText("")
+                }
+            }
+        }
+
+
+
+//            val dayArray = listOf<String>("monday","tuesday","wednesday","thrusday","friday")
+//            val builder = AlertDialog.Builder(this)
+//            builder.setTitle("Select Day")
+//            builder.setCancelable(false)
+//            val list = Arrays.asList(regionalOffice)
+//            builder.setMultiChoiceItems(list, itemChecked) { dialog, i, isChecked ->
+//                // Update the current focused item's checked status
+//                if (isChecked){
+//                    dayList.add(i)
+//                    Collections.sort(dayList)
+//                }else{
+//                    dayList.remove(i)
+//                }
+//
+//            }
+//            builder.setPositiveButton("ok") { dialog, which ->
+//                val stringBuilder = StringBuilder()
+//                for (i in dayList.indices) {
+//                    stringBuilder.append(regionalOffice.get(dayList[i]))
+//                    if (i != dayList.size - 1) {
+//                        stringBuilder.append(",")
+//                    }
+//                }
+//                regionalspinner.text= stringBuilder.toString()
+//            }
+//            builder.show()
 
     }
 
+    override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
+        val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
+        roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
+        Log.d("nja", roselectedId)
+        regionalspinner.text = selectedItemList
+    }
     private fun setFinancialYearTypeSpinner(financialdata: MutableList<FinancialYearData>) {
         financialdata.sortBy { it.name }
 
@@ -667,6 +797,22 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
         }
 
+//        resestTV.setOnClickListener {
+//            regionalspinner.text = ""//TODO
+//            SearchableMultiSelectSpinner.reCreateAfterReset(this, "Select Regional Office", "Done","clear", afterResetRO, object :
+//                    SelectionCompleteListener {
+//                override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
+////                    Log.e("data", selectedItems.toString())
+//                    val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
+//                    selectedItems.removeAll(selectedItems)
+//                    roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
+//                    regionalspinner.text = selectedItemList
+//
+//
+//                }
+//
+//            })
+//        }
 
 
     }
@@ -748,6 +894,8 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //
 //        }
     }
+
+
 
 
 }

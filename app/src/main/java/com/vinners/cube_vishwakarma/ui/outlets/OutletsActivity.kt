@@ -13,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
+import com.devstune.searchablemultiselectspinner.SearchableAdapter
 import com.devstune.searchablemultiselectspinner.SearchableMultiSelectSpinner
 import com.devstune.searchablemultiselectspinner.SelectionCompleteListener
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -29,10 +30,9 @@ import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityOutletsBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
+import com.vinners.cube_vishwakarma.ui.dashboardFilter.FinancialYearData
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import java.util.*
-import java.util.stream.Collectors
-import java.util.stream.Stream
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 
@@ -59,12 +59,12 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
     private lateinit var salesspinner: TextView
     private lateinit var applyBtn:TextView
 
-    var roselectedId:String = ""
-    var saleselectedId:String = ""
+    var roselectedId: List<Int> = listOf<Int>()
+    var saleselectedId:List<Int> = listOf<Int>()
     var selectedItemList:String? = ""
     var saleselectedItemList:String? = ""
 
-
+    var searchableItems= listOf<RegionalOfficeFilterData>()
     var filterOutletList: ArrayList<OutletsList> = ArrayList<OutletsList>()
 
     private val filtersLoadedFirstTime = false
@@ -79,7 +79,25 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
                 }
     }
 
+    private val multiValueSelectedSpinnerAdapter: SearchableAdapter by lazy {
+        SearchableAdapter(
+                this,
+                searchableItems,
+                searchableItems,
+                object : SearchableAdapter.ItemClickListener {
+                    override fun onItemClicked(
+                            item: RegionalOfficeFilterData,
+                            position: Int,
+                            b: Boolean
+                    ) {
 
+                    }
+
+                },false)
+                .apply {
+                    updateViewList(emptyList())
+                }
+    }
 
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
@@ -241,15 +259,19 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
                     val ItemList = selectedItems
 
                     saleselectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
-                  //  saleselectedItemList = selectedItemList.toString().stream().collect(Collectors.joining("','", "'", "'"))
 
-                    saleselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
+                    saleselectedId = selectedItems.map { it.id }
 
+//                    saleselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
+
+//                    for (i in 0 until id.size){
+//                        saleselectedId = id.get(i).toString()
+//                    }
 
                     salesspinner.text = saleselectedItemList
 
-                    val stream = Stream.of(selectedItems.toString()).collect(Collectors.joining("','", "'", "'"))
-                    Log.d("njabjj", stream)
+//                    val stream = Stream.of(selectedItems.toString()).collect(Collectors.joining("','", "'", "'"))
+//                    Log.d("njabjj", stream)
 
                 }
 
@@ -270,13 +292,9 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
             SearchableMultiSelectSpinner.show(this, "Select Regional Office", "Done", regionalOffice, object :
                     SelectionCompleteListener {
                 override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
-//                    Log.e("data", selectedItems.toString())
-//                    selectedItemList = selectedItems.toString()
-
                     selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
-                    roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
-
-                    Log.d("nja", roselectedId.toString())
+//                   roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
+                    roselectedId  = selectedItems.map { it.id }
                     regionalspinner.text = selectedItemList
 
                 }
@@ -287,21 +305,16 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
 
     }
 
+
     private fun initBottomsheetFileterView() {
         applyBtn.setOnClickListener {
-
-            viewModel.getOutletsById(roselectedId, saleselectedId)
-//            doAsync {
-//                // Get the student list from database
-//                val database = mDb.getOutletsDao().getOutletsByID(roselectedId, saleselectedId)
-//
-//                uiThread {
-//                    toast("${database.size} records found.")
-//                    // Display the students in text view
-//                    outletRecyclerAdapter.updateViewList(database)
-////
-//                }
-//            }
+            if (roselectedId.isEmpty().not() || saleselectedId.isEmpty().not()) {
+                viewModel.getOutletsById(roselectedId, saleselectedId)
+            }else{
+                viewModel.getOutletData()
+            }
+            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+            bottomSheetDialog.dismiss()
 
 
 
