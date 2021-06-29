@@ -2,6 +2,7 @@ package com.vinners.cube_vishwakarma.data.repository
 
 import com.vinners.cube_vishwakarma.data.dataStores.dashboard.DashBoardRemoteDataStore
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.dashboard.ActiveSubAdminResponse
 import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponse
 import com.vinners.cube_vishwakarma.data.models.dashboardFilter.DashboardFilterList
 import javax.inject.Inject
@@ -13,10 +14,12 @@ class DashBoardRepository @Inject constructor(
         return dashBoardRemoteDataStore.getFinancialData()
     }
 
-    suspend fun getDashBoard(startDate:String,endDate:String,regionalOfficeIds:String?):DashBoardResponse{
-        return dashBoardRemoteDataStore.getDashboard(startDate,endDate,regionalOfficeIds)
+    suspend fun getDashBoard(startDate:String,endDate:String,regionalOfficeIds:String?,activeSubadminId:String?):DashBoardResponse{
+        return dashBoardRemoteDataStore.getDashboard(startDate,endDate,regionalOfficeIds,activeSubadminId)
     }
 
-
+    suspend fun activeSubAdmin():List<ActiveSubAdminResponse>{
+        return dashBoardRemoteDataStore.activeSubAdmin()
+    }
 
 }

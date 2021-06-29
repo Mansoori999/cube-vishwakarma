@@ -13,7 +13,12 @@ data class ComplaintRequestWithStatus (
     val endDate : String,
 
     @SerializedName("regionalOfficeIds")
-    val regionalOfficeIds : String? = null
+    val regionalOfficeIds : String? = null,
+
+    @SerializedName("subadminIds")
+    val subadminIds:String? = null
+
+
 
 ){
 }

@@ -54,6 +54,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
     lateinit var startDate:String
     lateinit var endDate:String
     var regionalOfficeIds:String ?= null
+    var subadminId:String?=null
 
     @Inject
     lateinit var userSessionManager: UserSessionManager
@@ -127,6 +128,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
                 endDate = intent.getStringExtra("endDate")
             }
             regionalOfficeIds = intent.getStringExtra("regionalOfficeId")
+            subadminId =  intent.getStringExtra("subadminId")
         }else{
 
         }
@@ -137,23 +139,23 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
             }
 
             if (enableTotal == true ){
-                viewModel.getComplaintWithStatus(statustotal,startDate,endDate, regionalOfficeIds)
+                viewModel.getComplaintWithStatus(statustotal,startDate,endDate, regionalOfficeIds,subadminId)
             } else if(enableDue == true ){
-                viewModel.getComplaintWithStatus(statusdue,startDate,endDate, regionalOfficeIds)
+                viewModel.getComplaintWithStatus(statusdue,startDate,endDate, regionalOfficeIds,subadminId)
             } else if(enableWorking == true ) {
-                viewModel.getComplaintWithStatus(statusworking,startDate,endDate, regionalOfficeIds)
+                viewModel.getComplaintWithStatus(statusworking,startDate,endDate, regionalOfficeIds,subadminId)
             }else if(enablePending == true) {
-                viewModel.getComplaintWithStatus(statuspending,startDate,endDate, regionalOfficeIds)
+                viewModel.getComplaintWithStatus(statuspending,startDate,endDate, regionalOfficeIds,subadminId)
             }else if(enabledone == true) {
-                viewModel.getComplaintWithStatus(statusDone,startDate,endDate, regionalOfficeIds)
+                viewModel.getComplaintWithStatus(statusDone,startDate,endDate, regionalOfficeIds,subadminId)
             }else if (enabledraft == true ) {
-                viewModel.getComplaintWithStatus(statusDraft,startDate,endDate, regionalOfficeIds)
+                viewModel.getComplaintWithStatus(statusDraft,startDate,endDate, regionalOfficeIds,subadminId)
             }else if(enableestimate == true) {
-                viewModel.getComplaintWithStatus(statusEstimated,startDate,endDate, regionalOfficeIds)
+                viewModel.getComplaintWithStatus(statusEstimated,startDate,endDate, regionalOfficeIds,subadminId)
             }else if(enablebilled == true) {
-                viewModel.getComplaintWithStatus(statusBilled,startDate,endDate, regionalOfficeIds)
+                viewModel.getComplaintWithStatus(statusBilled,startDate,endDate, regionalOfficeIds,subadminId)
             }else if(enablepayment == true){
-                viewModel.getComplaintWithStatus(statusPayment,startDate,endDate, regionalOfficeIds)
+                viewModel.getComplaintWithStatus(statusPayment,startDate,endDate, regionalOfficeIds,subadminId)
             }else {
                 viewModel.getComplaintByOutletId(outletid!!)
             }
@@ -161,7 +163,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
         }
         if (enableTotal == true){
             viewBinding.outletComplaintsToolbar.setTitle("All Complaints")
-            viewModel.getComplaintWithStatus(statustotal,startDate,endDate, regionalOfficeIds)
+            viewModel.getComplaintWithStatus(statustotal,startDate,endDate, regionalOfficeIds,subadminId)
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -198,7 +200,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         } else if (enableDue == true){
             viewBinding.outletComplaintsToolbar.setTitle("Due Complaints")
-            viewModel.getComplaintWithStatus(statusdue,startDate,endDate, regionalOfficeIds)
+            viewModel.getComplaintWithStatus(statusdue,startDate,endDate, regionalOfficeIds,subadminId)
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -236,7 +238,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enableWorking == true){
             viewBinding.outletComplaintsToolbar.setTitle("Working Complaints")
-            viewModel.getComplaintWithStatus(statusworking,startDate,endDate, regionalOfficeIds)
+            viewModel.getComplaintWithStatus(statusworking,startDate,endDate, regionalOfficeIds,subadminId)
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -274,7 +276,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enablePending == true){
             viewBinding.outletComplaintsToolbar.setTitle("Pending Letter Complaints")
-            viewModel.getComplaintWithStatus(statuspending,startDate,endDate, regionalOfficeIds)
+            viewModel.getComplaintWithStatus(statuspending,startDate,endDate, regionalOfficeIds,subadminId)
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -311,7 +313,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enabledone == true){
             viewBinding.outletComplaintsToolbar.setTitle("Done Complaints")
-            viewModel.getComplaintWithStatus(statusDone,startDate,endDate, regionalOfficeIds)
+            viewModel.getComplaintWithStatus(statusDone,startDate,endDate, regionalOfficeIds,subadminId)
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -348,7 +350,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enabledraft == true){
             viewBinding.outletComplaintsToolbar.setTitle("Draft Complaints")
-            viewModel.getComplaintWithStatus(statusDraft,startDate,endDate, regionalOfficeIds)
+            viewModel.getComplaintWithStatus(statusDraft,startDate,endDate, regionalOfficeIds,subadminId)
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -385,7 +387,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enableestimate == true){
             viewBinding.outletComplaintsToolbar.setTitle("Estimated Complaints")
-            viewModel.getComplaintWithStatus(statusEstimated,startDate,endDate, regionalOfficeIds)
+            viewModel.getComplaintWithStatus(statusEstimated,startDate,endDate, regionalOfficeIds,subadminId)
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -422,7 +424,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enablebilled == true){
             viewBinding.outletComplaintsToolbar.setTitle("Billed Complaints")
-            viewModel.getComplaintWithStatus(statusBilled,startDate,endDate, regionalOfficeIds)
+            viewModel.getComplaintWithStatus(statusBilled,startDate,endDate, regionalOfficeIds,subadminId)
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{
@@ -459,7 +461,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
 
         }else if (enablepayment == true){
             viewBinding.outletComplaintsToolbar.setTitle("Payment Complaints")
-            viewModel.getComplaintWithStatus(statusPayment,startDate,endDate, regionalOfficeIds)
+            viewModel.getComplaintWithStatus(statusPayment,startDate,endDate, regionalOfficeIds,subadminId)
             viewModel.complaintStatusState.observe(this, androidx.lifecycle.Observer {
                 when(it){
                     Lce.Loading->{

@@ -2,7 +2,6 @@ package com.vinners.cube_vishwakarma.ui.outlets
 
 
 import android.content.Intent
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -30,7 +29,6 @@ import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityOutletsBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
-import com.vinners.cube_vishwakarma.ui.dashboardFilter.FinancialYearData
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import java.util.*
 import javax.inject.Inject
@@ -63,6 +61,7 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
     var saleselectedId:List<Int> = listOf<Int>()
     var selectedItemList:String? = ""
     var saleselectedItemList:String? = ""
+
 
     var searchableItems= listOf<RegionalOfficeFilterData>()
     var filterOutletList: ArrayList<OutletsList> = ArrayList<OutletsList>()
@@ -117,14 +116,18 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
         viewBinding.outletRecycler.layoutManager = LinearLayoutManager(this)
         outletRecyclerAdapter.updateViewList(emptyList())
         viewBinding.outletRecycler.adapter = outletRecyclerAdapter
-//        viewBinding.refreshLayout.setOnRefreshListener {
-//
-//            if (!viewBinding.refreshLayout.isRefreshing) {
-//                viewBinding.refreshLayout.isRefreshing = true
-//            }
-//            viewModel.getOutletData()
-//
-//        }
+        viewBinding.refreshLayout.setOnRefreshListener {
+
+            if (!viewBinding.refreshLayout.isRefreshing) {
+                viewBinding.refreshLayout.isRefreshing = true
+            }
+            if (roselectedId.isEmpty().not() || saleselectedId.isEmpty().not()) {
+                viewModel.getOutletsById(roselectedId, saleselectedId)
+            }else{
+                viewModel.getOutletData()
+            }
+
+        }
         val bottomSheetCallback = object: BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(p0: View, p1: Float) {}
             override fun onStateChanged(p0: View, p1: Int) {}
@@ -159,6 +162,9 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
                     if (it.content.isEmpty()){
                         viewBinding.errorLayout.root.setVisibilityVisible()
                         viewBinding.progressBar.setVisibilityGone()
+                        if (!viewBinding.refreshLayout.isRefreshing) {
+                            viewBinding.refreshLayout.isRefreshing = false
+                        }
                         viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
                         viewBinding.errorLayout.errorActionButton.setVisibilityGone()
                         viewBinding.errorLayout.messageTv.text = "Not Outlets Found"
@@ -212,6 +218,7 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
                 }
             is Lce.Content->
             {
+
                 if (it.content.isEmpty()){
                     viewBinding.errorLayout.root.setVisibilityVisible()
                     viewBinding.progressBar.setVisibilityGone()
@@ -317,42 +324,6 @@ class OutletsActivity : BaseActivity<ActivityOutletsBinding,OutletsViewModel>(R.
             bottomSheetDialog.dismiss()
 
 
-
-
-//            val cur = db.getDataUnique(roselectedId,saleselectedId)
-//            if (cur.count > 0) {
-////                if (cur.moveToFirst()) {
-////                    do {
-////                        filterOutletList.add(OutletsList(cur.getString(1)))
-////                    } while (cur.moveToNext())
-////                }
-//                while (cur.moveToNext()) {
-//                    Log.e("value", "" + cur.getString(1));
-//                    filterOutletList.add(OutletsList(cur.getString(1)))
-//                }
-//                cur.close()
-//                db.close()
-//            }
-//            val cu: Cursor = db.getData()
-//            if (cu.count > 0) {
-//                filterOutletList.clear()
-//                while (cu.moveToNext()) {
-//                    Log.e("value", "" + cu.getString(1));
-//                    filterOutletList.add(OutletsList(cu.getString(1)))
-//                }
-//            }
-//            outletRecyclerAdapter.updateViewList(database)
-//            val cursor: Cursor = db.getListItem(roselectedId,saleselectedId)
-
-//            if (cursor != null) {
-//                cursor.moveToNext();
-//
-//                do {
-////                    outletRecyclerAdapter.updateViewList(cursor.getString(1))
-//                    Log.e("value", "" + cursor.getString(1));
-//
-//                } while (cursor.moveToNext());
-//            }
         }
 
     }

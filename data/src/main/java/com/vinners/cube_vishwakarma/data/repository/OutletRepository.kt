@@ -64,7 +64,7 @@ class OutletRepository @Inject constructor(
         return outletRemoteDataStore.getComplaints(outletid)
     }
 
-    suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?):List<MyComplaintList>{
-        return outletRemoteDataStore.getComplaintWithStatus(status,startDate,endDate,regionalOfficeIds)
+    suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?,subadminIds:String?):List<MyComplaintList>{
+        return outletRemoteDataStore.getComplaintWithStatus(status,startDate,endDate,regionalOfficeIds,subadminIds)
     }
 }

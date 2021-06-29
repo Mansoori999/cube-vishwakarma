@@ -3,15 +3,13 @@ package com.vinners.cube_vishwakarma.ui
 
 import android.content.Intent
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
@@ -48,6 +46,7 @@ import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.feature_auth.ui.AuthActivity
 import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
+import com.vinners.cube_vishwakarma.ui.dashboardFilter.ActiveSubAdminData
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.FinancialYearData
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
@@ -65,7 +64,7 @@ import kotlin.collections.ArrayList
 
 
 class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R.layout.activity_main),
-    NavigationView.OnNavigationItemSelectedListener,SelectionCompleteListener ,MainActivityRecyclerAdapter.ClickListener{
+    NavigationView.OnNavigationItemSelectedListener,MainActivityRecyclerAdapter.ClickListener {
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
 
@@ -73,48 +72,49 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     lateinit var userSessionManager: UserSessionManager
 
     var list: MutableList<String> = ArrayList()
-    var searchableItems= listOf<RegionalOfficeFilterData>()
+    var searchableItems = listOf<RegionalOfficeFilterData>()
 
     private var selectionCompleteListener: SelectionCompleteListener? = null
-    private lateinit var bottomSheetDialog:BottomSheetDialog
+    private lateinit var bottomSheetDialog: BottomSheetDialog
 
     private lateinit var sheetBehavior: BottomSheetBehavior<View>
 
     var afterResetRO = mutableListOf<RegionalOfficeFilterData>()
     private lateinit var financialspinner: SearchableSpinner
-    private lateinit var regionalspinner:TextView
-    private lateinit var applyBtn:TextView
-    private lateinit var resestTV : TextView
+    private lateinit var regionalspinner: TextView
+    private lateinit var applyBtn: TextView
+    private lateinit var resestTV: TextView
+    private lateinit var subadminSpinner: SearchableSpinner
 //    var afterResetRO = listOf<RegionalOfficeFilterData>()
 
-    var roselectedId:String? = null
+    var roselectedId: String? = null
 
-    lateinit var  defaultStartDate : String
-    lateinit var  defaultEndDate : String
-    lateinit var  startDateF : String
-    lateinit var  endDateF : String
-    var startdate:String? = null
-    var enddate : String? =null
-    var startdatef:String? = null
-    var enddatef : String? =null
-    var regionalOfficeIds : String? = null
-    var fyearDateId :Int ?= null
-    var fyearDateName:String?= null
-    var roIds : String? =null
-    val isClicked:Boolean = false
+    lateinit var defaultStartDate: String
+    lateinit var defaultEndDate: String
+    lateinit var startDateF: String
+    lateinit var endDateF: String
+    var startdate: String? = null
+    var enddate: String? = null
+    var startdatef: String? = null
+    var enddatef: String? = null
+    var regionalOfficeIds: String? = null
+    var fyearDateId: Int? = null
+    var fyearDateName: String? = null
+    var roIds: String? = null
+    val isClicked: Boolean = false
+    var subadminId :String? = null
 
     @Inject
-    lateinit var appInfo : AppInfo
+    lateinit var appInfo: AppInfo
 
     private val homeList = ArrayList<MainActivityListModel>()
 
     private val mainActivityRecyclerAdapter: MainActivityRecyclerAdapter by lazy {
         MainActivityRecyclerAdapter(this)
-            .apply {
-                updateViewList(homeList = emptyList())
-            }
+                .apply {
+                    updateViewList(homeList = emptyList())
+                }
     }
-
 
 
     override val viewModel: MainActivityViewModel by viewModels { viewModelFactory }
@@ -254,11 +254,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_TOTAL_ACTIVITY, true)
             intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("endDate", defaultEndDate)
             intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF",endDateF)
-            intent.putExtra("regionalOfficeId",regionalOfficeIds)
-            intent.putExtra("regionalOfficeId",roselectedId)
+            intent.putExtra("endDateF", endDateF)
+            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+            intent.putExtra("regionalOfficeId", roselectedId)
+            intent.putExtra("subadminId",subadminId)
             startActivity(intent)
 
         }
@@ -267,11 +268,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_DUE_ACTIVITY, true)
             intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("endDate", defaultEndDate)
             intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF",endDateF)
-            intent.putExtra("regionalOfficeId",regionalOfficeIds)
-            intent.putExtra("regionalOfficeId",roselectedId)
+            intent.putExtra("endDateF", endDateF)
+            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+            intent.putExtra("regionalOfficeId", roselectedId)
+            intent.putExtra("subadminId",subadminId)
             startActivity(intent)
 
         }
@@ -280,11 +282,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_WORKING_ACTIVITY, true)
             intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("endDate", defaultEndDate)
             intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF",endDateF)
-            intent.putExtra("regionalOfficeId",regionalOfficeIds)
-            intent.putExtra("regionalOfficeId",roselectedId)
+            intent.putExtra("endDateF", endDateF)
+            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+            intent.putExtra("regionalOfficeId", roselectedId)
+            intent.putExtra("subadminId",subadminId)
             startActivity(intent)
 
         }
@@ -293,11 +296,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_PENDING_ACTIVITY, true)
             intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("endDate", defaultEndDate)
             intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF",endDateF)
-            intent.putExtra("regionalOfficeId",regionalOfficeIds)
-            intent.putExtra("regionalOfficeId",roselectedId)
+            intent.putExtra("endDateF", endDateF)
+            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+            intent.putExtra("regionalOfficeId", roselectedId)
+            intent.putExtra("subadminId",subadminId)
             startActivity(intent)
 
         }
@@ -307,11 +311,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_DONE_ACTIVITY, true)
             intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("endDate", defaultEndDate)
             intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF",endDateF)
-            intent.putExtra("regionalOfficeId",regionalOfficeIds)
-            intent.putExtra("regionalOfficeId",roselectedId)
+            intent.putExtra("endDateF", endDateF)
+            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+            intent.putExtra("regionalOfficeId", roselectedId)
+            intent.putExtra("subadminId",subadminId)
             startActivity(intent)
 
         }
@@ -321,11 +326,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_DRAFT_ACTIVITY, true)
             intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("endDate", defaultEndDate)
             intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF",endDateF)
-            intent.putExtra("regionalOfficeId",regionalOfficeIds)
-            intent.putExtra("regionalOfficeId",roselectedId)
+            intent.putExtra("endDateF", endDateF)
+            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+            intent.putExtra("regionalOfficeId", roselectedId)
+            intent.putExtra("subadminId",subadminId)
             startActivity(intent)
 
         }
@@ -334,11 +340,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_ESTIMATE_ACTIVITY, true)
             intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("endDate", defaultEndDate)
             intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF",endDateF)
-            intent.putExtra("regionalOfficeId",regionalOfficeIds)
-            intent.putExtra("regionalOfficeId",roselectedId)
+            intent.putExtra("endDateF", endDateF)
+            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+            intent.putExtra("regionalOfficeId", roselectedId)
+            intent.putExtra("subadminId",subadminId)
             startActivity(intent)
 
         }
@@ -347,11 +354,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_BILLED_ACTIVITY, true)
             intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("endDate", defaultEndDate)
             intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF",endDateF)
-            intent.putExtra("regionalOfficeId",regionalOfficeIds)
-            intent.putExtra("regionalOfficeId",roselectedId)
+            intent.putExtra("endDateF", endDateF)
+            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+            intent.putExtra("regionalOfficeId", roselectedId)
+            intent.putExtra("subadminId",subadminId)
             startActivity(intent)
 
         }
@@ -360,11 +368,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             val intent = Intent(this, OutletComplaintsActivity::class.java)
             intent.putExtra(OutletComplaintsActivity.ENABLE_PAYMENT_ACTIVITY, true)
             intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate",defaultEndDate)
+            intent.putExtra("endDate", defaultEndDate)
             intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF",endDateF)
-            intent.putExtra("regionalOfficeId",regionalOfficeIds)
-            intent.putExtra("regionalOfficeId",roselectedId)
+            intent.putExtra("endDateF", endDateF)
+            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+            intent.putExtra("regionalOfficeId", roselectedId)
+            intent.putExtra("subadminId",subadminId)
             startActivity(intent)
 
         }
@@ -372,7 +381,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //        sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 //        val bottomSheetDialog = BottomSheetDialog(this)
 //        bottomSheetDialog.setContentView(bottomSheetView)
-        val bottomSheetCallback = object: BottomSheetBehavior.BottomSheetCallback() {
+        val bottomSheetCallback = object : BottomSheetBehavior.BottomSheetCallback() {
             override fun onSlide(p0: View, p1: Float) {}
             override fun onStateChanged(p0: View, p1: Int) {}
         }
@@ -381,6 +390,13 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         bottomSheetDialog.setContentView(bottomSheetView)
         financialspinner = bottomSheetView.findViewById(R.id.financial_spinner)
         regionalspinner = bottomSheetView.findViewById(R.id.ro_spinner)
+        subadminSpinner = bottomSheetView.findViewById(R.id.subadmin_spinner)
+        val activeSubadminlayout = bottomSheetView.findViewById<LinearLayout>(R.id.activeSubadmin_layout)
+        if (userSessionManager.designation?.toLowerCase().equals("admin")) {
+            activeSubadminlayout.setVisibilityVisible()
+        } else {
+            activeSubadminlayout.setVisibilityGone()
+        }
         regionalspinner.setHintTextColor(getResources().getColor(R.color.black))
         sheetBehavior = BottomSheetBehavior.from(bottomSheetView.parent as View)
         sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -400,6 +416,12 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         applyBtn = bottomSheetView.findViewById(R.id.apply_textview)
         resestTV = bottomSheetView.findViewById(R.id.resestTV)
 
+        subadminSpinner.onItemSelected { adapterView, view, i, l ->
+            if (subadminSpinner.childCount != 0 && subadminSpinner.selectedItemPosition != 0) {
+                val subadminData = subadminSpinner.selectedItem as ActiveSubAdminData
+                subadminId = subadminData.id
+            }
+        }
         initBottomsheetFileterView()
     }
 
@@ -418,11 +440,11 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //    }
 
     private fun preparehomeData() {
-        homeList.add(MainActivityListModel("Totals","#99CC33"))
-        homeList.add(MainActivityListModel("Due","#FF6633"))
-        homeList.add(MainActivityListModel("Working","#0066CC"))
-        homeList.add(MainActivityListModel("Pending Letter","#2EC43E"))
-        homeList.add(MainActivityListModel("Done","#ff0000"))
+        homeList.add(MainActivityListModel("Totals", "#99CC33"))
+        homeList.add(MainActivityListModel("Due", "#FF6633"))
+        homeList.add(MainActivityListModel("Working", "#0066CC"))
+        homeList.add(MainActivityListModel("Pending Letter", "#2EC43E"))
+        homeList.add(MainActivityListModel("Done", "#ff0000"))
 
         mainActivityRecyclerAdapter.notifyDataSetChanged()
     }
@@ -457,8 +479,8 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         viewModel.initViewModel()
 
         viewModel.financialFilterState.observe(this, Observer {
-            when(it){
-                Lce.Loading->{
+            when (it) {
+                Lce.Loading -> {
                 }
                 is Lce.Content -> {
 
@@ -473,33 +495,33 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                     setFinancialYearTypeSpinner(financialdata)
 
                 }
-                is Lce.Error->{
+                is Lce.Error -> {
                 }
             }
         })
         viewModel.getRinancialYearFilterData()
 
         viewModel.dashboardState.observe(this, Observer {
-            when(it){
-                Lce.Loading ->{
+            when (it) {
+                Lce.Loading -> {
                     viewBinding.contentMainContainer.loadingData.setVisibilityVisible()
                 }
                 is Lce.Content -> {
 
                     viewBinding.contentMainContainer.loadingData.setVisibilityGone()
-                        viewBinding.contentMainContainer.totals.text = it.content.total
-                        viewBinding.contentMainContainer.due.text = it.content.due
-                        viewBinding.contentMainContainer.working.text = it.content.working
-                        viewBinding.contentMainContainer.pending.text = it.content.pendingletter
-                        viewBinding.contentMainContainer.done.text = it.content.done
-                        viewBinding.contentMainContainer.draft.text = it.content.draft
-                        viewBinding.contentMainContainer.estimated.text = it.content.estimated
-                        viewBinding.contentMainContainer.billed.text = it.content.billed
-                        viewBinding.contentMainContainer.payment.text = it.content.payment
+                    viewBinding.contentMainContainer.totals.text = it.content.total
+                    viewBinding.contentMainContainer.due.text = it.content.due
+                    viewBinding.contentMainContainer.working.text = it.content.working
+                    viewBinding.contentMainContainer.pending.text = it.content.pendingletter
+                    viewBinding.contentMainContainer.done.text = it.content.done
+                    viewBinding.contentMainContainer.draft.text = it.content.draft
+                    viewBinding.contentMainContainer.estimated.text = it.content.estimated
+                    viewBinding.contentMainContainer.billed.text = it.content.billed
+                    viewBinding.contentMainContainer.payment.text = it.content.payment
 
 
                 }
-                is Lce.Error ->{
+                is Lce.Error -> {
                     viewBinding.contentMainContainer.loadingData.setVisibilityGone()
                     showInformationDialog(it.error)
 
@@ -508,10 +530,10 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         })
 
         viewModel.regionalOfficeFilterState.observe(this, Observer {
-            when(it){
-                Lce.Loading->{
+            when (it) {
+                Lce.Loading -> {
                 }
-                is Lce.Content ->{
+                is Lce.Content -> {
                     val regionalOffice = it.content.map {
                         RegionalOfficeFilterData(
                                 id = it.roid!!,
@@ -530,12 +552,60 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
 
                 }
-                is Lce.Error->{
+                is Lce.Error -> {
 
                 }
             }
         })
         viewModel.getRegionalOfficeFilterData()
+        viewModel.acitveSubAdminFilterState.observe(this, Observer {
+            when (it) {
+                Lce.Loading -> {
+                }
+                is Lce.Content -> {
+
+                    val activeSubadmin = it.content.map {
+                        ActiveSubAdminData(
+                                id = it.id!!,
+                                name = it.name!!,
+
+                                )
+                    }.toMutableList()
+                    setActiveSubAdminTypeSpinner(activeSubadmin)
+
+                }
+                is Lce.Error -> {
+                }
+            }
+        })
+        viewModel.activeSubAdmib()
+
+    }
+
+    private fun setActiveSubAdminTypeSpinner(activeSubadmin: MutableList<ActiveSubAdminData>) {
+        activeSubadmin.sortBy { it.name }
+        val setItems = activeSubadmin.distinctBy { it.name }
+        activeSubadmin.clear()
+        activeSubadmin.addAll(setItems)
+        activeSubadmin.add(
+                0,
+                ActiveSubAdminData(
+                        id = "XX",
+                        name = "Select SubAdmin"
+                )
+        )
+        val aa = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                activeSubadmin
+        )
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        with(subadminSpinner) {
+            adapter = aa
+            prompt = "Select SubAdmin"
+            gravity = Gravity.CENTER
+        }
+
     }
 
     private fun setRegionalOfficeTypeSpinner(regionalOffice: MutableList<RegionalOfficeFilterData>) {
@@ -571,7 +641,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                                         position: Int,
                                         b: Boolean
                                 ) {
-                                    for(i in 0 until regionalOffice.size) {
+                                    for (i in 0 until regionalOffice.size) {
                                         if (regionalOffice[i].id == item.id) {
                                             regionalOffice[i].isSelected = b
                                             break
@@ -579,7 +649,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                                     }
                                 }
 
-                            },false)
+                            }, false)
 
             adapter.notifyDataSetChanged()
 
@@ -603,14 +673,14 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
             alertDialog.setPositiveButton("Done") { dialogInterface, i ->
                 dialogInterface.dismiss()
-                val resultList =ArrayList<RegionalOfficeFilterData>()
+                val resultList = ArrayList<RegionalOfficeFilterData>()
                 for (i in 0 until regionalOffice.size) {
                     if (regionalOffice[i].isSelected) {
                         resultList.add(regionalOffice[i])
                     }
                 }
                 regionalspinner.text = resultList.toString().substring(1, resultList.toString().length - 1)
-                roselectedId= resultList.joinToString (separator = ","){ "${it.id}" }
+                roselectedId = resultList.joinToString(separator = ",") { "${it.id}" }
 
 //                selectionCompleteListener?.onCompleteSelection(resultList)
             }
@@ -644,7 +714,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         resestTV.setOnClickListener {
 //            regionalspinner.text = ""//TODO
 //            roselectedId = ""
-            val resultList =ArrayList<RegionalOfficeFilterData>()
+            val resultList = ArrayList<RegionalOfficeFilterData>()
             val stringBuilder = StringBuilder()
             for (i in 0 until regionalOffice.size) {
                 if (regionalOffice[i].isSelected) {
@@ -654,7 +724,6 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 }
             }
         }
-
 
 
 //            val dayArray = listOf<String>("monday","tuesday","wednesday","thrusday","friday")
@@ -686,16 +755,10 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
     }
 
-    override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
-        val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
-        roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
-        Log.d("nja", roselectedId)
-        regionalspinner.text = selectedItemList
-    }
     private fun setFinancialYearTypeSpinner(financialdata: MutableList<FinancialYearData>) {
         financialdata.sortBy { it.name }
 
-        for (i in 0 until financialdata.size){
+        for (i in 0 until financialdata.size) {
 
             var startDate = financialdata.get(i).startdate
             val endDate = financialdata.get(i).enddate
@@ -704,12 +767,9 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //          val stDate =DateTimeHelper.getDDMMYYYYDateFromString(startdate)
 //            val enDate = DateTimeHelper.getDDMMYYYYDateFromString(endDate)
             val stDate = dateFormat.parse(startDate)
-           val enDate = dateFormat.parse(endDate)
+            val enDate = dateFormat.parse(endDate)
             val currentdate = Calendar.getInstance().time
 //            val currentdate = dateFormat.format(cdate)
-
-
-
 
 
             Log.d("sjh", enDate.toString())
@@ -722,7 +782,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 startdate = financialdata.get(i).startdate
                 enddate = financialdata.get(i).enddate
 
-            }else{
+            } else {
 //               Toast.makeText(this,"nxjj",Toast.LENGTH_LONG).show()
             }
 
@@ -759,14 +819,13 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
 
     }
+
     private fun startDateAndEndDatePassForDashBoard() {
 
-            defaultStartDate = startdate.toString()
-            defaultEndDate = enddate.toString()
+        defaultStartDate = startdate.toString()
+        defaultEndDate = enddate.toString()
 
-            viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds)
-
-
+        viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds,subadminId)
 
 
     }
@@ -776,26 +835,26 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
 
         applyBtn.setOnClickListener {
-            var sdate:String?=null
-            var eDate:String?=null
+            var sdate: String? = null
+            var eDate: String? = null
             financialspinner.onItemSelected { adapterView, _, _, _ ->
                 adapterView ?: return@onItemSelected
                 val financialData = financialspinner.selectedItem as FinancialYearData
 //                startdatef = financialData.startdate
 //                enddatef  = financialData.enddate
             }
-            val financialData = financialspinner.selectedItem as FinancialYearData
-            startdatef = financialData.startdate
-            enddatef  = financialData.enddate
+            val activeSubadminId = (subadminSpinner.selectedItem as ActiveSubAdminData).id.toString()
+                val financialData = financialspinner.selectedItem as FinancialYearData
+                startdatef = financialData.startdate
+                enddatef = financialData.enddate
+                startDateF = startdatef.toString()
+                endDateF = enddatef.toString()
+                val roIds = roselectedId
+                viewModel.dashBoardData(startDateF, endDateF, roselectedId,subadminId)
+                sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
+                bottomSheetDialog.dismiss()
 
-            startDateF = startdatef.toString()
-            endDateF = enddatef.toString()
-            val roIds = roselectedId
-            viewModel.dashBoardData(startDateF, endDateF,roselectedId)
-            sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
-            bottomSheetDialog.dismiss()
-
-        }
+            }
 
 //        resestTV.setOnClickListener {
 //            regionalspinner.text = ""//TODO
@@ -815,58 +874,58 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //        }
 
 
-    }
-
-
-
-
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.nav_complaint ->{
-                val intent = Intent(this, ComplaintsActivity::class.java)
-                startActivity(intent)
-
-            }
-            R.id.nav_billing->{
-                Toast.makeText(this,"Comming soon",Toast.LENGTH_LONG).show()
-            }
-            R.id.nav_doc ->{
-                val intent = Intent(this, DocumentsActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_attendance ->{
-                val intent = Intent(this, AttendanceActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_expanse ->{
-                val intent = Intent(this, ExpenseActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_tutorial ->{
-                val intent = Intent(this, TutorialsActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_outlet ->{
-                val intent = Intent(this, OutletsActivity::class.java)
-                startActivity(intent)
-            }
-            R.id.nav_logout->{
-                MaterialAlertDialogBuilder(this)
-                        .setTitle("Log Out")
-                        .setMessage("Do you want to log out?")
-                        .setPositiveButton("Yes") { _, _ ->
-//                        userSessionManager.logOut()
-                            viewModel.logout()
-                        }.setNegativeButton("No") { dialog, _ ->
-                            dialog.cancel()
-                        }.show()
-            }
         }
-        return true
-    }
 
-    override fun onItemClick(position: Int) {
+
+
+
+
+        override fun onNavigationItemSelected(item: MenuItem): Boolean {
+            when (item.itemId) {
+                R.id.nav_complaint -> {
+                    val intent = Intent(this, ComplaintsActivity::class.java)
+                    startActivity(intent)
+
+                }
+//                R.id.nav_billing -> {
+//                    Toast.makeText(this, "Comming soon", Toast.LENGTH_LONG).show()
+//                }
+                R.id.nav_doc -> {
+                    val intent = Intent(this, DocumentsActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_attendance -> {
+                    val intent = Intent(this, AttendanceActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_expanse -> {
+                    val intent = Intent(this, ExpenseActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_tutorial -> {
+                    val intent = Intent(this, TutorialsActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_outlet -> {
+                    val intent = Intent(this, OutletsActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_logout -> {
+                    MaterialAlertDialogBuilder(this)
+                            .setTitle("Log Out")
+                            .setMessage("Do you want to log out?")
+                            .setPositiveButton("Yes") { _, _ ->
+//                        userSessionManager.logOut()
+                                viewModel.logout()
+                            }.setNegativeButton("No") { dialog, _ ->
+                                dialog.cancel()
+                            }.show()
+                }
+            }
+            return true
+        }
+
+        override fun onItemClick(position: Int) {
 //        when(position){
 //            0 ->
 //            {
@@ -893,11 +952,10 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //
 //
 //        }
+        }
+
+
     }
 
-
-
-
-}
 
 

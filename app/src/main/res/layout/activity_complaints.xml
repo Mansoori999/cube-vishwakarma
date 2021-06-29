@@ -71,6 +71,7 @@
         android:id="@+id/complaint_request"
         android:layout_weight="1"
         app:cardCornerRadius="8dp"
+        android:visibility="gone"
         android:layout_height="120dp">
         <RelativeLayout
             android:layout_width="match_parent"

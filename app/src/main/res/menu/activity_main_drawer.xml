@@ -6,10 +6,10 @@
             android:checked="false"
             android:title="Complaints" />
 
-        <item android:id="@+id/nav_billing"
-            android:icon="@drawable/ic_rupee"
-            android:checked="false"
-            android:title="Billig" />
+<!--        <item android:id="@+id/nav_billing"-->
+<!--            android:icon="@drawable/ic_rupee"-->
+<!--            android:checked="false"-->
+<!--            android:title="Billing" />-->
 
         <item android:id="@+id/nav_doc"
             android:icon="@drawable/ic_document"
