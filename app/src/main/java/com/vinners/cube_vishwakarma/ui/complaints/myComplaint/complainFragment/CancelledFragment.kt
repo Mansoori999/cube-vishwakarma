@@ -36,6 +36,7 @@ class CancelledFragment : BaseFragment<FragmentCancelledBinding, AllComplaintFra
 
     }
 
+    var adminUserid : String = ""
     private val allComplaintRecyclerAdapter: AllComplaintRecyclerAdapter by lazy {
         AllComplaintRecyclerAdapter()
                 .apply {
@@ -78,7 +79,12 @@ class CancelledFragment : BaseFragment<FragmentCancelledBinding, AllComplaintFra
                 viewBinding.refreshLayout.isRefreshing = true
             }
 
-            viewModel.getComplaintList(userid!!)
+            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                viewModel.getComplaintList(adminUserid)
+            }else{
+                viewModel.getComplaintList(userid!!)
+
+            }
 
         }
     }
@@ -124,8 +130,12 @@ class CancelledFragment : BaseFragment<FragmentCancelledBinding, AllComplaintFra
 
             }
         })
+        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+            viewModel.getComplaintList(adminUserid)
+        }else{
+            viewModel.getComplaintList(userid!!)
 
-        viewModel.getComplaintList(userid!!)
+        }
 
     }
 

@@ -677,30 +677,13 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         } else {
             viewBinding.changeStatus.setVisibilityGone()
         }
-
-        if (content.status?.toLowerCase().equals("done")) {
-            if (content.letterpic != null) {
-                viewBinding.imageContainer.setVisibilityGone()
-//                viewBinding.letterpic.imageView.load(appInfo.getFullAttachmentUrl(content.letterpic!!))
-            } else {
-                viewBinding.imageContainer.setVisibilityGone()
-            }
-
-        } else {
-            viewBinding.imageContainer.setVisibilityGone()
-
-        }
     }
-        viewBinding.letterpic.imageView.setOnClickListener {
-            val imageUrl :String = content.letterpic.toString()
-            imageOpenDialog(imageUrl)
-        }
+
         detailsId = content.id
         statusremarks = content.statusremarks
         complaintid = content.complaintid
         status = content.status
-
-    }
+}
 
     override fun onInitDataBinding() {
         id = intent.getStringExtra("complaintId")

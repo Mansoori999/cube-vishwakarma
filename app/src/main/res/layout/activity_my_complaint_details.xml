@@ -44,616 +44,655 @@
         android:layout_height="wrap_content"
         android:overScrollMode="never"
         android:paddingBottom="@dimen/dimension_20dp">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:id="@+id/detail_screen"
-        android:paddingTop="10dp"
-        android:layout_height="wrap_content">
-
-        <View
-            android:id="@+id/divider"
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true" />
-        <TextView
-            android:id="@+id/date_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif"
-
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Date"
-            android:textColor="#CC000000"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/date_label"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#80000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/complaintId_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="ComplaintID"
-            android:textColor="#CC000000"
-            android:textSize="16sp" />
-        <TextView
-            android:id="@+id/complaint_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/complaintId_label"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#99000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/work_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/date"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Work"
-            android:textColor="#CC000000"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/work"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/work_label"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#99000000"
-            android:textSize="12sp" />
-
-
-        <TextView
-            android:id="@+id/type_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/complaint_id"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Type"
-            android:textColor="#CC000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/type_label"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#80000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/outlet_name_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/work"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Outlet Name"
-            android:textColor="#CC000000"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/outlet_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/outlet_name_label"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#99000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/regional_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/type"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Regional Office"
-            android:textColor="#CC000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/regional"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/regional_label"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#80000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/sales_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/outlet_name"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Sales Area"
-            android:textColor="#CC000000"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/sales"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/sales_label"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#99000000"
-            android:textSize="12sp" />
-
-
-        <TextView
-            android:id="@+id/district_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/regional"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="District"
-            android:textColor="#CC000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/district"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/district_label"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#80000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/letter_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/sales"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Letter Status"
-            android:textColor="#CC000000"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/letter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/letter_label"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#99000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/status_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/district"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Status"
-            android:textColor="@android:color/holo_red_dark"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/status_label"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#80000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/subadmin_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/letter"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Subadmin"
-            android:textColor="#CC000000"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/subadmin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/subadmin_label"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#99000000"
-            android:textSize="12sp" />
-
-
-        <TextView
-            android:id="@+id/supervisor_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/status"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Supervisor"
-            android:textColor="#CC000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/supervisor"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/supervisor_label"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#80000000"
-            android:textSize="12sp" />
-
-
-        <TextView
-            android:id="@+id/foreman_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/subadmin"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Foreman"
-            android:textColor="#CC000000"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/foreman"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/foreman_label"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#99000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/enduser_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/supervisor"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="End User"
-            android:textColor="#CC000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/enduser"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/enduser_label"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#80000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/order_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/foreman"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Order By"
-            android:textColor="#CC000000"
-            android:textSize="16sp" />
-
-
-        <TextView
-            android:id="@+id/order"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/order_label"
-            android:layout_alignEnd="@id/divider"
-            android:layout_alignRight="@id/divider"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#99000000"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/remarks_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/enduser"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="Remarks"
-            android:textColor="#CC000000"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/remarks"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/remarks_label"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp"
-            android:layout_toRightOf="@id/divider"
-            android:fontFamily="sans-serif"
-            android:gravity="center"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:text="NA"
-            android:textColor="#80000000"
-            android:textSize="12sp" />
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/order"
-            android:id="@+id/imageContainer"
-            android:visibility="gone"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:id="@+id/detail_screen"
+            android:paddingTop="10dp"
+            android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/dividers"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true" />
+
+                    <TextView
+                        android:id="@+id/date_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@id/dividers"
+                        android:layout_alignRight="@id/dividers"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="sans-serif"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="Date"
+                        android:textColor="#CC000000"
+                        android:textSize="16sp" />
+
+
+                    <TextView
+                        android:id="@+id/date"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/date_label"
+                        android:layout_alignEnd="@id/dividers"
+                        android:layout_alignRight="@id/dividers"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="sans-serif"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="NA"
+                        android:textColor="#80000000"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/complaintId_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:paddingLeft="3dp"
+                        android:layout_toRightOf="@id/dividers"
+                        android:paddingRight="3dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:text="ComplaintID"
+                        android:textColor="#CC000000"
+                        android:textSize="16sp" />
+            <TextView
+                android:id="@+id/complaint_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/complaintId_label"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:gravity="center"
+                android:layout_toRightOf="@id/dividers"
+                android:textColor="#80000000"
+                android:textSize="12sp" />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/divider1"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true" />
+                    <TextView
+                        android:id="@+id/work_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignEnd="@id/divider1"
+                        android:layout_alignRight="@id/divider1"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="sans-serif"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="Work"
+                        android:textColor="#CC000000"
+                        android:textSize="16sp" />
+
+
+                    <TextView
+                        android:id="@+id/work"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/work_label"
+                        android:layout_alignEnd="@id/divider1"
+                        android:layout_alignRight="@id/divider1"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="10dp"
+                        android:fontFamily="sans-serif"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="NA"
+                        android:textColor="#99000000"
+                        android:textSize="12sp" />
+
+
+                    <TextView
+                        android:id="@+id/type_label"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toRightOf="@id/divider1"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="Type"
+                        android:textColor="#CC000000"
+                        android:textSize="14sp" />
+
+                    <TextView
+                        android:id="@+id/type"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/type_label"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_toRightOf="@id/divider1"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:paddingLeft="3dp"
+                        android:paddingRight="3dp"
+                        android:text="NA"
+                        android:textColor="#80000000"
+                        android:textSize="12sp" />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:id="@+id/outlet_name_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/divider2"
+                android:layout_alignRight="@id/divider2"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Outlet Name"
+                android:textColor="#CC000000"
+                android:textSize="16sp" />
+
 
             <TextView
+                android:id="@+id/outlet_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Image"
-                android:textColor="@color/black"
-                android:textSize="12sp"
-                android:textStyle="normal" />
+                android:layout_below="@id/outlet_name_label"
+                android:layout_alignEnd="@id/divider2"
+                android:layout_alignRight="@id/divider2"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#99000000"
+                android:textSize="12sp" />
 
-            <include
-                android:id="@+id/letterpic"
-                layout="@layout/doc_click_image_layout"
+            <TextView
+                android:id="@+id/regional_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="-8dp" />
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider2"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Regional Office"
+                android:textColor="#CC000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/regional"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/regional_label"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider2"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#80000000"
+                android:textSize="12sp" />
+
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/divider3"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:id="@+id/sales_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/divider3"
+                android:layout_alignRight="@id/divider3"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Sales Area"
+                android:textColor="#CC000000"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/sales"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/sales_label"
+                android:layout_alignEnd="@id/divider3"
+                android:layout_alignRight="@id/divider3"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#99000000"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/district_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider3"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="District"
+                android:textColor="#CC000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/district"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/district_label"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider3"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#80000000"
+                android:textSize="12sp" />
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/divider4"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/letter_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/divider4"
+                android:layout_alignRight="@id/divider4"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Letter Status"
+                android:textColor="#CC000000"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/letter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/letter_label"
+                android:layout_alignEnd="@id/divider4"
+                android:layout_alignRight="@id/divider4"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#99000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/status_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider4"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Status"
+                android:textColor="@android:color/holo_red_dark"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/status_label"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider4"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#80000000"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/divider5"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true" />
+
+            <TextView
+                android:id="@+id/subadmin_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/divider5"
+                android:layout_alignRight="@id/divider5"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Subadmin"
+                android:textColor="#CC000000"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/subadmin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/subadmin_label"
+                android:layout_alignEnd="@id/divider5"
+                android:layout_alignRight="@id/divider5"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#99000000"
+                android:textSize="12sp" />
+
+
+            <TextView
+                android:id="@+id/supervisor_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider5"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Supervisor"
+                android:textColor="#CC000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/supervisor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/supervisor_label"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider5"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#80000000"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <View
+                android:id="@+id/divider"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true" />
+            <TextView
+                android:id="@+id/foreman_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@id/divider"
+                android:layout_alignRight="@id/divider"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="Foreman"
+                android:textColor="#CC000000"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/foreman"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/foreman_label"
+                android:layout_alignEnd="@id/divider"
+                android:layout_alignRight="@id/divider"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#99000000"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/enduser_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="End User"
+                android:textColor="#CC000000"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/enduser"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/enduser_label"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_toRightOf="@id/divider"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:text="NA"
+                android:textColor="#80000000"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <View
+                    android:id="@+id/divider6"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true" />
+                <TextView
+                    android:id="@+id/order_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignEnd="@id/divider6"
+                    android:layout_alignRight="@id/divider6"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="sans-serif"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:text="Order By"
+                    android:textColor="#CC000000"
+                    android:textSize="16sp" />
+
+
+                <TextView
+                    android:id="@+id/order"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/order_label"
+                    android:layout_alignEnd="@id/divider6"
+                    android:layout_alignRight="@id/divider6"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_marginLeft="10dp"
+                    android:fontFamily="sans-serif"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:text="NA"
+                    android:textColor="#99000000"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/remarks_label"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@id/divider6"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:text="Remarks"
+                    android:textColor="#CC000000"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/remarks"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/remarks_label"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_toRightOf="@id/divider6"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:paddingLeft="3dp"
+                    android:paddingRight="3dp"
+                    android:text="NA"
+                    android:textColor="#80000000"
+                    android:textSize="12sp" />
+
+            </RelativeLayout>
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/change_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:visibility="gone"
+                android:text="Change Status"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
         </LinearLayout>
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/change_status"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/imageContainer"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="3dp"
-            android:paddingRight="3dp"
-            android:visibility="gone"
-            android:text="Change Status"
-            android:textColor="@color/white"
-            android:textSize="16sp" />
 
-<!--        android:layout_alignEnd="@id/divider"-->
-<!--        android:layout_alignRight="@id/divider"-->
 
-    </RelativeLayout>
+
+
+
+
+
+
+
     </ScrollView>
 </RelativeLayout>
 

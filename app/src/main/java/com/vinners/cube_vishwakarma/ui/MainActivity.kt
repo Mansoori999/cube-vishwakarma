@@ -423,6 +423,16 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             }
         }
         initBottomsheetFileterView()
+        viewBinding.contentMainContainer.refresh.setOnClickListener {
+            viewModel.initViewModel()
+            if (startDateF.equals("null").not() && endDateF.equals("null").not()){
+                viewModel.dashBoardData(startDateF, endDateF, roselectedId,subadminId)
+            }else {
+                viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds,subadminId)
+
+            }
+
+        }
     }
 
 
@@ -542,14 +552,6 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                         )
                     }.toMutableList()
                     setRegionalOfficeTypeSpinner(regionalOffice)
-//                    val regionalOffice = it.content.map {
-//                        ROModel(
-//                            id = it.roid!!,
-//                            name = it.regionaloffice!!,
-//                        )
-//                    }.toMutableList()
-//                    setRegionalOfficeTypeSpinner(regionalOffice)
-
 
                 }
                 is Lce.Error -> {
@@ -723,6 +725,8 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                     regionalspinner.setText("")
                 }
             }
+
+            subadminSpinner.setSelection(0)
         }
 
 

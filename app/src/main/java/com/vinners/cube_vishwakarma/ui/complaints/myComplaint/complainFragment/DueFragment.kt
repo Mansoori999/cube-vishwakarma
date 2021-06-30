@@ -34,6 +34,7 @@ class DueFragment : BaseFragment<FragmentDueBinding, AllComplaintFragmentViewMod
         fun newInstance() = DueFragment()
 
     }
+    var adminUserid : String = ""
     private val allComplaintRecyclerAdapter: AllComplaintRecyclerAdapter by lazy {
         AllComplaintRecyclerAdapter()
                 .apply {
@@ -75,7 +76,12 @@ class DueFragment : BaseFragment<FragmentDueBinding, AllComplaintFragmentViewMod
                 viewBinding.refreshLayout.isRefreshing = true
             }
 
-            viewModel.getComplaintList(userid!!)
+            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                viewModel.getComplaintList(adminUserid)
+            }else{
+                viewModel.getComplaintList(userid!!)
+
+            }
 
         }
     }
@@ -124,7 +130,12 @@ class DueFragment : BaseFragment<FragmentDueBinding, AllComplaintFragmentViewMod
             }
         })
 
-        viewModel.getComplaintList(userid!!)
+        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+            viewModel.getComplaintList(adminUserid)
+        }else{
+            viewModel.getComplaintList(userid!!)
+
+        }
 
     }
 

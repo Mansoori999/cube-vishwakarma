@@ -36,6 +36,7 @@ class PaymentFragment : BaseFragment<FragmentPaymentBinding, AllComplaintFragmen
         fun newInstance() = PaymentFragment()
     }
 
+    var adminUserid : String = ""
     private val allComplaintRecyclerAdapter: AllComplaintRecyclerAdapter by lazy {
         AllComplaintRecyclerAdapter()
             .apply {
@@ -78,7 +79,12 @@ class PaymentFragment : BaseFragment<FragmentPaymentBinding, AllComplaintFragmen
                 viewBinding.refreshLayout.isRefreshing = true
             }
 
-            viewModel.getComplaintList(userid!!)
+            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                viewModel.getComplaintList(adminUserid)
+            }else{
+                viewModel.getComplaintList(userid!!)
+
+            }
 
         }
     }
@@ -125,7 +131,12 @@ class PaymentFragment : BaseFragment<FragmentPaymentBinding, AllComplaintFragmen
             }
         })
 
-        viewModel.getComplaintList(userid!!)
+        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+            viewModel.getComplaintList(adminUserid)
+        }else{
+            viewModel.getComplaintList(userid!!)
+
+        }
 
     }
 

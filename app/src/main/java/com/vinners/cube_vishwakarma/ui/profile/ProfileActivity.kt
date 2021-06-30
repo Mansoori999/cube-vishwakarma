@@ -323,8 +323,8 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityView
                 Lse.Success -> {
                     viewBinding.loadingPicProgress.setVisibilityGone()
                     viewModel.refreshProfileData()
-                    Toast.makeText(this, "profile Pic Updated Succefully", Toast.LENGTH_SHORT)
-                            .show()
+//                    Toast.makeText(this, "profile Pic Updated Succefully", Toast.LENGTH_SHORT)
+//                            .show()
                 }
                 is Lse.Error -> {
                     viewBinding.loadingPicProgress.setVisibilityGone()
