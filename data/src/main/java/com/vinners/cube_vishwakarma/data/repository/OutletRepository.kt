@@ -21,6 +21,10 @@ class OutletRepository @Inject constructor(
         return OutletsLocalDataStore.getOutletsBYID(roid,said)
     }
 
+    suspend fun getOutletsBYIDWithOR(roid:List<Int> , said:List<Int>):List<OutletsList> {
+        return OutletsLocalDataStore.getOutletsBYIDWithOR(roid,said)
+    }
+
 //    suspend fun insertOutlets(outlets : List<OutletsList>){
 //        return OutletsLocalDataStore.insertAllOutlets(outlets)
 //    }

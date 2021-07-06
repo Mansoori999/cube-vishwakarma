@@ -7,9 +7,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletDetailsList
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import com.vinners.cube_vishwakarma.data.repository.OutletRepository
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.LoadMetaForAddComplaintState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mobile.androidbase.location.LocationUtils
@@ -19,17 +21,31 @@ import javax.inject.Inject
 
 interface OutletEvents {
 
-    val outletListState: LiveData<Lce<List<OutletsList>>>
+   val outletListState: LiveData<Lce<List<OutletsList>>>
 
     val outletState: LiveData<Lce<List<OutletsList>>>
 
     val outletDetailsListState : LiveData<Lce<OutletDetailsList>>
 
+    val outletStateWithOR: LiveData<Lce<List<OutletsList>>>
+
     val  complaintsbyoutletListState: LiveData<Lce<List<MyComplaintList>>>
    val complaintStatusState : LiveData<Lce<List<MyComplaintList>>>
 
 }
+sealed class LoadMetaForAddOutletState {
 
+    object LoadingLoadMetaForAddOutletState : LoadMetaForAddOutletState()
+
+
+    data class MetaForAddOutletStateLoaded(
+            val regionalAndSalesInfo: List<OutletsList>
+    ) : LoadMetaForAddOutletState()
+
+    data class ErrorInLoadingMetaForAddOutletLoaded(
+            val error: String
+    ) : LoadMetaForAddOutletState()
+}
 sealed class UploadEditOutletState {
 
     object EditOutletDataLoading : UploadEditOutletState()
@@ -40,10 +56,37 @@ sealed class UploadEditOutletState {
         val error: String
     ) : UploadEditOutletState()
 }
+
 class OutletsViewModel @Inject constructor(
     private val outletRepository: OutletRepository,
     private val geocoder: Geocoder
 ): ViewModel(),OutletEvents {
+
+//    private val _loadRegionalAndSalesInfo = MutableLiveData<LoadMetaForAddOutletState>()
+//    val loadRegionalAndSalesInfo: LiveData<LoadMetaForAddOutletState> = _loadRegionalAndSalesInfo
+//
+//    var outletRequestList: List<OutletsList>? = null
+//
+//    fun getOutletstData() = viewModelScope.launch {
+//
+//        try {
+//            _loadRegionalAndSalesInfo.postValue(LoadMetaForAddOutletState.LoadingLoadMetaForAddOutletState)
+//
+//            outletRequestList = outletRepository.getOutletData()
+//            _loadRegionalAndSalesInfo.postValue(
+//                    LoadMetaForAddOutletState.MetaForAddOutletStateLoaded(
+//                            outletRequestList!!
+//                    )
+//            )
+//        } catch (e: Exception) {
+//            _loadRegionalAndSalesInfo.postValue(
+//                    LoadMetaForAddOutletState.ErrorInLoadingMetaForAddOutletLoaded(
+//                            e.toString()
+//                    )
+//            )
+//            e.printStackTrace()
+//        }
+//    }
 
     private val _outletListState = MutableLiveData<Lce<List<OutletsList>>>()
     override val outletListState: LiveData<Lce<List<OutletsList>>> = _outletListState
@@ -71,6 +114,20 @@ class OutletsViewModel @Inject constructor(
                 _outletState.postValue(Lce.content(response))
             }catch (e:Exception){
                 _outletState.postValue(Lce.error(e.localizedMessage))
+            }
+        }
+    }
+
+    private val _outletStateWithOR = MutableLiveData<Lce<List<OutletsList>>>()
+    override val outletStateWithOR: LiveData<Lce<List<OutletsList>>> = _outletStateWithOR
+    fun getOutletsByIdWithOR(roid:List<Int> , said:List<Int>){
+        _outletStateWithOR.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = outletRepository.getOutletsBYIDWithOR(roid,said)
+                _outletStateWithOR.postValue(Lce.content(response))
+            }catch (e:Exception){
+                _outletStateWithOR.postValue(Lce.error(e.localizedMessage))
             }
         }
     }

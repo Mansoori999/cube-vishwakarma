@@ -33,7 +33,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="#EFEFEF"
         >
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -45,7 +44,7 @@
                 android:id="@+id/documentsRecycler"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                tools:listitem="@layout/documents_list_layout"
+                tools:listitem="@layout/documents_layout"
                 />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

@@ -1,7 +1,7 @@
 package com.vinners.cube_vishwakarma.ui.dashboardFilter
 
 data class RegionalOfficeFilterData(
-    val id: Int,
+    var id: Int,
     val name: String,
     var isSelected: Boolean
 ) {

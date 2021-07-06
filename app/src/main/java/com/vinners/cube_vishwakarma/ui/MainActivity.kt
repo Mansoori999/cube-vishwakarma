@@ -860,24 +860,6 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
             }
 
-//        resestTV.setOnClickListener {
-//            regionalspinner.text = ""//TODO
-//            SearchableMultiSelectSpinner.reCreateAfterReset(this, "Select Regional Office", "Done","clear", afterResetRO, object :
-//                    SelectionCompleteListener {
-//                override fun onCompleteSelection(selectedItems: ArrayList<RegionalOfficeFilterData>) {
-////                    Log.e("data", selectedItems.toString())
-//                    val selectedItemList = selectedItems.toString().substring(1, selectedItems.toString().length - 1)
-//                    selectedItems.removeAll(selectedItems)
-//                    roselectedId= selectedItems.joinToString (separator = ","){ "${it.id}" }
-//                    regionalspinner.text = selectedItemList
-//
-//
-//                }
-//
-//            })
-//        }
-
-
         }
 
 

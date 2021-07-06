@@ -27,12 +27,12 @@
             android:title="Expense" />
 
         <item android:id="@+id/nav_tutorial"
-            android:icon="@drawable/ic_tutorial"
+            android:icon="@drawable/ic_document"
             android:checked="false"
             android:title="Tutorials" />
 
         <item android:id="@+id/nav_outlet"
-            android:icon="@drawable/ic_outlet"
+            android:icon="@drawable/ic_petrol"
             android:checked="false"
             android:title="Outlets" />
 

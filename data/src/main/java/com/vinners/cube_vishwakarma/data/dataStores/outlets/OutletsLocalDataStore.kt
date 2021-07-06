@@ -10,5 +10,8 @@ interface OutletsLocalDataStore  {
     suspend fun deleteAllOutlets()
 
     suspend fun getOutletsBYID(roid:List<Int> , said:List<Int>): List<OutletsList>
+
+    suspend fun getOutletsBYIDWithOR(roid:List<Int> , said:List<Int>): List<OutletsList>
+
 //    fun getOutlets(): Observable<OutletsList>
 }

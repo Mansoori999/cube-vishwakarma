@@ -217,18 +217,25 @@ class EditOutletActivity : BaseActivity<ActivityEditOutletBinding, OutletsViewMo
         viewBinding.editOutletToolbar.setOnClickListener {
             onBackPressed()
         }
-        Handler().postDelayed({
+        viewBinding.getCurrentLocation.setOnClickListener {
 
-            val mapFragment =
-                supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
+            viewBinding.mapHolder.setVisibilityVisible()
+            viewBinding.getCurrentLocation.setVisibilityGone()
+            Handler().postDelayed({
 
-            if (locationPermissions())
-                checkForGpsStatus()
-            else
-                requestLocationPermissions()
+                val mapFragment =
+                    supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+                mapFragment.getMapAsync(this)
 
-        }, 300)
+
+                if (locationPermissions())
+                    checkForGpsStatus()
+                else
+                    requestLocationPermissions()
+
+            }, 300)
+        }
+
 
         outletId = intent.getStringExtra(OutletDetalisActivity.OUTLET_ID)
         val outletName = intent.getStringExtra(OUTLET_NAME)

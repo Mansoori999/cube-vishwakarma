@@ -25,7 +25,7 @@ data class OutletsList(
         val salesarea : String? =null,
 
         @SerializedName("roid")
-        val roid : Int? =null,
+        var roid : Int? =null,
 
         @SerializedName("said")
         val said : Int? =null,

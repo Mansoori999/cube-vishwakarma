@@ -28,6 +28,10 @@ class OutletLocalDataStoreImpl @Inject constructor(
         return outletsDao.getOutletsByID(roid,said)
     }
 
+    override suspend fun getOutletsBYIDWithOR(roid: List<Int>, said: List<Int>): List<OutletsList> {
+        return outletsDao.getOutletsByIDWithOR(roid,said)
+    }
+
 //    override suspend fun insertAllOutlets(): List<OutletsList> {
 //        return outletsLocalDatabase.getOutletsDao().insertOutlet()
 //    }

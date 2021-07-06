@@ -37,11 +37,15 @@ public interface OutletsDao {
 //        OutletsList.COLUMN_SALES_AREA_ID + " IN (:said)" +"")
 
 @Query("SELECT * FROM " + OutletsList.TABLE_NAME +
-            " WHERE " + OutletsList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " OR "
+            " WHERE " + OutletsList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " AND "
         + OutletsList.COLUMN_SALES_AREA_ID + " IN (:said)" + "")
 //List<OutletsList>getOutletsByID(@Nullable String roid, @Nullable String said);
     List<OutletsList>getOutletsByID(List<Integer> roid, List<Integer> said);
 
+    @Query("SELECT * FROM " + OutletsList.TABLE_NAME +
+            " WHERE " + OutletsList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " OR "
+            + OutletsList.COLUMN_SALES_AREA_ID + " IN (:said)" + "")
+    List<OutletsList>getOutletsByIDWithOR(List<Integer> roid, List<Integer> said);
 
 //    @Query("SELECT * FROM " + OutletsList.TABLE_NAME +
 //            " WHERE ( :regionalOffice IS NULL OR " + OutletsList.COLUMN_REGIONAL_OFFICE + " IN (':regionalOffice')" + ") AND " +
