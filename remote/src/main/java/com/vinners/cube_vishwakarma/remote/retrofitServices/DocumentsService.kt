@@ -6,6 +6,6 @@ import retrofit2.http.GET
 
 interface DocumentsService {
 
-    @GET("api/master/getdocument")
+    @GET("api/master/getdocument?isactive=1")
     suspend fun getDocumentsData():Response<List<DocumentsResponse>>
 }

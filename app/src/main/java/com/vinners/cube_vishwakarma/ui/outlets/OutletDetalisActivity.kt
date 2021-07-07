@@ -30,6 +30,8 @@ class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, Outlets
         const val OUTLET_SECONDARY_MOBILE = "secondary_mobile"
         const val OUTLET_IMAGE = "outlet_image"
         const val OUTLET_ID = "outlet_id"
+        const val OUTLET_LOCATION = "location"
+        const val OUTLET_ADDRESS = "address"
 
 
     }
@@ -140,10 +142,23 @@ class OutletDetalisActivity : BaseActivity<ActivityOutletDetalisBinding, Outlets
             startActivity(intent)
         }
 
+        viewBinding.editgps.setOnClickListener {
+            val intent = Intent(this,EditGpsLocationActivity::class.java)
+            intent.putExtra(OUTLET_NAME,content.outlet)
+            intent.putExtra(OUTLET_CUSTOMER_CODE,content.customercode)
+            intent.putExtra(OUTLET_REGIONAL_OFFICE,content.regionaloffice)
+            intent.putExtra(OUTLET_SALES_AREA,content.salesarea)
+            intent.putExtra(OUTLET_ID,content.outletid)
+            intent.putExtra(OUTLET_LOCATION,content.location)
+            intent.putExtra(OUTLET_ADDRESS,content.address)
+            startActivity(intent)
+        }
+
         viewBinding.complaintsBtn.setOnClickListener {
             val intent = Intent(this,OutletComplaintsActivity::class.java)
             intent.putExtra(OUTLET_ID,content.outletid)
             startActivity(intent)
         }
+
     }
 }

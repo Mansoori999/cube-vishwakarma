@@ -48,8 +48,6 @@ class OutletRepository @Inject constructor(
         outletid: String?,
         secondarymail: String?,
         secondarymobile: String?,
-        gps: String,
-        gpsAddress: String,
         images: List<String>,
         pic:String?
     ){
@@ -57,11 +55,16 @@ class OutletRepository @Inject constructor(
             outletid,
             secondarymail,
             secondarymobile,
-            gps,
-            gpsAddress,
             images,
             pic
         )
+    }
+    suspend fun editOutletGps(
+        outletid: String?,
+        gps: String,
+        gpsAddress: String,
+    ){
+        outletRemoteDataStore.editOutletGps(outletid,gps,gpsAddress)
     }
 
     suspend fun getComplaintsByOutletid(outletid :String): List<MyComplaintList>{

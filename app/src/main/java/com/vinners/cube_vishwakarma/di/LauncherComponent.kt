@@ -20,10 +20,7 @@ import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails
 import com.vinners.cube_vishwakarma.ui.documents.DocumentDetailsActivity
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
-import com.vinners.cube_vishwakarma.ui.outlets.EditOutletActivity
-import com.vinners.cube_vishwakarma.ui.outlets.OutletComplaintsActivity
-import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity
-import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
+import com.vinners.cube_vishwakarma.ui.outlets.*
 import com.vinners.cube_vishwakarma.ui.profile.BankDetailsAndOtherDetailsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileDetailsActivity
@@ -106,6 +103,8 @@ interface LauncherComponent {
     fun inject(bankDetailsAndOtheretailsActivity: BankDetailsAndOtherDetailsActivity)
 
     fun inject(documentDetailsActivity: DocumentDetailsActivity)
+
+    fun inject(editGpsLocationActivity: EditGpsLocationActivity)
 
 
 }

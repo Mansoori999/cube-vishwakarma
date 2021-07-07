@@ -57,6 +57,17 @@ sealed class UploadEditOutletState {
     ) : UploadEditOutletState()
 }
 
+sealed class UploadEditOutletGPSState {
+
+    object EditOutletDataGPSLoading : UploadEditOutletGPSState()
+
+    object OutletDataGPSUpdated : UploadEditOutletGPSState()
+
+    data class ErrorInUpDateEditOutletGPSData(
+        val error: String
+    ) : UploadEditOutletGPSState()
+}
+
 class OutletsViewModel @Inject constructor(
     private val outletRepository: OutletRepository,
     private val geocoder: Geocoder
@@ -172,27 +183,16 @@ class OutletsViewModel @Inject constructor(
         outletid: String?,
         secondarymail: String?,
         secondarymobile: String?,
-        latitude: Double,
-        longitude: Double,
         images: List<String>,
         pic:String?
     ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             _uploadEditOutletDataState.postValue(UploadEditOutletState.EditOutletDataLoading)
 
-            val gps = "$latitude,$longitude"
-            val fullAddressFromGps = LocationUtils.addressFromLocation(
-                geoCoder = geocoder,
-                latitude = latitude,
-                longitude = longitude
-            )
-
             outletRepository.editOutlet(
                outletid,
                secondarymail,
                 secondarymobile,
-                gps,
-                fullAddressFromGps,
                 images,
                 pic
             )
@@ -208,6 +208,42 @@ class OutletsViewModel @Inject constructor(
             e.printStackTrace()
         }
 
+    }
+
+    private val _uploadEditOutletGPSDataState = MutableLiveData<UploadEditOutletGPSState>()
+    val uploadEditOutletGPSDataState: LiveData<UploadEditOutletGPSState> = _uploadEditOutletGPSDataState
+
+    fun editOutletGps(
+        outletid: String?,
+        latitude: Double,
+        longitude: Double
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            _uploadEditOutletGPSDataState.postValue(UploadEditOutletGPSState.EditOutletDataGPSLoading)
+
+            val gps = "$latitude,$longitude"
+            val fullAddressFromGps = LocationUtils.addressFromLocation(
+                geoCoder = geocoder,
+                latitude = latitude,
+                longitude = longitude
+            )
+
+            outletRepository.editOutletGps(
+                outletid,
+                gps,
+                fullAddressFromGps
+            )
+
+            _uploadEditOutletGPSDataState.postValue(UploadEditOutletGPSState.OutletDataGPSUpdated)
+        } catch (e: Exception) {
+
+            _uploadEditOutletGPSDataState.postValue(
+                UploadEditOutletGPSState.ErrorInUpDateEditOutletGPSData(
+                    e.toString()
+                )
+            )
+            e.printStackTrace()
+        }
     }
 
     /* Outlet complaints*/
