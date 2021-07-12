@@ -2,6 +2,7 @@ package com.vinners.cube_vishwakarma.ui
 
 
 import android.content.Intent
+import android.graphics.Color
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -19,15 +20,24 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager.widget.ViewPager
 import coil.api.load
 import com.devstune.searchablemultiselectspinner.SearchableAdapter
-import com.devstune.searchablemultiselectspinner.SearchableMultiSelectSpinner
 import com.devstune.searchablemultiselectspinner.SelectionCompleteListener
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.formatter.IValueFormatter
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.utils.ViewPortHandler
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
-import com.google.common.io.Files.append
+import com.google.android.material.tabs.TabLayout
 import com.toptoche.searchablespinnerlibrary.SearchableSpinner
 import com.vinners.cube_vishwakarma.BuildConfig
 import com.vinners.cube_vishwakarma.R
@@ -56,7 +66,6 @@ import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
 import de.hdodenhof.circleimageview.CircleImageView
-
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -77,6 +86,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     private var selectionCompleteListener: SelectionCompleteListener? = null
     private lateinit var bottomSheetDialog: BottomSheetDialog
 
+
     private lateinit var sheetBehavior: BottomSheetBehavior<View>
 
     var afterResetRO = mutableListOf<RegionalOfficeFilterData>()
@@ -88,6 +98,13 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //    var afterResetRO = listOf<RegionalOfficeFilterData>()
 
     var roselectedId: String? = null
+
+    var dataEnteriesYAxis = listOf<Int>()
+    var monthlyDataXAxis = listOf<String>()
+
+    var roDataEnteriesYAxis = listOf<Int>()
+    var roListXAxis = listOf<String>()
+
 
     lateinit var defaultStartDate: String
     lateinit var defaultEndDate: String
@@ -107,6 +124,13 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     @Inject
     lateinit var appInfo: AppInfo
 
+    private lateinit var viewPager: ViewPager
+    private lateinit var tabs: TabLayout
+
+    private val sectionsPagerAdapter: DashboardPagerAdapter by lazy {
+        DashboardPagerAdapter(supportFragmentManager)
+
+    }
     private val homeList = ArrayList<MainActivityListModel>()
 
     private val mainActivityRecyclerAdapter: MainActivityRecyclerAdapter by lazy {
@@ -116,7 +140,14 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 }
     }
 
+    companion object {
+        const val MONTHLY = "monthly"
+        const val SUMMARY = "summary"
+        const val ROWISE = "rowise"
 
+    }
+    private var tabPosition: Int? = 0
+    private var selectedTab: String? = null
     override val viewModel: MainActivityViewModel by viewModels { viewModelFactory }
 
     override fun onInitDependencyInjection() {
@@ -128,8 +159,23 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     }
 
     override fun onInitDataBinding() {
+//        val dotsIndicator = findViewById<DotsIndicator>(R.id.dots_indicator)
+//        viewPager = findViewById(R.id.view_pager)
+//        viewPager.adapter = sectionsPagerAdapter
+//        viewPager.setCurrentItem(1)
+//        dotsIndicator.setViewPager(viewPager)
 
 
+        viewBinding.contentMainContainer.tabs.addTab(viewBinding.contentMainContainer.tabs.newTab().setText("Monthly"))
+        viewBinding.contentMainContainer.tabs.addTab(viewBinding.contentMainContainer.tabs.newTab().setText("Summary"))
+        viewBinding.contentMainContainer.tabs.addTab(viewBinding.contentMainContainer.tabs.newTab().setText("RO Wise"))
+
+        val tab = findViewById<TabLayout>(R.id.tabs)
+        tab.selectTab(tab.getTabAt(1))
+        if (selectedTab.equals(null)){
+            viewBinding.contentMainContainer.summaryContainer.setVisibilityVisible()
+        }
+        viewBinding.contentMainContainer.tabs.addOnTabSelectedListener(onTabSelectedListener)
         val hiuserTV = findViewById<TextView>(R.id.hiuserTV)
         hiuserTV.setText(String.format("Hii, %s", userSessionManager.userName))
         val hiuserMobileTV = findViewById<TextView>(R.id.hiuserMobileTV)
@@ -433,21 +479,10 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
             }
 
         }
+
     }
 
 
-//    private fun setProfilePicture() {
-////        val profilepic = findViewById<CircleImageView>(R.id.profile_pic)
-////        val profilePicUrl= userSessionManager.profilepic
-////
-////        if (profilePicUrl != null) {
-////            val picUrl = appInfo.getFullAttachmentUrl(profilePicUrl)
-////            profilepic.load(File(picUrl))
-////
-////       }else{
-////            profilepic.setImageDrawable(getResources().getDrawable(R.drawable.user))
-////        }
-//    }
 
     private fun preparehomeData() {
         homeList.add(MainActivityListModel("Totals", "#99CC33"))
@@ -517,19 +552,25 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                     viewBinding.contentMainContainer.loadingData.setVisibilityVisible()
                 }
                 is Lce.Content -> {
+                    it.content.dashboardCount.forEach{
+                        viewBinding.contentMainContainer.loadingData.setVisibilityGone()
+                        viewBinding.contentMainContainer.totals.text = it.total
+                        viewBinding.contentMainContainer.due.text = it.due
+                        viewBinding.contentMainContainer.working.text = it.working
+                        viewBinding.contentMainContainer.pending.text = it.pendingletter
+                        viewBinding.contentMainContainer.done.text = it.done
+                        viewBinding.contentMainContainer.draft.text = it.draft
+                        viewBinding.contentMainContainer.estimated.text = it.estimated
+                        viewBinding.contentMainContainer.billed.text = it.billed
+                        viewBinding.contentMainContainer.payment.text = it.payment
 
-                    viewBinding.contentMainContainer.loadingData.setVisibilityGone()
-                    viewBinding.contentMainContainer.totals.text = it.content.total
-                    viewBinding.contentMainContainer.due.text = it.content.due
-                    viewBinding.contentMainContainer.working.text = it.content.working
-                    viewBinding.contentMainContainer.pending.text = it.content.pendingletter
-                    viewBinding.contentMainContainer.done.text = it.content.done
-                    viewBinding.contentMainContainer.draft.text = it.content.draft
-                    viewBinding.contentMainContainer.estimated.text = it.content.estimated
-                    viewBinding.contentMainContainer.billed.text = it.content.billed
-                    viewBinding.contentMainContainer.payment.text = it.content.payment
-
-
+                    }
+                    dataEnteriesYAxis =  it.content.monthWiseChart!!.data.toList()
+                    monthlyDataXAxis = it.content.monthWiseChart!!.monthList
+                    roDataEnteriesYAxis = it.content.roWiseChart!!.data.toList()
+                    roListXAxis = it.content.roWiseChart!!.roList
+                    monthWiseBarChart()
+                    roWiseBarChart()
                 }
                 is Lce.Error -> {
                     viewBinding.contentMainContainer.loadingData.setVisibilityGone()
@@ -583,7 +624,113 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         viewModel.activeSubAdmib()
 
     }
+    private fun roWiseBarChart() {
+        val roBarEntries: ArrayList<BarEntry> = ArrayList()
+        for (i in 0 until roDataEnteriesYAxis.size) {
+            roBarEntries.add(BarEntry(i.toFloat(), roDataEnteriesYAxis[i].toFloat()))
+        }
 
+        val roBarDataSet = BarDataSet(roBarEntries,"Complaint")
+        roBarDataSet.setColor(Color.parseColor("#2383E1"))
+        roBarDataSet.valueTextColor = Color.BLACK
+        roBarDataSet.setFormSize(15f)
+        viewBinding.contentMainContainer.barChartRO.getDescription().setEnabled(false)
+        val xAxisro = viewBinding.contentMainContainer.barChartRO.getXAxis()
+        xAxisro.granularity = 1f
+        xAxisro.isGranularityEnabled = true
+        xAxisro.setDrawGridLines(false)
+        xAxisro.setCenterAxisLabels(false)
+        xAxisro.axisMaximum = roListXAxis.size.toFloat()
+        xAxisro.setPosition(XAxis.XAxisPosition.BOTTOM)
+        xAxisro.valueFormatter = IndexAxisValueFormatter(roListXAxis)
+        val roBarData = BarData(roBarDataSet)
+        viewBinding.contentMainContainer.barChartRO.setFitBars(true)
+        viewBinding.contentMainContainer.barChartRO.setDragEnabled(true)
+        viewBinding.contentMainContainer.barChartRO.setData(roBarData)
+        roBarData.barWidth = 0.5f
+        viewBinding.contentMainContainer.barChartRO.setExtraOffsets(5f,5f,5f,15f)
+        //Y-axis
+        viewBinding.contentMainContainer.barChartRO.getAxisRight().setEnabled(false)
+        val leftAxisro: YAxis = viewBinding.contentMainContainer.barChartRO.getAxisLeft()
+        leftAxisro.setDrawGridLines(true)
+//        leftAxisro.setSpaceTop(15f)
+        leftAxisro.setAxisMinimum(0f)
+        val yAxisRight: YAxis = viewBinding.contentMainContainer.barChartRO.getAxisRight()
+        yAxisRight.setEnabled(false)
+        viewBinding.contentMainContainer.barChart.setExtraBottomOffset(1f)
+//        viewBinding.contentMainContainer.barChart.setVisibleXRangeMaximum(12f)
+//        viewBinding.contentMainContainer.barChart.setVisibleXRangeMinimum(4f)
+        viewBinding.contentMainContainer.barChartRO.invalidate()
+
+    }
+
+    private fun monthWiseBarChart(){
+        val barEntries: ArrayList<BarEntry> = ArrayList()
+        for (i in 0 until dataEnteriesYAxis.size) {
+            barEntries.add(BarEntry(i.toFloat(), dataEnteriesYAxis[i].toFloat()))
+        }
+
+        val barDataSet = BarDataSet(barEntries,"Complaint")
+        barDataSet.setColor(Color.parseColor("#2383E1"))
+        barDataSet.valueTextColor = Color.BLACK
+        barDataSet.setFormSize(15f)
+        viewBinding.contentMainContainer.barChart.getDescription().setEnabled(false)
+        val xAxis = viewBinding.contentMainContainer.barChart.getXAxis()
+        xAxis.granularity = 1f
+        xAxis.isGranularityEnabled = true
+        xAxis.setDrawGridLines(false)
+        xAxis.setCenterAxisLabels(false)
+        xAxis.axisMaximum = monthlyDataXAxis.size.toFloat()
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
+        xAxis.valueFormatter = IndexAxisValueFormatter(monthlyDataXAxis)
+        val barData = BarData(barDataSet)
+        viewBinding.contentMainContainer.barChart.setFitBars(true)
+        viewBinding.contentMainContainer.barChart.setDragEnabled(true)
+        viewBinding.contentMainContainer.barChart.setData(barData)
+        barData.barWidth = 0.5f
+        viewBinding.contentMainContainer.barChart.setExtraOffsets(5f,5f,5f,15f)
+        //Y-axis
+        viewBinding.contentMainContainer.barChart.getAxisRight().setEnabled(false)
+        val leftAxis: YAxis = viewBinding.contentMainContainer.barChart.getAxisLeft()
+        leftAxis.setDrawGridLines(true)
+//        leftAxisro.setSpaceTop(15f)
+        leftAxis.setAxisMinimum(0f)
+        val yAxisRight: YAxis = viewBinding.contentMainContainer.barChart.getAxisRight()
+        yAxisRight.setEnabled(false)
+        viewBinding.contentMainContainer.barChart.setExtraBottomOffset(1f)
+//        viewBinding.contentMainContainer.barChart.setVisibleXRangeMaximum(12f)
+//        viewBinding.contentMainContainer.barChart.setVisibleXRangeMinimum(12f)
+        viewBinding.contentMainContainer.barChart.invalidate()
+
+    }
+
+
+//    class IntValueFormatter : IValueFormatter {
+//        fun getFormattedValue(
+//            value: Float,
+//            entry: Entry?,
+//            dataSetIndex: Int,
+//            viewPortHandler: ViewPortHandler?
+//        ): String {
+//            return value as Int.toString()
+//        }
+//    }
+//    class MyValueFormatter : IValueFormatter {
+//        private val mFormat: DecimalFormat
+//        override fun getFormattedValue(
+//            value: Float,
+//            entry: Entry?,
+//            dataSetIndex: Int,
+//            viewPortHandler: ViewPortHandler?
+//        ): String {
+//            // write your logic here
+//            return mFormat.format(value).toString() + " $" // e.g. append a dollar-sign
+//        }
+//
+//        init {
+//            mFormat = DecimalFormat("###,###,##0.0") // use one decimal
+//        }
+//    }
     private fun setActiveSubAdminTypeSpinner(activeSubadmin: MutableList<ActiveSubAdminData>) {
         activeSubadmin.sortBy { it.name }
         val setItems = activeSubadmin.distinctBy { it.name }
@@ -828,10 +975,42 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
         defaultStartDate = startdate.toString()
         defaultEndDate = enddate.toString()
-
         viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds,subadminId)
+    }
+    private val onTabSelectedListener = object : TabLayout.OnTabSelectedListener {
+        override fun onTabSelected(tab: TabLayout.Tab?) {
+            selectedTab = tab?.text.toString()
+            tabPosition = tab?.position
 
+//            defaultStartDate = startdate.toString()
+//            defaultEndDate = enddate.toString()
+//            viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds,subadminId)
 
+            if (selectedTab!!.toLowerCase().equals("summary")) {
+                viewBinding.contentMainContainer.summaryContainer.setVisibilityVisible()
+                viewBinding.contentMainContainer.monthlyContainer.setVisibilityGone()
+                viewBinding.contentMainContainer.roWiseContainer.setVisibilityGone()
+
+            } else if (selectedTab!!.toLowerCase().equals("monthly")) {
+                viewBinding.contentMainContainer.monthlyContainer.setVisibilityVisible()
+                viewBinding.contentMainContainer.summaryContainer.setVisibilityGone()
+                viewBinding.contentMainContainer.roWiseContainer.setVisibilityGone()
+            }else if (selectedTab!!.toLowerCase().equals("ro wise")){
+                viewBinding.contentMainContainer.summaryContainer.setVisibilityGone()
+                viewBinding.contentMainContainer.roWiseContainer.setVisibilityVisible()
+                viewBinding.contentMainContainer.monthlyContainer.setVisibilityGone()
+
+            }
+
+        }
+
+        override fun onTabUnselected(tab: TabLayout.Tab?) {
+
+        }
+
+        override fun onTabReselected(tab: TabLayout.Tab?) {
+
+        }
     }
 
 
@@ -942,6 +1121,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
 
     }
+
 
 
 

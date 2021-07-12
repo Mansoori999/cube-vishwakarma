@@ -10,6 +10,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
+import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
@@ -52,8 +54,11 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,MyComplaintVi
         getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true)
         viewBinding.mycomplaintToolbar.setNavigationOnClickListener { view -> onBackPressed() }
 
-        tabs = findViewById(R.id.tabs)
+       tabs = findViewById(R.id.tabs)
+   // val dotsIndicator = findViewById<DotsIndicator>(R.id.dots_indicator)
         viewPager = findViewById(R.id.view_pager)
+//        viewPager.adapter = sectionsPagerAdapter
+//        dotsIndicator.setViewPager(viewPager)
         setUpViewPager()
     }
 

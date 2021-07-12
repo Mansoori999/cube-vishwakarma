@@ -14,6 +14,9 @@ import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.ComplaintRequestActivity
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity
+import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.MonthlyFragment
+import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.ROWiseFragment
+import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.SummeryFragment
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
@@ -105,6 +108,13 @@ interface LauncherComponent {
     fun inject(documentDetailsActivity: DocumentDetailsActivity)
 
     fun inject(editGpsLocationActivity: EditGpsLocationActivity)
+
+    fun inject(summeryFragment: SummeryFragment)
+
+    fun inject(monthlyFragment: MonthlyFragment)
+
+    fun inject(roWiseFragment: ROWiseFragment)
+
 
 
 }

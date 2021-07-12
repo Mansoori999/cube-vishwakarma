@@ -544,5 +544,7 @@ class OutletComplaintsActivity :  BaseActivity<ActivityOutletComplaintsBinding, 
         }.also {
             startActivity(it)
         }
+
+
     }
 }

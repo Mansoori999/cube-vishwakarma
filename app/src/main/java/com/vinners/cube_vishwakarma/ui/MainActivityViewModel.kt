@@ -10,6 +10,7 @@ import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
 import com.vinners.cube_vishwakarma.data.models.dashboard.ActiveSubAdminResponse
 import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponse
+import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponseDataItem
 import com.vinners.cube_vishwakarma.data.models.dashboardFilter.DashboardFilterList
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
 import com.vinners.cube_vishwakarma.data.repository.ComplaintRequestRepository
@@ -31,7 +32,7 @@ interface ProfileEvents {
 
     val financialFilterState: LiveData<Lce<List<DashboardFilterList>>>
     val regionalOfficeFilterState: LiveData<Lce<List<ComplaintOutletList>>>
-    val dashboardState : LiveData<Lce<DashBoardResponse>>
+    val dashboardState : LiveData<Lce<DashBoardResponseDataItem>>
     val acitveSubAdminFilterState: LiveData<Lce<List<ActiveSubAdminResponse>>>
 
 
@@ -100,8 +101,8 @@ class MainActivityViewModel@Inject constructor(
 
     /* DashBoard */
 
-    private val _dashboardState =  MutableLiveData<Lce<DashBoardResponse>>()
-    override val dashboardState: LiveData<Lce<DashBoardResponse>> = _dashboardState
+    private val _dashboardState =  MutableLiveData<Lce<DashBoardResponseDataItem>>()
+    override val dashboardState: LiveData<Lce<DashBoardResponseDataItem>> = _dashboardState
 
     fun dashBoardData(startDate:String,endDate:String,regionalOfficeIds:String?,activeSubadminId:String?) {
         _dashboardState.value = Lce.Loading

@@ -1,196 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <RelativeLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#fff">
-
-        <RelativeLayout
-            android:id="@+id/toolbar_profile"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <View
-                android:id="@+id/v_one_login"
-                android:layout_width="match_parent"
-                android:layout_height="270dp"
-                android:background="#2383E1" />
-
-            <RelativeLayout
-                android:id="@+id/toolbat_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                <ImageView
-                    android:id="@+id/drawer_menu"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:layout_gravity="center"
-                    android:scaleX="0.6"
-                    android:scaleY="0.6"
-                    android:src="@drawable/ic_menu" />
-
-                <TextView
-                    android:id="@+id/home_screen_cms_textview"
-                    android:layout_centerVertical="true"
-                    android:layout_centerHorizontal="true"
-                   android:layout_toRightOf="@+id/drawer_menu"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/librebaskervilleregular"
-                    android:text="Vishwakarma Electrical"
-                    android:textColor="#fff"
-                    android:textSize="20dp"
-                    android:layout_width="wrap_content" />
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:orientation="horizontal">
-                <ImageView
-                    android:id="@+id/filter"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:scaleX="0.6"
-                    android:layout_marginRight="-15dp"
-                    android:scaleY="0.6"
-                    android:src="@drawable/ic_filter" />
-                <ImageView
-                    android:id="@+id/refresh"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
-                    android:layout_gravity="center"
-                    android:scaleX="0.6"
-                    android:scaleY="0.6"
-                    android:visibility="visible"
-                    android:src="@drawable/ic_refresh" />
-                </LinearLayout>
-            </RelativeLayout>
-
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profile_pic"
-                android:layout_below="@+id/toolbat_container"
-                android:layout_width="150dp"
-                android:layout_centerHorizontal="true"
-                android:src="@drawable/user"
-                android:layout_marginTop="15dp"
-                android:layout_height="150dp"/>
-<!--            <ImageView-->
-<!--                android:id="@+id/profile_pic"-->
-<!--                android:layout_below="@+id/toolbat_container"-->
-<!--                android:layout_width="150dp"-->
-<!--                android:layout_centerHorizontal="true"-->
-<!--                android:src="@drawable/user"-->
-<!--                android:layout_marginTop="30dp"-->
-<!--                android:layout_height="150dp" />-->
-        </RelativeLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_card"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="205dp"
-            android:visibility="visible">
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cv_one_user_name"
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:layout_centerHorizontal="true"
-                android:layout_margin="@dimen/dimension_20dp"
-                android:elevation="5dp"
-                app:cardBackgroundColor="#fcfcfc"
-                app:cardCornerRadius="10dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="false"
-                card_view:cardElevation="5dp">
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:id="@+id/profile_Container"
-                    android:layout_height="match_parent">
-                    <TextView
-                        android:id="@+id/hiuserTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="Hii , "
-                        android:textColor="@color/black"
-                        android:textSize="18dp" />
-                    <TextView
-                        android:id="@+id/hiuserMobileTV"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:text="67656"
-                        android:layout_below="@+id/hiuserTV"
-                        android:textColor="@color/black"
-                        android:textSize="18dp" />
-                </RelativeLayout>
-
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
-        <ProgressBar
-            android:id="@+id/loading_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone" />
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabs"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            app:tabMode="fixed"
-            app:tabGravity="center"
-            app:tabSelectedTextColor="@color/white"
-            app:tabMaxWidth="0dp"
-            android:layout_marginTop="-10dp"
-            app:tabIndicator="@drawable/selected_dot"
-            app:tabIndicatorGravity="stretch"
-            app:tabIndicatorAnimationMode="elastic"
-            app:tabIndicatorHeight="0dp"
-            android:layout_below="@+id/lin_card"
-            app:tabTextColor="#000" />
-
-<!--        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator-->
-<!--            android:id="@+id/dots_indicator"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginEnd="8dp"-->
-<!--            android:layout_marginStart="8dp"-->
-<!--            app:dotsColor="@color/world_rugby_blue"-->
-<!--            app:dotsCornerRadius="8dp"-->
-<!--            app:dotsSize="16dp"-->
-<!--            android:layout_marginTop="-10dp"-->
-<!--            app:dotsSpacing="4dp"-->
-<!--            android:layout_marginBottom="10dp"-->
-<!--            app:dotsWidthFactor="2.5"-->
-<!--            android:layout_below="@+id/lin_card"-->
-<!--           android:layout_centerHorizontal="true"-->
-<!--            app:progressMode="false"-->
-<!--            app:selectedDotColor="@color/red"-->
-<!--            />-->
-        <androidx.viewpager.widget.ViewPager
-            android:id="@+id/view_pager"
-            android:layout_width="match_parent"
-            android:layout_below="@+id/tabs"
-            android:layout_height="wrap_content"
-            android:layout_weight="1" />
-
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:visibility="gone"
-            android:id="@+id/summaryContainer"
-            android:layout_below="@+id/tabs">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    tools:context=".ui.complaints.dashboardFragment.SummeryFragment">
 
         <LinearLayout
             android:id="@+id/home_screen_user_menus"
@@ -204,49 +20,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:weightSum="3">
-            <androidx.cardview.widget.CardView
-                android:id="@+id/total_cardView"
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_weight="1"
-                android:layout_centerHorizontal="true"
-                android:elevation="0dp"
-                app:cardCornerRadius="8dp"
-                android:background="?android:attr/selectableItemBackground"
-                android:layout_margin="5dp"
-                app:cardPreventCornerOverlap="false"
-                app:cardUseCompatPadding="false"
-                card_view:cardElevation="2dp">
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/total_cardView"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_weight="1"
+                    android:layout_centerHorizontal="true"
+                    android:elevation="0dp"
+                    app:cardCornerRadius="8dp"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:layout_margin="5dp"
+                    app:cardPreventCornerOverlap="false"
+                    app:cardUseCompatPadding="false"
+                    card_view:cardElevation="2dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:orientation="vertical"
-                    android:gravity="center"
-                    android:background="@drawable/mainscreen_border"
-                    android:layout_gravity="center"
-                    android:layout_height="match_parent">
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textColor="#0099ff"
-                    android:id="@+id/dashboard_text"
-                    android:textStyle="normal"
-                    android:textSize="16sp"
-                    android:layout_gravity="center_vertical"
-                    android:text="Total" />
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:id="@+id/totals"
-                    android:textColor="#0099ff"
-                    android:layout_gravity="center"
-                    android:text="0"
-                    android:textSize="13sp"
-                    android:textStyle="normal"/>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:background="@drawable/mainscreen_border"
+                        android:layout_gravity="center"
+                        android:layout_height="match_parent">
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:textColor="#0099ff"
+                            android:id="@+id/dashboard_text"
+                            android:textStyle="normal"
+                            android:textSize="16sp"
+                            android:layout_gravity="center_vertical"
+                            android:text="Total" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:id="@+id/totals"
+                            android:textColor="#0099ff"
+                            android:layout_gravity="center"
+                            android:text="0"
+                            android:textSize="13sp"
+                            android:textStyle="normal"/>
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:id="@+id/due_cardView"
@@ -604,75 +420,7 @@
                 </androidx.cardview.widget.CardView>
             </LinearLayout>
 
-
-<!--            <LinearLayout-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:gravity="center"-->
-<!--                android:layout_marginLeft="10dp"-->
-<!--                android:layout_marginRight="10dp"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_height="wrap_content">-->
-<!--            <androidx.recyclerview.widget.RecyclerView-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:id="@+id/Recyclerview_home"-->
-<!--                android:visibility="gone"-->
-<!--                tools:listitem="@layout/dashboard_layout"/>-->
-<!--&lt;!&ndash;                <include layout="@layout/dashboard_layout"/>&ndash;&gt;-->
-<!--            </LinearLayout>-->
-
-
-        </LinearLayout>
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:visibility="gone"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/monthlyContainer"
-            android:layout_below="@+id/tabs">
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:layout_width="0dp"
-                android:id="@+id/barChart"
-                android:layout_weight="1"
-                android:layout_height="240dp"/>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="5dp"
-            android:visibility="gone"
-            android:layout_marginBottom="10dp"
-            android:id="@+id/roWiseContainer"
-            android:layout_below="@+id/tabs">
-
-            <com.github.mikephil.charting.charts.BarChart
-                android:layout_width="0dp"
-                android:id="@+id/barChartRO"
-                android:layout_weight="1"
-                android:layout_height="240dp"/>
-
-        </LinearLayout>
-<!--        <View-->
-<!--            android:id="@+id/shadow"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="16dp"-->
-<!--            android:background="@drawable/shape_gradient_top_shadow"-->
-<!--            android:visibility="gone"-->
-<!--            app:layout_anchor="@id/complaints_filter" />-->
-
-        <include
-            android:id="@+id/complaints_filter"
-            layout="@layout/bottomsheet_filter_layout"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"/>
-    </RelativeLayout>
-
-
+</LinearLayout>
 </layout>
