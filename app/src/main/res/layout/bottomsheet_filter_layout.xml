@@ -18,7 +18,15 @@
         android:paddingTop="15dp"
         android:paddingRight="10dp"
         android:paddingBottom="15dp">
-
+        <TextView
+            android:id="@+id/resestTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="5dp"
+            android:text=" Reset " />
         <Space
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -148,6 +156,36 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:id="@+id/activeSubadmin_layout"
+            android:orientation="vertical">
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Sub Admin"
+                android:textColor="@color/black" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/subadmin_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/spinner_background"
+                android:gravity="left"
+                android:minHeight="28dp" />
+
+        </LinearLayout>
     </LinearLayout>
 
 

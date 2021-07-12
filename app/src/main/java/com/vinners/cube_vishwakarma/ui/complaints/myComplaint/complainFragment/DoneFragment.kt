@@ -38,7 +38,7 @@ class DoneFragment : BaseFragment<FragmentDoneBinding, AllComplaintFragmentViewM
 
     }
 
-
+    var adminUserid : String = ""
     private val allComplaintRecyclerAdapter: AllComplaintRecyclerAdapter by lazy {
         AllComplaintRecyclerAdapter()
                 .apply {
@@ -81,7 +81,12 @@ class DoneFragment : BaseFragment<FragmentDoneBinding, AllComplaintFragmentViewM
                 viewBinding.refreshLayout.isRefreshing = true
             }
 
-            viewModel.getComplaintList(userid!!)
+            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                viewModel.getComplaintList(adminUserid)
+            }else{
+                viewModel.getComplaintList(userid!!)
+
+            }
 
         }
     }
@@ -129,7 +134,12 @@ class DoneFragment : BaseFragment<FragmentDoneBinding, AllComplaintFragmentViewM
             }
         })
 
-        viewModel.getComplaintList(userid!!)
+        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+            viewModel.getComplaintList(adminUserid)
+        }else{
+            viewModel.getComplaintList(userid!!)
+
+        }
 
     }
 

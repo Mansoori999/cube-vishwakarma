@@ -29,6 +29,7 @@
             app:title="Outlet Details"
             app:navigationIcon="@drawable/ic_arrow_left"
             app:titleTextColor="@android:color/white" >
+
             <ImageButton
                 android:layout_width="40dp"
                 android:layout_height="40dp"
@@ -36,6 +37,16 @@
                 android:layout_gravity="right"
                 android:background="?attr/colorPrimaryDark"
                 android:src="@drawable/ic_edit"
+                android:layout_marginRight="10dp"
+                android:clickable="true"
+                tools:ignore="VectorDrawableCompat" />
+            <ImageButton
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/editgps"
+                android:layout_gravity="right"
+                android:background="?attr/colorPrimaryDark"
+                android:src="@drawable/ic_gps"
                 android:layout_marginRight="10dp"
                 android:clickable="true"
                 tools:ignore="VectorDrawableCompat" />

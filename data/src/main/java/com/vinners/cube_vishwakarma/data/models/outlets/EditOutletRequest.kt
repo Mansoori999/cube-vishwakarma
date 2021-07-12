@@ -7,8 +7,8 @@ data class EditOutletRequest(
     val secondarymail: String?=null,
 
 
-    @field:SerializedName("gpsaddress")
-    val gpsaddress: String,
+//    @field:SerializedName("gpsaddress")
+//    val gpsaddress: String,
 
     @field:SerializedName("secondarymobile")
     val secondarymobile: String?=null,
@@ -20,8 +20,8 @@ data class EditOutletRequest(
     @field:SerializedName("pic")
     val pic: String ? = null,
 
-    @field:SerializedName("gps")
-    val gps: String
+//    @field:SerializedName("gps")
+//    val gps: String
 
 ) {
 }

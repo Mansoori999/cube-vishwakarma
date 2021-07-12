@@ -40,7 +40,7 @@
             android:id="@+id/refreshProgressbar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:visibility="visible"
+            android:visibility="gone"
             android:layout_centerInParent="true" />
 <LinearLayout
     android:layout_width="match_parent"
@@ -74,7 +74,7 @@
                     android:imeOptions="actionDone"
                     android:enabled="false"
                     android:focusable="true"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:inputType="text"
                     android:maxLines="1" />
 
@@ -107,13 +107,13 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="12dp"
             android:layout_marginLeft="12dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/regionalInputLayout"
                 style="@style/Widget.Design.TextInputLayout"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Regional Office"
@@ -128,7 +128,7 @@
                     android:imeOptions="actionDone"
                     android:enabled="false"
                     android:inputType="text"
-                    android:textSize="12dp"
+                    android:textSize="14dp"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -137,7 +137,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/saleInputLayout"
                 style="@style/Widget.Design.TextInputLayout"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="Sales Area"
@@ -150,25 +150,41 @@
                     android:layout_height="wrap_content"
                     android:imeOptions="actionDone"
                     android:inputType="text"
-                    android:textSize="12dp"
+                    android:textSize="14dp"
                     android:enabled="false"
                     android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#cccccc"/>
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="visible">
+<!--    <View-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="1dp"-->
+<!--        android:background="#cccccc"/>-->
+<!--    <TextView-->
+<!--        android:id="@+id/getCurrentLocation"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="center_vertical"-->
+<!--        android:layout_toRightOf="@+id/map"-->
+<!--        android:paddingTop="10dp"-->
+<!--        android:background="?android:attr/selectableItemBackground"-->
+<!--        android:paddingBottom="10dp"-->
+<!--        android:layout_centerVertical="true"-->
+<!--        android:layout_marginLeft="@dimen/dimension_20dp"-->
+<!--        android:text="Click Here For Get Current Location"-->
+<!--        android:textColor="@color/colorPrimaryDark"-->
+<!--        android:textSize="15sp" />-->
+<!--    <com.google.android.material.card.MaterialCardView-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/mapHolder"-->
+<!--        android:visibility="gone">-->
 
-        <include layout="@layout/layout_map"
-            android:id="@+id/map_editOutlet"/>
+<!--        <include layout="@layout/layout_map"-->
+<!--            android:visibility="visible"-->
+<!--            android:id="@+id/map_editOutlet"/>-->
 
-    </com.google.android.material.card.MaterialCardView>
+<!--    </com.google.android.material.card.MaterialCardView>-->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
@@ -207,6 +223,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
+                android:textSize="14sp"
                 android:inputType="textEmailAddress"
                 android:maxLines="1" />
 
@@ -229,7 +246,7 @@
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
                 android:inputType="number"
-                android:textSize="12dp"
+                android:textSize="14dp"
                 android:maxLength="10"
                 android:maxLines="1" />
 

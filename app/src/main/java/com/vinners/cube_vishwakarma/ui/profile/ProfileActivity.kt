@@ -1,36 +1,54 @@
 package com.vinners.cube_vishwakarma.ui.profile
 
+import android.Manifest
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import coil.api.load
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.himanshu.cameraintegrator.ImageCallback
+import com.himanshu.cameraintegrator.ImagesSizes
+import com.himanshu.cameraintegrator.integrator.CameraIntegrator
+import com.himanshu.cameraintegrator.integrator.GalleryIntegrator
+import com.himanshu.cameraintegrator.storage.StorageMode
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.base.AppInfo
+import com.vinners.cube_vishwakarma.core.AppConstants
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
+import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityProfileBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 import de.hdodenhof.circleimageview.CircleImageView
+import java.lang.Exception
 import javax.inject.Inject
 
 class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityViewModel>(R.layout.activity_profile) {
 
+    companion object{
+        private const val PERMISSION_REQUEST_STORAGE = 233
+    }
 
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
@@ -41,6 +59,7 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityView
     @Inject
     lateinit var appInfo: AppInfo
 
+    private var currentlyClickingImageForIndex: Int = -1
     private lateinit var oldPassword:EditText
     private lateinit var newPassword:EditText
 
@@ -59,6 +78,12 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityView
     override fun onInitDataBinding() {
         viewBinding.backbtn.setOnClickListener {
             onBackPressed()
+        }
+        viewBinding.editProfilePic.setOnClickListener {
+            if (storagePermissions())
+                showCameraOptionDialog()
+            else
+                requestStoragePermissions()
         }
         val  myAnim : Animation = AnimationUtils.loadAnimation(this, R.anim.card_anim)
         viewBinding.personalDetail.setOnClickListener {
@@ -141,6 +166,107 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityView
         }
     }
 
+
+    fun showCameraOptionDialog() {
+        val optionsForDialog = arrayOf<CharSequence>("Open Camera", "Select from Gallery")
+        val alertBuilder = AlertDialog.Builder(this)
+        alertBuilder.setTitle("Select An Option")
+        alertBuilder.setIcon(R.drawable.ic_camera)
+        alertBuilder.setItems(optionsForDialog, DialogInterface.OnClickListener { dialog, which ->
+            when (which) {
+                0 -> openCamera()
+                1 -> openGallery()
+            }
+        })
+        alertBuilder.setNegativeButton("Cancel") { dialog12, _ -> dialog12.dismiss() }
+        alertBuilder.show()
+    }
+    fun openCamera() {
+        try {
+            cameraIntegrator.initiateCapture()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    fun openGallery() {
+        try {
+            galleryIntegrator.initiateImagePick()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CameraIntegrator.REQUEST_IMAGE_CAPTURE)
+            cameraIntegrator.parseResults(requestCode, resultCode, data, imageCallback)
+        else if (requestCode == GalleryIntegrator.REQUEST_IMAGE_PICK)
+            galleryIntegrator.parseResults(requestCode, resultCode, data, imageCallback)
+    }
+
+    private val imageCallback =
+        ImageCallback { requestedBy, result, error ->
+
+            if (result != null) {
+                val imagePath = result.imagePath
+                // viewBinding.userPic.load(File(imagePath))
+                viewModel.updateProfilePic(imagePath)
+            }
+        }
+
+    private val cameraIntegrator: CameraIntegrator by lazy {
+        CameraIntegrator(this)
+            .apply {
+                setStorageMode(StorageMode.EXTERNAL_PUBLIC_STORAGE)
+                setPublicDirectoryName(AppConstants.PUBLIC_FILE_FOLDER)
+                setRequiredImageSize(ImagesSizes.OPTIMUM_MEDIUM)
+            }
+    }
+
+
+    private val galleryIntegrator: GalleryIntegrator by lazy {
+        GalleryIntegrator(this)
+            .apply {
+                setStorageMode(StorageMode.EXTERNAL_PUBLIC_STORAGE)
+                setPublicDirectoryName(AppConstants.PUBLIC_FILE_FOLDER)
+                setRequiredImageSize(ImagesSizes.OPTIMUM_MEDIUM)
+            }
+    }
+    private fun requestStoragePermissions() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ),
+            PERMISSION_REQUEST_STORAGE
+        )
+    }
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            PERMISSION_REQUEST_STORAGE -> {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    showCameraOptionDialog()
+                } else {
+                    //TODO handle manual permission here
+                }
+                return
+            }
+        }
+    }
+    private fun storagePermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            this, Manifest.permission.READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+                &&
+                ContextCompat.checkSelfPermission(
+                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED
+    }
     private fun setValidationChangePassword() {
         if  (oldPassword.isVisible && oldPassword.text.isNullOrBlank()){
             showInformationDialog("Please enter password")
@@ -184,6 +310,28 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityView
 
         })
         viewModel.initViewModel()
+//
+//        viewModel.percentageProfileCompleteState.observe(this, Observer {
+////            viewBinding.loadingPic.text = "$it%"
+//            viewBinding.loadingPicProgress.progress = it
+//        })
+        viewModel.profilePicState.observe(this, Observer {
+            when (it) {
+                Lse.Loading -> {
+                    viewBinding.loadingPicProgress.setVisibilityVisible()
+                }
+                Lse.Success -> {
+                    viewBinding.loadingPicProgress.setVisibilityGone()
+                    viewModel.refreshProfileData()
+//                    Toast.makeText(this, "profile Pic Updated Succefully", Toast.LENGTH_SHORT)
+//                            .show()
+                }
+                is Lse.Error -> {
+                    viewBinding.loadingPicProgress.setVisibilityGone()
+                    showInformationDialog(it.error)
+                }
+            }
+        })
 
         viewModel.refreshProfileState.observe(this, Observer {
             when(it){
@@ -224,3 +372,5 @@ class ProfileActivity : BaseActivity<ActivityProfileBinding, ProfileActivityView
         })
     }
 }
+
+

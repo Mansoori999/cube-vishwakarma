@@ -8,7 +8,9 @@ import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
+import com.vinners.cube_vishwakarma.data.models.dashboard.ActiveSubAdminResponse
 import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponse
+import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponseDataItem
 import com.vinners.cube_vishwakarma.data.models.dashboardFilter.DashboardFilterList
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
 import com.vinners.cube_vishwakarma.data.repository.ComplaintRequestRepository
@@ -30,7 +32,8 @@ interface ProfileEvents {
 
     val financialFilterState: LiveData<Lce<List<DashboardFilterList>>>
     val regionalOfficeFilterState: LiveData<Lce<List<ComplaintOutletList>>>
-    val dashboardState : LiveData<Lce<DashBoardResponse>>
+    val dashboardState : LiveData<Lce<DashBoardResponseDataItem>>
+    val acitveSubAdminFilterState: LiveData<Lce<List<ActiveSubAdminResponse>>>
 
 
 }
@@ -98,14 +101,14 @@ class MainActivityViewModel@Inject constructor(
 
     /* DashBoard */
 
-    private val _dashboardState =  MutableLiveData<Lce<DashBoardResponse>>()
-    override val dashboardState: LiveData<Lce<DashBoardResponse>> = _dashboardState
+    private val _dashboardState =  MutableLiveData<Lce<DashBoardResponseDataItem>>()
+    override val dashboardState: LiveData<Lce<DashBoardResponseDataItem>> = _dashboardState
 
-    fun dashBoardData(startDate:String,endDate:String,regionalOfficeIds:String?) {
+    fun dashBoardData(startDate:String,endDate:String,regionalOfficeIds:String?,activeSubadminId:String?) {
         _dashboardState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {
-                val response = dashBoardRepository.getDashBoard(startDate,endDate,regionalOfficeIds)
+                val response = dashBoardRepository.getDashBoard(startDate,endDate,regionalOfficeIds,activeSubadminId)
                 _dashboardState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _dashboardState.postValue(Lce.error(e.localizedMessage))
@@ -113,6 +116,26 @@ class MainActivityViewModel@Inject constructor(
             }
         }
     }
+
+
+    // Active SUBADMIN
+    private val _acitveSubAdminFilterState = MutableLiveData<Lce<List<ActiveSubAdminResponse>>>()
+    override val acitveSubAdminFilterState: LiveData<Lce<List<ActiveSubAdminResponse>>>  = _acitveSubAdminFilterState
+
+    fun activeSubAdmib() = viewModelScope.launch {
+
+        _acitveSubAdminFilterState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = dashBoardRepository.activeSubAdmin()
+                _acitveSubAdminFilterState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _acitveSubAdminFilterState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
 
 
 

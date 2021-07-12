@@ -4,10 +4,7 @@ import com.vinners.cube_vishwakarma.data.dataStores.outlets.OutletRemoteDataStor
 import com.vinners.cube_vishwakarma.data.models.complaints.ComplaintUserIdRequet
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.dashboard.ComplaintRequestWithStatus
-import com.vinners.cube_vishwakarma.data.models.outlets.ComplaintRequest
-import com.vinners.cube_vishwakarma.data.models.outlets.EditOutletRequest
-import com.vinners.cube_vishwakarma.data.models.outlets.OutletDetailsList
-import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
+import com.vinners.cube_vishwakarma.data.models.outlets.*
 import com.vinners.cube_vishwakarma.remote.extensions.bodyOrThrow
 import com.vinners.cube_vishwakarma.remote.retrofitServices.OutletService
 import okhttp3.MediaType
@@ -33,8 +30,6 @@ class OutletRemoteDataStoreImpl @Inject constructor(
         outletid: String?,
         secondarymail: String?,
         secondarymobile: String?,
-        gps: String,
-        gpsAddress: String,
         images: List<String>,
         pic:String?
     ){
@@ -53,8 +48,6 @@ class OutletRemoteDataStoreImpl @Inject constructor(
              outletid = outletid,
              secondarymail = secondarymail,
              secondarymobile = secondarymobile,
-             gps = gps,
-             gpsaddress = gpsAddress,
              pic = pic
             ),
             images = imagesBodies
@@ -62,6 +55,18 @@ class OutletRemoteDataStoreImpl @Inject constructor(
         val outletId = response.bodyOrThrow().first().outletId
 
     }
+
+    override suspend fun editOutletGps(outletid: String?, gps: String, gpsAddress: String) {
+        val response =  outletService.editOutletGps(
+            EditOutletLocation(
+                outletid = outletid,
+                gps = gps,
+                gpsaddress = gpsAddress
+            )
+        )
+            val outletid = response.bodyOrThrow().first().outletId
+    }
+
 
     override suspend fun getComplaints(outletid: String): List<MyComplaintList> {
         return outletService.getComplaintsByOutletid(
@@ -71,13 +76,14 @@ class OutletRemoteDataStoreImpl @Inject constructor(
         ).bodyOrThrow()
     }
 
-    override suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?): List<MyComplaintList> {
+    override suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?,subadminIds:String?): List<MyComplaintList> {
         return outletService.getComplaintWithStatus(
             ComplaintRequestWithStatus(
                 status = status,
                 startDate = startDate,
                 endDate = endDate,
-                regionalOfficeIds = regionalOfficeIds
+                regionalOfficeIds = regionalOfficeIds,
+                subadminIds = subadminIds
             )
         ).bodyOrThrow()
     }

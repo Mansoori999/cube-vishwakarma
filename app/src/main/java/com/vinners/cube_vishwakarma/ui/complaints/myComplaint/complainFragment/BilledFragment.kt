@@ -35,6 +35,8 @@ class BilledFragment :  BaseFragment<FragmentBilledBinding, AllComplaintFragment
     companion object {
         fun newInstance() = BilledFragment()
     }
+
+    var adminUserid : String = ""
     private val allComplaintRecyclerAdapter: AllComplaintRecyclerAdapter by lazy {
         AllComplaintRecyclerAdapter()
             .apply {
@@ -76,11 +78,12 @@ class BilledFragment :  BaseFragment<FragmentBilledBinding, AllComplaintFragment
         viewBinding.allcomplaintFragmentRecycler.adapter = allComplaintRecyclerAdapter
         viewBinding.refreshLayout.setOnRefreshListener {
 
-            if (!viewBinding.refreshLayout.isRefreshing) {
-                viewBinding.refreshLayout.isRefreshing = true
-            }
+            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                viewModel.getComplaintList(adminUserid)
+            }else{
+                viewModel.getComplaintList(userid!!)
 
-            viewModel.getComplaintList(userid!!)
+            }
 
         }
     }
@@ -126,8 +129,13 @@ class BilledFragment :  BaseFragment<FragmentBilledBinding, AllComplaintFragment
 
             }
         })
+        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+            viewModel.getComplaintList(adminUserid)
+        }else{
+            viewModel.getComplaintList(userid!!)
 
-        viewModel.getComplaintList(userid!!)
+        }
+
 
     }
 

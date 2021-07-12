@@ -14,13 +14,16 @@ interface OutletRemoteDataStore {
         outletid: String?,
         secondarymail: String?,
         secondarymobile: String?,
-        gps: String,
-        gpsAddress: String,
         images: List<String>,
         pic:String?
     )
 
+    suspend fun editOutletGps(
+        outletid: String?,
+        gps: String,
+        gpsAddress: String,
+    )
     suspend fun getComplaints(outletid :String):List<MyComplaintList>
 
-    suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?):List<MyComplaintList>
+    suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?,subadminIds:String?):List<MyComplaintList>
 }

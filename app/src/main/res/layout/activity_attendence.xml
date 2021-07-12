@@ -20,7 +20,7 @@
             android:background="?attr/colorPrimaryDark"
             app:navigationIcon="@drawable/ic_arrow_left"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="Attendence"
+            app:title="Attendance"
             style="@style/ToolbarTheme"
             app:elevation="0dp"
             app:titleTextColor="@android:color/white" />

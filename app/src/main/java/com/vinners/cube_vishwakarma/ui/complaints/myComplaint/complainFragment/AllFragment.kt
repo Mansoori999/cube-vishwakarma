@@ -48,6 +48,7 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
 
 
     var userid : String? = null
+    var adminUserid : String = ""
 
     override val viewModel: AllComplaintFragmentViewModel by viewModels{ viewModelFactory }
 
@@ -75,7 +76,12 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
                 viewBinding.refreshLayout.isRefreshing = true
             }
 
-            viewModel.getComplaintList(userid!!)
+            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                viewModel.getComplaintList(adminUserid)
+            }else{
+                viewModel.getComplaintList(userid!!)
+
+            }
 
         }
 
@@ -120,7 +126,13 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
             }
         })
 
-        viewModel.getComplaintList(userid!!)
+        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+            viewModel.getComplaintList(adminUserid)
+        }else{
+            viewModel.getComplaintList(userid!!)
+
+        }
+
 
     }
 

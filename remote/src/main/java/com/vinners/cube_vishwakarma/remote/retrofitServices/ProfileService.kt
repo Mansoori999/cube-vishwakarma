@@ -17,6 +17,14 @@ interface ProfileService {
     suspend fun getProfile(): Response<List<UserProfile>>
 
     @Multipart
+    @POST("api/user/updateuserpic")
+    suspend fun updateProfilePic(@Part imageFile: MultipartBody.Part?): Response<List<UpdateProfilePic>>
+
+//    @Multipart
+//    @POST("api/user/updateprofilepic")
+//    suspend fun updateProfilePic(@Part imageFile: MultipartBody.Part?): Response<List<UpdateProfilePic>>
+
+    @Multipart
     @POST("/api/user/updatewithfile")
     suspend fun updloadBankDetails(
         @Query("type") bankKey: String?,
@@ -43,9 +51,6 @@ interface ProfileService {
         @Query("short") fullReferUrl: String
     ): Response<ReferResponse>
 
-    @Multipart
-    @POST("api/user/updateprofilepic")
-    suspend fun updateProfilePic(@Part imageFile: MultipartBody.Part?): Response<List<UpdateProfilePic>>
 
 
     @GET("api/application/downloadcertficate")

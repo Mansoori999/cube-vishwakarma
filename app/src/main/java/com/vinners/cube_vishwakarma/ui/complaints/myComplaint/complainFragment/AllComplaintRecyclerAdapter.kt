@@ -1,7 +1,11 @@
 package com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.os.Build
+import android.text.Html
+import android.text.Spanned
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,14 +13,12 @@ import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.DateTimeHelper
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
-import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
-import com.vinners.cube_vishwakarma.ui.outlets.OutletRecyclerAdapter
-import java.text.ParseException
-import java.text.SimpleDateFormat
+import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity
 import java.util.*
 
 
@@ -31,6 +33,8 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
     private lateinit var allComplaintsClickListener: AllComplaintsClickListener
     var mFilteredItemList = listOf<MyComplaintList>()
     private var searchFilter: SearchFilters? = null
+
+
 
 
     fun updateViewList (complaintList: List<MyComplaintList>){
@@ -51,6 +55,12 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
 
     override fun onBindViewHolder(holder: AllComplaintRecyclerHolder, position: Int) {
         holder.onBind(mFilteredItemList[position])
+        holder.name.setOnClickListener {
+            val intent = Intent(context, OutletDetalisActivity::class.java)
+            intent.putExtra(OutletDetalisActivity.OUTLET_ID,mFilteredItemList.get(position).outletid)
+            context.startActivity(intent)
+        }
+
     }
     fun setAllComplaintsListener(allComplaintsClickListener: AllComplaintsClickListener) {
         this.allComplaintsClickListener = allComplaintsClickListener
@@ -102,28 +112,36 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
     }
     inner class AllComplaintRecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val complaintId = itemView.findViewById<TextView>(R.id.id)
-        private val date = itemView.findViewById<TextView>(R.id.dateEt)
+        private val work = itemView.findViewById<TextView>(R.id.work)
+        private val date = itemView.findViewById<TextView>(R.id.complaintidAnddateEt)
         private val  status = itemView.findViewById<TextView>(R.id.status)
-        private val name = itemView.findViewById<TextView>(R.id.outlet_name)
-//        private val code = itemView.findViewById<TextView>(R.id.customer_code)
-        private val letterstatus = itemView.findViewById<TextView>(R.id.letterstatus)
+        val name = itemView.findViewById<TextView>(R.id.outlet_name)
+        private val salesArea = itemView.findViewById<TextView>(R.id.salesAreaEt)
+        private val ro = itemView.findViewById<TextView>(R.id.ro)
+        private val subAdmin = itemView.findViewById<TextView>(R.id.am)
+        private val orderby = itemView.findViewById<TextView>(R.id.orderby)
 
         init {
 
             itemView.setOnClickListener {
                 allComplaintsClickListener.OnAllComplaintsClick(mFilteredItemList[adapterPosition])
             }
+
+
         }
 
-        fun onBind(complaintList: MyComplaintList){
+        fun onBind(complaintList: MyComplaintList) {
 
-            name.text = "${complaintList.outlet}   -   ${complaintList.customercode}"
-            complaintId.text = "${complaintList.complaintid}"
-//            date.text =  "${complaintList.fordate}"
-           date.text = DateTimeHelper.getDDMMYYYYDateFromString(complaintList.fordate!!)
+            name.text = "${complaintList.outlet} - ${complaintList.outletcategory}"
+            ro.text = "${complaintList.regionaloffice}"
+
+            salesArea.text = "${complaintList.salesarea}"
+            work.text = "${complaintList.work}"
+            subAdmin.text = "${complaintList.subadmin}"
+            orderby.text =  "${complaintList.orderby}"
+           date.text = "${complaintList.complaintid} - ${DateTimeHelper.getDDMMYYYYDateFromString(complaintList.fordate!!)}"
 //            code.text = "-  ${complaintList.customercode}"
-            letterstatus.text = "Letter status : ${complaintList.letterstatus}"
+          //  letterstatus.text = "Letter status : ${complaintList.letterstatus}"
             status.text = complaintList.status
             if (complaintList.status!!.toLowerCase().equals("done")) {
                 status.setTextColor(Color.parseColor("#99CC33"))
@@ -153,3 +171,4 @@ class AllComplaintRecyclerAdapter() : RecyclerView.Adapter<AllComplaintRecyclerA
 
 
 }
+

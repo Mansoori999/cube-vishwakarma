@@ -23,12 +23,14 @@ interface ProfileEvents {
     val changeduserpasswordState: LiveData<Lce<String>>
     val refreshProfileState: LiveData<Lce<LoginResponse>>
 
+    val profilePicState: LiveData<Lse>
     fun initViewModel()
-
+    val percentageProfileCompleteState: LiveData<Int>
 }
 class ProfileActivityViewModel@Inject constructor(
         private val userProfileRepository: ProfileRepository,
-        private val observeProfileInteractor: ObserveProfileInteractor
+        private val observeProfileInteractor: ObserveProfileInteractor,
+        private val observeProfileCompletePercentage: ObserveProfileCompletePercentage
         ) : ViewModel(), ProfileEvents{
 
     override fun initViewModel() {
@@ -38,9 +40,13 @@ class ProfileActivityViewModel@Inject constructor(
     private val _profile = MutableLiveData<Profile>()
     override val profile: LiveData<Profile> = _profile
 
+    private val _profilePercentageComplete = MutableLiveData<Int>()
+    override val percentageProfileCompleteState: LiveData<Int> = _profilePercentageComplete
+
 
     private fun startObservingProfile() {
         observeProfileInteractor.execute(GetProfileObserver(), null)
+        observeProfileCompletePercentage.execute(GetProfileCompletePercentageObserver(),null)
 
     }
 
@@ -55,6 +61,33 @@ class ProfileActivityViewModel@Inject constructor(
         }
     }
 
+
+    private inner class GetProfileCompletePercentageObserver : DisposableObserver<Int>() {
+
+        override fun onComplete() {}
+
+        override fun onError(e: Throwable) {}
+
+        override fun onNext(t: Int) {
+            _profilePercentageComplete.postValue(t)
+        }
+    }
+
+
+    private val _profilePicState = MutableLiveData<Lse>()
+    override val profilePicState: LiveData<Lse> = _profilePicState
+
+    fun updateProfilePic(imageUrl: String?) {
+        viewModelScope.launch {
+            _profilePicState.value = Lse.Loading
+            try {
+                userProfileRepository.updateProfilePic(imageUrl)
+                _profilePicState.postValue(Lse.Success)
+            } catch (e: Exception) {
+                _profilePicState.postValue(Lse.Error(e.localizedMessage))
+            }
+        }
+    }
 
     private val _changeduserpasswordState = MutableLiveData<Lce<String>>()
     override val changeduserpasswordState: LiveData<Lce<String>> = _changeduserpasswordState

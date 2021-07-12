@@ -7,30 +7,45 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletDetailsList
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import com.vinners.cube_vishwakarma.data.repository.OutletRepository
+import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.LoadMetaForAddComplaintState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mobile.androidbase.location.LocationUtils
-import java.io.File
 import javax.inject.Inject
 
 
 
 interface OutletEvents {
 
-    val outletListState: LiveData<Lce<List<OutletsList>>>
+   val outletListState: LiveData<Lce<List<OutletsList>>>
 
     val outletState: LiveData<Lce<List<OutletsList>>>
 
     val outletDetailsListState : LiveData<Lce<OutletDetailsList>>
 
+    val outletStateWithOR: LiveData<Lce<List<OutletsList>>>
+
     val  complaintsbyoutletListState: LiveData<Lce<List<MyComplaintList>>>
    val complaintStatusState : LiveData<Lce<List<MyComplaintList>>>
 
 }
+sealed class LoadMetaForAddOutletState {
 
+    object LoadingLoadMetaForAddOutletState : LoadMetaForAddOutletState()
+
+
+    data class MetaForAddOutletStateLoaded(
+            val regionalAndSalesInfo: List<OutletsList>
+    ) : LoadMetaForAddOutletState()
+
+    data class ErrorInLoadingMetaForAddOutletLoaded(
+            val error: String
+    ) : LoadMetaForAddOutletState()
+}
 sealed class UploadEditOutletState {
 
     object EditOutletDataLoading : UploadEditOutletState()
@@ -41,10 +56,48 @@ sealed class UploadEditOutletState {
         val error: String
     ) : UploadEditOutletState()
 }
+
+sealed class UploadEditOutletGPSState {
+
+    object EditOutletDataGPSLoading : UploadEditOutletGPSState()
+
+    object OutletDataGPSUpdated : UploadEditOutletGPSState()
+
+    data class ErrorInUpDateEditOutletGPSData(
+        val error: String
+    ) : UploadEditOutletGPSState()
+}
+
 class OutletsViewModel @Inject constructor(
     private val outletRepository: OutletRepository,
     private val geocoder: Geocoder
 ): ViewModel(),OutletEvents {
+
+//    private val _loadRegionalAndSalesInfo = MutableLiveData<LoadMetaForAddOutletState>()
+//    val loadRegionalAndSalesInfo: LiveData<LoadMetaForAddOutletState> = _loadRegionalAndSalesInfo
+//
+//    var outletRequestList: List<OutletsList>? = null
+//
+//    fun getOutletstData() = viewModelScope.launch {
+//
+//        try {
+//            _loadRegionalAndSalesInfo.postValue(LoadMetaForAddOutletState.LoadingLoadMetaForAddOutletState)
+//
+//            outletRequestList = outletRepository.getOutletData()
+//            _loadRegionalAndSalesInfo.postValue(
+//                    LoadMetaForAddOutletState.MetaForAddOutletStateLoaded(
+//                            outletRequestList!!
+//                    )
+//            )
+//        } catch (e: Exception) {
+//            _loadRegionalAndSalesInfo.postValue(
+//                    LoadMetaForAddOutletState.ErrorInLoadingMetaForAddOutletLoaded(
+//                            e.toString()
+//                    )
+//            )
+//            e.printStackTrace()
+//        }
+//    }
 
     private val _outletListState = MutableLiveData<Lce<List<OutletsList>>>()
     override val outletListState: LiveData<Lce<List<OutletsList>>> = _outletListState
@@ -64,7 +117,7 @@ class OutletsViewModel @Inject constructor(
     //    //databae getDataByID
     private val _outletState = MutableLiveData<Lce<List<OutletsList>>>()
     override val outletState: LiveData<Lce<List<OutletsList>>> = _outletState
-    fun getOutletsById(roid:String , said:String){
+    fun getOutletsById(roid:List<Int> , said:List<Int>){
         _outletState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {
@@ -72,6 +125,20 @@ class OutletsViewModel @Inject constructor(
                 _outletState.postValue(Lce.content(response))
             }catch (e:Exception){
                 _outletState.postValue(Lce.error(e.localizedMessage))
+            }
+        }
+    }
+
+    private val _outletStateWithOR = MutableLiveData<Lce<List<OutletsList>>>()
+    override val outletStateWithOR: LiveData<Lce<List<OutletsList>>> = _outletStateWithOR
+    fun getOutletsByIdWithOR(roid:List<Int> , said:List<Int>){
+        _outletStateWithOR.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = outletRepository.getOutletsBYIDWithOR(roid,said)
+                _outletStateWithOR.postValue(Lce.content(response))
+            }catch (e:Exception){
+                _outletStateWithOR.postValue(Lce.error(e.localizedMessage))
             }
         }
     }
@@ -116,27 +183,16 @@ class OutletsViewModel @Inject constructor(
         outletid: String?,
         secondarymail: String?,
         secondarymobile: String?,
-        latitude: Double,
-        longitude: Double,
         images: List<String>,
         pic:String?
     ) = viewModelScope.launch(Dispatchers.IO) {
         try {
             _uploadEditOutletDataState.postValue(UploadEditOutletState.EditOutletDataLoading)
 
-            val gps = "$latitude,$longitude"
-            val fullAddressFromGps = LocationUtils.addressFromLocation(
-                geoCoder = geocoder,
-                latitude = latitude,
-                longitude = longitude
-            )
-
             outletRepository.editOutlet(
                outletid,
                secondarymail,
                 secondarymobile,
-                gps,
-                fullAddressFromGps,
                 images,
                 pic
             )
@@ -152,6 +208,42 @@ class OutletsViewModel @Inject constructor(
             e.printStackTrace()
         }
 
+    }
+
+    private val _uploadEditOutletGPSDataState = MutableLiveData<UploadEditOutletGPSState>()
+    val uploadEditOutletGPSDataState: LiveData<UploadEditOutletGPSState> = _uploadEditOutletGPSDataState
+
+    fun editOutletGps(
+        outletid: String?,
+        latitude: Double,
+        longitude: Double
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            _uploadEditOutletGPSDataState.postValue(UploadEditOutletGPSState.EditOutletDataGPSLoading)
+
+            val gps = "$latitude,$longitude"
+            val fullAddressFromGps = LocationUtils.addressFromLocation(
+                geoCoder = geocoder,
+                latitude = latitude,
+                longitude = longitude
+            )
+
+            outletRepository.editOutletGps(
+                outletid,
+                gps,
+                fullAddressFromGps
+            )
+
+            _uploadEditOutletGPSDataState.postValue(UploadEditOutletGPSState.OutletDataGPSUpdated)
+        } catch (e: Exception) {
+
+            _uploadEditOutletGPSDataState.postValue(
+                UploadEditOutletGPSState.ErrorInUpDateEditOutletGPSData(
+                    e.toString()
+                )
+            )
+            e.printStackTrace()
+        }
     }
 
     /* Outlet complaints*/
@@ -176,11 +268,11 @@ class OutletsViewModel @Inject constructor(
     private val _complaintStatusState =  MutableLiveData<Lce<List<MyComplaintList>>>()
     override val complaintStatusState: LiveData<Lce<List<MyComplaintList>>> = _complaintStatusState
 
-    fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?) {
+    fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?,subadminIds:String?) {
         _complaintStatusState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {
-                val response = outletRepository.getComplaintWithStatus(status,startDate,endDate,regionalOfficeIds)
+                val response = outletRepository.getComplaintWithStatus(status,startDate,endDate,regionalOfficeIds,subadminIds)
                 _complaintStatusState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _complaintStatusState.postValue(Lce.error(e.localizedMessage))

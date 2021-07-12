@@ -17,8 +17,12 @@ class OutletRepository @Inject constructor(
 
 
 
-    suspend fun getOutletsBYID(roid:String , said:String):List<OutletsList> {
+    suspend fun getOutletsBYID(roid:List<Int> , said:List<Int>):List<OutletsList> {
         return OutletsLocalDataStore.getOutletsBYID(roid,said)
+    }
+
+    suspend fun getOutletsBYIDWithOR(roid:List<Int> , said:List<Int>):List<OutletsList> {
+        return OutletsLocalDataStore.getOutletsBYIDWithOR(roid,said)
     }
 
 //    suspend fun insertOutlets(outlets : List<OutletsList>){
@@ -44,8 +48,6 @@ class OutletRepository @Inject constructor(
         outletid: String?,
         secondarymail: String?,
         secondarymobile: String?,
-        gps: String,
-        gpsAddress: String,
         images: List<String>,
         pic:String?
     ){
@@ -53,18 +55,23 @@ class OutletRepository @Inject constructor(
             outletid,
             secondarymail,
             secondarymobile,
-            gps,
-            gpsAddress,
             images,
             pic
         )
+    }
+    suspend fun editOutletGps(
+        outletid: String?,
+        gps: String,
+        gpsAddress: String,
+    ){
+        outletRemoteDataStore.editOutletGps(outletid,gps,gpsAddress)
     }
 
     suspend fun getComplaintsByOutletid(outletid :String): List<MyComplaintList>{
         return outletRemoteDataStore.getComplaints(outletid)
     }
 
-    suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?):List<MyComplaintList>{
-        return outletRemoteDataStore.getComplaintWithStatus(status,startDate,endDate,regionalOfficeIds)
+    suspend fun getComplaintWithStatus(status : String,startDate : String,endDate : String,regionalOfficeIds : String?,subadminIds:String?):List<MyComplaintList>{
+        return outletRemoteDataStore.getComplaintWithStatus(status,startDate,endDate,regionalOfficeIds,subadminIds)
     }
 }

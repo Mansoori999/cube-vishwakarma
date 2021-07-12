@@ -1,26 +1,23 @@
 package com.vinners.cube_vishwakarma.ui.outlets
 
+
 import android.Manifest
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.Manifest.permission.ACCESS_FINE_LOCATION
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
-import android.os.Handler
 import android.os.PersistableBundle
 import android.provider.Settings
 import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
-import coil.ImageLoader
 import coil.api.load
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.LocationCallback
@@ -29,14 +26,12 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.himanshu.cameraintegrator.ImageCallback
 import com.himanshu.cameraintegrator.ImagesSizes
-import com.himanshu.cameraintegrator.RequestSource
 import com.himanshu.cameraintegrator.Result
 import com.himanshu.cameraintegrator.integrator.CameraIntegrator
 import com.himanshu.cameraintegrator.storage.StorageMode
@@ -56,7 +51,6 @@ import com.vinners.cube_vishwakarma.databinding.ActivityEditOutletBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity.Companion.OUTLET_CUSTOMER_CODE
-
 import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity.Companion.OUTLET_IMAGE
 import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity.Companion.OUTLET_NAME
 import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity.Companion.OUTLET_REGIONAL_OFFICE
@@ -64,8 +58,6 @@ import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity.Companion.O
 import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity.Companion.OUTLET_SECONDARY_MAIL
 import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity.Companion.OUTLET_SECONDARY_MOBILE
 import java.io.File
-
-
 import javax.inject.Inject
 
 class EditOutletActivity : BaseActivity<ActivityEditOutletBinding, OutletsViewModel>(R.layout.activity_edit_outlet),
@@ -217,18 +209,25 @@ class EditOutletActivity : BaseActivity<ActivityEditOutletBinding, OutletsViewMo
         viewBinding.editOutletToolbar.setOnClickListener {
             onBackPressed()
         }
-        Handler().postDelayed({
+//        viewBinding.getCurrentLocation.setOnClickListener {
+//
+//            viewBinding.mapHolder.setVisibilityVisible()
+//            viewBinding.getCurrentLocation.setVisibilityGone()
+//            Handler().postDelayed({
+//
+//                val mapFragment =
+//                    supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+//                mapFragment.getMapAsync(this)
+//
+//
+//                if (locationPermissions())
+//                    checkForGpsStatus()
+//                else
+//                    requestLocationPermissions()
+//
+//            }, 300)
+//        }
 
-            val mapFragment =
-                supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-            mapFragment.getMapAsync(this)
-
-            if (locationPermissions())
-                checkForGpsStatus()
-            else
-                requestLocationPermissions()
-
-        }, 300)
 
         outletId = intent.getStringExtra(OutletDetalisActivity.OUTLET_ID)
         val outletName = intent.getStringExtra(OUTLET_NAME)
@@ -282,10 +281,10 @@ class EditOutletActivity : BaseActivity<ActivityEditOutletBinding, OutletsViewMo
     }
 
     private fun validateAndUploadEditOutletData() {
-        if (userLocation.latitude == 0.0) {
-            showInformationDialog("Location not captured yet, retry when location is updated on map")
-            return
-        }
+//        if (userLocation.latitude == 0.0) {
+//            showInformationDialog("Location not captured yet, retry when location is updated on map")
+//            return
+//        }
 //        if (viewBinding.secondaryMailEt.text.isNullOrBlank()) {
 //            showInformationDialog("Please Enter Secondary Mail")
 //            return
@@ -308,8 +307,6 @@ class EditOutletActivity : BaseActivity<ActivityEditOutletBinding, OutletsViewMo
 
         viewModel.upDateEditOutletData(
                 outletid = outletId,
-                latitude = userLocation.latitude,
-                longitude = userLocation.longitude,
                 images = imagesMap.values.map { it.imagePath!! },
                 secondarymobile = viewBinding.secondaryMobileET.text.toString(),
                 secondarymail = viewBinding.secondaryMailEt.text.toString(),
@@ -493,7 +490,7 @@ class EditOutletActivity : BaseActivity<ActivityEditOutletBinding, OutletsViewMo
         if (!userLocationCaptured)
             locationHelper.startLocationUpdates()
 
-        viewBinding.mapEditOutlet.locationRefreshingProgressbar.visibility = View.GONE
+//        viewBinding.mapEditOutlet.locationRefreshingProgressbar.visibility = View.GONE
 
     }
 

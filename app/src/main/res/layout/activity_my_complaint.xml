@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent"
@@ -11,7 +10,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="?attr/colorPrimaryDark"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <androidx.appcompat.widget.Toolbar
@@ -25,16 +24,41 @@
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabs"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
+            android:layout_height="30dp"
+            android:background="?attr/colorPrimaryDark"
             app:tabMode="scrollable"
-            app:tabIndicatorColor="@color/world_rugby_red_light"
-            app:tabIndicatorHeight="3dp"
-            app:tabTextColor="#fff" />
+            app:tabGravity="center"
+            app:tabIndicator="@drawable/selected_dot"
+            app:tabIndicatorGravity="stretch"
+            app:tabIndicatorAnimationMode="elastic"
+            app:tabIndicatorHeight="0dp"
+            app:tabSelectedTextColor="@color/selected_textcolor"
+            app:tabIndicatorColor="@color/white"
+            app:tabTextColor="#5068EF" />
+<!--        #5161C3-->
+<!--        world_rugby_red_light-->
+<!--        app:tabIndicatorHeight="3dp"-->
+<!--        app:tabBackground="@drawable/tab_selector"-->
+
     </com.google.android.material.appbar.AppBarLayout>
 
-
-
+<!--    <com.tbuonomo.viewpagerdotsindicator.DotsIndicator-->
+<!--        android:id="@+id/dots_indicator"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginEnd="8dp"-->
+<!--        android:layout_marginStart="8dp"-->
+<!--        app:dotsColor="@color/world_rugby_blue"-->
+<!--        app:dotsCornerRadius="8dp"-->
+<!--        app:dotsSize="16dp"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        app:dotsSpacing="4dp"-->
+<!--        android:layout_marginBottom="10dp"-->
+<!--        app:dotsWidthFactor="2.5"-->
+<!--        android:layout_gravity="center"-->
+<!--        app:progressMode="false"-->
+<!--        app:selectedDotColor="@color/red"-->
+<!--        />-->
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"

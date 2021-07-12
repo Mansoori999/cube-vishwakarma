@@ -14,16 +14,16 @@ import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.ComplaintRequestActivity
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity
+import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.MonthlyFragment
+import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.ROWiseFragment
+import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.SummeryFragment
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 import com.vinners.cube_vishwakarma.ui.documents.DocumentDetailsActivity
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
-import com.vinners.cube_vishwakarma.ui.outlets.EditOutletActivity
-import com.vinners.cube_vishwakarma.ui.outlets.OutletComplaintsActivity
-import com.vinners.cube_vishwakarma.ui.outlets.OutletDetalisActivity
-import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
+import com.vinners.cube_vishwakarma.ui.outlets.*
 import com.vinners.cube_vishwakarma.ui.profile.BankDetailsAndOtherDetailsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileDetailsActivity
@@ -106,6 +106,15 @@ interface LauncherComponent {
     fun inject(bankDetailsAndOtheretailsActivity: BankDetailsAndOtherDetailsActivity)
 
     fun inject(documentDetailsActivity: DocumentDetailsActivity)
+
+    fun inject(editGpsLocationActivity: EditGpsLocationActivity)
+
+    fun inject(summeryFragment: SummeryFragment)
+
+    fun inject(monthlyFragment: MonthlyFragment)
+
+    fun inject(roWiseFragment: ROWiseFragment)
+
 
 
 }

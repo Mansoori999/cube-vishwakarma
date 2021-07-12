@@ -34,6 +34,7 @@ class DraftFragment :  BaseFragment<FragmentDraftBinding, AllComplaintFragmentVi
     companion object {
         fun newInstance() = DraftFragment()
     }
+    var adminUserid : String = ""
     private val allComplaintRecyclerAdapter: AllComplaintRecyclerAdapter by lazy {
         AllComplaintRecyclerAdapter()
             .apply {
@@ -76,7 +77,12 @@ class DraftFragment :  BaseFragment<FragmentDraftBinding, AllComplaintFragmentVi
                 viewBinding.refreshLayout.isRefreshing = true
             }
 
-            viewModel.getComplaintList(userid!!)
+            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                viewModel.getComplaintList(adminUserid)
+            }else{
+                viewModel.getComplaintList(userid!!)
+
+            }
 
         }
     }
@@ -123,7 +129,12 @@ class DraftFragment :  BaseFragment<FragmentDraftBinding, AllComplaintFragmentVi
             }
         })
 
-        viewModel.getComplaintList(userid!!)
+        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+            viewModel.getComplaintList(adminUserid)
+        }else{
+            viewModel.getComplaintList(userid!!)
+
+        }
 
     }
 

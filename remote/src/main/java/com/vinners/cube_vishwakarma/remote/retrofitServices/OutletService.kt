@@ -24,6 +24,12 @@ interface OutletService {
             @Part images: List<MultipartBody.Part>
     ):Response<List<OutletResponse>>
 
+    @POST("api/outlet/editoutletgps")
+    suspend fun editOutletGps(
+        @Body editOutletLocation: EditOutletLocation
+    ):Response<List<OutletResponse>>
+
+
     @POST("api/complaint/getcomplaintbyoutletid")
     suspend fun getComplaintsByOutletid(
         @Body complaintRequest: ComplaintRequest

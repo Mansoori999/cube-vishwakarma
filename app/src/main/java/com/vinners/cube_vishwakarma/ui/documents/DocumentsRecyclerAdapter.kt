@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.res.ResourcesCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -43,7 +44,7 @@ class DocumentsRecyclerAdapter() : RecyclerView.Adapter<DocumentsRecyclerAdapter
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DocumentsRecyclerHolder {
         this.context = parent.context
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.documents_list_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.documents_layout, parent, false)
         return DocumentsRecyclerHolder(view)
     }
 
@@ -72,7 +73,7 @@ class DocumentsRecyclerAdapter() : RecyclerView.Adapter<DocumentsRecyclerAdapter
     inner class DocumentsRecyclerHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         private val category = itemView.findViewById<TextView>(R.id.category)
-        private val path = itemView.findViewById<ImageView>(R.id.path)
+//        private val path = itemView.findViewById<ImageView>(R.id.path)
 //        private val description = itemView.findViewById<TextView>(R.id.description)
 
         init {
@@ -89,17 +90,17 @@ class DocumentsRecyclerAdapter() : RecyclerView.Adapter<DocumentsRecyclerAdapter
 //            sanitizer.parseUrl(documentsList.path)
 //            val urlpath  = sanitizer.getValue("v")
 
-            val pathurl = documentsList.path
-            val link = pathurl?.substringAfter(".")
-            if (link.equals("ppt") || link.equals("pptx")){
-                path.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.default_ppt, null))
-            }else if (link.equals("pdf")){
-                path.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.default_pdf, null))
-            }else{
-                path.load(appInfo.getFullAttachmentUrl(documentsList.path!!))
-            }
-            val image = appInfo.getFullAttachmentUrl(documentsList.path!!)
-            Log.d("jhug",image)
+//            val pathurl = documentsList.path
+//            val link = pathurl?.substringAfter(".")
+//            if (link.equals("ppt") || link.equals("pptx")){
+//                path.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.default_ppt, null))
+//            }else if (link.equals("pdf")){
+//                path.setImageDrawable(ResourcesCompat.getDrawable(context.getResources(), R.drawable.default_pdf, null))
+//            }else{
+//                path.load(appInfo.getFullAttachmentUrl(documentsList.path!!))
+//            }
+//            val image = appInfo.getFullAttachmentUrl(documentsList.path!!)
+//            Log.d("jhug",image)
             category.text = "${documentsList.category}"
 //            description.text = documentsList.description
 

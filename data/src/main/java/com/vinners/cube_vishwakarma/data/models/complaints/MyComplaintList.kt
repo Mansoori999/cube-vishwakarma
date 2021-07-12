@@ -16,6 +16,9 @@ data class MyComplaintList (
         @SerializedName("outlet")
         val outlet : String? =null,
 
+        @SerializedName("outletid")
+        val outletid : String? =null,
+
         @SerializedName("customercode")
         val customercode : String? =null,
 
@@ -23,7 +26,25 @@ data class MyComplaintList (
         val letterstatus : String? =null,
 
         @SerializedName("status")
-        val status : String? =null
+        val status : String? =null,
+
+        @SerializedName("outletcategory")
+        val outletcategory : String? =null,
+
+        @SerializedName("regionaloffice")
+        val regionaloffice : String? =null,
+
+        @SerializedName("salesarea")
+        val salesarea : String? =null,
+
+        @SerializedName("work")
+        val work : String? =null,
+
+        @SerializedName("subadmin")
+        val subadmin : String? =null,
+
+        @SerializedName("orderby")
+        val orderby : String? =null
 
 
 ) {

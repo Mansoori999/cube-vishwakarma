@@ -16,7 +16,7 @@
             <View
                 android:id="@+id/v_one_login"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="270dp"
                 android:background="#2383E1" />
 
             <RelativeLayout
@@ -29,7 +29,6 @@
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
                     android:scaleX="0.6"
                     android:scaleY="0.6"
                     android:src="@drawable/ic_menu" />
@@ -38,22 +37,37 @@
                     android:id="@+id/home_screen_cms_textview"
                     android:layout_centerVertical="true"
                     android:layout_centerHorizontal="true"
+                   android:layout_toRightOf="@+id/drawer_menu"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/librebaskervilleregular"
                     android:text="Vishwakarma Electrical"
                     android:textColor="#fff"
                     android:textSize="20dp"
                     android:layout_width="wrap_content" />
-
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:orientation="horizontal">
                 <ImageView
                     android:id="@+id/filter"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:layout_gravity="center"
-                    android:layout_alignParentRight="true"
                     android:scaleX="0.6"
+                    android:layout_marginRight="-15dp"
                     android:scaleY="0.6"
                     android:src="@drawable/ic_filter" />
+                <ImageView
+                    android:id="@+id/refresh"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center"
+                    android:scaleX="0.6"
+                    android:scaleY="0.6"
+                    android:visibility="visible"
+                    android:src="@drawable/ic_refresh" />
+                </LinearLayout>
             </RelativeLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -62,7 +76,7 @@
                 android:layout_width="150dp"
                 android:layout_centerHorizontal="true"
                 android:src="@drawable/user"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="15dp"
                 android:layout_height="150dp"/>
 <!--            <ImageView-->
 <!--                android:id="@+id/profile_pic"-->
@@ -78,13 +92,13 @@
             android:id="@+id/lin_card"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="230dp"
+            android:layout_marginTop="205dp"
             android:visibility="visible">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cv_one_user_name"
                 android:layout_width="match_parent"
-                android:layout_height="80dp"
+                android:layout_height="70dp"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="@dimen/dimension_20dp"
                 android:elevation="5dp"
@@ -128,11 +142,55 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:visibility="gone" />
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            app:tabMode="fixed"
+            app:tabGravity="center"
+            app:tabSelectedTextColor="@color/white"
+            app:tabMaxWidth="0dp"
+            android:layout_marginTop="-10dp"
+            app:tabIndicator="@drawable/selected_dot"
+            app:tabIndicatorGravity="stretch"
+            app:tabIndicatorAnimationMode="elastic"
+            app:tabIndicatorHeight="0dp"
+            android:layout_below="@+id/lin_card"
+            app:tabTextColor="#000" />
+
+<!--        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator-->
+<!--            android:id="@+id/dots_indicator"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginEnd="8dp"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            app:dotsColor="@color/world_rugby_blue"-->
+<!--            app:dotsCornerRadius="8dp"-->
+<!--            app:dotsSize="16dp"-->
+<!--            android:layout_marginTop="-10dp"-->
+<!--            app:dotsSpacing="4dp"-->
+<!--            android:layout_marginBottom="10dp"-->
+<!--            app:dotsWidthFactor="2.5"-->
+<!--            android:layout_below="@+id/lin_card"-->
+<!--           android:layout_centerHorizontal="true"-->
+<!--            app:progressMode="false"-->
+<!--            app:selectedDotColor="@color/red"-->
+<!--            />-->
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/view_pager"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/tabs"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="-10dp"
-            android:layout_below="@+id/lin_card">
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:id="@+id/summaryContainer"
+            android:layout_below="@+id/tabs">
 
         <LinearLayout
             android:id="@+id/home_screen_user_menus"
@@ -567,6 +625,38 @@
         </LinearLayout>
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/monthlyContainer"
+            android:layout_below="@+id/tabs">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:layout_width="0dp"
+                android:id="@+id/barChart"
+                android:layout_weight="1"
+                android:layout_height="240dp"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:visibility="gone"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/roWiseContainer"
+            android:layout_below="@+id/tabs">
+
+            <com.github.mikephil.charting.charts.BarChart
+                android:layout_width="0dp"
+                android:id="@+id/barChartRO"
+                android:layout_weight="1"
+                android:layout_height="240dp"/>
+
+        </LinearLayout>
 <!--        <View-->
 <!--            android:id="@+id/shadow"-->
 <!--            android:layout_width="match_parent"-->
