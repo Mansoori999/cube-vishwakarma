@@ -26,5 +26,12 @@ interface MyComplaintService {
             @Part image: List<MultipartBody.Part>
     ):Response<List<String>>
 
+    @GET("api/user/getuserbymanagerid")
+    suspend fun allocateUserForComplaint():Response<List<AllocateUserResponse>>
+
+    @POST("api/complaint/allocateusertocomplaint")
+    suspend fun requestAllocatedUserForComplaint(
+            @Body allocateUserRequestForComplaint: AllocateUserRequestForComplaint
+    ):Response<List<String>>
 
 }

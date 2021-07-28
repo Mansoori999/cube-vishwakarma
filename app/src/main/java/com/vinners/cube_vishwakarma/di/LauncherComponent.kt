@@ -20,8 +20,7 @@ import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.SummeryFragm
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
-import com.vinners.cube_vishwakarma.ui.documents.DocumentDetailsActivity
-import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
+import com.vinners.cube_vishwakarma.ui.documents.*
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
 import com.vinners.cube_vishwakarma.ui.outlets.*
 import com.vinners.cube_vishwakarma.ui.profile.BankDetailsAndOtherDetailsActivity
@@ -114,6 +113,12 @@ interface LauncherComponent {
     fun inject(monthlyFragment: MonthlyFragment)
 
     fun inject(roWiseFragment: ROWiseFragment)
+
+    fun  inject(imagesForDocumentsActivity: ImagesForDocumentsActivity)
+
+    fun inject(selectComplaintDetailsDialogFragment:SelectComplaintDetailsDialogFragment)
+
+    fun inject(selectOutletsDetailsDialogFragment: SelectOutletsDetailsDialogFragment)
 
 
 

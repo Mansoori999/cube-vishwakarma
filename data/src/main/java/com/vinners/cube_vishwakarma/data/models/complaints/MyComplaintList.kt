@@ -44,7 +44,18 @@ data class MyComplaintList (
         val subadmin : String? =null,
 
         @SerializedName("orderby")
-        val orderby : String? =null
+        val orderby : String? =null,
+
+        @SerializedName("supervisor")
+        val supervisor : String? =null,
+
+        @SerializedName("enduser")
+        val enduser : String? =null,
+
+
+
+
+
 
 
 ) {

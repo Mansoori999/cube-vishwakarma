@@ -44,4 +44,20 @@ class MyComplaintRemoteDataStoreImpl @Inject constructor(
                         image = imagesBodies
         ).bodyOrThrow()
     }
+
+    override suspend fun allocateUserForComplaint(): List<AllocateUserResponse> {
+        return myComplaintService.allocateUserForComplaint().bodyOrThrow()
+    }
+
+    override suspend fun requestAllocatedUserForComplaint(supervisorid: String?, enduserid: String?, foremanid: String?, compid: String): List<String> {
+        return myComplaintService.requestAllocatedUserForComplaint(
+                AllocateUserRequestForComplaint(
+                        supervisorid = supervisorid,
+                        enduserid = enduserid,
+                        foremanid = foremanid,
+                        compid = compid
+                )
+        ).bodyOrThrow()
+    }
+
 }

@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+
     <application
         android:name=".TrumanApp"
         android:allowBackup="true"
@@ -22,7 +24,9 @@
         android:theme="@style/Theme.Truman"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.outlets.EditGpsLocationActivity"></activity>
+        <activity android:name=".ui.documents.ImagesForDocumentsActivity"
+            android:launchMode="singleInstance"/>
+        <activity android:name=".ui.outlets.EditGpsLocationActivity" />
         <activity android:name=".ui.documents.DocumentDetailsActivity" />
         <activity android:name=".ui.profile.BankDetailsAndOtherDetailsActivity" />
         <activity android:name=".ui.profile.ProfileDetailsActivity" />
@@ -118,7 +122,8 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths_app"

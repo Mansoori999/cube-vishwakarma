@@ -36,6 +36,11 @@
             android:checked="false"
             android:title="Outlets" />
 
+        <item android:id="@+id/nav_images"
+            android:icon="@drawable/ic_gallery_img"
+            android:checked="false"
+            android:title="Images" />
+
         <item android:id="@+id/nav_logout"
             android:icon="@drawable/ic_logout"
             android:checked="false"

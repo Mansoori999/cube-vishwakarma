@@ -6,10 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
-import com.vinners.cube_vishwakarma.data.models.complaints.ComplaintUserIdRequet
-import com.vinners.cube_vishwakarma.data.models.complaints.MyComplainDetailsList
-import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
-import com.vinners.cube_vishwakarma.data.models.complaints.UpDateComplaintList
+import com.vinners.cube_vishwakarma.data.models.complaints.*
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
 import com.vinners.cube_vishwakarma.data.repository.MyComplaintRepository
 import com.vinners.cube_vishwakarma.data.repository.ProfileRepository
@@ -25,6 +22,10 @@ interface ComplaintEvents {
     val complaintDetailsState :LiveData<Lce<MyComplainDetailsList>>
 
     val upDateListState:LiveData<Lce<List<String>>>
+
+    val allocateUserListState: LiveData<Lce<List<AllocateUserResponse>>>
+
+    val requestforAllocatedUserListState: LiveData<Lce<List<String>>>
 
 
 }
@@ -83,5 +84,40 @@ class AllComplaintFragmentViewModel @Inject constructor(
             }
         }
     }
+
+    /* Upload Complaint*/
+    private val _allocateUserListState = MutableLiveData<Lce<List<AllocateUserResponse>>>()
+    override val allocateUserListState: LiveData<Lce<List<AllocateUserResponse>>> = _allocateUserListState
+
+    fun allocateUserForComplaint(){
+        _allocateUserListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = myComplaintRepository.allocateUserForComplaint()
+                _allocateUserListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _allocateUserListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    /* Upload Complaint*/
+    private val _requestforAllocatedUserListState = MutableLiveData<Lce<List<String>>>()
+    override val requestforAllocatedUserListState: LiveData<Lce<List<String>>> = _requestforAllocatedUserListState
+
+    fun requestforAllocatedUserForComplaint(supervisorid:String?,enduserid:String?,foremanid: String?,compid: String){
+        _requestforAllocatedUserListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = myComplaintRepository.requestAllocatedUserForComplaint(supervisorid,enduserid,foremanid,compid)
+                _requestforAllocatedUserListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _requestforAllocatedUserListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
 
 }

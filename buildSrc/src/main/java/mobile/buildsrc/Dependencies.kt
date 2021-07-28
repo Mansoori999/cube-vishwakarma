@@ -10,7 +10,7 @@ object GradlePlugins {
 
 object Libs {
 
-    val cameraIntegrator = "com.github.Him-khati:camera_intergrator:0.2.3"
+    val cameraIntegrator = "com.github.Him-khati:camera_intergrator:0.3.3"
     val timber = "com.jakewharton.timber:timber:4.7.1"
     val junit = "junit:junit:4.12"
 
@@ -41,7 +41,7 @@ object Libs {
         val dynamicLinksKtx =   "com.google.firebase:firebase-dynamic-links-ktx"
         val inAppMessagingKtx = "com.google.firebase:firebase-inappmessaging-display-ktx"
 
-        val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.3.0"
+        val crashlyticsGradlePlugin = "com.google.firebase:firebase-crashlytics-gradle:2.4.1"
     }
 
     object Google {
@@ -162,7 +162,7 @@ object Libs {
     }
 
     object Glide {
-        private const val version = "4.9.0"
+        private const val version = "4.12.0"
         val glide = "com.github.bumptech.glide:glide:$version"
         val compiler = "com.github.bumptech.glide:compiler:$version"
     }

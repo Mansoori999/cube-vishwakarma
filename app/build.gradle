@@ -8,6 +8,7 @@ apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'com.google.gms.google-services'
 
 
+
 def getGitHash = { ->
     def stdout = new ByteArrayOutputStream()
     exec {
@@ -72,6 +73,7 @@ android {
                                     enableCrashReporting   : "true"]
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
     }
 
     packagingOptions {
@@ -147,6 +149,7 @@ dependencies {
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
     implementation 'com.tbuonomo:dotsindicator:4.2'
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
 
     testImplementation Libs.junit
     testImplementation Libs.mockitoInline
@@ -226,6 +229,10 @@ dependencies {
     implementation platform(Libs.Square.OkHttp.okhttpBom)
     implementation Libs.Square.OkHttp.loggingInterceptor
 
+
+
+    implementation Libs.Glide.glide
+
     //coil imageLoder
     implementation "io.coil-kt:coil:0.11.0"
 
@@ -237,4 +244,15 @@ dependencies {
     implementation 'com.github.pratikbutani:MultiSelectSpinner:1.0.1'
 
     implementation "org.jetbrains.anko:anko-commons:0.10.5"
+
+    /**
+     * Glide,Image Loading and Caching Library
+     */
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+
+//    //camera_intergration for store on local directory
+//    implementation 'com.github.vinnersafterwork:camera_intergrator:0.3.3'
+
 }

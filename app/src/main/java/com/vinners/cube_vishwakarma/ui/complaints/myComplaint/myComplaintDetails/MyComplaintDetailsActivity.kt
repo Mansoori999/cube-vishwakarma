@@ -50,12 +50,10 @@ import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_STATUS
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_VIEW
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
+import com.vinners.cube_vishwakarma.ui.dashboardFilter.FinancialYearData
 import java.io.File
 import java.io.InputStream
-import java.util.*
-import java.util.stream.Collectors.toList
 import javax.inject.Inject
-import kotlin.collections.ArrayList
 
 
 class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBinding,AllComplaintFragmentViewModel>(R.layout.activity_my_complaint_details) {
@@ -103,6 +101,33 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private var detailsId: String? = null
     private var status : String ? = null
      private var statusremarks : String? = null
+    private var supervisorId: String? = null
+    private var foremanId : String ? = null
+    private var endUserId : String? = null
+    private var supervisor: String? = null
+    private var foreman : String ? = null
+    private var endUser : String? = null
+
+    private var supervisorid:String? = null
+    private var foremanid:String? = null
+    private var enduserid:String? = null
+
+    private lateinit var supervisorSpinner:Spinner
+    private lateinit var foremanSpinner:Spinner
+    private lateinit var enduserSpinner:Spinner
+    private lateinit var errorText:TextView
+    var nameshowfirst:String = "Select EndUser"
+    var endidshowfirst:String = "XX"
+    var designationnameshowfirst:String = ""
+
+    var nameSupervisorshowfirst:String = "Select Supervisor"
+    var SupervisorIdShowfirst:String = "XX"
+    var SupervisorDesignationnameshowfirst:String = ""
+
+    var nameForemanshowfirst:String  = "Select Foreman"
+    var foremanidshowfirst:String = "XX"
+    var foremanDesignationnameshowfirst:String = ""
+
 
     private var statusValue : String? = null
     private var complaintid : String? = null
@@ -472,6 +497,54 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             }
         })
 
+        viewModel.allocateUserListState.observe(this, Observer {
+            when(it){
+                Lce.Loading ->{
+
+                }
+                is Lce.Content ->{
+                    var designation:String? = null
+                    it.content.forEach {
+                        designation = it.designation
+                    }
+
+                        val enduserData = it.content.filter { it.designation!!.toLowerCase().equals("enduser") || it.designation!!.toLowerCase().equals("end user") }.map {
+                            AllocateUserData(
+                                    id = it.id!!,
+                                    name = it.name!!,
+                                    designation = it.designation!!
+                            )
+                        }.toMutableList()
+                        setendUserTypeSpinner(enduserData)
+
+                        val supervisorData = it.content.filter { it.designation!!.toLowerCase().equals("supervisor")}.map {
+                            AllocateUserData(
+                                    id = it.id!!,
+                                    name = it.name!!,
+                                    designation = it.designation!!
+                            )
+                        }.toMutableList()
+                        supervisorTypeSpinner(supervisorData)
+
+
+                        val foremanData = it.content.filter { it.designation!!.toLowerCase().equals("foreman")}.map {
+                            AllocateUserData(
+                                    id = it.id!!,
+                                    name = it.name!!,
+                                    designation = it.designation!!
+                            )
+                        }.toMutableList()
+                        foremanTypeSpinner(foremanData)
+
+
+                }
+                is Lce.Error ->{
+
+                }
+
+            }
+        })
+
         viewModel.upDateListState.observe(this, Observer {
             when(it){
                 Lce.Loading ->{
@@ -650,32 +723,103 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                 }
             }
         })
+
+        viewModel.requestforAllocatedUserListState.observe(this, Observer {
+            when(it){
+                Lce.Loading ->{
+                    viewBinding.loadingData.setVisibilityVisible()
+                    viewBinding.detailScreen.setVisibilityGone()
+                }
+                is Lce.Content ->{
+                    Toast.makeText(this, "Successfully Allocated User", Toast.LENGTH_SHORT).show()
+                    id.let { viewModel.getComplainDetails(it!!) }
+                    viewModel.complaintDetailsState.observe(this, Observer {
+                        when(it){
+                            Lce.Loading ->{
+                                viewBinding.loadingData.setVisibilityVisible()
+                            }
+                            is Lce.Content ->{
+                                if (it.content != null){
+                                    viewBinding.loadingData.setVisibilityGone()
+                                    viewBinding.date.text = DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                                    viewBinding.complaintId.text = it.content.complaintid
+                                    viewBinding.work.text = it.content.work
+                                    viewBinding.type.text = it.content.type
+                                    viewBinding.outletName.text = it.content.outletname
+                                    viewBinding.regional.text = it.content.regionaloffice
+                                    viewBinding.sales.text = it.content.salesarea
+                                    viewBinding.district.text = it.content.district
+                                    viewBinding.letter.text = it.content.letterstatus
+
+                                    viewBinding.subadmin.text = it.content.subadmin
+                                    viewBinding.supervisor.text = it.content.supervisor
+                                    viewBinding.foreman.text = it.content.foreman
+                                    viewBinding.enduser.text = it.content.enduser
+                                    viewBinding.order.text = it.content.orderBy
+                                    viewBinding.remarks.text = it.content.remarks
+                                    if (enabledComplaintRequest == true){
+                                        viewBinding.status.text = complaintRequestStatus
+                                    }else{
+                                        viewBinding.status.text = it.content.status
+                                        setChangeStatus(it.content)
+                                    }
+
+                                }else{
+                                    viewBinding.loadingData.setVisibilityVisible()
+                                }
+
+
+
+                            }
+                            is Lce.Error ->
+                            {
+
+                                viewBinding.loadingData.setVisibilityGone()
+                                showInformationDialog(it.error)
+
+                            }
+
+                        }
+                    })
+
+                    viewBinding.loadingData.setVisibilityGone()
+                    viewBinding.detailScreen.setVisibilityVisible()
+
+                }
+                is Lce.Error ->{
+                    viewBinding.loadingData.setVisibilityGone()
+                    showInformationDialog(it.error)
+
+                }
+
+            }
+        })
     }
 
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        for (fragment in supportFragmentManager.fragments) {
-//            fragment.onActivityResult(requestCode, resultCode, data)
-//        }
-//    }
+
+
+
+
     private fun setChangeStatus(content: MyComplainDetailsList) {
 
-    if (userSessionManager.designation!!.toLowerCase().equals("admin")&&
-            (content.status?.toLowerCase().equals("due") ||
+    if (userSessionManager.designation!!.toLowerCase().equals("sub admin")&&
+            ((content.status?.toLowerCase().equals("due") ||
                 content.status?.toLowerCase().equals("working") ||
                 content.status?.toLowerCase().equals("hold")
-                 )){
-        viewBinding.changeStatus.setVisibilityGone()
+                 ))){
+        viewBinding.changeStatus.setVisibilityVisible()
+        viewBinding.allocateBtn.setVisibilityVisible()
     }else {
         if (content.status?.toLowerCase().equals("due") ||
             content.status?.toLowerCase().equals("working") ||
             content.status?.toLowerCase().equals("hold")
         ) {
-            viewBinding.changeStatus.setVisibilityVisible()
+            viewBinding.changeStatus.setVisibilityGone()
+            viewBinding.allocateBtn.setVisibilityGone()
 
         } else {
             viewBinding.changeStatus.setVisibilityGone()
+            viewBinding.allocateBtn.setVisibilityGone()
         }
     }
 
@@ -683,6 +827,13 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         statusremarks = content.statusremarks
         complaintid = content.complaintid
         status = content.status
+        supervisorId = content.supervisorid
+        endUserId = content.enduserid
+        foremanId = content.foremanid
+        supervisor = content.supervisor
+        endUser = content.enduser
+        foreman = content.foreman
+
 }
 
     override fun onInitDataBinding() {
@@ -791,7 +942,85 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
         }
 
+        viewBinding.allocateBtn.setOnClickListener {
+            viewModel.allocateUserForComplaint()
+            val inflater: LayoutInflater = LayoutInflater.from(this)
+            val dialogView = inflater.inflate(R.layout.complaint_details_allocate_dialog_layout,null)
+            val mBuilder = AlertDialog.Builder(this)
+                    .setView(dialogView)
+                    .setTitle("Allocate User")
 
+            val  mAlertDialog = mBuilder.show()
+            supervisorSpinner = dialogView.findViewById(R.id.supervisor_spinner)
+            foremanSpinner = dialogView.findViewById(R.id.foreman_spinner)
+            enduserSpinner = dialogView.findViewById(R.id.enduser_spinner)
+            errorText = dialogView.findViewById<TextView>(R.id.errorText)
+            supervisorSpinner.onItemSelected {adapterView, _, position, _->
+                adapterView ?: return@onItemSelected
+                if (supervisorSpinner.childCount != 0 && supervisorSpinner.selectedItemPosition != 0){
+                   val supervisorValue = adapterView.getItemAtPosition(position) as AllocateUserData
+                    supervisorid = supervisorValue.id
+                }
+            }
+            foremanSpinner.onItemSelected {adapterView, _, position, _->
+                adapterView ?: return@onItemSelected
+                if (foremanSpinner.childCount != 0 && foremanSpinner.selectedItemPosition != 0){
+                    val foremanValue = adapterView.getItemAtPosition(position) as AllocateUserData
+                    foremanid = foremanValue.id
+                }
+            }
+            enduserSpinner.onItemSelected {adapterView, _, position, _->
+                adapterView ?: return@onItemSelected
+                if (enduserSpinner.childCount != 0 && enduserSpinner.selectedItemPosition != 0){
+                    val endUserValue = adapterView.getItemAtPosition(position) as AllocateUserData
+                    enduserid = endUserValue.id
+                }
+            }
+            val cancle = dialogView.findViewById<Button>(R.id.cancelbtn)
+            val update = dialogView.findViewById<Button>(R.id.uploadbtn)
+            cancle.setOnClickListener {
+                //dismiss dialog
+                mAlertDialog.dismiss()
+            }
+            update.setOnClickListener{
+//                setValidationForAllocateUser()
+                if (setValidationForAllocateUser() == true) {
+                    viewModel.requestforAllocatedUserForComplaint(
+                            supervisorid = supervisorid,
+                            enduserid = enduserid,
+                            foremanid = foremanid,
+                            compid = detailsId!!
+                    )
+                    mAlertDialog.dismiss()
+                }
+            }
+        }
+
+    }
+
+    private fun setValidationForAllocateUser(): Boolean {
+        if (supervisor.isNullOrEmpty() && foreman.isNullOrEmpty() && endUser.isNullOrEmpty()){
+            if ((supervisorSpinner.childCount == 0 || supervisorSpinner.selectedItemPosition == 0) && (foremanSpinner.childCount == 0 || foremanSpinner.selectedItemPosition == 0) && (enduserSpinner.childCount == 0 || enduserSpinner.selectedItemPosition == 0)) {
+                errorText.setVisibilityVisible()
+//                showInformationDialog("Please Select Supervisor")
+                errorText.setText("Please Select At-least One User")
+                return false
+            }
+        }
+//        if (foreman.isNullOrEmpty()){
+//            if (foremanSpinner.childCount == 0 || foremanSpinner.selectedItemPosition == 0) {
+//                showInformationDialog("Please Select Foreman")
+//                return
+//            }
+//        }
+//        if (endUser.isNullOrEmpty()){
+//            if (enduserSpinner.childCount == 0 || enduserSpinner.selectedItemPosition == 0) {
+//                showInformationDialog("Please Select EndUser")
+//                return
+//            }
+//        }
+
+        return true
 
     }
 
@@ -936,5 +1165,144 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         dialog.window!!.attributes.windowAnimations = R.style.MyAlertDialogStyle
         dialog.show()
     }
+
+
+    private fun supervisorTypeSpinner(supervisorData: MutableList<AllocateUserData>) {
+        for (i in 0 until supervisorData.size){
+            val endusername = supervisorData[i].name
+
+            if (supervisor.isNullOrEmpty()){
+                SupervisorIdShowfirst = "XX"
+                nameSupervisorshowfirst = "Select Supervisor"
+                SupervisorDesignationnameshowfirst = ""
+            }else {
+                if (endusername.equals(supervisor)) {
+                    SupervisorIdShowfirst = supervisorData[i].id
+                    nameSupervisorshowfirst = supervisorData[i].name
+                    SupervisorDesignationnameshowfirst = supervisorData[i].designation
+
+
+                }
+            }
+        }
+
+        supervisorData.add(
+                0,
+                AllocateUserData(
+                        id = SupervisorIdShowfirst,
+                        name = nameSupervisorshowfirst,
+                        designation = SupervisorDesignationnameshowfirst
+                )
+        )
+        val setItems = supervisorData.distinctBy { it.name }
+        supervisorData.clear()
+        supervisorData.addAll(setItems)
+
+        val aa = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                supervisorData
+        )
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        with(supervisorSpinner) {
+            adapter = aa
+            prompt = "Select Supervisor"
+            gravity = Gravity.CENTER
+        }
+
+    }
+
+    private fun foremanTypeSpinner(foremanData: MutableList<AllocateUserData>) {
+        for (i in 0 until foremanData.size){
+            val endusername = foremanData[i].name
+
+            if (foreman.isNullOrEmpty()){
+                foremanidshowfirst = "XX"
+                nameForemanshowfirst = "Select Foreman"
+                foremanDesignationnameshowfirst = ""
+            }else {
+                if (endusername.equals(foreman)) {
+                    foremanidshowfirst = foremanData[i].id
+                    nameForemanshowfirst = foremanData[i].name
+                    foremanDesignationnameshowfirst = foremanData[i].designation
+
+
+                }
+            }
+        }
+
+        foremanData.add(
+                0,
+                AllocateUserData(
+                        id = foremanidshowfirst!!,
+                        name = nameForemanshowfirst!!,
+                        designation = foremanDesignationnameshowfirst!!
+                )
+        )
+
+        val setItems = foremanData.distinctBy { it.name }
+        foremanData.clear()
+        foremanData.addAll(setItems)
+
+        val aa = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                foremanData
+        )
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        with(foremanSpinner) {
+            adapter = aa
+            prompt = "Select Foreman"
+            gravity = Gravity.CENTER
+        }
+    }
+    private fun setendUserTypeSpinner(enduserData: MutableList<AllocateUserData>) {
+//        enduserData.sortBy { it.name }
+//        val setItems = enduserData.distinctBy { it.id }
+//        regionalOffice.clear()
+
+        for (i in 0 until enduserData.size){
+            val endusername = enduserData[i].name
+
+            if (endUser.isNullOrEmpty()){
+                endidshowfirst = "XX"
+                nameshowfirst = "Select EndUser"
+                designationnameshowfirst = ""
+            }else {
+                if (endusername.equals(endUser)) {
+                    endidshowfirst = enduserData[i].id
+                    nameshowfirst = enduserData[i].name
+                    designationnameshowfirst = enduserData[i].designation
+
+
+                }
+            }
+        }
+
+        enduserData.add(
+                0,
+                AllocateUserData(
+                        id = endidshowfirst,
+                        name = nameshowfirst,
+                        designation = designationnameshowfirst
+                )
+        )
+        val setItems = enduserData.distinctBy { it.name }
+        enduserData.clear()
+        enduserData.addAll(setItems)
+        val aa = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                enduserData
+        )
+        aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        with(enduserSpinner) {
+            adapter = aa
+            prompt = "Select EndUser"
+            gravity = Gravity.CENTER
+        }
+
+    }
+
 }
 

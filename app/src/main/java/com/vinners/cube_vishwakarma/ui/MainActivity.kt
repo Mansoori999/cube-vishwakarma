@@ -60,6 +60,7 @@ import com.vinners.cube_vishwakarma.ui.dashboardFilter.ActiveSubAdminData
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.FinancialYearData
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
+import com.vinners.cube_vishwakarma.ui.documents.ImagesForDocumentsActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
@@ -1073,6 +1074,10 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 }
                 R.id.nav_outlet -> {
                     val intent = Intent(this, OutletsActivity::class.java)
+                    startActivity(intent)
+                }
+                R.id.nav_images ->{
+                    val intent = Intent(this,ImagesForDocumentsActivity::class.java)
                     startActivity(intent)
                 }
                 R.id.nav_logout -> {

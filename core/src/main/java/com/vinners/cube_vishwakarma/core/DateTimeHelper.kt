@@ -149,4 +149,11 @@ object DateTimeHelper {
         val date = dateFormatter.parse(dateString)
         return date
     }
+
+    //-------------------Current Date Related Methods ------------------------//
+    fun getTodaysDateInDDMMYYYY(): String? {
+        dateFormatter = SimpleDateFormat("dd-MM-yyyy", Locale.US)
+        val newCalendar = Calendar.getInstance()
+        return dateFormatter.format(newCalendar.time)
+    }
 }

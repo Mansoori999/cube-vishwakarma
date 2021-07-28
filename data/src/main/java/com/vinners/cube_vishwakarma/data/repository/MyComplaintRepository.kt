@@ -17,4 +17,11 @@ class MyComplaintRepository @Inject constructor(
     suspend fun upDateComplaints(statusremarks:String, status:String, id:Int,image: List<String>):List<String>{
         return myComplaintRemoteDataStore.upDateComplaint(statusremarks,status,id,image)
     }
+    suspend fun allocateUserForComplaint():List<AllocateUserResponse>{
+        return myComplaintRemoteDataStore.allocateUserForComplaint()
+    }
+
+    suspend fun requestAllocatedUserForComplaint(supervisorid:String?,enduserid:String?,foremanid: String?,compid: String):List<String>{
+        return myComplaintRemoteDataStore.requestAllocatedUserForComplaint(supervisorid,enduserid,foremanid,compid)
+    }
 }

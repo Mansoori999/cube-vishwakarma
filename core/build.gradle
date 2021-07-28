@@ -27,6 +27,7 @@ dependencies {
     implementation project(':data')
     implementation project(':remote')
     implementation project(':base')
+//    implementation project(path: ':')
 
     testImplementation(Libs.junit)
 
@@ -62,4 +63,6 @@ dependencies {
 
     implementation(platform(Libs.Square.OkHttp.okhttpBom))
     implementation Libs.Square.OkHttp.okHttp
+
+    implementation Libs.Glide.glide
 }

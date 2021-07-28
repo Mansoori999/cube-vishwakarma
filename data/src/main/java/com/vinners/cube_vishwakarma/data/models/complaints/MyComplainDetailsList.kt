@@ -66,7 +66,16 @@ data class MyComplainDetailsList (
     val orderBy: String? = null,
 
     @SerializedName("remarks")
-    val remarks: String? = null
+    val remarks: String? = null,
+
+    @SerializedName("supervisorid")
+    val supervisorid: String? = null,
+
+    @SerializedName("enduserid")
+    val enduserid: String? = null,
+
+    @field:SerializedName("foremanid")
+    val foremanid: String? = null,
 
     ){
 }

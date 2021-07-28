@@ -667,6 +667,11 @@
                     android:textSize="12sp" />
 
             </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/change_status"
                 android:layout_width="wrap_content"
@@ -681,18 +686,23 @@
                 android:visibility="gone"
                 android:text="Change Status"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
-
+                android:textSize="14sp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/allocate_btn"
+                android:layout_width="150dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif"
+                android:paddingLeft="3dp"
+                android:paddingRight="3dp"
+                android:visibility="gone"
+                android:text="Allocate"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+            </RelativeLayout>
         </LinearLayout>
-
-
-
-
-
-
-
-
-
     </ScrollView>
 </RelativeLayout>
 
