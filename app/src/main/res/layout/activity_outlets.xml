@@ -18,7 +18,7 @@
             android:id="@+id/outlet_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimaryDark"
+            android:background="@color/colorPrimaryDark"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="Outlets"
             app:titleTextColor="@android:color/white" />

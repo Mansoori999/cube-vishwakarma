@@ -10,7 +10,8 @@ object GradlePlugins {
 
 object Libs {
 
-    val cameraIntegrator = "com.github.Him-khati:camera_intergrator:0.3.3"
+//    val cameraIntegrator = "com.github.Him-khati:camera_intergrator:0.3.3"
+    val cameraIntegrator = "com.github.vinnersafterwork:camera_intergrator:0.3.3"
     val timber = "com.jakewharton.timber:timber:4.7.1"
     val junit = "junit:junit:4.12"
 

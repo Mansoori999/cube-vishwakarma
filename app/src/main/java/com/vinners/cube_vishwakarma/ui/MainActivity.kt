@@ -29,10 +29,7 @@ import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.formatter.IValueFormatter
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
-import com.github.mikephil.charting.utils.ViewPortHandler
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -60,7 +57,7 @@ import com.vinners.cube_vishwakarma.ui.dashboardFilter.ActiveSubAdminData
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.FinancialYearData
 import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
-import com.vinners.cube_vishwakarma.ui.documents.ImagesForDocumentsActivity
+import com.vinners.cube_vishwakarma.ui.documents.ImagesForDocumentActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
@@ -1077,7 +1074,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                     startActivity(intent)
                 }
                 R.id.nav_images ->{
-                    val intent = Intent(this,ImagesForDocumentsActivity::class.java)
+                    val intent = Intent(this, ImagesForDocumentActivity::class.java)
                     startActivity(intent)
                 }
                 R.id.nav_logout -> {

@@ -11,7 +11,9 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application
         android:name=".TrumanApp"
@@ -24,8 +26,10 @@
         android:theme="@style/Theme.Truman"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.documents.ImagesForDocumentsActivity"
-            android:launchMode="singleInstance"/>
+        <activity android:name=".ui.documents.ImagesForDocumentActivity"></activity>
+        <activity
+            android:name=".ui.documents.ImagesForDocumentsActivity"
+            android:launchMode="singleInstance" />
         <activity android:name=".ui.outlets.EditGpsLocationActivity" />
         <activity android:name=".ui.documents.DocumentDetailsActivity" />
         <activity android:name=".ui.profile.BankDetailsAndOtherDetailsActivity" />

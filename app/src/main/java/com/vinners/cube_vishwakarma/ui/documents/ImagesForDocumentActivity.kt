@@ -7,9 +7,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.View
@@ -25,31 +25,31 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.gridlayout.widget.GridLayout
 import com.bumptech.glide.Glide
+import com.himanshu.cameraintegrator.ImageCallback
+import com.himanshu.cameraintegrator.ImagesSizes
+import com.himanshu.cameraintegrator.RequestSource
+import com.himanshu.cameraintegrator.integrator.CameraIntegrator
+import com.himanshu.cameraintegrator.storage.StorageMode
 import com.vinners.cube_vishwakarma.R
+import com.vinners.cube_vishwakarma.core.AppConstants
 import com.vinners.cube_vishwakarma.core.DateTimeHelper
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
-import com.vinners.cube_vishwakarma.core.camera.ImageCallback
 import com.vinners.cube_vishwakarma.core.camera.ImageHelper
-import com.vinners.cube_vishwakarma.core.camera.ImagesSizes
-import com.vinners.cube_vishwakarma.core.camera.RequestSource
-import com.vinners.cube_vishwakarma.core.camera.integrator.CameraIntegrator
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
-import com.vinners.cube_vishwakarma.databinding.ActivityImagesForDocumentsBinding
+import com.vinners.cube_vishwakarma.databinding.ActivityImagesForDocumentBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import mobile.fitbitMerch.ui.masterData.ComplaintSelectionListener
 import mobile.fitbitMerch.ui.masterData.OutletSelectionListener
-
-
-
 import java.io.File
-import java.io.IOException
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBinding, DocumentsViewModel>(R.layout.activity_images_for_documents), ComplaintSelectionListener,
+class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,DocumentsViewModel>(R.layout.activity_images_for_document),
+    ComplaintSelectionListener,
     OutletSelectionListener {
 
     companion object{
@@ -57,12 +57,6 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
 
     }
 
-    @Inject
-    lateinit var viewModelFactory: LauncherViewModelFactory
-
-    override val viewModel: DocumentsViewModel by viewModels { viewModelFactory }
-
-    private lateinit var cameraIntegrator: CameraIntegrator
     private val imageListForSend = ArrayList<Uri>()
     private lateinit var imagesContainer: GridLayout
     private  var outlet: OutletsList? = null
@@ -75,6 +69,13 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
     private val imageTextList = ArrayList<String>()
     private val simpleDateFormat = SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
 
+    @Inject
+    lateinit var viewModelFactory: LauncherViewModelFactory
+
+    override val viewModel: DocumentsViewModel by viewModels { viewModelFactory }
+
+
+
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
             .builder()
@@ -82,19 +83,13 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
             .build()
             .inject(this)
     }
-    override fun onInitViewModel() {
 
-    }
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val menuInflater = menuInflater
         menuInflater.inflate(R.menu.document_images_ok_menu, menu)
         return true
     }
-
     override fun onInitDataBinding() {
-        val builder = StrictMode.VmPolicy.Builder()
-        StrictMode.setVmPolicy(builder.build())
-        setSupportActionBar(viewBinding.toolbar)
         viewBinding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -186,7 +181,13 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
         })
 
 
-        viewBinding.clickImage.setOnClickListener(View.OnClickListener { openCamera() })
+        viewBinding.clickImage.setOnClickListener(View.OnClickListener {
+            if (storagePermissions())
+                openCamera()
+            else
+                requestStoragePermissions()
+
+        })
 
         viewBinding.outletDetailLayout.setOnClickListener(View.OnClickListener {
             viewBinding.imageBeforeAfter.setVisibility(View.GONE)
@@ -220,16 +221,29 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
     }
 
     fun openCamera() {
-        cameraIntegrator = CameraIntegrator(this)
-        cameraIntegrator.setImageDirectoryName(".priya")
-        cameraIntegrator.setRequiredImageSize(ImagesSizes.OPTIMUM_BIG)
         try {
             cameraIntegrator.initiateCapture()
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
+//        cameraIntegrator = CameraIntegrator(this)
+//        cameraIntegrator.setImageDirectoryName(".priya")
+//        cameraIntegrator.setRequiredImageSize(ImagesSizes.OPTIMUM_BIG)
+//        try {
+//            cameraIntegrator.initiateCapture()
+//        } catch (e: IOException) {
+//            e.printStackTrace()
+//        }
     }
 
+    private val cameraIntegrator: CameraIntegrator by lazy {
+        CameraIntegrator(this)
+            .apply {
+                setStorageMode(StorageMode.EXTERNAL_PUBLIC_STORAGE)
+                setPublicDirectoryName(AppConstants.PUBLIC_FILE_FOLDER)
+                setRequiredImageSize(ImagesSizes.OPTIMUM_MEDIUM)
+            }
+    }
 
 //    fun openCamera() {
 //        if (storagePermissions())
@@ -280,56 +294,56 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
 
     }
 
-    private val imageCallback = ImageCallback { requestedBy, result ->
+    private val imageCallback = ImageCallback { requestedBy, result,error ->
 
-                if (requestedBy == RequestSource.SOURCE_CAMERA) {
-                    imageTextList.clear()
-                    val calendar = Calendar.getInstance()
-                    imageTextList.add(simpleDateFormat.format(calendar.time).toString())
-                    if (outlet != null) {
-                        imageTextList.add("⦿")
-                        imageTextList.add(outlet!!.customercode!!.trim())
-                        imageTextList.add(outlet!!.name!!.trim())
-                        imageTextList.add(outlet!!.regionaloffice!!.trim())
-                    }
-                    if (complaint != null) {
-                        imageTextList.add("⦿")
-                        imageTextList.add(complaint!!.complaintid!!.trim())
-                        imageTextList.add(complaint!!.outlet!!.trim())
-                        imageTextList.add(complaint!!.work!!.trim())
-                    }
-                    val image = result!!.bitmap
-                    val stampImage: Bitmap =
-                        ImageHelper.stampImageWithText(image, imageTextList, checkboxTextColor)
-                    val storageDir =
-                        Environment.getExternalStoragePublicDirectory("Cube")
-                    val subDirecory =
-                        File(storageDir, DateTimeHelper.getTodaysDateInDDMMYYYY())
-                    storageDir.mkdirs()
-                    subDirecory.mkdirs()
-                    if (outlet != null) {
-                        val outletDirectory = File(subDirecory, outlet!!.customercode)
-                        outletDirectory.mkdirs()
-                        val beforAfterDirectory =
-                            File(outletDirectory, checkboxTextColor)
-                        beforAfterDirectory.mkdirs()
-                        val imageFile: File = ImageHelper.createImageFile(beforAfterDirectory)
-                        ImageHelper.saveTo(imageFile.absolutePath, stampImage)
-                        captureOrSelectedImagePath = imageFile.absolutePath
-                    } else if (complaint != null) {
-                        val complaintDirectory =
-                            File(subDirecory, complaint!!.complaintid)
-                        complaintDirectory.mkdirs()
-                        val beforAfterDirectory =
-                            File(complaintDirectory, checkboxTextColor)
-                        beforAfterDirectory.mkdirs()
-                        val imageFile: File = ImageHelper.createImageFile(beforAfterDirectory)
-                        ImageHelper.saveTo(imageFile.absolutePath, stampImage)
-                        captureOrSelectedImagePath = imageFile.absolutePath
-                    }
+        if (requestedBy == RequestSource.SOURCE_CAMERA) {
+            imageTextList.clear()
+            val calendar = Calendar.getInstance()
+            imageTextList.add(simpleDateFormat.format(calendar.time).toString())
+            if (outlet != null) {
+                imageTextList.add("⦿")
+                imageTextList.add(outlet!!.customercode!!.trim())
+                imageTextList.add(outlet!!.name!!.trim())
+                imageTextList.add(outlet!!.regionaloffice!!.trim())
+            }
+            if (complaint != null) {
+                imageTextList.add("⦿")
+                imageTextList.add(complaint!!.complaintid!!.trim())
+                imageTextList.add(complaint!!.outlet!!.trim())
+                imageTextList.add(complaint!!.work!!.trim())
+            }
+            val image = result!!.bitmap
+            val stampImage: Bitmap =
+                ImageHelper.stampImageWithText(image, imageTextList, checkboxTextColor)
+            val storageDir =
+                Environment.getExternalStoragePublicDirectory("Cube")
+            val subDirecory =
+                File(storageDir, DateTimeHelper.getTodaysDateInDDMMYYYY())
+            storageDir.mkdirs()
+            subDirecory.mkdirs()
+            if (outlet != null) {
+                val outletDirectory = File(subDirecory, outlet!!.customercode)
+                outletDirectory.mkdirs()
+                val beforAfterDirectory =
+                    File(outletDirectory, checkboxTextColor)
+                beforAfterDirectory.mkdirs()
+                val imageFile: File = ImageHelper.createImageFile(beforAfterDirectory)
+                ImageHelper.saveTo(imageFile.absolutePath, stampImage)
+                captureOrSelectedImagePath = imageFile.absolutePath
+            } else if (complaint != null) {
+                val complaintDirectory =
+                    File(subDirecory, complaint!!.complaintid)
+                complaintDirectory.mkdirs()
+                val beforAfterDirectory =
+                    File(complaintDirectory, checkboxTextColor)
+                beforAfterDirectory.mkdirs()
+                val imageFile: File = ImageHelper.createImageFile(beforAfterDirectory)
+                ImageHelper.saveTo(imageFile.absolutePath, stampImage)
+                captureOrSelectedImagePath = imageFile.absolutePath
+            }
 //                openCamera()
-                    inflateImageLayout()
-                }
+            inflateImageLayout()
+        }
 
     }
 
@@ -360,12 +374,12 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
                     imagesContainer.indexOfChild(imageView),
                     captureOrSelectedImagePath
                 )
-                Glide.with(this@ImagesForDocumentsActivity)
+                Glide.with(this@ImagesForDocumentActivity)
                     .load(imageList[i]).into(addedImage)
                 val finalImageList: Array<File> = imageList
                 addedImage.setOnClickListener {
                     val imageDialog = Dialog(
-                        this@ImagesForDocumentsActivity,
+                        this@ImagesForDocumentActivity,
                         android.R.style.Theme_Black_NoTitleBar_Fullscreen
                     )
                     imageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -379,8 +393,8 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
                     shareImage.setOnClickListener {
                         val uri =
                             FileProvider.getUriForFile(
-                                this@ImagesForDocumentsActivity,
-                                this@ImagesForDocumentsActivity.packageName
+                                this@ImagesForDocumentActivity,
+                                this@ImagesForDocumentActivity.packageName
                                     .toString() + ".provider",
                                 finalImageList[i]
                             )
@@ -393,7 +407,7 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
                         startActivity(shareIntent)
                     }
                     deleteImage.setOnClickListener {
-                        AlertDialog.Builder(this@ImagesForDocumentsActivity)
+                        AlertDialog.Builder(this@ImagesForDocumentActivity)
                             .setTitle("Delete Image")
                             .setMessage("Do you want to delete this image?")
                             .setPositiveButton(
@@ -416,8 +430,8 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
                 addedImage.setOnLongClickListener {
                     crossImage.visibility = View.VISIBLE
                     val uri = FileProvider.getUriForFile(
-                        this@ImagesForDocumentsActivity,
-                        this@ImagesForDocumentsActivity.packageName
+                        this@ImagesForDocumentActivity,
+                        this@ImagesForDocumentActivity.packageName
                             .toString() + ".provider",
                         finalImageList[i]
                     )
@@ -426,8 +440,8 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
                 }
                 crossImage.setOnClickListener {
                     val uri = FileProvider.getUriForFile(
-                        this@ImagesForDocumentsActivity,
-                        this@ImagesForDocumentsActivity.packageName
+                        this@ImagesForDocumentActivity,
+                        this@ImagesForDocumentActivity.packageName
                             .toString() + ".provider",
                         finalImageList[i]
                     )
@@ -436,8 +450,8 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
                 }
                 for (k in imageListForSend.indices) {
                     val uri = FileProvider.getUriForFile(
-                        this@ImagesForDocumentsActivity,
-                        this@ImagesForDocumentsActivity.packageName.toString() + ".provider",
+                        this@ImagesForDocumentActivity,
+                        this@ImagesForDocumentActivity.packageName.toString() + ".provider",
                         finalImageList[i]
                     )
                     if (imageListForSend.contains(uri)) {
@@ -497,5 +511,8 @@ class ImagesForDocumentsActivity : BaseActivity<ActivityImagesForDocumentsBindin
         viewBinding.workingButton.setEnabled(true)
     }
 
+    override fun onInitViewModel() {
+
+    }
 
 }

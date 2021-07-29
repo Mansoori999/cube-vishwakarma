@@ -27,7 +27,7 @@
                     style="@style/ToolbarTheme"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
-                    android:background="?attr/colorPrimaryDark"
+                    android:background="@color/colorPrimaryDark"
                     app:elevation="0dp"
                     app:navigationIcon="@drawable/ic_arrow_left"
                     app:popupTheme="@style/AppTheme.PopupOverlay"

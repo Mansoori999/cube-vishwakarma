@@ -20,7 +20,7 @@
             android:id="@+id/request_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimaryDark"
+            android:background="@color/colorPrimaryDark"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="Complaint Requests"
             app:navigationIcon="@drawable/ic_arrow_left"

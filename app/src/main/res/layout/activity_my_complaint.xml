@@ -10,14 +10,14 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimaryDark"
+        android:background="@color/colorPrimaryDark"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/mycomplaint_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimaryDark"
+            android:background="@color/colorPrimaryDark"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="My Complaints"
             app:titleTextColor="@android:color/white" />
@@ -25,7 +25,7 @@
             android:id="@+id/tabs"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="?attr/colorPrimaryDark"
+            android:background="@color/colorPrimaryDark"
             app:tabMode="scrollable"
             app:tabGravity="center"
             app:tabIndicator="@drawable/selected_dot"
@@ -34,7 +34,7 @@
             app:tabIndicatorHeight="0dp"
             app:tabSelectedTextColor="@color/selected_textcolor"
             app:tabIndicatorColor="@color/white"
-            app:tabTextColor="#5068EF" />
+            app:tabTextColor="#75A6D6" />
 <!--        #5161C3-->
 <!--        world_rugby_red_light-->
 <!--        app:tabIndicatorHeight="3dp"-->

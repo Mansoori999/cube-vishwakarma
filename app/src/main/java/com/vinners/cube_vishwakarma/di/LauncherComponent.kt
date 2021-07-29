@@ -114,7 +114,7 @@ interface LauncherComponent {
 
     fun inject(roWiseFragment: ROWiseFragment)
 
-    fun  inject(imagesForDocumentsActivity: ImagesForDocumentsActivity)
+    fun inject(imagesForDocumentActivity: ImagesForDocumentActivity)
 
     fun inject(selectComplaintDetailsDialogFragment:SelectComplaintDetailsDialogFragment)
 

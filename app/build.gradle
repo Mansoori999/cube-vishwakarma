@@ -64,6 +64,10 @@ android {
                                     enableCrashReporting   : "false"]
             splits.abi.enable = false
             splits.density.enable = false
+
+            setProperty("archivesBaseName", "cube")
+
+
         }
 
         release {
