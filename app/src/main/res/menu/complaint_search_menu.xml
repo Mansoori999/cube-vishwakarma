@@ -2,6 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+<!--    <item-->
+<!--        android:id="@+id/action_refresh"-->
+<!--        android:icon="@drawable/ic_refresh"-->
+<!--        app:showAsAction="always|collapseActionView"-->
+<!--        app:actionViewClass="androidx.appcompat.widget.SearchView"-->
+<!--        android:title="refresh"/>-->
+
     <item
         android:id="@+id/action_search"
         android:icon="@drawable/ic_search"

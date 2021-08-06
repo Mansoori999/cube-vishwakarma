@@ -7,8 +7,6 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
-import com.vinners.cube_vishwakarma.cache.OutletsType;
-import com.vinners.cube_vishwakarma.cache.entities.CachedOutlets;
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList;
 
 import java.util.List;

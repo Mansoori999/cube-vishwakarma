@@ -23,7 +23,9 @@ interface MyComplaintService {
     @POST("api/complaint/updatecomplaint")
     suspend fun upDateComplaint(
             @Part("data") upDateComplaintRequest: UpDateComplaintRequest,
-            @Part image: List<MultipartBody.Part>
+            @Part letterPic: MultipartBody.Part,
+            @Part measurementPic: MultipartBody.Part,
+            @Part layoutPic: MultipartBody.Part
     ):Response<List<String>>
 
     @GET("api/user/getuserbymanagerid")

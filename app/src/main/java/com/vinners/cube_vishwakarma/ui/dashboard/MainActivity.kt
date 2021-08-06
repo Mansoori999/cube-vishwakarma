@@ -1,8 +1,7 @@
-package com.vinners.cube_vishwakarma.ui
+package com.vinners.cube_vishwakarma.ui.dashboard
 
 
 import android.content.Intent
-import android.graphics.Color
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -24,12 +23,6 @@ import androidx.viewpager.widget.ViewPager
 import coil.api.load
 import com.devstune.searchablemultiselectspinner.SearchableAdapter
 import com.devstune.searchablemultiselectspinner.SelectionCompleteListener
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -70,8 +63,8 @@ import javax.inject.Inject
 import kotlin.collections.ArrayList
 
 
-class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R.layout.activity_main),
-    NavigationView.OnNavigationItemSelectedListener,MainActivityRecyclerAdapter.ClickListener {
+class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>(R.layout.activity_main),
+    NavigationView.OnNavigationItemSelectedListener, MainActivityRecyclerAdapter.ClickListener {
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
 
@@ -83,7 +76,6 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
     private var selectionCompleteListener: SelectionCompleteListener? = null
     private lateinit var bottomSheetDialog: BottomSheetDialog
-
 
     private lateinit var sheetBehavior: BottomSheetBehavior<View>
 
@@ -126,13 +118,17 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
     private lateinit var tabs: TabLayout
 
     private val sectionsPagerAdapter: DashboardPagerAdapter by lazy {
-        DashboardPagerAdapter(supportFragmentManager)
+        DashboardPagerAdapter(
+                supportFragmentManager
+        )
 
     }
     private val homeList = ArrayList<MainActivityListModel>()
 
     private val mainActivityRecyclerAdapter: MainActivityRecyclerAdapter by lazy {
-        MainActivityRecyclerAdapter(this)
+        MainActivityRecyclerAdapter(
+                this
+        )
                 .apply {
                     updateViewList(homeList = emptyList())
                 }
@@ -158,22 +154,23 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
     override fun onInitDataBinding() {
 //        val dotsIndicator = findViewById<DotsIndicator>(R.id.dots_indicator)
-//        viewPager = findViewById(R.id.view_pager)
+
 //        viewPager.adapter = sectionsPagerAdapter
 //        viewPager.setCurrentItem(1)
 //        dotsIndicator.setViewPager(viewPager)
 
 
-        viewBinding.contentMainContainer.tabs.addTab(viewBinding.contentMainContainer.tabs.newTab().setText("Monthly"))
-        viewBinding.contentMainContainer.tabs.addTab(viewBinding.contentMainContainer.tabs.newTab().setText("Summary"))
-        viewBinding.contentMainContainer.tabs.addTab(viewBinding.contentMainContainer.tabs.newTab().setText("RO Wise"))
+//        viewBinding.contentMainContainer.tabs.addTab(viewBinding.contentMainContainer.tabs.newTab().setText("Monthly"))
+//        viewBinding.contentMainContainer.tabs.addTab(viewBinding.contentMainContainer.tabs.newTab().setText("Summary"))
+//        viewBinding.contentMainContainer.tabs.addTab(viewBinding.contentMainContainer.tabs.newTab().setText("RO Wise"))
 
-        val tab = findViewById<TabLayout>(R.id.tabs)
-        tab.selectTab(tab.getTabAt(1))
-        if (selectedTab.equals(null)){
-            viewBinding.contentMainContainer.summaryContainer.setVisibilityVisible()
-        }
-        viewBinding.contentMainContainer.tabs.addOnTabSelectedListener(onTabSelectedListener)
+        tabs = findViewById(R.id.tabs)
+        viewPager = findViewById(R.id.view_pager)
+//        tab.selectTab(tab.getTabAt(1))
+//        if (selectedTab.equals(null)){
+//            viewBinding.contentMainContainer.summaryContainer.setVisibilityVisible()
+//        }
+//        viewBinding.contentMainContainer.tabs.addOnTabSelectedListener(onTabSelectedListener)
         val hiuserTV = findViewById<TextView>(R.id.hiuserTV)
         hiuserTV.setText(String.format("Hii, %s", userSessionManager.userName))
         val hiuserMobileTV = findViewById<TextView>(R.id.hiuserMobileTV)
@@ -292,135 +289,136 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
         startDateF = startdatef.toString()
         endDateF = enddatef.toString()
-        val myAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.card_anim)
-        viewBinding.contentMainContainer.totalCardView.setOnClickListener {
-            viewBinding.contentMainContainer.totalCardView.startAnimation(myAnim)
-            val intent = Intent(this, OutletComplaintsActivity::class.java)
-            intent.putExtra(OutletComplaintsActivity.ENABLE_TOTAL_ACTIVITY, true)
-            intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate", defaultEndDate)
-            intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF", endDateF)
-            intent.putExtra("regionalOfficeId", regionalOfficeIds)
-            intent.putExtra("regionalOfficeId", roselectedId)
-            intent.putExtra("subadminId",subadminId)
-            startActivity(intent)
-
-        }
-        viewBinding.contentMainContainer.dueCardView.setOnClickListener {
-            viewBinding.contentMainContainer.dueCardView.startAnimation(myAnim)
-            val intent = Intent(this, OutletComplaintsActivity::class.java)
-            intent.putExtra(OutletComplaintsActivity.ENABLE_DUE_ACTIVITY, true)
-            intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate", defaultEndDate)
-            intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF", endDateF)
-            intent.putExtra("regionalOfficeId", regionalOfficeIds)
-            intent.putExtra("regionalOfficeId", roselectedId)
-            intent.putExtra("subadminId",subadminId)
-            startActivity(intent)
-
-        }
-        viewBinding.contentMainContainer.workingCardView.setOnClickListener {
-            viewBinding.contentMainContainer.workingCardView.startAnimation(myAnim)
-            val intent = Intent(this, OutletComplaintsActivity::class.java)
-            intent.putExtra(OutletComplaintsActivity.ENABLE_WORKING_ACTIVITY, true)
-            intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate", defaultEndDate)
-            intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF", endDateF)
-            intent.putExtra("regionalOfficeId", regionalOfficeIds)
-            intent.putExtra("regionalOfficeId", roselectedId)
-            intent.putExtra("subadminId",subadminId)
-            startActivity(intent)
-
-        }
-        viewBinding.contentMainContainer.pendingCardView.setOnClickListener {
-            viewBinding.contentMainContainer.pendingCardView.startAnimation(myAnim)
-            val intent = Intent(this, OutletComplaintsActivity::class.java)
-            intent.putExtra(OutletComplaintsActivity.ENABLE_PENDING_ACTIVITY, true)
-            intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate", defaultEndDate)
-            intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF", endDateF)
-            intent.putExtra("regionalOfficeId", regionalOfficeIds)
-            intent.putExtra("regionalOfficeId", roselectedId)
-            intent.putExtra("subadminId",subadminId)
-            startActivity(intent)
-
-        }
-
-        viewBinding.contentMainContainer.doneCardView.setOnClickListener {
-            viewBinding.contentMainContainer.doneCardView.startAnimation(myAnim)
-            val intent = Intent(this, OutletComplaintsActivity::class.java)
-            intent.putExtra(OutletComplaintsActivity.ENABLE_DONE_ACTIVITY, true)
-            intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate", defaultEndDate)
-            intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF", endDateF)
-            intent.putExtra("regionalOfficeId", regionalOfficeIds)
-            intent.putExtra("regionalOfficeId", roselectedId)
-            intent.putExtra("subadminId",subadminId)
-            startActivity(intent)
-
-        }
-
-        viewBinding.contentMainContainer.draftCardView.setOnClickListener {
-            viewBinding.contentMainContainer.draftCardView.startAnimation(myAnim)
-            val intent = Intent(this, OutletComplaintsActivity::class.java)
-            intent.putExtra(OutletComplaintsActivity.ENABLE_DRAFT_ACTIVITY, true)
-            intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate", defaultEndDate)
-            intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF", endDateF)
-            intent.putExtra("regionalOfficeId", regionalOfficeIds)
-            intent.putExtra("regionalOfficeId", roselectedId)
-            intent.putExtra("subadminId",subadminId)
-            startActivity(intent)
-
-        }
-        viewBinding.contentMainContainer.estimatedCardView.setOnClickListener {
-            viewBinding.contentMainContainer.estimatedCardView.startAnimation(myAnim)
-            val intent = Intent(this, OutletComplaintsActivity::class.java)
-            intent.putExtra(OutletComplaintsActivity.ENABLE_ESTIMATE_ACTIVITY, true)
-            intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate", defaultEndDate)
-            intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF", endDateF)
-            intent.putExtra("regionalOfficeId", regionalOfficeIds)
-            intent.putExtra("regionalOfficeId", roselectedId)
-            intent.putExtra("subadminId",subadminId)
-            startActivity(intent)
-
-        }
-        viewBinding.contentMainContainer.billedCardView.setOnClickListener {
-            viewBinding.contentMainContainer.billedCardView.startAnimation(myAnim)
-            val intent = Intent(this, OutletComplaintsActivity::class.java)
-            intent.putExtra(OutletComplaintsActivity.ENABLE_BILLED_ACTIVITY, true)
-            intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate", defaultEndDate)
-            intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF", endDateF)
-            intent.putExtra("regionalOfficeId", regionalOfficeIds)
-            intent.putExtra("regionalOfficeId", roselectedId)
-            intent.putExtra("subadminId",subadminId)
-            startActivity(intent)
-
-        }
-        viewBinding.contentMainContainer.paymentCardView.setOnClickListener {
-            viewBinding.contentMainContainer.paymentCardView.startAnimation(myAnim)
-            val intent = Intent(this, OutletComplaintsActivity::class.java)
-            intent.putExtra(OutletComplaintsActivity.ENABLE_PAYMENT_ACTIVITY, true)
-            intent.putExtra("startDate", defaultStartDate)
-            intent.putExtra("endDate", defaultEndDate)
-            intent.putExtra("startDateF", startDateF)
-            intent.putExtra("endDateF", endDateF)
-            intent.putExtra("regionalOfficeId", regionalOfficeIds)
-            intent.putExtra("regionalOfficeId", roselectedId)
-            intent.putExtra("subadminId",subadminId)
-            startActivity(intent)
-
-        }
+//
+//        val myAnim: Animation = AnimationUtils.loadAnimation(this, R.anim.card_anim)
+//        viewBinding.contentMainContainer.totalCardView.setOnClickListener {
+//            viewBinding.contentMainContainer.totalCardView.startAnimation(myAnim)
+//            val intent = Intent(this, OutletComplaintsActivity::class.java)
+//            intent.putExtra(OutletComplaintsActivity.ENABLE_TOTAL_ACTIVITY, true)
+//            intent.putExtra("startDate", defaultStartDate)
+//            intent.putExtra("endDate", defaultEndDate)
+//            intent.putExtra("startDateF", startDateF)
+//            intent.putExtra("endDateF", endDateF)
+//            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+//            intent.putExtra("regionalOfficeId", roselectedId)
+//            intent.putExtra("subadminId", subadminId)
+//            startActivity(intent)
+//
+//        }
+//        viewBinding.contentMainContainer.dueCardView.setOnClickListener {
+//            viewBinding.contentMainContainer.dueCardView.startAnimation(myAnim)
+//            val intent = Intent(this, OutletComplaintsActivity::class.java)
+//            intent.putExtra(OutletComplaintsActivity.ENABLE_DUE_ACTIVITY, true)
+//            intent.putExtra("startDate", defaultStartDate)
+//            intent.putExtra("endDate", defaultEndDate)
+//            intent.putExtra("startDateF", startDateF)
+//            intent.putExtra("endDateF", endDateF)
+//            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+//            intent.putExtra("regionalOfficeId", roselectedId)
+//            intent.putExtra("subadminId", subadminId)
+//            startActivity(intent)
+//
+//        }
+//        viewBinding.contentMainContainer.workingCardView.setOnClickListener {
+//            viewBinding.contentMainContainer.workingCardView.startAnimation(myAnim)
+//            val intent = Intent(this, OutletComplaintsActivity::class.java)
+//            intent.putExtra(OutletComplaintsActivity.ENABLE_WORKING_ACTIVITY, true)
+//            intent.putExtra("startDate", defaultStartDate)
+//            intent.putExtra("endDate", defaultEndDate)
+//            intent.putExtra("startDateF", startDateF)
+//            intent.putExtra("endDateF", endDateF)
+//            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+//            intent.putExtra("regionalOfficeId", roselectedId)
+//            intent.putExtra("subadminId", subadminId)
+//            startActivity(intent)
+//
+//        }
+//        viewBinding.contentMainContainer.pendingCardView.setOnClickListener {
+//            viewBinding.contentMainContainer.pendingCardView.startAnimation(myAnim)
+//            val intent = Intent(this, OutletComplaintsActivity::class.java)
+//            intent.putExtra(OutletComplaintsActivity.ENABLE_PENDING_ACTIVITY, true)
+//            intent.putExtra("startDate", defaultStartDate)
+//            intent.putExtra("endDate", defaultEndDate)
+//            intent.putExtra("startDateF", startDateF)
+//            intent.putExtra("endDateF", endDateF)
+//            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+//            intent.putExtra("regionalOfficeId", roselectedId)
+//            intent.putExtra("subadminId", subadminId)
+//            startActivity(intent)
+//
+//        }
+//
+//        viewBinding.contentMainContainer.doneCardView.setOnClickListener {
+//            viewBinding.contentMainContainer.doneCardView.startAnimation(myAnim)
+//            val intent = Intent(this, OutletComplaintsActivity::class.java)
+//            intent.putExtra(OutletComplaintsActivity.ENABLE_DONE_ACTIVITY, true)
+//            intent.putExtra("startDate", defaultStartDate)
+//            intent.putExtra("endDate", defaultEndDate)
+//            intent.putExtra("startDateF", startDateF)
+//            intent.putExtra("endDateF", endDateF)
+//            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+//            intent.putExtra("regionalOfficeId", roselectedId)
+//            intent.putExtra("subadminId", subadminId)
+//            startActivity(intent)
+//
+//        }
+//
+//        viewBinding.contentMainContainer.draftCardView.setOnClickListener {
+//            viewBinding.contentMainContainer.draftCardView.startAnimation(myAnim)
+//            val intent = Intent(this, OutletComplaintsActivity::class.java)
+//            intent.putExtra(OutletComplaintsActivity.ENABLE_DRAFT_ACTIVITY, true)
+//            intent.putExtra("startDate", defaultStartDate)
+//            intent.putExtra("endDate", defaultEndDate)
+//            intent.putExtra("startDateF", startDateF)
+//            intent.putExtra("endDateF", endDateF)
+//            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+//            intent.putExtra("regionalOfficeId", roselectedId)
+//            intent.putExtra("subadminId", subadminId)
+//            startActivity(intent)
+//
+//        }
+//        viewBinding.contentMainContainer.estimatedCardView.setOnClickListener {
+//            viewBinding.contentMainContainer.estimatedCardView.startAnimation(myAnim)
+//            val intent = Intent(this, OutletComplaintsActivity::class.java)
+//            intent.putExtra(OutletComplaintsActivity.ENABLE_ESTIMATE_ACTIVITY, true)
+//            intent.putExtra("startDate", defaultStartDate)
+//            intent.putExtra("endDate", defaultEndDate)
+//            intent.putExtra("startDateF", startDateF)
+//            intent.putExtra("endDateF", endDateF)
+//            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+//            intent.putExtra("regionalOfficeId", roselectedId)
+//            intent.putExtra("subadminId", subadminId)
+//            startActivity(intent)
+//
+//        }
+//        viewBinding.contentMainContainer.billedCardView.setOnClickListener {
+//            viewBinding.contentMainContainer.billedCardView.startAnimation(myAnim)
+//            val intent = Intent(this, OutletComplaintsActivity::class.java)
+//            intent.putExtra(OutletComplaintsActivity.ENABLE_BILLED_ACTIVITY, true)
+//            intent.putExtra("startDate", defaultStartDate)
+//            intent.putExtra("endDate", defaultEndDate)
+//            intent.putExtra("startDateF", startDateF)
+//            intent.putExtra("endDateF", endDateF)
+//            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+//            intent.putExtra("regionalOfficeId", roselectedId)
+//            intent.putExtra("subadminId", subadminId)
+//            startActivity(intent)
+//
+//        }
+//        viewBinding.contentMainContainer.paymentCardView.setOnClickListener {
+//            viewBinding.contentMainContainer.paymentCardView.startAnimation(myAnim)
+//            val intent = Intent(this, OutletComplaintsActivity::class.java)
+//            intent.putExtra(OutletComplaintsActivity.ENABLE_PAYMENT_ACTIVITY, true)
+//            intent.putExtra("startDate", defaultStartDate)
+//            intent.putExtra("endDate", defaultEndDate)
+//            intent.putExtra("startDateF", startDateF)
+//            intent.putExtra("endDateF", endDateF)
+//            intent.putExtra("regionalOfficeId", regionalOfficeIds)
+//            intent.putExtra("regionalOfficeId", roselectedId)
+//            intent.putExtra("subadminId", subadminId)
+//            startActivity(intent)
+//
+//        }
 //        sheetBehavior = BottomSheetBehavior.from(complaints_filter_bottomsheet)
 //        sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 //        val bottomSheetDialog = BottomSheetDialog(this)
@@ -470,9 +468,9 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         viewBinding.contentMainContainer.refresh.setOnClickListener {
             viewModel.initViewModel()
             if (startDateF.equals("null").not() && endDateF.equals("null").not()){
-                viewModel.dashBoardData(startDateF, endDateF, roselectedId,subadminId)
+                viewModel.dashBoardData(startDateF, endDateF, roselectedId, subadminId)
             }else {
-                viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds,subadminId)
+                viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds, subadminId)
 
             }
 
@@ -550,25 +548,31 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                     viewBinding.contentMainContainer.loadingData.setVisibilityVisible()
                 }
                 is Lce.Content -> {
-                    it.content.dashboardCount.forEach{
-                        viewBinding.contentMainContainer.loadingData.setVisibilityGone()
-                        viewBinding.contentMainContainer.totals.text = it.total
-                        viewBinding.contentMainContainer.due.text = it.due
-                        viewBinding.contentMainContainer.working.text = it.working
-                        viewBinding.contentMainContainer.pending.text = it.pendingletter
-                        viewBinding.contentMainContainer.done.text = it.done
-                        viewBinding.contentMainContainer.draft.text = it.draft
-                        viewBinding.contentMainContainer.estimated.text = it.estimated
-                        viewBinding.contentMainContainer.billed.text = it.billed
-                        viewBinding.contentMainContainer.payment.text = it.payment
+                    viewBinding.contentMainContainer.loadingData.setVisibilityGone()
+//                    it.content.dashboardCount.forEach{
 
-                    }
-                    dataEnteriesYAxis =  it.content.monthWiseChart!!.data.toList()
-                    monthlyDataXAxis = it.content.monthWiseChart!!.monthList
-                    roDataEnteriesYAxis = it.content.roWiseChart!!.data.toList()
-                    roListXAxis = it.content.roWiseChart!!.roList
-                    monthWiseBarChart()
-                    roWiseBarChart()
+//                        viewBinding.contentMainContainer.totals.text = it.total
+//                        viewBinding.contentMainContainer.due.text = it.due
+//                        viewBinding.contentMainContainer.working.text = it.working
+//                        viewBinding.contentMainContainer.pending.text = it.pendingletter
+//                        viewBinding.contentMainContainer.done.text = it.done
+//                        viewBinding.contentMainContainer.draft.text = it.draft
+//                        viewBinding.contentMainContainer.estimated.text = it.estimated
+//                        viewBinding.contentMainContainer.billed.text = it.billed
+//                        viewBinding.contentMainContainer.payment.text = it.payment
+
+//                    }
+//                    dataEnteriesYAxis =  it.content.monthWiseChart!!.data.toList()
+//                    monthlyDataXAxis = it.content.monthWiseChart!!.monthList
+//                    roDataEnteriesYAxis = it.content.roWiseChart!!.data.toList()
+//                    roListXAxis = it.content.roWiseChart!!.roList
+//                    monthWiseBarChart()
+//                    roWiseBarChart()
+                    tabs.setVisibilityVisible()
+                    viewPager.setVisibilityVisible()
+                    viewPager.adapter = sectionsPagerAdapter
+                    viewPager.currentItem = 1
+                    tabs.setupWithViewPager(viewPager)
                 }
                 is Lce.Error -> {
                     viewBinding.contentMainContainer.loadingData.setVisibilityGone()
@@ -622,86 +626,86 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
         viewModel.activeSubAdmib()
 
     }
-    private fun roWiseBarChart() {
-        val roBarEntries: ArrayList<BarEntry> = ArrayList()
-        for (i in 0 until roDataEnteriesYAxis.size) {
-            roBarEntries.add(BarEntry(i.toFloat(), roDataEnteriesYAxis[i].toFloat()))
-        }
+//    private fun roWiseBarChart() {
+//        val roBarEntries: ArrayList<BarEntry> = ArrayList()
+//        for (i in 0 until roDataEnteriesYAxis.size) {
+//            roBarEntries.add(BarEntry(i.toFloat(), roDataEnteriesYAxis[i].toFloat()))
+//        }
+//
+//        val roBarDataSet = BarDataSet(roBarEntries,"Complaint")
+//        roBarDataSet.setColor(Color.parseColor("#2383E1"))
+//        roBarDataSet.valueTextColor = Color.BLACK
+//        roBarDataSet.setFormSize(15f)
+//        viewBinding.contentMainContainer.barChartRO.getDescription().setEnabled(false)
+//        val xAxisro = viewBinding.contentMainContainer.barChartRO.getXAxis()
+//        xAxisro.granularity = 1f
+//        xAxisro.isGranularityEnabled = true
+//        xAxisro.setDrawGridLines(false)
+//        xAxisro.setCenterAxisLabels(false)
+//        xAxisro.axisMaximum = roListXAxis.size.toFloat()
+//        xAxisro.setPosition(XAxis.XAxisPosition.BOTTOM)
+//        xAxisro.valueFormatter = IndexAxisValueFormatter(roListXAxis)
+//        val roBarData = BarData(roBarDataSet)
+//        viewBinding.contentMainContainer.barChartRO.setFitBars(true)
+//        viewBinding.contentMainContainer.barChartRO.setDragEnabled(true)
+//        viewBinding.contentMainContainer.barChartRO.setData(roBarData)
+//        roBarData.barWidth = 0.5f
+//        viewBinding.contentMainContainer.barChartRO.setExtraOffsets(5f,5f,5f,15f)
+//        //Y-axis
+//        viewBinding.contentMainContainer.barChartRO.getAxisRight().setEnabled(false)
+//        val leftAxisro: YAxis = viewBinding.contentMainContainer.barChartRO.getAxisLeft()
+//        leftAxisro.setDrawGridLines(true)
+////        leftAxisro.setSpaceTop(15f)
+//        leftAxisro.setAxisMinimum(0f)
+//        val yAxisRight: YAxis = viewBinding.contentMainContainer.barChartRO.getAxisRight()
+//        yAxisRight.setEnabled(false)
+////        viewBinding.contentMainContainer.barChart.setExtraBottomOffset(1f)
+////        viewBinding.contentMainContainer.barChart.setVisibleXRangeMaximum(12f)
+////        viewBinding.contentMainContainer.barChart.setVisibleXRangeMinimum(4f)
+//        viewBinding.contentMainContainer.barChartRO.invalidate()
+//
+//    }
 
-        val roBarDataSet = BarDataSet(roBarEntries,"Complaint")
-        roBarDataSet.setColor(Color.parseColor("#2383E1"))
-        roBarDataSet.valueTextColor = Color.BLACK
-        roBarDataSet.setFormSize(15f)
-        viewBinding.contentMainContainer.barChartRO.getDescription().setEnabled(false)
-        val xAxisro = viewBinding.contentMainContainer.barChartRO.getXAxis()
-        xAxisro.granularity = 1f
-        xAxisro.isGranularityEnabled = true
-        xAxisro.setDrawGridLines(false)
-        xAxisro.setCenterAxisLabels(false)
-        xAxisro.axisMaximum = roListXAxis.size.toFloat()
-        xAxisro.setPosition(XAxis.XAxisPosition.BOTTOM)
-        xAxisro.valueFormatter = IndexAxisValueFormatter(roListXAxis)
-        val roBarData = BarData(roBarDataSet)
-        viewBinding.contentMainContainer.barChartRO.setFitBars(true)
-        viewBinding.contentMainContainer.barChartRO.setDragEnabled(true)
-        viewBinding.contentMainContainer.barChartRO.setData(roBarData)
-        roBarData.barWidth = 0.5f
-        viewBinding.contentMainContainer.barChartRO.setExtraOffsets(5f,5f,5f,15f)
-        //Y-axis
-        viewBinding.contentMainContainer.barChartRO.getAxisRight().setEnabled(false)
-        val leftAxisro: YAxis = viewBinding.contentMainContainer.barChartRO.getAxisLeft()
-        leftAxisro.setDrawGridLines(true)
-//        leftAxisro.setSpaceTop(15f)
-        leftAxisro.setAxisMinimum(0f)
-        val yAxisRight: YAxis = viewBinding.contentMainContainer.barChartRO.getAxisRight()
-        yAxisRight.setEnabled(false)
-        viewBinding.contentMainContainer.barChart.setExtraBottomOffset(1f)
-//        viewBinding.contentMainContainer.barChart.setVisibleXRangeMaximum(12f)
-//        viewBinding.contentMainContainer.barChart.setVisibleXRangeMinimum(4f)
-        viewBinding.contentMainContainer.barChartRO.invalidate()
-
-    }
-
-    private fun monthWiseBarChart(){
-        val barEntries: ArrayList<BarEntry> = ArrayList()
-        for (i in 0 until dataEnteriesYAxis.size) {
-            barEntries.add(BarEntry(i.toFloat(), dataEnteriesYAxis[i].toFloat()))
-        }
-
-        val barDataSet = BarDataSet(barEntries,"Complaint")
-        barDataSet.setColor(Color.parseColor("#2383E1"))
-        barDataSet.valueTextColor = Color.BLACK
-        barDataSet.setFormSize(15f)
-        viewBinding.contentMainContainer.barChart.getDescription().setEnabled(false)
-        val xAxis = viewBinding.contentMainContainer.barChart.getXAxis()
-        xAxis.granularity = 1f
-        xAxis.isGranularityEnabled = true
-        xAxis.setDrawGridLines(false)
-        xAxis.setCenterAxisLabels(false)
-        xAxis.axisMaximum = monthlyDataXAxis.size.toFloat()
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
-        xAxis.valueFormatter = IndexAxisValueFormatter(monthlyDataXAxis)
-        val barData = BarData(barDataSet)
-        viewBinding.contentMainContainer.barChart.setFitBars(true)
-        viewBinding.contentMainContainer.barChart.setDragEnabled(true)
-        viewBinding.contentMainContainer.barChart.setData(barData)
-        barData.barWidth = 0.5f
-        viewBinding.contentMainContainer.barChart.setExtraOffsets(5f,5f,5f,15f)
-        //Y-axis
-        viewBinding.contentMainContainer.barChart.getAxisRight().setEnabled(false)
-        val leftAxis: YAxis = viewBinding.contentMainContainer.barChart.getAxisLeft()
-        leftAxis.setDrawGridLines(true)
-//        leftAxisro.setSpaceTop(15f)
-        leftAxis.setAxisMinimum(0f)
-        val yAxisRight: YAxis = viewBinding.contentMainContainer.barChart.getAxisRight()
-        yAxisRight.setEnabled(false)
-        viewBinding.contentMainContainer.barChart.setExtraBottomOffset(1f)
-//        viewBinding.contentMainContainer.barChart.setVisibleXRangeMaximum(12f)
-//        viewBinding.contentMainContainer.barChart.setVisibleXRangeMinimum(12f)
-        viewBinding.contentMainContainer.barChart.invalidate()
-
-    }
-
+//    private fun monthWiseBarChart(){
+//        val barEntries: ArrayList<BarEntry> = ArrayList()
+//        for (i in 0 until dataEnteriesYAxis.size) {
+//            barEntries.add(BarEntry(i.toFloat(), dataEnteriesYAxis[i].toFloat()))
+//        }
+//
+//        val barDataSet = BarDataSet(barEntries,"Complaint")
+//        barDataSet.setColor(Color.parseColor("#2383E1"))
+//        barDataSet.valueTextColor = Color.BLACK
+//        barDataSet.setFormSize(15f)
+//        viewBinding.contentMainContainer.barChart.getDescription().setEnabled(false)
+//        val xAxis = viewBinding.contentMainContainer.barChart.getXAxis()
+//        xAxis.granularity = 1f
+//        xAxis.isGranularityEnabled = true
+//        xAxis.setDrawGridLines(false)
+//        xAxis.setCenterAxisLabels(false)
+//        xAxis.axisMaximum = monthlyDataXAxis.size.toFloat()
+//        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM)
+//        xAxis.valueFormatter = IndexAxisValueFormatter(monthlyDataXAxis)
+//        val barData = BarData(barDataSet)
+//        viewBinding.contentMainContainer.barChart.setFitBars(true)
+//        viewBinding.contentMainContainer.barChart.setDragEnabled(true)
+//        viewBinding.contentMainContainer.barChart.setData(barData)
+//        barData.barWidth = 0.5f
+//        viewBinding.contentMainContainer.barChart.setExtraOffsets(5f,5f,5f,15f)
+//        //Y-axis
+//        viewBinding.contentMainContainer.barChart.getAxisRight().setEnabled(false)
+//        val leftAxis: YAxis = viewBinding.contentMainContainer.barChart.getAxisLeft()
+//        leftAxis.setDrawGridLines(true)
+////        leftAxisro.setSpaceTop(15f)
+//        leftAxis.setAxisMinimum(0f)
+//        val yAxisRight: YAxis = viewBinding.contentMainContainer.barChart.getAxisRight()
+//        yAxisRight.setEnabled(false)
+//        viewBinding.contentMainContainer.barChart.setExtraBottomOffset(1f)
+////        viewBinding.contentMainContainer.barChart.setVisibleXRangeMaximum(12f)
+////        viewBinding.contentMainContainer.barChart.setVisibleXRangeMinimum(12f)
+//        viewBinding.contentMainContainer.barChart.invalidate()
+//
+//    }
+//
 
 //    class IntValueFormatter : IValueFormatter {
 //        fun getFormattedValue(
@@ -973,8 +977,36 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 
         defaultStartDate = startdate.toString()
         defaultEndDate = enddate.toString()
-        viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds,subadminId)
+        viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds, subadminId)
+
+//        val preferences = this.getSharedPreferences("data", MODE_PRIVATE)
+        val preferences = getSharedPreferences("summerydata", 0)
+        val editor = preferences.edit()
+        editor.putString("defaultEndDate", defaultEndDate)
+        editor.putString("defaultStartDate", defaultStartDate)
+        editor.putString("startDateF", startDateF)
+        editor.putString("endDateF", endDateF)
+        editor.putString("roselectedId", roselectedId)
+        editor.putString("regionalOfficeIds", roselectedId)
+        editor.putString("subadminId", subadminId)
+        editor.apply()
+        editor.commit()
+
+//        val bundle = Bundle()
+//        bundle.putString("defaultEndDate", defaultEndDate)
+//        bundle.putString("defaultStartDate", defaultStartDate)
+//        bundle.putString("startDateF", startDateF)
+//        bundle.putString("endDateF", endDateF)
+//        bundle.putString("roselectedId", roselectedId)
+//        bundle.putString("regionalOfficeIds", roselectedId)
+//        bundle.putString("subadminId", subadminId)
+//        val intent: Intent = getIntent()
+//        intent.putExtras(bundle)
+//        val myObj = SummeryFragment()
+//        myObj.setArguments(bundle)
     }
+
+
     private val onTabSelectedListener = object : TabLayout.OnTabSelectedListener {
         override fun onTabSelected(tab: TabLayout.Tab?) {
             selectedTab = tab?.text.toString()
@@ -984,21 +1016,21 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
 //            defaultEndDate = enddate.toString()
 //            viewModel.dashBoardData(defaultStartDate, defaultEndDate, regionalOfficeIds,subadminId)
 
-            if (selectedTab!!.toLowerCase().equals("summary")) {
-                viewBinding.contentMainContainer.summaryContainer.setVisibilityVisible()
-                viewBinding.contentMainContainer.monthlyContainer.setVisibilityGone()
-                viewBinding.contentMainContainer.roWiseContainer.setVisibilityGone()
-
-            } else if (selectedTab!!.toLowerCase().equals("monthly")) {
-                viewBinding.contentMainContainer.monthlyContainer.setVisibilityVisible()
-                viewBinding.contentMainContainer.summaryContainer.setVisibilityGone()
-                viewBinding.contentMainContainer.roWiseContainer.setVisibilityGone()
-            }else if (selectedTab!!.toLowerCase().equals("ro wise")){
-                viewBinding.contentMainContainer.summaryContainer.setVisibilityGone()
-                viewBinding.contentMainContainer.roWiseContainer.setVisibilityVisible()
-                viewBinding.contentMainContainer.monthlyContainer.setVisibilityGone()
-
-            }
+//            if (selectedTab!!.toLowerCase().equals("summary")) {
+//                viewBinding.contentMainContainer.summaryContainer.setVisibilityVisible()
+//                viewBinding.contentMainContainer.monthlyContainer.setVisibilityGone()
+//                viewBinding.contentMainContainer.roWiseContainer.setVisibilityGone()
+//
+//            } else if (selectedTab!!.toLowerCase().equals("monthly")) {
+//                viewBinding.contentMainContainer.monthlyContainer.setVisibilityVisible()
+//                viewBinding.contentMainContainer.summaryContainer.setVisibilityGone()
+//                viewBinding.contentMainContainer.roWiseContainer.setVisibilityGone()
+//            }else if (selectedTab!!.toLowerCase().equals("ro wise")){
+//                viewBinding.contentMainContainer.summaryContainer.setVisibilityGone()
+//                viewBinding.contentMainContainer.roWiseContainer.setVisibilityVisible()
+//                viewBinding.contentMainContainer.monthlyContainer.setVisibilityGone()
+//
+//            }
 
         }
 
@@ -1031,7 +1063,18 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                 startDateF = startdatef.toString()
                 endDateF = enddatef.toString()
                 val roIds = roselectedId
-                viewModel.dashBoardData(startDateF, endDateF, roselectedId,subadminId)
+                viewModel.dashBoardData(startDateF, endDateF, roselectedId, subadminId)
+            val preferences = getSharedPreferences("summerydata", 0)
+            val editor = preferences.edit()
+            editor.putString("defaultEndDate", defaultEndDate)
+            editor.putString("defaultStartDate", defaultStartDate)
+            editor.putString("startDateF", startDateF)
+            editor.putString("endDateF", endDateF)
+            editor.putString("roselectedId", roselectedId)
+            editor.putString("regionalOfficeIds", roselectedId)
+            editor.putString("subadminId", subadminId)
+            editor.apply()
+            editor.commit()
                 sheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN)
                 bottomSheetDialog.dismiss()
 
@@ -1073,7 +1116,7 @@ class MainActivity : BaseActivity<ActivityMainBinding , MainActivityViewModel>(R
                     val intent = Intent(this, OutletsActivity::class.java)
                     startActivity(intent)
                 }
-                R.id.nav_images ->{
+                R.id.nav_images -> {
                     val intent = Intent(this, ImagesForDocumentActivity::class.java)
                     startActivity(intent)
                 }

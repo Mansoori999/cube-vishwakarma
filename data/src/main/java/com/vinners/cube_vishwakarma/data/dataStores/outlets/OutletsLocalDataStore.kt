@@ -1,4 +1,6 @@
 package com.vinners.cube_vishwakarma.data.dataStores.outlets
+import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponseDataItem
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 
 interface OutletsLocalDataStore  {
@@ -12,6 +14,18 @@ interface OutletsLocalDataStore  {
     suspend fun getOutletsBYID(roid:List<Int> , said:List<Int>): List<OutletsList>
 
     suspend fun getOutletsBYIDWithOR(roid:List<Int> , said:List<Int>): List<OutletsList>
+
+    suspend fun insertAllMyColplaints(complaints : List<MyComplaintList>)
+
+    suspend fun deleteAllMyComplaints()
+
+    suspend fun getAllMyComplaints():List<MyComplaintList>
+
+    suspend fun insertDashboardData(dashboardList : DashBoardResponseDataItem)
+
+    suspend fun deleteDashboardData()
+
+    suspend fun getDashboardData():DashBoardResponseDataItem
 
 //    fun getOutlets(): Observable<OutletsList>
 }

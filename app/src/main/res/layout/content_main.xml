@@ -150,6 +150,7 @@
             app:tabGravity="center"
             app:tabSelectedTextColor="@color/white"
             app:tabMaxWidth="0dp"
+            android:visibility="gone"
             android:layout_marginTop="-10dp"
             app:tabIndicator="@drawable/selected_dot"
             app:tabIndicatorGravity="stretch"
@@ -180,8 +181,9 @@
             android:id="@+id/view_pager"
             android:layout_width="match_parent"
             android:layout_below="@+id/tabs"
+            android:visibility="gone"
             android:layout_height="wrap_content"
-            android:layout_weight="1" />
+            />
 
 
         <LinearLayout

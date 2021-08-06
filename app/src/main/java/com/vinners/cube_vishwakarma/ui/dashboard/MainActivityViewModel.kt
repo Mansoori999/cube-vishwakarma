@@ -1,4 +1,4 @@
-package com.vinners.cube_vishwakarma.ui
+package com.vinners.cube_vishwakarma.ui.dashboard
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,7 +9,6 @@ import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.ComplaintOutletList
 import com.vinners.cube_vishwakarma.data.models.dashboard.ActiveSubAdminResponse
-import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponse
 import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponseDataItem
 import com.vinners.cube_vishwakarma.data.models.dashboardFilter.DashboardFilterList
 import com.vinners.cube_vishwakarma.data.models.profile.Profile
@@ -17,7 +16,6 @@ import com.vinners.cube_vishwakarma.data.repository.ComplaintRequestRepository
 import com.vinners.cube_vishwakarma.data.repository.DashBoardRepository
 import com.vinners.cube_vishwakarma.data.repository.ProfileRepository
 import com.vinners.cube_vishwakarma.feature_auth.ui.ObserveProfileInteractor
-import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.LoadMetaForAddComplaintState
 import io.reactivex.observers.DisposableObserver
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -33,6 +31,7 @@ interface ProfileEvents {
     val financialFilterState: LiveData<Lce<List<DashboardFilterList>>>
     val regionalOfficeFilterState: LiveData<Lce<List<ComplaintOutletList>>>
     val dashboardState : LiveData<Lce<DashBoardResponseDataItem>>
+    val dashboardDaoState: LiveData<Lce<DashBoardResponseDataItem>>
     val acitveSubAdminFilterState: LiveData<Lce<List<ActiveSubAdminResponse>>>
 
 
@@ -42,7 +41,7 @@ class MainActivityViewModel@Inject constructor(
     private val dashBoardRepository: DashBoardRepository,
     private val complaintRequestRepository: ComplaintRequestRepository,
     private val observeProfileInteractor: ObserveProfileInteractor
-) : ViewModel(), ProfileEvents  {
+) : ViewModel(), ProfileEvents {
 
     private val _logoutState = MutableLiveData<Lse>()
     override val logoutState: LiveData<Lse> = _logoutState
@@ -112,6 +111,23 @@ class MainActivityViewModel@Inject constructor(
                 _dashboardState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _dashboardState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    //GET ALl Complaints From DataBase
+    private val _dashboardDaoState =  MutableLiveData<Lce<DashBoardResponseDataItem>>()
+    override val dashboardDaoState: LiveData<Lce<DashBoardResponseDataItem>> = _dashboardDaoState
+
+    fun getDashboardDaoData(){
+        _dashboardDaoState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = dashBoardRepository.getDashboardDaoData()
+                _dashboardDaoState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _dashboardDaoState.postValue(Lce.error(e.localizedMessage))
 
             }
         }

@@ -2,8 +2,12 @@ package com.vinners.cube_vishwakarma.cache.localDataStoreImpl
 
 import androidx.annotation.WorkerThread
 import com.vinners.cube_vishwakarma.cache.OutletsLocalDatabase
+import com.vinners.cube_vishwakarma.cache.dao.DashboardDao
+import com.vinners.cube_vishwakarma.cache.dao.MyComplaintDao
 import com.vinners.cube_vishwakarma.cache.dao.OutletsDao
 import com.vinners.cube_vishwakarma.data.dataStores.outlets.OutletsLocalDataStore
+import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
+import com.vinners.cube_vishwakarma.data.models.dashboard.DashBoardResponseDataItem
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import io.reactivex.Observable
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +16,9 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class OutletLocalDataStoreImpl @Inject constructor(
-    private val outletsDao: OutletsDao
+    private val outletsDao: OutletsDao,
+    private val myComplaintDao: MyComplaintDao,
+    private val dashboardDao: DashboardDao
 ): OutletsLocalDataStore {
 
 
@@ -32,9 +38,29 @@ class OutletLocalDataStoreImpl @Inject constructor(
         return outletsDao.getOutletsByIDWithOR(roid,said)
     }
 
-//    override suspend fun insertAllOutlets(): List<OutletsList> {
-//        return outletsLocalDatabase.getOutletsDao().insertOutlet()
-//    }
+    override suspend fun insertAllMyColplaints(complaints: List<MyComplaintList>) {
+        return myComplaintDao.insertMyComplaints(complaints)
+    }
+
+    override suspend fun deleteAllMyComplaints() {
+        return myComplaintDao.deleteAllMyComplaints()
+    }
+
+    override suspend fun getAllMyComplaints(): List<MyComplaintList> {
+        return myComplaintDao.getAllComplaints()
+    }
+
+    override suspend fun insertDashboardData(dashboardList: DashBoardResponseDataItem) {
+        return dashboardDao.insertDashboardData(dashboardList)
+    }
+
+    override suspend fun deleteDashboardData() {
+        return dashboardDao.deleteDashboardData()
+    }
+
+    override suspend fun getDashboardData(): DashBoardResponseDataItem {
+        return dashboardDao.getDashboardAllData()
+    }
 
 
 }

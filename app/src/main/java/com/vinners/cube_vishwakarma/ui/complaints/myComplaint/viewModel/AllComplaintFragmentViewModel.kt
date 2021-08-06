@@ -12,6 +12,7 @@ import com.vinners.cube_vishwakarma.data.repository.MyComplaintRepository
 import com.vinners.cube_vishwakarma.data.repository.ProfileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 
@@ -27,6 +28,7 @@ interface ComplaintEvents {
 
     val requestforAllocatedUserListState: LiveData<Lce<List<String>>>
 
+    val complaintDaoListState: LiveData<Lce<List<MyComplaintList>>>
 
 }
 class AllComplaintFragmentViewModel @Inject constructor(
@@ -50,7 +52,24 @@ class AllComplaintFragmentViewModel @Inject constructor(
         }
     }
 
-     /*Complaint Details */
+    //GET ALl Complaints From DataBase
+    private val _complaintDaoListState = MutableLiveData<Lce<List<MyComplaintList>>>()
+    override val complaintDaoListState: LiveData<Lce<List<MyComplaintList>>> = _complaintDaoListState
+
+    fun getComplaintDaoList(){
+        _complaintDaoListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = myComplaintRepository.getAllMyComplaintsDao()
+                _complaintDaoListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _complaintDaoListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    /*Complaint Details */
 
     private val _complaintDetailsState = MutableLiveData<Lce<MyComplainDetailsList>>()
     override val complaintDetailsState: LiveData<Lce<MyComplainDetailsList>> = _complaintDetailsState
@@ -72,11 +91,18 @@ class AllComplaintFragmentViewModel @Inject constructor(
     private val _upDateListState = MutableLiveData<Lce<List<String>>>()
     override val upDateListState: LiveData<Lce<List<String>>> = _upDateListState
 
-    fun upDateComplaints(statusremarks:String, status:String, id:Int,image: List<String>){
+    fun upDateComplaints(
+            statusremarks: String,
+            status: String,
+            id: Int,
+            letterPic: File,
+            measurementPic:File,
+            layoutPic:File
+    ){
         _upDateListState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {
-                val response = myComplaintRepository.upDateComplaints(statusremarks,status,id,image)
+                val response = myComplaintRepository.upDateComplaints(statusremarks,status,id,letterPic.absolutePath,measurementPic.absolutePath,layoutPic.absolutePath)
                 _upDateListState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _upDateListState.postValue(Lce.error(e.localizedMessage))

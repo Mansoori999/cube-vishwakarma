@@ -1,14 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.complaints.dashboardFragment.ROWiseFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    tools:context=".ui.dashboard.fragment.ROWiseFragment">
+    <ProgressBar
+        android:id="@+id/loading_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginTop="5dp"
+        android:visibility="visible"
+        android:layout_marginBottom="10dp"
+        android:id="@+id/roWiseContainer"
+       >
 
-</FrameLayout>
+        <com.github.mikephil.charting.charts.BarChart
+            android:layout_width="match_parent"
+            android:id="@+id/barChartRO"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+</RelativeLayout>
+</layout>

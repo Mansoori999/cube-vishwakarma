@@ -8,7 +8,12 @@ interface MyComplaintRemoteDataStore {
 
     suspend fun getComplaintetails(id: String):MyComplainDetailsList
 
-    suspend fun  upDateComplaint(statusremarks:String, status:String, id:Int,  image: List<String>): List<String>
+    suspend fun  upDateComplaint(statusremarks: String,
+                                 status: String,
+                                 id: Int,
+                                 letterPic:String,
+                                 measurementPic:String,
+                                 layoutPic:String): List<String>
 
     suspend fun allocateUserForComplaint() :List<AllocateUserResponse>
 

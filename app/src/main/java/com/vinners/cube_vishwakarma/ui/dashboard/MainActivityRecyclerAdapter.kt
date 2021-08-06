@@ -1,11 +1,10 @@
-package com.vinners.cube_vishwakarma.ui
+package com.vinners.cube_vishwakarma.ui.dashboard
 
 import android.content.Context
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +22,7 @@ class MainActivityRecyclerAdapter(private var clickListener: ClickListener) : Re
         notifyDataSetChanged()
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainActivityRecyclerAdapter.MainActivityRecyclerHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainActivityRecyclerHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.dashboard_layout, parent, false)
         return MainActivityRecyclerHolder(view)
     }
@@ -32,7 +31,7 @@ class MainActivityRecyclerAdapter(private var clickListener: ClickListener) : Re
        return homeList.size
     }
 
-    override fun onBindViewHolder(holder: MainActivityRecyclerAdapter.MainActivityRecyclerHolder, position: Int) {
+    override fun onBindViewHolder(holder: MainActivityRecyclerHolder, position: Int) {
         holder.onBind(homeList[position])
     }
 

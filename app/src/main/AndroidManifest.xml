@@ -63,7 +63,7 @@
         <activity android:name=".ui.complaints.myComplaint.MyComplaintActivity" />
         <activity android:name=".ui.complaints.ComplaintsActivity" />
         <activity
-            android:name=".ui.MainActivity"
+            android:name=".ui.dashboard.MainActivity"
             android:screenOrientation="portrait" />
 
         <meta-data

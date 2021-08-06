@@ -1,13 +1,11 @@
-package com.vinners.cube_vishwakarma.ui
+package com.vinners.cube_vishwakarma.ui.dashboard
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.MonthlyFragment
-import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.ROWiseFragment
-import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.SummeryFragment
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
-
+import com.vinners.cube_vishwakarma.ui.dashboard.fragment.MonthlyFragment
+import com.vinners.cube_vishwakarma.ui.dashboard.fragment.ROWiseFragment
+import com.vinners.cube_vishwakarma.ui.dashboard.fragment.SummeryFragment
 
 
 private val TAB_TITLES = arrayOf(

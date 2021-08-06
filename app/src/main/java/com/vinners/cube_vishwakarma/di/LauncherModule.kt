@@ -3,10 +3,10 @@ package com.vinners.cube_vishwakarma.di
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.vinners.cube_vishwakarma.core.di.modules.ViewModelKey
-import com.vinners.cube_vishwakarma.ui.MainActivityViewModel
+import com.vinners.cube_vishwakarma.ui.dashboard.MainActivityViewModel
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.ComplaintRequestViewModel
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintViewModel
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.MyComplaintSharedViewModel
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsViewModel
 import com.vinners.cube_vishwakarma.ui.languageSelection.LanguageViewModel
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsViewModel
@@ -38,10 +38,6 @@ abstract class LauncherModule {
     @ViewModelKey(MainActivityViewModel::class)
     abstract fun bindMainActivityViewModel(viewModel: MainActivityViewModel): ViewModel
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(MyComplaintViewModel::class)
-    abstract fun bindMyComplaintViewModel(viewModel: MyComplaintViewModel): ViewModel
 
     @Binds
     @IntoMap
@@ -72,5 +68,11 @@ abstract class LauncherModule {
     @IntoMap
     @ViewModelKey(DocumentsViewModel::class)
     abstract fun bindDocumentsViewModel(viewModel: DocumentsViewModel): ViewModel
+
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(MyComplaintSharedViewModel::class)
+    abstract fun bindMyComplaintSharedViewModel(viewModel: MyComplaintSharedViewModel): ViewModel
 
 }

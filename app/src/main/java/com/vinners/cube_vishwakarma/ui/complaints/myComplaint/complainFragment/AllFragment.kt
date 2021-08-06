@@ -2,12 +2,12 @@ package com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment
 
 
 import android.content.Intent
-import androidx.fragment.app.viewModels
 
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.base.BaseFragment
-import androidx.lifecycle.Observer
 import coil.api.load
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
@@ -22,6 +22,7 @@ import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllCompla
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.MyComplaintSharedViewModel
 import java.util.*
 import javax.inject.Inject
 
@@ -50,6 +51,7 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
     var userid : String? = null
     var adminUserid : String = ""
 
+
     override val viewModel: AllComplaintFragmentViewModel by viewModels{ viewModelFactory }
 
     fun allComplaintSearchFilter(newText: String?){
@@ -57,12 +59,15 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
 
     }
 
+    val sharedViewModel: MyComplaintSharedViewModel by viewModels{ viewModelFactory }
+//    private val sharedViewModel: MyComplaintSharedViewModel by activityViewModels()
+
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
-            .builder()
-            .coreComponent(getCoreComponent())
-            .build()
-            .inject(this)
+                .builder()
+                .coreComponent(getCoreComponent())
+                .build()
+                .inject(this)
     }
 
     override fun onInitDataBinding() {
@@ -70,33 +75,53 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
         viewBinding.allcomplaintFragmentRecycler.layoutManager = LinearLayoutManager(context)
         allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
         viewBinding.allcomplaintFragmentRecycler.adapter = allComplaintRecyclerAdapter
-        viewBinding.refreshLayout.setOnRefreshListener {
-
-            if (!viewBinding.refreshLayout.isRefreshing) {
-                viewBinding.refreshLayout.isRefreshing = true
-            }
-
-            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
-                viewModel.getComplaintList(adminUserid)
-            }else{
-                viewModel.getComplaintList(userid!!)
-
-            }
-
-        }
+//        viewBinding.refreshLayout.setOnRefreshListener {
+//
+//            if (!viewBinding.refreshLayout.isRefreshing) {
+//                viewBinding.refreshLayout.isRefreshing = true
+//            }
+//
+//            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+//                viewModel.getComplaintList(adminUserid)
+//            }else{
+//                viewModel.getComplaintList(userid!!)
+//
+//            }
+//
+//        }
 
     }
 
     override fun onInitViewModel() {
-        viewModel.complaintListState.observe(this, Observer {
+
+//        sharedViewModel.getComplaints.let {
+//
+//            if (it!!.isEmpty()){
+//                        viewBinding.progressBar.setVisibilityGone()
+//                        viewBinding.errorLayout.root.setVisibilityVisible()
+//                        viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
+//                        viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+//                        viewBinding.errorLayout.messageTv.text = "Not Complaint Found"
+//                    } else {
+//                        viewBinding.errorLayout.root.setVisibilityGone()
+//                        viewBinding.progressBar.setVisibilityGone()
+//                        allComplaintRecyclerAdapter.updateViewList(it)
+////                        if (!viewBinding.refreshLayout.isRefreshing) {
+////                            viewBinding.refreshLayout.isRefreshing = false
+////                        }
+//                    }
+//
+//        }
+
+
+        viewModel.complaintDaoListState.observe(this, Observer {
             when(it){
                 Lce.Loading ->{
                     viewBinding.errorLayout.root.setVisibilityGone()
                     viewBinding.progressBar.setVisibilityVisible()
-                    viewBinding.refreshLayout.isRefreshing = false
+//                    viewBinding.refreshLayout.isRefreshing = false
                 }
-                is Lce.Content->
-                {
+                is Lce.Content-> {
                     if (it.content.isEmpty()){
                         viewBinding.progressBar.setVisibilityGone()
                         viewBinding.errorLayout.root.setVisibilityVisible()
@@ -107,16 +132,16 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
                         viewBinding.errorLayout.root.setVisibilityGone()
                         viewBinding.progressBar.setVisibilityGone()
                         allComplaintRecyclerAdapter.updateViewList(it.content)
-                        if (!viewBinding.refreshLayout.isRefreshing) {
-                            viewBinding.refreshLayout.isRefreshing = false
-                        }
+//                        if (!viewBinding.refreshLayout.isRefreshing) {
+//                            viewBinding.refreshLayout.isRefreshing = false
+//                        }
                     }
 
                 }
                 is Lce.Error ->
                 {
                     viewBinding.progressBar.setVisibilityGone()
-                    viewBinding.refreshLayout.isRefreshing = false
+//                    viewBinding.refreshLayout.isRefreshing = false
                     viewBinding.progressBar.setVisibilityGone()
                     showInformationDialog(it.error)
 
@@ -125,13 +150,14 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
 
             }
         })
+        viewModel.getComplaintDaoList()
 
-        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
-            viewModel.getComplaintList(adminUserid)
-        }else{
-            viewModel.getComplaintList(userid!!)
-
-        }
+//        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+//            viewModel.getComplaintList(adminUserid)
+//        }else{
+//            viewModel.getComplaintList(userid!!)
+//
+//        }
 
 
     }

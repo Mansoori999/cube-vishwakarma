@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.vinners.cube_vishwakarma.cache.LocalDatabase
 import com.vinners.cube_vishwakarma.cache.OutletsLocalDatabase
+import com.vinners.cube_vishwakarma.cache.dao.DashboardDao
+import com.vinners.cube_vishwakarma.cache.dao.MyComplaintDao
 import com.vinners.cube_vishwakarma.cache.dao.OutletsDao
 import com.vinners.cube_vishwakarma.cache.dao.ProfileDao
 import com.vinners.cube_vishwakarma.cache.localDataStoreImpl.OutletLocalDataStoreImpl
@@ -62,6 +64,19 @@ abstract class CacheModule {
             return outletsLocalDatabase.getOutletsDao()
         }
 
+        @Singleton
+        @Provides
+        @JvmStatic
+        fun provideMyComplaintDao(outletsLocalDatabase: OutletsLocalDatabase): MyComplaintDao {
+            return outletsLocalDatabase.getMyComplaintDao()
+        }
+
+        @Singleton
+        @Provides
+        @JvmStatic
+        fun provideDashboardDao(outletsLocalDatabase: OutletsLocalDatabase): DashboardDao {
+            return outletsLocalDatabase.getDashboardDao()
+        }
 
     }
 

@@ -4,10 +4,12 @@ import com.vinners.cube_vishwakarma.data.dataStores.complaint.MyComplaintRemoteD
 import com.vinners.cube_vishwakarma.data.models.complaints.*
 import com.vinners.cube_vishwakarma.remote.extensions.bodyOrThrow
 import com.vinners.cube_vishwakarma.remote.retrofitServices.MyComplaintService
+import okhttp3.MediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
+import java.io.FileNotFoundException
 import javax.inject.Inject
 
 class MyComplaintRemoteDataStoreImpl @Inject constructor(
@@ -25,23 +27,46 @@ class MyComplaintRemoteDataStoreImpl @Inject constructor(
         return myComplaintService.getComplaintDetails(id).bodyOrThrow().first()
     }
 
-    override suspend fun upDateComplaint(statusremarks: String, status: String, id: Int,  image: List<String>):List<String> {
-        val imagesBodies = if (image.isEmpty())
-            emptyList()
-        else {
-            image.map {
-                val file = File(it)
-                val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-                MultipartBody.Part.createFormData("file", file.name, requestFile)
-            }
-        }
+    override suspend fun upDateComplaint(
+            statusremarks: String,
+            status: String,
+            id: Int,
+            letterPic:String,
+            measurementPic:String,
+            layoutPic:String
+
+    ):List<String> {
+        val letterpic = File(letterPic)
+        val measurementpic = File(measurementPic)
+        val layoutpic = File(layoutPic)
+        if (!letterpic.exists())
+            throw FileNotFoundException("Invalid File Path Provided For CheckIn Picture,file ${letterpic.absolutePath} does not exist or is inaccessible to app")
+
+        val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), letterpic)
+        val bodyletterpic = MultipartBody.Part.createFormData("file", letterpic.name, requestFile)
+
+        val requestmeasurementpic = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), measurementpic)
+        val bodymeasurementpic = MultipartBody.Part.createFormData("measurementPic", measurementpic.name, requestmeasurementpic)
+
+        val requestlayoutpic = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), layoutpic)
+        val bodylayoutpic = MultipartBody.Part.createFormData("layoutPic", layoutpic.name, requestlayoutpic)
+
+//        val imagesBodies = if (letterPic.isEmpty())
+//            emptyList()
+//        else {
+//            image.map {
+//                val file = File(it)
+//                val requestFile = RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
+//                MultipartBody.Part.createFormData("file", file.name, requestFile)
+//            }
+//        }
         return myComplaintService.upDateComplaint(
                 UpDateComplaintRequest(
                         id = id,
                         status = status,
                         statusremarks = statusremarks
                 ),
-                        image = imagesBodies
+                bodyletterpic,bodymeasurementpic,bodylayoutpic
         ).bodyOrThrow()
     }
 

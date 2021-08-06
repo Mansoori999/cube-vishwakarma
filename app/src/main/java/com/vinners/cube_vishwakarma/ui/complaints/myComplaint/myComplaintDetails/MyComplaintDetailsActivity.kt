@@ -11,18 +11,16 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Environment
-import android.os.PersistableBundle
+import android.os.*
+import android.provider.OpenableColumns
 import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
-import androidx.cardview.widget.CardView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import coil.api.load
@@ -49,20 +47,25 @@ import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_STATUS
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_VIEW
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.FileUtils.getPath
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
-import com.vinners.cube_vishwakarma.ui.dashboardFilter.FinancialYearData
 import java.io.File
 import java.io.InputStream
 import javax.inject.Inject
 
 
-class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBinding,AllComplaintFragmentViewModel>(R.layout.activity_my_complaint_details) {
+class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBinding, AllComplaintFragmentViewModel>(
+    R.layout.activity_my_complaint_details
+) {
     companion object{
         private const val PERMISSION_REQUEST_STORAGE = 233
         private const val MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 1
         private const val MY_REQUEST_CODE_PERMISSION = 1000
         private const val MY_RESULT_CODE_FILECHOOSER = 2000
         private const val LOG_TAG = "filechooser"
+        private const val LETTER_IMAGE = "letter_image"
+        private const val MESUREMENT_IMAGE = "mesurment_image"
+        private const val LAYOUT_IMAGE = "layout_image"
     }
 
     val REQUEST_GALLERY_PHOTO = 2
@@ -82,6 +85,8 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private var imagesMap: MutableMap<Int, Result> = mutableMapOf()
 
     private var currentlyClickingImageForIndex: Int = -1
+
+    private var currentlyClickingletterImageForIndex: Int = -1
 
 
     @Inject
@@ -136,17 +141,36 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private lateinit var reason:EditText
     private lateinit var tv:TextView
 
+    var path = listOf<String>()
     var ret:String? = null
-    private lateinit var donecontainer:CardView
+    private lateinit var donecontainer:LinearLayout
     private lateinit var filename : TextView
+    private lateinit var filename1 : TextView
+    private lateinit var filename2 : TextView
 
 
     private lateinit var bytes:ByteArray
      var inputStream : InputStream? = null
     private lateinit var uri:Uri
     var filePath:String ? = null
-    private lateinit var path:String
 
+    lateinit var imageClick1:TextView
+    lateinit var imageClick2:TextView
+    lateinit var imageClick3:TextView
+
+    lateinit var imageView1:ImageView
+    lateinit var imageView2:ImageView
+    lateinit var imageView3:ImageView
+
+
+    private var currentlyClickingImageFor: String = ""
+    private var imageResult: File? = null
+    private var mesurmentImageResult: File? = null
+    private var layoutImageResult: File? = null
+
+    private var myFilePath :File? = null
+    private var mesurmentFilePath: File? = null
+    private var layoutFilePath: File? = null
 
 
 
@@ -161,13 +185,18 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
     }
 
+private inner class ClickComplaintDoneLetterImageOnClickListener:View.OnClickListener{
+    override fun onClick(v: View?) {
+        val clickedView = v ?: return
 
+    }
+}
     private inner class ClickOutletImageOnClickListener : View.OnClickListener {
         override fun onClick(v: View?) {
             val clickedView = v ?: return
             currentlyClickingImageForIndex = when (clickedView.id) {
-                R.id.clickImageLabel -> 0
-
+                R.id.clickImageLabel2 -> 0
+                R.id.clickImageLabel3 -> 1
                 else -> -1
             }
             showCameraOptionDialog()
@@ -181,21 +210,21 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
     private fun requestStoragePermissions() {
         ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                ),
-                PERMISSION_REQUEST_STORAGE
+            this,
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ),
+            PERMISSION_REQUEST_STORAGE
         )
     }
     private fun storagePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-                this, Manifest.permission.READ_EXTERNAL_STORAGE
+            this, Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 &&
                 ContextCompat.checkSelfPermission(
-                        this, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -203,13 +232,24 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private val imageCallback = ImageCallback { _, result, error ->
 
         if (result?.imagePath != null) {
-            if (currentlyClickingImageForIndex == -1)
-                return@ImageCallback
 
-            imagesMap.put(currentlyClickingImageForIndex, result)
-            when (currentlyClickingImageForIndex) {
-                0 ->ImageStoreView.load(result.bitmap)
-                else -> {
+            if (currentlyClickingImageFor.equals(LETTER_IMAGE)) {
+                imageResult = File(result.imagePath)
+                imageView1.load(result.bitmap)
+                imageView1.setOnClickListener {
+                    imageOpenDialog(imageResult.toString())
+                }
+            } else if (currentlyClickingImageFor.equals(MESUREMENT_IMAGE)) {
+                mesurmentImageResult = File(result.imagePath)
+                imageView2.load(result.bitmap)
+                imageView2.setOnClickListener {
+                    imageOpenDialog(mesurmentImageResult.toString())
+                }
+            }else if (currentlyClickingImageFor.equals(LAYOUT_IMAGE)) {
+                layoutImageResult = File(result.imagePath)
+                imageView3.load(result.bitmap)
+                imageView3.setOnClickListener {
+                    imageOpenDialog(layoutImageResult.toString())
                 }
             }
 
@@ -225,8 +265,8 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
 
     }
     override fun onRestoreInstanceState(
-            savedInstanceState: Bundle?,
-            persistentState: PersistableBundle?
+        savedInstanceState: Bundle?,
+        persistentState: PersistableBundle?
     ) {
         super.onRestoreInstanceState(savedInstanceState, persistentState)
         savedInstanceState?.let {
@@ -240,8 +280,8 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<String>, grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             PERMISSION_REQUEST_STORAGE -> {
@@ -249,7 +289,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
                     cameraIntegrator.initiateCapture()
                 }
             }
-            MY_REQUEST_CODE_PERMISSION->{
+            MY_REQUEST_CODE_PERMISSION -> {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
 //                    Log.i( LOG_TAG,"Permission granted!");
@@ -258,7 +298,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
                 }
                 // Cancelled or denied.
                 else {
-                    Log.i(LOG_TAG,"Permission denied!");
+                    Log.i(LOG_TAG, "Permission denied!");
                     Toast.makeText(this, "Permission denied!", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -275,22 +315,192 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             galleryIntegrator.parseResults(requestCode, resultCode, data, imageCallback)
         }
         when(requestCode){
-            MY_RESULT_CODE_FILECHOOSER->{
-                if (resultCode === RESULT_OK) {
+            MY_RESULT_CODE_FILECHOOSER -> {
+                if (resultCode == RESULT_OK) {
                     if (data != null) {
-                        uri = data.data!!
+                        var uri = data.data
                         val uriString = uri.toString()
-                        val file =  File(uri.getPath().toString())
-                        val uploadedFileName = file.getName().toString()
-                        try {
-                            filePath = FileUtils.getPath(this,uri).toString()
-                        } catch (e: Exception) {
-                            Log.e(LOG_TAG, "Error: $e")
-                            Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+                        if (currentlyClickingImageFor.equals(LETTER_IMAGE)) {
+                            filename.setVisibilityVisible()
+//                            val path = FileUtils.getPath(this, uri!!).toString()
+//                            val path1: String? = getPath(this, uri)
+                            imageResult = File(getPath(this, uri!!))
+                            if (uriString.startsWith("content://")) {
+                                var cursor: Cursor? = null
+                                try {
+                                    cursor = this.getContentResolver().query(
+                                        uri,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                    )
+                                    if (cursor != null && cursor.moveToFirst()) {
+                                        filename.setText(
+                                            cursor.getString(
+                                                cursor.getColumnIndex(
+                                                    OpenableColumns.DISPLAY_NAME
+                                                )
+                                            )
+                                        )
+                                    }
+                                } finally {
+                                    cursor!!.close()
+                                }
+                            } else if (uriString.startsWith("file://")) {
+                                filename.setText(myFilePath!!.name)
+                            }
+                        } else if (currentlyClickingImageFor.equals(MESUREMENT_IMAGE)) {
+                            filename1.setVisibilityVisible()
+                            mesurmentImageResult = File(uriString)
+                            if (uriString.startsWith("content://")) {
+                                var cursor: Cursor? = null
+                                try {
+                                    cursor = this.getContentResolver().query(
+                                        uri!!,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                    )
+                                    if (cursor != null && cursor.moveToFirst()) {
+                                        filename1.setText(
+                                            cursor.getString(
+                                                cursor.getColumnIndex(
+                                                    OpenableColumns.DISPLAY_NAME
+                                                )
+                                            )
+                                        )
+                                    }
+                                } finally {
+                                    cursor!!.close()
+                                }
+                            } else if (uriString.startsWith("file://")) {
+                                filename1.setText(mesurmentFilePath!!.name)
+                            }
+                        } else if (currentlyClickingImageFor.equals(LAYOUT_IMAGE)) {
+                            filename2.setVisibilityVisible()
+                            layoutImageResult = File(uriString)
+                            if (uriString.startsWith("content://")) {
+                                var cursor: Cursor? = null
+                                try {
+                                    cursor = this.getContentResolver().query(
+                                        uri!!,
+                                        null,
+                                        null,
+                                        null,
+                                        null
+                                    )
+                                    if (cursor != null && cursor.moveToFirst()) {
+                                        filename2.setText(
+                                            cursor.getString(
+                                                cursor.getColumnIndex(
+                                                    OpenableColumns.DISPLAY_NAME
+                                                )
+                                            )
+                                        )
+                                    }
+                                } finally {
+                                    cursor!!.close()
+                                }
+                            } else if (uriString.startsWith("file://")) {
+                                filename2.setText(layoutFilePath!!.name)
+                            }
                         }
-                        filename.setText(uploadedFileName)
+
+//                         path = myFile.absolutePath
+//                        var displayName: String? = null
+//                        if (currentlyClickingImageForIndex == -1)
+//                            return
+//                        when (currentlyClickingImageForIndex) {
+//                            0 ->{
+//
+//                            }
+//                            1->{
+//
+//                                if (uriString.startsWith("content://")) {
+//                                    var cursor: Cursor? = null
+//                                    try {
+//                                        cursor = this.getContentResolver().query(uri!!, null, null, null, null)
+//                                        if (cursor != null && cursor.moveToFirst()) {
+//                                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+//                                            filename1.setText(displayName)
+//                                        }
+//                                    } finally {
+//                                        cursor!!.close()
+//                                    }
+//                                } else if (uriString.startsWith("file://")) {
+//                                    displayName = myFile.name
+//                                    filename1.setText(displayName)
+//                                }
+//                            }
+//                            2->{
+//                                if (uriString.startsWith("content://")) {
+//                                    var cursor: Cursor? = null
+//                                    try {
+//                                        cursor = this.getContentResolver().query(uri!!, null, null, null, null)
+//                                        if (cursor != null && cursor.moveToFirst()) {
+//                                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
+//                                            filename2.setText(displayName)
+//                                        }
+//                                    } finally {
+//                                        cursor!!.close()
+//                                    }
+//                                } else if (uriString.startsWith("file://")) {
+//                                    displayName = myFile.name
+//                                    filename2.setText(displayName)
+//                                }
+//                            }
+//                            else -> {
+//                            }
+//                        }
+
+//                        uri = data.data!!
+//                        val uriString = uri.toString()
+//                        val file = File(uri.getPath().toString())
+//                        val uploadedFileName = file.getName().toString()
+//                        if (currentlyClickingImageForIndex == -1)
+//                            return
+//                        when (currentlyClickingImageForIndex) {
+//                            0 -> try {
+//                                filePath = FileUtils.getPath(this, uri).toString()
+//                            } catch (e: Exception) {
+//                                Log.d(LOG_TAG, "Error: $e")
+//                                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+//                            }
+//                            1 -> try {
+//                                filePath = FileUtils.getPath(this, uri).toString()
+//                            } catch (e: Exception) {
+//                                Log.d(LOG_TAG, "Error: $e")
+//                                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+//                            }
+//                            2 -> try {
+//                                filePath = FileUtils.getPath(this, uri).toString()
+//                            } catch (e: Exception) {
+//                                Log.d(LOG_TAG, "Error: $e")
+//                                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+//                            }
+//                            else -> {
+//                            }
+//                        }
+////                        try {
+////                            filePath = FileUtils.getPath(this,uri).toString()
+////                        } catch (e: Exception) {
+////                            Log.e(LOG_TAG, "Error: $e")
+////                            Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+////                        }
+//
+//                        when (currentlyClickingImageForIndex) {
+//                            0 -> filename.setText(uploadedFileName)
+//                            1 -> filename1.setText(uploadedFileName)
+//                            2 -> filename2.setText(uploadedFileName)
+//                            else -> {
+//                            }
+//                        }
+
 
                     }
+
                 }
             }
         }
@@ -300,51 +510,41 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 
 
-    private fun setValidationUpdate() {
+    private fun setValidationUpdate():Boolean {
         if  (reason.isVisible && reason.text.isNullOrBlank()){
             showInformationDialog("Please Write Reason")
-            return
+            return true
         }
         if (statusValue == null){
             showInformationDialog("Please Select Status")
-            return
+            return true
+        }
+
+        if (donecontainer.isVisible && imageResult == null && path.isEmpty()){
+            showInformationDialog("Please Click Letter Pic OR Select File")
+            return true
         }
 
 
-//       if (donecontainer.isVisible && imagesMap.isEmpty()){
-//           showInformationDialog("Please Click Image First")
-//           return
-//       }
-        val fileurl= filePath
-
-
-        if (donecontainer.isVisible && (imagesMap.isEmpty() && fileurl.isNullOrEmpty()))  {
-            showInformationDialog("Please Click Image First OR Select File")
-            return
-        }
-
-
-        var value : List<String> = mutableListOf()
-        if (donecontainer.isVisible && imagesMap.isEmpty().not()){
-            value = imagesMap.values.map { it.imagePath!! }
-        }else{
-            if(fileurl != null) {
-                val encodefile = filePath!!.trim().split(",")
-                value = encodefile
-            }
-        }
 
         viewModel.upDateComplaints(
-                statusremarks = reason.text.toString(),
-                id = detailsId!!.toInt(),
-                status = statusValue.toString(),
-                image = value
+            statusremarks = reason.text.toString(),
+            id = detailsId!!.toInt(),
+            status = statusValue.toString(),
+            letterPic = imageResult!!,
+            measurementPic = mesurmentImageResult!!,
+            layoutPic = layoutImageResult!!
 
         )
+        return true
 
     }
     fun showCameraOptionDialog() {
-        val optionsForDialog = arrayOf<CharSequence>("Open Camera", "Select from Gallery","Select File")
+        val optionsForDialog = arrayOf<CharSequence>(
+            "Open Camera",
+            "Select from Gallery",
+            "Select File"
+        )
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.setTitle("Select An Option")
         alertBuilder.setIcon(R.drawable.ic_camera)
@@ -352,7 +552,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             when (which) {
                 0 -> openCamera()
                 1 -> openGallery()
-                2 ->  openFile()
+                2 -> openFile()
             }
         })
         alertBuilder.setNegativeButton("Cancel") { dialog12, _ -> dialog12.dismiss() }
@@ -402,12 +602,15 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // Level 23
 
             // Check if we have Call permission
-            val permisson = ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)
+            val permisson = ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            )
             if (permisson != PackageManager.PERMISSION_GRANTED) {
                 // If don't have permission so prompt the user.
-                requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                        MY_REQUEST_CODE_PERMISSION
+                requestPermissions(
+                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                    MY_REQUEST_CODE_PERMISSION
                 )
                 return
             }
@@ -418,7 +621,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
     private fun doBrowseFile() {
         var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
-        chooseFile.type = "*/*"
+//        chooseFile.type = "*/*"
+        chooseFile.setType("application/pdf");
         chooseFile = Intent.createChooser(chooseFile, "Choose a file")
         startActivityForResult(chooseFile, MY_RESULT_CODE_FILECHOOSER)
 
@@ -449,14 +653,15 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
     override fun onInitViewModel() {
         id.let { viewModel.getComplainDetails(it!!) }
         viewModel.complaintDetailsState.observe(this, Observer {
-            when(it){
-                Lce.Loading ->{
+            when (it) {
+                Lce.Loading -> {
                     viewBinding.loadingData.setVisibilityVisible()
                 }
-                is Lce.Content ->{
-                    if (it.content != null){
+                is Lce.Content -> {
+                    if (it.content != null) {
                         viewBinding.loadingData.setVisibilityGone()
-                        viewBinding.date.text = DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                        viewBinding.date.text =
+                            DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
                         viewBinding.complaintId.text = it.content.complaintid
                         viewBinding.work.text = it.content.work
                         viewBinding.type.text = it.content.type
@@ -472,22 +677,85 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                         viewBinding.enduser.text = it.content.enduser
                         viewBinding.order.text = it.content.orderBy
                         viewBinding.remarks.text = it.content.remarks
-                        if (enabledComplaintRequest == true){
+                        val link = it.content.letterpic?.substringAfter(".")
+                        if (link.equals("pdf")) {
+                            viewBinding.letterimageView.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    this.getResources(),
+                                    R.drawable.default_pdf,
+                                    null
+                                )
+                            )
+                            val url = appInfo.getFullAttachmentUrl(it.content.letterpic!!)
+                            viewBinding.letterimageView.setOnClickListener {
+                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                                startActivity(intent)
+                            }
+
+                        } else {
+                            if (it.content.letterpic != null) {
+                                val imageUrl: String = it.content.letterpic!!
+                                viewBinding.letterimageView.load(appInfo.getFullAttachmentUrl(it.content.letterpic!!))
+                                viewBinding.letterimageView.setOnClickListener {
+                                    imageOpenDialog(imageUrl)
+                                }
+                            }
+                        }
+                        val measurementpic = it.content.measurementpic?.substringAfter(".")
+                        if (measurementpic.equals("pdf")) {
+                            viewBinding.mesurenmentImageView.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    this.getResources(),
+                                    R.drawable.default_pdf,
+                                    null
+                                )
+                            )
+                        } else {
+                            if (it.content.measurementpic != null) {
+                                viewBinding.mesurenmentImageView.load(
+                                    appInfo.getFullAttachmentUrl(
+                                        it.content.measurementpic!!
+                                    )
+                                )
+                                val imageUrl: String = it.content.measurementpic!!
+                                viewBinding.mesurenmentImageView.setOnClickListener {
+                                    imageOpenDialog(imageUrl)
+                                }
+                            }
+                        }
+                        val layoutpic = it.content.layoutpic?.substringAfter(".")
+                        if (layoutpic.equals("pdf")) {
+                            viewBinding.layoutImageView.setImageDrawable(
+                                ResourcesCompat.getDrawable(
+                                    this.getResources(),
+                                    R.drawable.default_pdf,
+                                    null
+                                )
+                            )
+                        } else {
+                            if (it.content.layoutpic != null) {
+                                viewBinding.layoutImageView.load(appInfo.getFullAttachmentUrl(it.content.layoutpic!!))
+                                val imageUrl: String = it.content.layoutpic!!
+                                viewBinding.layoutImageView.setOnClickListener {
+                                    imageOpenDialog(imageUrl)
+                                }
+                            }
+                        }
+
+                        if (enabledComplaintRequest == true) {
                             viewBinding.status.text = complaintRequestStatus
-                        }else{
+                        } else {
                             viewBinding.status.text = it.content.status
                             setChangeStatus(it.content)
                         }
 
-                    }else{
+                    } else {
                         viewBinding.loadingData.setVisibilityVisible()
                     }
 
 
-
                 }
-                is Lce.Error ->
-                {
+                is Lce.Error -> {
 
                     viewBinding.loadingData.setVisibilityGone()
                     showInformationDialog(it.error)
@@ -498,47 +766,55 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         })
 
         viewModel.allocateUserListState.observe(this, Observer {
-            when(it){
-                Lce.Loading ->{
+            when (it) {
+                Lce.Loading -> {
 
                 }
-                is Lce.Content ->{
-                    var designation:String? = null
+                is Lce.Content -> {
+                    var designation: String? = null
                     it.content.forEach {
                         designation = it.designation
                     }
 
-                        val enduserData = it.content.filter { it.designation!!.toLowerCase().equals("enduser") || it.designation!!.toLowerCase().equals("end user") }.map {
-                            AllocateUserData(
+                    val enduserData = it.content.filter {
+                        it.designation!!.toLowerCase()
+                            .equals("enduser") || it.designation!!.toLowerCase().equals(
+                            "end user"
+                        )
+                    }.map {
+                        AllocateUserData(
+                            id = it.id!!,
+                            name = it.name!!,
+                            designation = it.designation!!
+                        )
+                    }.toMutableList()
+                    setendUserTypeSpinner(enduserData)
+
+                    val supervisorData =
+                        it.content.filter { it.designation!!.toLowerCase().equals("supervisor") }
+                            .map {
+                                AllocateUserData(
                                     id = it.id!!,
                                     name = it.name!!,
                                     designation = it.designation!!
-                            )
-                        }.toMutableList()
-                        setendUserTypeSpinner(enduserData)
+                                )
+                            }.toMutableList()
+                    supervisorTypeSpinner(supervisorData)
 
-                        val supervisorData = it.content.filter { it.designation!!.toLowerCase().equals("supervisor")}.map {
+
+                    val foremanData =
+                        it.content.filter { it.designation!!.toLowerCase().equals("foreman") }.map {
                             AllocateUserData(
-                                    id = it.id!!,
-                                    name = it.name!!,
-                                    designation = it.designation!!
+                                id = it.id!!,
+                                name = it.name!!,
+                                designation = it.designation!!
                             )
                         }.toMutableList()
-                        supervisorTypeSpinner(supervisorData)
-
-
-                        val foremanData = it.content.filter { it.designation!!.toLowerCase().equals("foreman")}.map {
-                            AllocateUserData(
-                                    id = it.id!!,
-                                    name = it.name!!,
-                                    designation = it.designation!!
-                            )
-                        }.toMutableList()
-                        foremanTypeSpinner(foremanData)
+                    foremanTypeSpinner(foremanData)
 
 
                 }
-                is Lce.Error ->{
+                is Lce.Error -> {
 
                 }
 
@@ -546,26 +822,29 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         })
 
         viewModel.upDateListState.observe(this, Observer {
-            when(it){
-                Lce.Loading ->{
+            when (it) {
+                Lce.Loading -> {
                     viewBinding.loadingData.setVisibilityVisible()
                     viewBinding.detailScreen.setVisibilityGone()
 
                 }
-                is Lce.Content ->{
-                    if (status!!.equals("Working")){
+                is Lce.Content -> {
+                    if (status!!.equals("Working")) {
                         Toast.makeText(this, "Status Updated", Toast.LENGTH_SHORT).show()
 
                         id.let { viewModel.getComplainDetails(it!!) }
                         viewModel.complaintDetailsState.observe(this, Observer {
-                            when(it){
-                                Lce.Loading ->{
+                            when (it) {
+                                Lce.Loading -> {
                                     viewBinding.loadingData.setVisibilityVisible()
                                 }
-                                is Lce.Content ->{
-                                    if (it.content != null){
+                                is Lce.Content -> {
+                                    if (it.content != null) {
                                         viewBinding.loadingData.setVisibilityGone()
-                                        viewBinding.date.text = DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                                        viewBinding.date.text =
+                                            DateTimeHelper.getDDMMYYYYDateFromString(
+                                                it.content.fordate!!
+                                            )
                                         viewBinding.complaintId.text = it.content.complaintid
                                         viewBinding.work.text = it.content.work
                                         viewBinding.type.text = it.content.type
@@ -581,17 +860,55 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                         viewBinding.enduser.text = it.content.enduser
                                         viewBinding.order.text = it.content.orderBy
                                         viewBinding.remarks.text = it.content.remarks
+                                        val link = it.content.letterpic?.substringAfter(".")
+                                        if (link.equals("pdf")) {
+                                            viewBinding.letterimageView.setImageDrawable(
+                                                ResourcesCompat.getDrawable(
+                                                    this.getResources(),
+                                                    R.drawable.default_pdf,
+                                                    null
+                                                )
+                                            )
+                                        } else {
+                                            viewBinding.letterimageView.load(it.content.letterpic)
+                                        }
+                                        val measurementpic =
+                                            it.content.measurementpic?.substringAfter(
+                                                "."
+                                            )
+                                        if (measurementpic.equals("pdf")) {
+                                            viewBinding.mesurenmentImageView.setImageDrawable(
+                                                ResourcesCompat.getDrawable(
+                                                    this.getResources(),
+                                                    R.drawable.default_pdf,
+                                                    null
+                                                )
+                                            )
+                                        } else {
+                                            viewBinding.mesurenmentImageView.load(it.content.measurementpic)
+                                        }
+                                        val layoutpic = it.content.layoutpic?.substringAfter(".")
+                                        if (layoutpic.equals("pdf")) {
+                                            viewBinding.layoutImageView.setImageDrawable(
+                                                ResourcesCompat.getDrawable(
+                                                    this.getResources(),
+                                                    R.drawable.default_pdf,
+                                                    null
+                                                )
+                                            )
+                                        } else {
+                                            viewBinding.layoutImageView.load(it.content.layoutpic)
+                                        }
+
                                         setChangeStatus(it.content)
 
-                                    }else{
+                                    } else {
                                         viewBinding.loadingData.setVisibilityVisible()
                                     }
 
 
-
                                 }
-                                is Lce.Error ->
-                                {
+                                is Lce.Error -> {
 
                                     viewBinding.loadingData.setVisibilityGone()
                                     showInformationDialog(it.error)
@@ -607,18 +924,21 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //                                .commit()
 ////                        startActivity(Intent(this, WorkingFragment::class.java))
 //                        finish()
-                    }else if (status!!.equals("Hold")){
+                    } else if (status!!.equals("Hold")) {
                         Toast.makeText(this, "Status Updated", Toast.LENGTH_SHORT).show()
                         id.let { viewModel.getComplainDetails(it!!) }
                         viewModel.complaintDetailsState.observe(this, Observer {
-                            when(it){
-                                Lce.Loading ->{
+                            when (it) {
+                                Lce.Loading -> {
                                     viewBinding.loadingData.setVisibilityVisible()
                                 }
-                                is Lce.Content ->{
-                                    if (it.content != null){
+                                is Lce.Content -> {
+                                    if (it.content != null) {
                                         viewBinding.loadingData.setVisibilityGone()
-                                        viewBinding.date.text = DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                                        viewBinding.date.text =
+                                            DateTimeHelper.getDDMMYYYYDateFromString(
+                                                it.content.fordate!!
+                                            )
                                         viewBinding.complaintId.text = it.content.complaintid
                                         viewBinding.work.text = it.content.work
                                         viewBinding.type.text = it.content.type
@@ -634,17 +954,55 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                         viewBinding.enduser.text = it.content.enduser
                                         viewBinding.order.text = it.content.orderBy
                                         viewBinding.remarks.text = it.content.remarks
+                                        val link = it.content.letterpic?.substringAfter(".")
+                                        if (link.equals("pdf")) {
+                                            viewBinding.letterimageView.setImageDrawable(
+                                                ResourcesCompat.getDrawable(
+                                                    this.getResources(),
+                                                    R.drawable.default_pdf,
+                                                    null
+                                                )
+                                            )
+                                        } else {
+                                            viewBinding.letterimageView.load(it.content.letterpic)
+                                        }
+                                        val measurementpic =
+                                            it.content.measurementpic?.substringAfter(
+                                                "."
+                                            )
+                                        if (measurementpic.equals("pdf")) {
+                                            viewBinding.mesurenmentImageView.setImageDrawable(
+                                                ResourcesCompat.getDrawable(
+                                                    this.getResources(),
+                                                    R.drawable.default_pdf,
+                                                    null
+                                                )
+                                            )
+                                        } else {
+                                            viewBinding.mesurenmentImageView.load(it.content.measurementpic)
+                                        }
+                                        val layoutpic = it.content.layoutpic?.substringAfter(".")
+                                        if (layoutpic.equals("pdf")) {
+                                            viewBinding.layoutImageView.setImageDrawable(
+                                                ResourcesCompat.getDrawable(
+                                                    this.getResources(),
+                                                    R.drawable.default_pdf,
+                                                    null
+                                                )
+                                            )
+                                        } else {
+                                            viewBinding.layoutImageView.load(it.content.layoutpic)
+                                        }
+
                                         setChangeStatus(it.content)
 
-                                    }else{
+                                    } else {
                                         viewBinding.loadingData.setVisibilityVisible()
                                     }
 
 
-
                                 }
-                                is Lce.Error ->
-                                {
+                                is Lce.Error -> {
 
                                     viewBinding.loadingData.setVisibilityGone()
                                     showInformationDialog(it.error)
@@ -660,18 +1018,21 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //                                .commit()
 ////                        startActivity(Intent(this, HoldFragment::class.java))
 //                        finish()
-                    }else if (status!!.equals("Due")){
+                    } else if (status!!.equals("Due")) {
                         Toast.makeText(this, "Status Updated", Toast.LENGTH_SHORT).show()
                         id.let { viewModel.getComplainDetails(it!!) }
                         viewModel.complaintDetailsState.observe(this, Observer {
-                            when(it){
-                                Lce.Loading ->{
+                            when (it) {
+                                Lce.Loading -> {
                                     viewBinding.loadingData.setVisibilityVisible()
                                 }
-                                is Lce.Content ->{
-                                    if (it.content != null){
+                                is Lce.Content -> {
+                                    if (it.content != null) {
                                         viewBinding.loadingData.setVisibilityGone()
-                                        viewBinding.date.text = DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                                        viewBinding.date.text =
+                                            DateTimeHelper.getDDMMYYYYDateFromString(
+                                                it.content.fordate!!
+                                            )
                                         viewBinding.complaintId.text = it.content.complaintid
                                         viewBinding.work.text = it.content.work
                                         viewBinding.type.text = it.content.type
@@ -687,12 +1048,51 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                         viewBinding.enduser.text = it.content.enduser
                                         viewBinding.order.text = it.content.orderBy
                                         viewBinding.remarks.text = it.content.remarks
+                                        val link = it.content.letterpic?.substringAfter(".")
+                                        if (link.equals("pdf")) {
+                                            viewBinding.letterimageView.setImageDrawable(
+                                                ResourcesCompat.getDrawable(
+                                                    this.getResources(),
+                                                    R.drawable.default_pdf,
+                                                    null
+                                                )
+                                            )
+                                        } else {
+                                            viewBinding.letterimageView.load(it.content.letterpic)
+                                        }
+                                        val measurementpic =
+                                            it.content.measurementpic?.substringAfter(
+                                                "."
+                                            )
+                                        if (measurementpic.equals("pdf")) {
+                                            viewBinding.mesurenmentImageView.setImageDrawable(
+                                                ResourcesCompat.getDrawable(
+                                                    this.getResources(),
+                                                    R.drawable.default_pdf,
+                                                    null
+                                                )
+                                            )
+                                        } else {
+                                            viewBinding.mesurenmentImageView.load(it.content.measurementpic)
+                                        }
+                                        val layoutpic = it.content.layoutpic?.substringAfter(".")
+                                        if (layoutpic.equals("pdf")) {
+                                            viewBinding.layoutImageView.setImageDrawable(
+                                                ResourcesCompat.getDrawable(
+                                                    this.getResources(),
+                                                    R.drawable.default_pdf,
+                                                    null
+                                                )
+                                            )
+                                        } else {
+                                            viewBinding.layoutImageView.load(it.content.layoutpic)
+                                        }
+
                                         setChangeStatus(it.content)
 
-                                    }else{
+                                    } else {
                                         viewBinding.loadingData.setVisibilityVisible()
                                     }
-
 
 
                                 }
@@ -717,7 +1117,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                     }
 
                 }
-                is Lce.Error ->{
+                is Lce.Error -> {
                     viewBinding.loadingData.setVisibilityGone()
                     showInformationDialog(it.error)
                 }
@@ -725,23 +1125,26 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         })
 
         viewModel.requestforAllocatedUserListState.observe(this, Observer {
-            when(it){
-                Lce.Loading ->{
+            when (it) {
+                Lce.Loading -> {
                     viewBinding.loadingData.setVisibilityVisible()
                     viewBinding.detailScreen.setVisibilityGone()
                 }
-                is Lce.Content ->{
+                is Lce.Content -> {
                     Toast.makeText(this, "Successfully Allocated User", Toast.LENGTH_SHORT).show()
                     id.let { viewModel.getComplainDetails(it!!) }
                     viewModel.complaintDetailsState.observe(this, Observer {
-                        when(it){
-                            Lce.Loading ->{
+                        when (it) {
+                            Lce.Loading -> {
                                 viewBinding.loadingData.setVisibilityVisible()
                             }
-                            is Lce.Content ->{
-                                if (it.content != null){
+                            is Lce.Content -> {
+                                if (it.content != null) {
                                     viewBinding.loadingData.setVisibilityGone()
-                                    viewBinding.date.text = DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                                    viewBinding.date.text =
+                                        DateTimeHelper.getDDMMYYYYDateFromString(
+                                            it.content.fordate!!
+                                        )
                                     viewBinding.complaintId.text = it.content.complaintid
                                     viewBinding.work.text = it.content.work
                                     viewBinding.type.text = it.content.type
@@ -757,22 +1160,58 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                     viewBinding.enduser.text = it.content.enduser
                                     viewBinding.order.text = it.content.orderBy
                                     viewBinding.remarks.text = it.content.remarks
-                                    if (enabledComplaintRequest == true){
+                                    val link = it.content.letterpic?.substringAfter(".")
+                                    if (link.equals("pdf")) {
+                                        viewBinding.letterimageView.setImageDrawable(
+                                            ResourcesCompat.getDrawable(
+                                                this.getResources(),
+                                                R.drawable.default_pdf,
+                                                null
+                                            )
+                                        )
+                                    } else {
+                                        viewBinding.letterimageView.load(it.content.letterpic)
+                                    }
+                                    val measurementpic =
+                                        it.content.measurementpic?.substringAfter(".")
+                                    if (measurementpic.equals("pdf")) {
+                                        viewBinding.mesurenmentImageView.setImageDrawable(
+                                            ResourcesCompat.getDrawable(
+                                                this.getResources(),
+                                                R.drawable.default_pdf,
+                                                null
+                                            )
+                                        )
+                                    } else {
+                                        viewBinding.mesurenmentImageView.load(it.content.measurementpic)
+                                    }
+                                    val layoutpic = it.content.layoutpic?.substringAfter(".")
+                                    if (layoutpic.equals("pdf")) {
+                                        viewBinding.layoutImageView.setImageDrawable(
+                                            ResourcesCompat.getDrawable(
+                                                this.getResources(),
+                                                R.drawable.default_pdf,
+                                                null
+                                            )
+                                        )
+                                    } else {
+                                        viewBinding.layoutImageView.load(it.content.layoutpic)
+                                    }
+
+                                    if (enabledComplaintRequest == true) {
                                         viewBinding.status.text = complaintRequestStatus
-                                    }else{
+                                    } else {
                                         viewBinding.status.text = it.content.status
                                         setChangeStatus(it.content)
                                     }
 
-                                }else{
+                                } else {
                                     viewBinding.loadingData.setVisibilityVisible()
                                 }
 
 
-
                             }
-                            is Lce.Error ->
-                            {
+                            is Lce.Error -> {
 
                                 viewBinding.loadingData.setVisibilityGone()
                                 showInformationDialog(it.error)
@@ -786,7 +1225,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                     viewBinding.detailScreen.setVisibilityVisible()
 
                 }
-                is Lce.Error ->{
+                is Lce.Error -> {
                     viewBinding.loadingData.setVisibilityGone()
                     showInformationDialog(it.error)
 
@@ -801,6 +1240,12 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 
     private fun setChangeStatus(content: MyComplainDetailsList) {
+
+        if (content.status?.toLowerCase().equals("done")){
+            viewBinding.doneImageContainer.setVisibilityVisible()
+        }else{
+            viewBinding.doneImageContainer.setVisibilityGone()
+        }
 
     if (userSessionManager.designation!!.toLowerCase().equals("sub admin")&&
             ((content.status?.toLowerCase().equals("due") ||
@@ -837,6 +1282,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 }
 
     override fun onInitDataBinding() {
+        val builder = StrictMode.VmPolicy.Builder()
+        StrictMode.setVmPolicy(builder.build())
         id = intent.getStringExtra("complaintId")
         enabledComplaintRequest = intent.getBooleanExtra(COMPLAINT_REQUEST_VIEW, false)
         complaintRequestStatus = intent.getStringExtra(COMPLAINT_REQUEST_STATUS)
@@ -854,7 +1301,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         }
         viewBinding.changeStatus.setOnClickListener {
             val inflater: LayoutInflater = LayoutInflater.from(this)
-            val dialogView = inflater.inflate(R.layout.complaint_details_dialog_layout,null)
+            val dialogView = inflater.inflate(R.layout.complaint_details_dialog_layout, null)
             val mBuilder = AlertDialog.Builder(this)
                 .setView(dialogView)
                 .setTitle("Update Status - ${complaintid}")
@@ -864,13 +1311,37 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
             reason = dialogView.findViewById<EditText>(R.id.reason)
             donecontainer = dialogView.findViewById(R.id.doneImage)
-            filename = dialogView.findViewById<TextView>(R.id.file_name)
+            filename = dialogView.findViewById(R.id.letter_name)
+            filename1 = dialogView.findViewById(R.id.measurement_name)
+            filename2 = dialogView.findViewById(R.id.layout_name)
+            imageClick1 = dialogView.findViewById<TextView>(R.id.clickImageLabel1)
+            imageClick2 = dialogView.findViewById<TextView>(R.id.clickImageLabel2)
+            imageClick3 = dialogView.findViewById<TextView>(R.id.clickImageLabel3)
+            imageView1 = dialogView.findViewById<ImageView>(R.id.imageView1)
+            imageView2 = dialogView.findViewById(R.id.imageView2)
+            imageView3 = dialogView.findViewById(R.id.imageView3)
 
-            val imangelayout= inflater.inflate(R.layout.layout_click_image, dialogView as ViewGroup, false)
-            imageClickLabel = imangelayout.findViewById(R.id.clickImageLabel)
-            ImageStoreView = imangelayout.findViewById(R.id.imageView)
-            imageClickLabel.setOnClickListener(ClickOutletImageOnClickListener())
-            donecontainer.addView(imangelayout)
+
+            imageClick1.setOnClickListener {
+                currentlyClickingImageFor = LETTER_IMAGE
+                showCameraOptionDialog()
+            }
+            imageClick2.setOnClickListener {
+                currentlyClickingImageFor = MESUREMENT_IMAGE
+                showCameraOptionDialog()
+            }
+            imageClick3.setOnClickListener {
+                currentlyClickingImageFor = LAYOUT_IMAGE
+                showCameraOptionDialog()
+            }
+//            imageClick2.setOnClickListener(ClickOutletImageOnClickListener())
+//            imageClick3.setOnClickListener(ClickOutletImageOnClickListener())
+
+//            val imangelayout= inflater.inflate(R.layout.layout_click_image, dialogView as ViewGroup, false)
+//            imageClickLabel = imangelayout.findViewById(R.id.clickImageLabel)
+//            ImageStoreView = imangelayout.findViewById(R.id.imageView)
+//            imageClickLabel.setOnClickListener(ClickOutletImageOnClickListener())
+//            donecontainer.addView(imangelayout)
 
 
 
@@ -879,7 +1350,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //            val spinnerlist = arrayOf("Select Status","Working", "Hold", "Done","Cancelled")
 //            val statusArrayList = status!!.split(",")
             statusList.clear()
-            statusList.add(0,"Select Status")
+            statusList.add(0, "Select Status")
             if (status!!.toLowerCase().equals("working")){
                 statusList.add("Hold")
                 statusList.add("Done")
@@ -936,8 +1407,10 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                 mAlertDialog.dismiss()
             }
             update.setOnClickListener{
-                setValidationUpdate()
-                mAlertDialog.dismiss()
+                if (setValidationUpdate() == true){
+//                setValidationUpdate()
+                    mAlertDialog.dismiss()
+                }
             }
 
         }
@@ -945,7 +1418,10 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         viewBinding.allocateBtn.setOnClickListener {
             viewModel.allocateUserForComplaint()
             val inflater: LayoutInflater = LayoutInflater.from(this)
-            val dialogView = inflater.inflate(R.layout.complaint_details_allocate_dialog_layout,null)
+            val dialogView = inflater.inflate(
+                R.layout.complaint_details_allocate_dialog_layout,
+                null
+            )
             val mBuilder = AlertDialog.Builder(this)
                     .setView(dialogView)
                     .setTitle("Allocate User")
@@ -955,21 +1431,21 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             foremanSpinner = dialogView.findViewById(R.id.foreman_spinner)
             enduserSpinner = dialogView.findViewById(R.id.enduser_spinner)
             errorText = dialogView.findViewById<TextView>(R.id.errorText)
-            supervisorSpinner.onItemSelected {adapterView, _, position, _->
+            supervisorSpinner.onItemSelected { adapterView, _, position, _->
                 adapterView ?: return@onItemSelected
                 if (supervisorSpinner.childCount != 0 && supervisorSpinner.selectedItemPosition != 0){
                    val supervisorValue = adapterView.getItemAtPosition(position) as AllocateUserData
                     supervisorid = supervisorValue.id
                 }
             }
-            foremanSpinner.onItemSelected {adapterView, _, position, _->
+            foremanSpinner.onItemSelected { adapterView, _, position, _->
                 adapterView ?: return@onItemSelected
                 if (foremanSpinner.childCount != 0 && foremanSpinner.selectedItemPosition != 0){
                     val foremanValue = adapterView.getItemAtPosition(position) as AllocateUserData
                     foremanid = foremanValue.id
                 }
             }
-            enduserSpinner.onItemSelected {adapterView, _, position, _->
+            enduserSpinner.onItemSelected { adapterView, _, position, _->
                 adapterView ?: return@onItemSelected
                 if (enduserSpinner.childCount != 0 && enduserSpinner.selectedItemPosition != 0){
                     val endUserValue = adapterView.getItemAtPosition(position) as AllocateUserData
@@ -986,10 +1462,10 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //                setValidationForAllocateUser()
                 if (setValidationForAllocateUser() == true) {
                     viewModel.requestforAllocatedUserForComplaint(
-                            supervisorid = supervisorid,
-                            enduserid = enduserid,
-                            foremanid = foremanid,
-                            compid = detailsId!!
+                        supervisorid = supervisorid,
+                        enduserid = enduserid,
+                        foremanid = foremanid,
+                        compid = detailsId!!
                     )
                     mAlertDialog.dismiss()
                 }
@@ -997,6 +1473,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         }
 
     }
+
+
 
     private fun setValidationForAllocateUser(): Boolean {
         if (supervisor.isNullOrEmpty() && foreman.isNullOrEmpty() && endUser.isNullOrEmpty()){
@@ -1027,16 +1505,16 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
     @TargetApi(Build.VERSION_CODES.M)
     fun askPermissions(url: String) {
         if (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
+                this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED
         ) {
             // Permission is not granted
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(
-                            this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    )
+                    this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                )
             ) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
@@ -1046,9 +1524,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                         .setMessage("Permission required to save photos from the Web.")
                         .setPositiveButton("Allow") { dialog, id ->
                             ActivityCompat.requestPermissions(
-                                    this,
-                                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                                this,
+                                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
                             )
                             finish()
                         }
@@ -1057,9 +1535,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                    this,
+                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
                 )
                 // MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE is an
                 // app-defined int constant. The callback method gets the
@@ -1092,8 +1570,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                     .setTitle(url.substring(url.lastIndexOf("/") + 1))
                     .setDescription("")
                     .setDestinationInExternalPublicDir(
-                            directory.toString(),
-                            url.substring(url.lastIndexOf("/") + 1)
+                        directory.toString(),
+                        url.substring(url.lastIndexOf("/") + 1)
                     )
         }
 
@@ -1128,7 +1606,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //            DownloadManager.STATUS_PENDING -> "Pending"
             DownloadManager.STATUS_RUNNING -> "Downloading..."
             DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully in $directory" + File.separator + url.substring(
-                    url.lastIndexOf("/") + 1
+                url.lastIndexOf("/") + 1
             )
             else -> ""
         }
@@ -1187,21 +1665,21 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         }
 
         supervisorData.add(
-                0,
-                AllocateUserData(
-                        id = SupervisorIdShowfirst,
-                        name = nameSupervisorshowfirst,
-                        designation = SupervisorDesignationnameshowfirst
-                )
+            0,
+            AllocateUserData(
+                id = SupervisorIdShowfirst,
+                name = nameSupervisorshowfirst,
+                designation = SupervisorDesignationnameshowfirst
+            )
         )
         val setItems = supervisorData.distinctBy { it.name }
         supervisorData.clear()
         supervisorData.addAll(setItems)
 
         val aa = ArrayAdapter(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                supervisorData
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            supervisorData
         )
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(supervisorSpinner) {
@@ -1232,12 +1710,12 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         }
 
         foremanData.add(
-                0,
-                AllocateUserData(
-                        id = foremanidshowfirst!!,
-                        name = nameForemanshowfirst!!,
-                        designation = foremanDesignationnameshowfirst!!
-                )
+            0,
+            AllocateUserData(
+                id = foremanidshowfirst!!,
+                name = nameForemanshowfirst!!,
+                designation = foremanDesignationnameshowfirst!!
+            )
         )
 
         val setItems = foremanData.distinctBy { it.name }
@@ -1245,9 +1723,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         foremanData.addAll(setItems)
 
         val aa = ArrayAdapter(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                foremanData
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            foremanData
         )
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(foremanSpinner) {
@@ -1280,20 +1758,20 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         }
 
         enduserData.add(
-                0,
-                AllocateUserData(
-                        id = endidshowfirst,
-                        name = nameshowfirst,
-                        designation = designationnameshowfirst
-                )
+            0,
+            AllocateUserData(
+                id = endidshowfirst,
+                name = nameshowfirst,
+                designation = designationnameshowfirst
+            )
         )
         val setItems = enduserData.distinctBy { it.name }
         enduserData.clear()
         enduserData.addAll(setItems)
         val aa = ArrayAdapter(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                enduserData
+            this,
+            android.R.layout.simple_spinner_dropdown_item,
+            enduserData
         )
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(enduserSpinner) {

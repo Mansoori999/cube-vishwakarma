@@ -12,10 +12,8 @@ import com.vinners.cube_vishwakarma.databinding.ActivitySplashBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.feature_auth.ui.AuthActivity
-import com.vinners.cube_vishwakarma.feature_auth.ui.login.OtpVerify.OtpCheckActivity
-import com.vinners.cube_vishwakarma.ui.MainActivity
-
 import com.vinners.cube_vishwakarma.ui.appVersionDiscontinued.VersionBlockActivity
+import com.vinners.cube_vishwakarma.ui.dashboard.MainActivity
 import javax.inject.Inject
 
 

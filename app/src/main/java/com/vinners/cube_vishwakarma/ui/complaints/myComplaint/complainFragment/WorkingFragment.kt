@@ -94,7 +94,7 @@ class WorkingFragment : BaseFragment<FragmentWorkingBinding, AllComplaintFragmen
 
     }
     override fun onInitViewModel() {
-        viewModel.complaintListState.observe(this, Observer {
+        viewModel.complaintDaoListState.observe(this, Observer {
             when(it){
                 Lce.Loading ->{
                     viewBinding.errorLayout.root.setVisibilityGone()
@@ -135,13 +135,13 @@ class WorkingFragment : BaseFragment<FragmentWorkingBinding, AllComplaintFragmen
 
             }
         })
-
-        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
-            viewModel.getComplaintList(adminUserid)
-        }else{
-            viewModel.getComplaintList(userid!!)
-
-        }
+        viewModel.getComplaintDaoList()
+//        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+//            viewModel.getComplaintList(adminUserid)
+//        }else{
+//            viewModel.getComplaintList(userid!!)
+//
+//        }
 
     }
 

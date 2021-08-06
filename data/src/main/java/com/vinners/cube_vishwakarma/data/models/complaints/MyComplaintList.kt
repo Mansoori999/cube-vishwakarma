@@ -1,17 +1,23 @@
 package com.vinners.cube_vishwakarma.data.models.complaints
 
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 
+@Entity(tableName = MyComplaintList.TABLE_NAME)
 data class MyComplaintList (
 
         @SerializedName("complaintid")
         val complaintid : String? =null,
 
+        @PrimaryKey
         @SerializedName("id")
-        val id : String? =null,
+        var id : String,
 
         @SerializedName("fordate")
-        val fordate : String? =null,
+        var fordate : String? =null,
 
         @SerializedName("outlet")
         val outlet : String? =null,
@@ -50,13 +56,75 @@ data class MyComplaintList (
         val supervisor : String? =null,
 
         @SerializedName("enduser")
-        val enduser : String? =null,
+        val enduser : String? =null
+        ) {
+
+        companion object {
+
+
+                @Ignore
+                const val TABLE_NAME : String = "myComplaint"
+
+                @Ignore
+                const val COLUMN_COMPLAINT_ID :String = "complaintid"
+
+                @Ignore
+                const val COLUMN_ID:String = "id"
+
+                @Ignore
+                const val COLUMN_FORDATE = "fordate"
+
+                @Ignore
+                const val COLUMN_OUTLET_ID:String = "outletid"
+
+                @Ignore
+                const val COLUMN_OUTLET_NAME :String = "name"
+
+                @Ignore
+                const val  COLUMN_CUSTOMER_CODE = "customercode"
+
+                @Ignore
+                const val COLUMN_LETTER_STATUS = "letterstatus"
+
+                @Ignore
+                const val COLUMN_STATUS = "status"
+
+                @Ignore
+                const val COLUMN_OUTLET_CATEGORY = "outletcategory"
+
+                @Ignore
+                const val COLUMN_WORK = "work"
+
+                @Ignore
+                const val COLUMN_COMPLAINT_STATUS:String = "status"
+
+                @Ignore
+                const val COLUMN_REGIONAL_OFFICE :String = "regionaloffice"
+
+                @Ignore
+                const val COLUMN_REGIONAL_OFFICE_ID :String = "roid"
+
+                @Ignore
+                const val COLUMN_SALES_AREA :String = "salesarea"
+
+                @Ignore
+                const val COLUMN_SALES_AREA_ID :String = "said"
 
 
 
 
 
+                @Ignore
+                val COLUMN_SUBADMIN = "subadmin"
 
 
-) {
+                @Ignore
+                val COLUMN_ORDER_BY = "orderby"
+
+                @Ignore
+                val COLUMN_SUPERVISOR = "supervisor"
+
+                @Ignore
+                val COLUMN_ENDUSER = "enduser"
+        }
 }

@@ -1,25 +1,24 @@
 package com.vinners.cube_vishwakarma.di
 
 
-import android.view.View
 import com.vinners.cube_vishwakarma.core.di.CoreComponent
 import com.vinners.cube_vishwakarma.core.di.scopes.FeatureScope
 import com.vinners.cube_vishwakarma.notification.NotificationService
 import com.vinners.cube_vishwakarma.ui.languageSelection.SelectLanguageFragment
 import com.vinners.cube_vishwakarma.ui.LauncherActivity
-import com.vinners.cube_vishwakarma.ui.MainActivity
 import com.vinners.cube_vishwakarma.ui.appVersionDiscontinued.VersionBlockActivity
 import com.vinners.cube_vishwakarma.ui.attendance.AttendanceActivity
 
 import com.vinners.cube_vishwakarma.ui.complaints.ComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.ComplaintRequestActivity
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity
-import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.MonthlyFragment
-import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.ROWiseFragment
-import com.vinners.cube_vishwakarma.ui.complaints.dashboardFragment.SummeryFragment
+import com.vinners.cube_vishwakarma.ui.dashboard.fragment.MonthlyFragment
+import com.vinners.cube_vishwakarma.ui.dashboard.fragment.ROWiseFragment
+import com.vinners.cube_vishwakarma.ui.dashboard.fragment.SummeryFragment
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.MyComplaintActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
+import com.vinners.cube_vishwakarma.ui.dashboard.MainActivity
 import com.vinners.cube_vishwakarma.ui.documents.*
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
 import com.vinners.cube_vishwakarma.ui.outlets.*

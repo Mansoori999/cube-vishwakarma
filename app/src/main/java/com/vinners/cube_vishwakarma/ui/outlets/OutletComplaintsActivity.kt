@@ -1,8 +1,6 @@
 package com.vinners.cube_vishwakarma.ui.outlets
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
@@ -14,11 +12,9 @@ import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
-import com.vinners.cube_vishwakarma.databinding.ActivityEditOutletBinding
 import com.vinners.cube_vishwakarma.databinding.ActivityOutletComplaintsBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
-import com.vinners.cube_vishwakarma.ui.MainActivityViewModel
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintRecyclerAdapter
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintsClickListener
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity

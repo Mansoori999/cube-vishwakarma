@@ -7,22 +7,32 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-    <Button
+    <ImageView
         android:id="@+id/share_image"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="40dp"
+        android:scaleType="fitXY"
+        android:layout_height="40dp"
         android:background="@drawable/image_share"
         android:layout_marginTop="15dp"
         android:layout_marginLeft="10dp" />
-    <Button
+    <ImageView
         android:id="@+id/delete_image"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="15dp"
-        android:background="@drawable/cross_state_change"
+        android:scaleType="fitXY"
+        android:background="@drawable/ic_cancel"
         android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
         />
+<!--    <ImageView-->
+<!--        android:id="@+id/drawer_menu"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:scaleX="0.6"-->
+<!--        android:scaleY="0.6"-->
+<!--        android:src="@drawable/ic_menu" />-->
 </RelativeLayout>
 
 

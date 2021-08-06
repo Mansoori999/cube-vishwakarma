@@ -77,5 +77,12 @@ data class MyComplainDetailsList (
     @field:SerializedName("foremanid")
     val foremanid: String? = null,
 
+    @SerializedName("measurementpic")
+    val measurementpic: String? = null,
+
+    @field:SerializedName("layoutpic")
+    val layoutpic: String? = null,
+
+
     ){
 }

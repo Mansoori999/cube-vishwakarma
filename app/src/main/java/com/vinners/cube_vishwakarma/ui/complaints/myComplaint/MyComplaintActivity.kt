@@ -1,28 +1,38 @@
 package com.vinners.cube_vishwakarma.ui.complaints.myComplaint
 
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
 import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
+import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
+import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
+import com.vinners.cube_vishwakarma.core.taskState.Lce
+import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
-import com.vinners.cube_vishwakarma.databinding.ActivityMainBinding
 import com.vinners.cube_vishwakarma.databinding.ActivityMyComplaintBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complainFragment.*
+
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.MyComplaintSharedViewModel
 import javax.inject.Inject
 
-class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,MyComplaintViewModel>(R.layout.activity_my_complaint) {
+class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintFragmentViewModel>(R.layout.activity_my_complaint), MenuItem.OnMenuItemClickListener {
 
     private lateinit var viewPager: ViewPager
     private lateinit var tabs: TabLayout
@@ -32,34 +42,51 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,MyComplaintVi
 
     }
 
+    var userid : String? = null
+    var adminUserid : String = ""
+
+    val sharedViewModel: MyComplaintSharedViewModel by viewModels{ viewModelFactory }
+//    @Inject
+//    lateinit var sharedViewModel: MyComplaintSharedViewModel
+
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
 
     @Inject
     lateinit var userSessionManager: UserSessionManager
 
-    override val viewModel: MyComplaintViewModel by viewModels { viewModelFactory }
+    override val viewModel: AllComplaintFragmentViewModel by viewModels { viewModelFactory }
 
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
-            .builder()
-            .coreComponent(getCoreComponent())
-            .build()
-            .inject(this)
+                .builder()
+                .coreComponent(getCoreComponent())
+                .build()
+                .inject(this)
     }
 
     override fun onInitDataBinding() {
+        userid = userSessionManager.userId
         setSupportActionBar(viewBinding.mycomplaintToolbar)
         getSupportActionBar()!!.setHomeAsUpIndicator(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_arrow_left,null))
         getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true)
         viewBinding.mycomplaintToolbar.setNavigationOnClickListener { view -> onBackPressed() }
 
-       tabs = findViewById(R.id.tabs)
-   // val dotsIndicator = findViewById<DotsIndicator>(R.id.dots_indicator)
+        viewBinding.refresh.setOnClickListener {
+            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                viewPager.setVisibilityVisible()
+                viewModel.getComplaintList(adminUserid)
+            }else{
+                viewModel.getComplaintList(userid!!)
+
+            }
+        }
+        tabs = findViewById(R.id.tabs)
+        // val dotsIndicator = findViewById<DotsIndicator>(R.id.dots_indicator)
         viewPager = findViewById(R.id.view_pager)
 //        viewPager.adapter = sectionsPagerAdapter
 //        dotsIndicator.setViewPager(viewPager)
-        setUpViewPager()
+//        setUpViewPager()
     }
 
     private fun setUpViewPager() {
@@ -68,11 +95,53 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,MyComplaintVi
     }
     override fun onInitViewModel() {
 
+        viewModel.complaintListState.observe(this, Observer {
+            when(it){
+                Lce.Loading ->{
+                    viewBinding.progressBar.setVisibilityVisible()
+
+                }
+                is Lce.Content->
+                {
+                    if (it.content.isEmpty()){
+                        viewBinding.progressBar.setVisibilityGone()
+
+                    } else {
+                        viewBinding.progressBar.setVisibilityGone()
+                        sharedViewModel.setcomplaints(it.content)
+                        tabs.setVisibilityVisible()
+                        viewPager.setVisibilityVisible()
+                        viewPager.adapter = sectionsPagerAdapter
+                        tabs.setupWithViewPager(viewPager)
+
+                    }
+
+                }
+                is Lce.Error ->
+                {
+                    viewBinding.progressBar.setVisibilityGone()
+                    showInformationDialog(it.error)
+
+                }
+
+
+            }
+        })
+
+        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+            viewModel.getComplaintList(adminUserid)
+        }else{
+            viewModel.getComplaintList(userid!!)
+
+        }
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.complaint_search_menu, menu)
         val search = menu.findItem(R.id.action_search)
+//        val refresh = menu.findItem(R.id.action_refresh)
+//        refresh.setOnMenuItemClickListener(this)
         var searchView = search.actionView as SearchView
         searchView = search.getActionView() as SearchView
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -155,4 +224,40 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,MyComplaintVi
         return super.onCreateOptionsMenu(menu)
     }
 
+    override fun onMenuItemClick(item: MenuItem?): Boolean {
+        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                    viewModel.getComplaintList(adminUserid)
+                }else{
+                    viewModel.getComplaintList(userid!!)
+
+                }
+        return true
+    }
+
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.action_refresh -> {
+//                if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+//                    viewModel.getComplaintList(adminUserid)
+//                }else{
+//                    viewModel.getComplaintList(userid!!)
+//
+//                }
+
+//                return true
+//            }
+//           R.id.action_search ->{
+//
+//           }
+//        }
+//        return true
+//
+//    }
+
+//    override fun onDestroy() {
+//        super.onDestroy()
+//
+//        // manually clear store
+//        clearViewModel()
+//    }
 }
