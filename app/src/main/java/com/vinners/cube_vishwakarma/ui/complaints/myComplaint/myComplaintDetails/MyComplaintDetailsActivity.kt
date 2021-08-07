@@ -10,17 +10,21 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
+import android.graphics.Color
+import android.graphics.Color.WHITE
 import android.net.Uri
 import android.os.*
 import android.provider.OpenableColumns
 import android.util.Log
 import android.view.*
+import android.webkit.MimeTypeMap
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.isVisible
 import androidx.lifecycle.Observer
 import coil.api.load
@@ -47,7 +51,6 @@ import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_STATUS
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity.Companion.COMPLAINT_REQUEST_VIEW
-import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.FileUtils.getPath
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
 import java.io.File
 import java.io.InputStream
@@ -55,7 +58,7 @@ import javax.inject.Inject
 
 
 class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBinding, AllComplaintFragmentViewModel>(
-    R.layout.activity_my_complaint_details
+        R.layout.activity_my_complaint_details
 ) {
     companion object{
         private const val PERMISSION_REQUEST_STORAGE = 233
@@ -141,7 +144,6 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private lateinit var reason:EditText
     private lateinit var tv:TextView
 
-    var path = listOf<String>()
     var ret:String? = null
     private lateinit var donecontainer:LinearLayout
     private lateinit var filename : TextView
@@ -210,21 +212,21 @@ private inner class ClickComplaintDoneLetterImageOnClickListener:View.OnClickLis
 
     private fun requestStoragePermissions() {
         ActivityCompat.requestPermissions(
-            this,
-            arrayOf(
-                Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE
-            ),
-            PERMISSION_REQUEST_STORAGE
+                this,
+                arrayOf(
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                ),
+                PERMISSION_REQUEST_STORAGE
         )
     }
     private fun storagePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-            this, Manifest.permission.READ_EXTERNAL_STORAGE
+                this, Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 &&
                 ContextCompat.checkSelfPermission(
-                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        this, Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -237,19 +239,46 @@ private inner class ClickComplaintDoneLetterImageOnClickListener:View.OnClickLis
                 imageResult = File(result.imagePath)
                 imageView1.load(result.bitmap)
                 imageView1.setOnClickListener {
-                    imageOpenDialog(imageResult.toString())
+                    try {
+                        val myIntent = Intent(Intent.ACTION_VIEW)
+                        val file = File(result.imagePath)
+                        val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+                        val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                        myIntent.setDataAndType(Uri.fromFile(file), mimetype)
+                        startActivity(myIntent)
+                    } catch (e: java.lang.Exception) {
+                        val data = e.message
+                    }
                 }
             } else if (currentlyClickingImageFor.equals(MESUREMENT_IMAGE)) {
                 mesurmentImageResult = File(result.imagePath)
                 imageView2.load(result.bitmap)
                 imageView2.setOnClickListener {
-                    imageOpenDialog(mesurmentImageResult.toString())
+                    try {
+                        val myIntent = Intent(Intent.ACTION_VIEW)
+                        val file = File(result.imagePath)
+                        val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+                        val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                        myIntent.setDataAndType(Uri.fromFile(file), mimetype)
+                        startActivity(myIntent)
+                    } catch (e: java.lang.Exception) {
+                        val data = e.message
+                    }
                 }
             }else if (currentlyClickingImageFor.equals(LAYOUT_IMAGE)) {
                 layoutImageResult = File(result.imagePath)
                 imageView3.load(result.bitmap)
                 imageView3.setOnClickListener {
-                    imageOpenDialog(layoutImageResult.toString())
+                    try {
+                        val myIntent = Intent(Intent.ACTION_VIEW)
+                        val file = File(result.imagePath)
+                        val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+                        val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                        myIntent.setDataAndType(Uri.fromFile(file), mimetype)
+                        startActivity(myIntent)
+                    } catch (e: java.lang.Exception) {
+                        val data = e.message
+                    }
                 }
             }
 
@@ -265,8 +294,8 @@ private inner class ClickComplaintDoneLetterImageOnClickListener:View.OnClickLis
 
     }
     override fun onRestoreInstanceState(
-        savedInstanceState: Bundle?,
-        persistentState: PersistableBundle?
+            savedInstanceState: Bundle?,
+            persistentState: PersistableBundle?
     ) {
         super.onRestoreInstanceState(savedInstanceState, persistentState)
         savedInstanceState?.let {
@@ -280,8 +309,8 @@ private inner class ClickComplaintDoneLetterImageOnClickListener:View.OnClickLis
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>, grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<String>, grantResults: IntArray
     ) {
         when (requestCode) {
             PERMISSION_REQUEST_STORAGE -> {
@@ -322,54 +351,74 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                         val uriString = uri.toString()
                         if (currentlyClickingImageFor.equals(LETTER_IMAGE)) {
                             filename.setVisibilityVisible()
-//                            val path = FileUtils.getPath(this, uri!!).toString()
-//                            val path1: String? = getPath(this, uri)
-                            imageResult = File(getPath(this, uri!!))
+                            val path = UtilsFile(this).getPath(uri!!)
+                            try {
+                                imageResult = File(path)
+                                val url = appInfo.getFullAttachmentUrl(path)
+                                filename.setOnClickListener {
+                                    try {
+                                        val myIntent = Intent(Intent.ACTION_VIEW)
+                                        val file = File(path)
+                                        val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+                                        val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                                        myIntent.setDataAndType(Uri.fromFile(file), mimetype)
+                                        startActivity(myIntent)
+                                    } catch (e: java.lang.Exception) {
+                                        // TODO: handle exception
+                                        val data = e.message
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Log.d(LOG_TAG, "Error: $e")
+                                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+                            }
+
                             if (uriString.startsWith("content://")) {
                                 var cursor: Cursor? = null
                                 try {
-                                    cursor = this.getContentResolver().query(
-                                        uri,
-                                        null,
-                                        null,
-                                        null,
-                                        null
-                                    )
+                                    cursor = this.getContentResolver().query(uri, null, null, null, null)
                                     if (cursor != null && cursor.moveToFirst()) {
-                                        filename.setText(
-                                            cursor.getString(
-                                                cursor.getColumnIndex(
-                                                    OpenableColumns.DISPLAY_NAME
-                                                )
-                                            )
-                                        )
+//                                        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+//                                        val yourRealPath = cursor.getString(column_index)
+//                                        imageResult = File(yourRealPath)
+                                        filename.setText(cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)))
                                     }
                                 } finally {
                                     cursor!!.close()
                                 }
                             } else if (uriString.startsWith("file://")) {
-                                filename.setText(myFilePath!!.name)
+                                filename.setText(imageResult!!.name)
                             }
                         } else if (currentlyClickingImageFor.equals(MESUREMENT_IMAGE)) {
                             filename1.setVisibilityVisible()
-                            mesurmentImageResult = File(uriString)
+                            val path = UtilsFile(this).getPath(uri!!)
+                            try {
+                                mesurmentImageResult = File(path)
+                                filename1.setOnClickListener {
+                                    try {
+                                        val myIntent = Intent(Intent.ACTION_VIEW)
+                                        val file = File(path)
+                                        val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+                                        val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                                        myIntent.setDataAndType(Uri.fromFile(file), mimetype)
+                                        startActivity(myIntent)
+                                    } catch (e: java.lang.Exception) {
+                                        // TODO: handle exception
+                                        val data = e.message
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Log.d(LOG_TAG, "Error: $e")
+                                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+                            }
+
                             if (uriString.startsWith("content://")) {
                                 var cursor: Cursor? = null
                                 try {
-                                    cursor = this.getContentResolver().query(
-                                        uri!!,
-                                        null,
-                                        null,
-                                        null,
-                                        null
-                                    )
+                                    cursor = this.getContentResolver().query(uri, null, null, null, null)
                                     if (cursor != null && cursor.moveToFirst()) {
                                         filename1.setText(
-                                            cursor.getString(
-                                                cursor.getColumnIndex(
-                                                    OpenableColumns.DISPLAY_NAME
-                                                )
-                                            )
+                                                cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
                                         )
                                     }
                                 } finally {
@@ -380,24 +429,45 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                             }
                         } else if (currentlyClickingImageFor.equals(LAYOUT_IMAGE)) {
                             filename2.setVisibilityVisible()
-                            layoutImageResult = File(uriString)
+
+                            val path = UtilsFile(this).getPath(uri!!)
+                            try {
+                                layoutImageResult = File(path)
+                                filename2.setOnClickListener {
+                                    try {
+                                        val myIntent = Intent(Intent.ACTION_VIEW)
+                                        val file = File(path)
+                                        val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+                                        val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                                        myIntent.setDataAndType(Uri.fromFile(file), mimetype)
+                                        startActivity(myIntent)
+                                    } catch (e: java.lang.Exception) {
+                                        // TODO: handle exception
+                                        val data = e.message
+                                    }
+                                }
+                            } catch (e: Exception) {
+                                Log.d(LOG_TAG, "Error: $e")
+                                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+                            }
+
                             if (uriString.startsWith("content://")) {
                                 var cursor: Cursor? = null
                                 try {
                                     cursor = this.getContentResolver().query(
-                                        uri!!,
-                                        null,
-                                        null,
-                                        null,
-                                        null
+                                            uri!!,
+                                            null,
+                                            null,
+                                            null,
+                                            null
                                     )
                                     if (cursor != null && cursor.moveToFirst()) {
                                         filename2.setText(
-                                            cursor.getString(
-                                                cursor.getColumnIndex(
-                                                    OpenableColumns.DISPLAY_NAME
+                                                cursor.getString(
+                                                        cursor.getColumnIndex(
+                                                                OpenableColumns.DISPLAY_NAME
+                                                        )
                                                 )
-                                            )
                                         )
                                     }
                                 } finally {
@@ -407,98 +477,6 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                 filename2.setText(layoutFilePath!!.name)
                             }
                         }
-
-//                         path = myFile.absolutePath
-//                        var displayName: String? = null
-//                        if (currentlyClickingImageForIndex == -1)
-//                            return
-//                        when (currentlyClickingImageForIndex) {
-//                            0 ->{
-//
-//                            }
-//                            1->{
-//
-//                                if (uriString.startsWith("content://")) {
-//                                    var cursor: Cursor? = null
-//                                    try {
-//                                        cursor = this.getContentResolver().query(uri!!, null, null, null, null)
-//                                        if (cursor != null && cursor.moveToFirst()) {
-//                                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-//                                            filename1.setText(displayName)
-//                                        }
-//                                    } finally {
-//                                        cursor!!.close()
-//                                    }
-//                                } else if (uriString.startsWith("file://")) {
-//                                    displayName = myFile.name
-//                                    filename1.setText(displayName)
-//                                }
-//                            }
-//                            2->{
-//                                if (uriString.startsWith("content://")) {
-//                                    var cursor: Cursor? = null
-//                                    try {
-//                                        cursor = this.getContentResolver().query(uri!!, null, null, null, null)
-//                                        if (cursor != null && cursor.moveToFirst()) {
-//                                            displayName = cursor.getString(cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME))
-//                                            filename2.setText(displayName)
-//                                        }
-//                                    } finally {
-//                                        cursor!!.close()
-//                                    }
-//                                } else if (uriString.startsWith("file://")) {
-//                                    displayName = myFile.name
-//                                    filename2.setText(displayName)
-//                                }
-//                            }
-//                            else -> {
-//                            }
-//                        }
-
-//                        uri = data.data!!
-//                        val uriString = uri.toString()
-//                        val file = File(uri.getPath().toString())
-//                        val uploadedFileName = file.getName().toString()
-//                        if (currentlyClickingImageForIndex == -1)
-//                            return
-//                        when (currentlyClickingImageForIndex) {
-//                            0 -> try {
-//                                filePath = FileUtils.getPath(this, uri).toString()
-//                            } catch (e: Exception) {
-//                                Log.d(LOG_TAG, "Error: $e")
-//                                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
-//                            }
-//                            1 -> try {
-//                                filePath = FileUtils.getPath(this, uri).toString()
-//                            } catch (e: Exception) {
-//                                Log.d(LOG_TAG, "Error: $e")
-//                                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
-//                            }
-//                            2 -> try {
-//                                filePath = FileUtils.getPath(this, uri).toString()
-//                            } catch (e: Exception) {
-//                                Log.d(LOG_TAG, "Error: $e")
-//                                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
-//                            }
-//                            else -> {
-//                            }
-//                        }
-////                        try {
-////                            filePath = FileUtils.getPath(this,uri).toString()
-////                        } catch (e: Exception) {
-////                            Log.e(LOG_TAG, "Error: $e")
-////                            Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
-////                        }
-//
-//                        when (currentlyClickingImageForIndex) {
-//                            0 -> filename.setText(uploadedFileName)
-//                            1 -> filename1.setText(uploadedFileName)
-//                            2 -> filename2.setText(uploadedFileName)
-//                            else -> {
-//                            }
-//                        }
-
-
                     }
 
                 }
@@ -506,7 +484,6 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         }
 
     }
-
 
 
 
@@ -520,7 +497,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             return true
         }
 
-        if (donecontainer.isVisible && imageResult == null && path.isEmpty()){
+        if (donecontainer.isVisible && imageResult == null){
             showInformationDialog("Please Click Letter Pic OR Select File")
             return true
         }
@@ -528,12 +505,12 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 
         viewModel.upDateComplaints(
-            statusremarks = reason.text.toString(),
-            id = detailsId!!.toInt(),
-            status = statusValue.toString(),
-            letterPic = imageResult!!,
-            measurementPic = mesurmentImageResult!!,
-            layoutPic = layoutImageResult!!
+                statusremarks = reason.text.toString(),
+                id = detailsId!!.toInt(),
+                status = statusValue.toString(),
+                letterPic = imageResult!!,
+                measurementPic = mesurmentImageResult!!,
+                layoutPic = layoutImageResult!!
 
         )
         return true
@@ -541,9 +518,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
     }
     fun showCameraOptionDialog() {
         val optionsForDialog = arrayOf<CharSequence>(
-            "Open Camera",
-            "Select from Gallery",
-            "Select File"
+                "Open Camera",
+                "Select from Gallery",
+                "Select File"
         )
         val alertBuilder = AlertDialog.Builder(this)
         alertBuilder.setTitle("Select An Option")
@@ -603,14 +580,14 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
             // Check if we have Call permission
             val permisson = ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.READ_EXTERNAL_STORAGE
+                    this,
+                    Manifest.permission.READ_EXTERNAL_STORAGE
             )
             if (permisson != PackageManager.PERMISSION_GRANTED) {
                 // If don't have permission so prompt the user.
                 requestPermissions(
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    MY_REQUEST_CODE_PERMISSION
+                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
+                        MY_REQUEST_CODE_PERMISSION
                 )
                 return
             }
@@ -618,6 +595,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         doBrowseFile()
 
     }
+
 
     private fun doBrowseFile() {
         var chooseFile = Intent(Intent.ACTION_GET_CONTENT)
@@ -661,7 +639,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                     if (it.content != null) {
                         viewBinding.loadingData.setVisibilityGone()
                         viewBinding.date.text =
-                            DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
+                                DateTimeHelper.getDDMMYYYYDateFromString(it.content.fordate!!)
                         viewBinding.complaintId.text = it.content.complaintid
                         viewBinding.work.text = it.content.work
                         viewBinding.type.text = it.content.type
@@ -677,71 +655,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                         viewBinding.enduser.text = it.content.enduser
                         viewBinding.order.text = it.content.orderBy
                         viewBinding.remarks.text = it.content.remarks
-                        val link = it.content.letterpic?.substringAfter(".")
-                        if (link.equals("pdf")) {
-                            viewBinding.letterimageView.setImageDrawable(
-                                ResourcesCompat.getDrawable(
-                                    this.getResources(),
-                                    R.drawable.default_pdf,
-                                    null
-                                )
-                            )
-                            val url = appInfo.getFullAttachmentUrl(it.content.letterpic!!)
-                            viewBinding.letterimageView.setOnClickListener {
-                                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                startActivity(intent)
-                            }
-
-                        } else {
-                            if (it.content.letterpic != null) {
-                                val imageUrl: String = it.content.letterpic!!
-                                viewBinding.letterimageView.load(appInfo.getFullAttachmentUrl(it.content.letterpic!!))
-                                viewBinding.letterimageView.setOnClickListener {
-                                    imageOpenDialog(imageUrl)
-                                }
-                            }
-                        }
-                        val measurementpic = it.content.measurementpic?.substringAfter(".")
-                        if (measurementpic.equals("pdf")) {
-                            viewBinding.mesurenmentImageView.setImageDrawable(
-                                ResourcesCompat.getDrawable(
-                                    this.getResources(),
-                                    R.drawable.default_pdf,
-                                    null
-                                )
-                            )
-                        } else {
-                            if (it.content.measurementpic != null) {
-                                viewBinding.mesurenmentImageView.load(
-                                    appInfo.getFullAttachmentUrl(
-                                        it.content.measurementpic!!
-                                    )
-                                )
-                                val imageUrl: String = it.content.measurementpic!!
-                                viewBinding.mesurenmentImageView.setOnClickListener {
-                                    imageOpenDialog(imageUrl)
-                                }
-                            }
-                        }
-                        val layoutpic = it.content.layoutpic?.substringAfter(".")
-                        if (layoutpic.equals("pdf")) {
-                            viewBinding.layoutImageView.setImageDrawable(
-                                ResourcesCompat.getDrawable(
-                                    this.getResources(),
-                                    R.drawable.default_pdf,
-                                    null
-                                )
-                            )
-                        } else {
-                            if (it.content.layoutpic != null) {
-                                viewBinding.layoutImageView.load(appInfo.getFullAttachmentUrl(it.content.layoutpic!!))
-                                val imageUrl: String = it.content.layoutpic!!
-                                viewBinding.layoutImageView.setOnClickListener {
-                                    imageOpenDialog(imageUrl)
-                                }
-                            }
-                        }
-
+                        setImageAndPdf(it.content)
                         if (enabledComplaintRequest == true) {
                             viewBinding.status.text = complaintRequestStatus
                         } else {
@@ -778,38 +692,38 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
                     val enduserData = it.content.filter {
                         it.designation!!.toLowerCase()
-                            .equals("enduser") || it.designation!!.toLowerCase().equals(
-                            "end user"
+                                .equals("enduser") || it.designation!!.toLowerCase().equals(
+                                "end user"
                         )
                     }.map {
                         AllocateUserData(
-                            id = it.id!!,
-                            name = it.name!!,
-                            designation = it.designation!!
+                                id = it.id!!,
+                                name = it.name!!,
+                                designation = it.designation!!
                         )
                     }.toMutableList()
                     setendUserTypeSpinner(enduserData)
 
                     val supervisorData =
-                        it.content.filter { it.designation!!.toLowerCase().equals("supervisor") }
-                            .map {
-                                AllocateUserData(
-                                    id = it.id!!,
-                                    name = it.name!!,
-                                    designation = it.designation!!
-                                )
-                            }.toMutableList()
+                            it.content.filter { it.designation!!.toLowerCase().equals("supervisor") }
+                                    .map {
+                                        AllocateUserData(
+                                                id = it.id!!,
+                                                name = it.name!!,
+                                                designation = it.designation!!
+                                        )
+                                    }.toMutableList()
                     supervisorTypeSpinner(supervisorData)
 
 
                     val foremanData =
-                        it.content.filter { it.designation!!.toLowerCase().equals("foreman") }.map {
-                            AllocateUserData(
-                                id = it.id!!,
-                                name = it.name!!,
-                                designation = it.designation!!
-                            )
-                        }.toMutableList()
+                            it.content.filter { it.designation!!.toLowerCase().equals("foreman") }.map {
+                                AllocateUserData(
+                                        id = it.id!!,
+                                        name = it.name!!,
+                                        designation = it.designation!!
+                                )
+                            }.toMutableList()
                     foremanTypeSpinner(foremanData)
 
 
@@ -842,9 +756,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                     if (it.content != null) {
                                         viewBinding.loadingData.setVisibilityGone()
                                         viewBinding.date.text =
-                                            DateTimeHelper.getDDMMYYYYDateFromString(
-                                                it.content.fordate!!
-                                            )
+                                                DateTimeHelper.getDDMMYYYYDateFromString(
+                                                        it.content.fordate!!
+                                                )
                                         viewBinding.complaintId.text = it.content.complaintid
                                         viewBinding.work.text = it.content.work
                                         viewBinding.type.text = it.content.type
@@ -860,46 +774,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                         viewBinding.enduser.text = it.content.enduser
                                         viewBinding.order.text = it.content.orderBy
                                         viewBinding.remarks.text = it.content.remarks
-                                        val link = it.content.letterpic?.substringAfter(".")
-                                        if (link.equals("pdf")) {
-                                            viewBinding.letterimageView.setImageDrawable(
-                                                ResourcesCompat.getDrawable(
-                                                    this.getResources(),
-                                                    R.drawable.default_pdf,
-                                                    null
-                                                )
-                                            )
-                                        } else {
-                                            viewBinding.letterimageView.load(it.content.letterpic)
-                                        }
-                                        val measurementpic =
-                                            it.content.measurementpic?.substringAfter(
-                                                "."
-                                            )
-                                        if (measurementpic.equals("pdf")) {
-                                            viewBinding.mesurenmentImageView.setImageDrawable(
-                                                ResourcesCompat.getDrawable(
-                                                    this.getResources(),
-                                                    R.drawable.default_pdf,
-                                                    null
-                                                )
-                                            )
-                                        } else {
-                                            viewBinding.mesurenmentImageView.load(it.content.measurementpic)
-                                        }
-                                        val layoutpic = it.content.layoutpic?.substringAfter(".")
-                                        if (layoutpic.equals("pdf")) {
-                                            viewBinding.layoutImageView.setImageDrawable(
-                                                ResourcesCompat.getDrawable(
-                                                    this.getResources(),
-                                                    R.drawable.default_pdf,
-                                                    null
-                                                )
-                                            )
-                                        } else {
-                                            viewBinding.layoutImageView.load(it.content.layoutpic)
-                                        }
-
+                                        setImageAndPdf(it.content)
                                         setChangeStatus(it.content)
 
                                     } else {
@@ -936,9 +811,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                     if (it.content != null) {
                                         viewBinding.loadingData.setVisibilityGone()
                                         viewBinding.date.text =
-                                            DateTimeHelper.getDDMMYYYYDateFromString(
-                                                it.content.fordate!!
-                                            )
+                                                DateTimeHelper.getDDMMYYYYDateFromString(
+                                                        it.content.fordate!!
+                                                )
                                         viewBinding.complaintId.text = it.content.complaintid
                                         viewBinding.work.text = it.content.work
                                         viewBinding.type.text = it.content.type
@@ -954,46 +829,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                         viewBinding.enduser.text = it.content.enduser
                                         viewBinding.order.text = it.content.orderBy
                                         viewBinding.remarks.text = it.content.remarks
-                                        val link = it.content.letterpic?.substringAfter(".")
-                                        if (link.equals("pdf")) {
-                                            viewBinding.letterimageView.setImageDrawable(
-                                                ResourcesCompat.getDrawable(
-                                                    this.getResources(),
-                                                    R.drawable.default_pdf,
-                                                    null
-                                                )
-                                            )
-                                        } else {
-                                            viewBinding.letterimageView.load(it.content.letterpic)
-                                        }
-                                        val measurementpic =
-                                            it.content.measurementpic?.substringAfter(
-                                                "."
-                                            )
-                                        if (measurementpic.equals("pdf")) {
-                                            viewBinding.mesurenmentImageView.setImageDrawable(
-                                                ResourcesCompat.getDrawable(
-                                                    this.getResources(),
-                                                    R.drawable.default_pdf,
-                                                    null
-                                                )
-                                            )
-                                        } else {
-                                            viewBinding.mesurenmentImageView.load(it.content.measurementpic)
-                                        }
-                                        val layoutpic = it.content.layoutpic?.substringAfter(".")
-                                        if (layoutpic.equals("pdf")) {
-                                            viewBinding.layoutImageView.setImageDrawable(
-                                                ResourcesCompat.getDrawable(
-                                                    this.getResources(),
-                                                    R.drawable.default_pdf,
-                                                    null
-                                                )
-                                            )
-                                        } else {
-                                            viewBinding.layoutImageView.load(it.content.layoutpic)
-                                        }
-
+                                        setImageAndPdf(it.content)
                                         setChangeStatus(it.content)
 
                                     } else {
@@ -1030,9 +866,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                     if (it.content != null) {
                                         viewBinding.loadingData.setVisibilityGone()
                                         viewBinding.date.text =
-                                            DateTimeHelper.getDDMMYYYYDateFromString(
-                                                it.content.fordate!!
-                                            )
+                                                DateTimeHelper.getDDMMYYYYDateFromString(
+                                                        it.content.fordate!!
+                                                )
                                         viewBinding.complaintId.text = it.content.complaintid
                                         viewBinding.work.text = it.content.work
                                         viewBinding.type.text = it.content.type
@@ -1048,46 +884,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                         viewBinding.enduser.text = it.content.enduser
                                         viewBinding.order.text = it.content.orderBy
                                         viewBinding.remarks.text = it.content.remarks
-                                        val link = it.content.letterpic?.substringAfter(".")
-                                        if (link.equals("pdf")) {
-                                            viewBinding.letterimageView.setImageDrawable(
-                                                ResourcesCompat.getDrawable(
-                                                    this.getResources(),
-                                                    R.drawable.default_pdf,
-                                                    null
-                                                )
-                                            )
-                                        } else {
-                                            viewBinding.letterimageView.load(it.content.letterpic)
-                                        }
-                                        val measurementpic =
-                                            it.content.measurementpic?.substringAfter(
-                                                "."
-                                            )
-                                        if (measurementpic.equals("pdf")) {
-                                            viewBinding.mesurenmentImageView.setImageDrawable(
-                                                ResourcesCompat.getDrawable(
-                                                    this.getResources(),
-                                                    R.drawable.default_pdf,
-                                                    null
-                                                )
-                                            )
-                                        } else {
-                                            viewBinding.mesurenmentImageView.load(it.content.measurementpic)
-                                        }
-                                        val layoutpic = it.content.layoutpic?.substringAfter(".")
-                                        if (layoutpic.equals("pdf")) {
-                                            viewBinding.layoutImageView.setImageDrawable(
-                                                ResourcesCompat.getDrawable(
-                                                    this.getResources(),
-                                                    R.drawable.default_pdf,
-                                                    null
-                                                )
-                                            )
-                                        } else {
-                                            viewBinding.layoutImageView.load(it.content.layoutpic)
-                                        }
-
+                                        setImageAndPdf(it.content)
                                         setChangeStatus(it.content)
 
                                     } else {
@@ -1142,9 +939,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                 if (it.content != null) {
                                     viewBinding.loadingData.setVisibilityGone()
                                     viewBinding.date.text =
-                                        DateTimeHelper.getDDMMYYYYDateFromString(
-                                            it.content.fordate!!
-                                        )
+                                            DateTimeHelper.getDDMMYYYYDateFromString(
+                                                    it.content.fordate!!
+                                            )
                                     viewBinding.complaintId.text = it.content.complaintid
                                     viewBinding.work.text = it.content.work
                                     viewBinding.type.text = it.content.type
@@ -1160,44 +957,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                     viewBinding.enduser.text = it.content.enduser
                                     viewBinding.order.text = it.content.orderBy
                                     viewBinding.remarks.text = it.content.remarks
-                                    val link = it.content.letterpic?.substringAfter(".")
-                                    if (link.equals("pdf")) {
-                                        viewBinding.letterimageView.setImageDrawable(
-                                            ResourcesCompat.getDrawable(
-                                                this.getResources(),
-                                                R.drawable.default_pdf,
-                                                null
-                                            )
-                                        )
-                                    } else {
-                                        viewBinding.letterimageView.load(it.content.letterpic)
-                                    }
-                                    val measurementpic =
-                                        it.content.measurementpic?.substringAfter(".")
-                                    if (measurementpic.equals("pdf")) {
-                                        viewBinding.mesurenmentImageView.setImageDrawable(
-                                            ResourcesCompat.getDrawable(
-                                                this.getResources(),
-                                                R.drawable.default_pdf,
-                                                null
-                                            )
-                                        )
-                                    } else {
-                                        viewBinding.mesurenmentImageView.load(it.content.measurementpic)
-                                    }
-                                    val layoutpic = it.content.layoutpic?.substringAfter(".")
-                                    if (layoutpic.equals("pdf")) {
-                                        viewBinding.layoutImageView.setImageDrawable(
-                                            ResourcesCompat.getDrawable(
-                                                this.getResources(),
-                                                R.drawable.default_pdf,
-                                                null
-                                            )
-                                        )
-                                    } else {
-                                        viewBinding.layoutImageView.load(it.content.layoutpic)
-                                    }
-
+                                    setImageAndPdf(it.content)
                                     if (enabledComplaintRequest == true) {
                                         viewBinding.status.text = complaintRequestStatus
                                     } else {
@@ -1235,8 +995,91 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         })
     }
 
+    private fun setImageAndPdf(content: MyComplainDetailsList) {
+        val link = content.letterpic?.substringAfter(".")
+        if (link.equals("pdf")) {
+            viewBinding.letterimageView.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                            this.getResources(),
+                            R.drawable.default_pdf,
+                            null
+                    )
+            )
+            viewBinding.letterimageView.background = Color.WHITE.toDrawable()
+            val url = appInfo.getFullAttachmentUrl(content.letterpic!!)
+            viewBinding.letterimageView.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+            }
 
+        } else {
+            if (content.letterpic != null) {
+                val imageUrl: String = content.letterpic!!
+                viewBinding.letterimageView.load(appInfo.getFullAttachmentUrl(content.letterpic!!))
+                viewBinding.letterimageView.setOnClickListener {
+                    imageOpenDialog(imageUrl)
+                }
+                viewBinding.letterimageView.background = Color.WHITE.toDrawable()
+            }
+        }
+        val measurementpic = content.measurementpic?.substringAfter(".")
 
+        if (measurementpic.equals("pdf")) {
+            viewBinding.mesurenmentImageView.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                            this.getResources(),
+                            R.drawable.default_pdf,
+                            null
+                    )
+            )
+            viewBinding.mesurenmentImageView.background = Color.WHITE.toDrawable()
+            val url = appInfo.getFullAttachmentUrl(content.measurementpic!!)
+            viewBinding.mesurenmentImageView.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+            }
+        } else {
+            if (content.measurementpic != null) {
+                viewBinding.mesurenmentImageView.load(
+                        appInfo.getFullAttachmentUrl(
+                                content.measurementpic!!
+                        )
+                )
+                val imageUrl: String = content.measurementpic!!
+                viewBinding.mesurenmentImageView.setOnClickListener {
+                    imageOpenDialog(imageUrl)
+                }
+                viewBinding.mesurenmentImageView.background = Color.WHITE.toDrawable()
+            }
+        }
+        val layoutpic = content.layoutpic?.substringAfter(".")
+
+        if (layoutpic.equals("pdf")) {
+            viewBinding.layoutImageView.setImageDrawable(
+                    ResourcesCompat.getDrawable(
+                            this.getResources(),
+                            R.drawable.default_pdf,
+                            null
+                    )
+            )
+            viewBinding.layoutImageView.background = Color.WHITE.toDrawable()
+            val url = appInfo.getFullAttachmentUrl(content.layoutpic!!)
+            viewBinding.layoutImageView.setOnClickListener {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                startActivity(intent)
+            }
+        } else {
+            if (content.layoutpic != null) {
+                viewBinding.layoutImageView.load(appInfo.getFullAttachmentUrl(content.layoutpic!!))
+                val imageUrl: String = content.layoutpic!!
+                viewBinding.layoutImageView.setOnClickListener {
+                    imageOpenDialog(imageUrl)
+                }
+                viewBinding.layoutImageView.background = Color.WHITE.toDrawable()
+            }
+        }
+
+    }
 
 
     private fun setChangeStatus(content: MyComplainDetailsList) {
@@ -1367,9 +1210,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             }
 
             val aa = ArrayAdapter(
-                this,
-                android.R.layout.simple_spinner_dropdown_item,
-                statusList
+                    this,
+                    android.R.layout.simple_spinner_dropdown_item,
+                    statusList
             )
             aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             with(statusSpinner) {
@@ -1419,8 +1262,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             viewModel.allocateUserForComplaint()
             val inflater: LayoutInflater = LayoutInflater.from(this)
             val dialogView = inflater.inflate(
-                R.layout.complaint_details_allocate_dialog_layout,
-                null
+                    R.layout.complaint_details_allocate_dialog_layout,
+                    null
             )
             val mBuilder = AlertDialog.Builder(this)
                     .setView(dialogView)
@@ -1462,10 +1305,10 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //                setValidationForAllocateUser()
                 if (setValidationForAllocateUser() == true) {
                     viewModel.requestforAllocatedUserForComplaint(
-                        supervisorid = supervisorid,
-                        enduserid = enduserid,
-                        foremanid = foremanid,
-                        compid = detailsId!!
+                            supervisorid = supervisorid,
+                            enduserid = enduserid,
+                            foremanid = foremanid,
+                            compid = detailsId!!
                     )
                     mAlertDialog.dismiss()
                 }
@@ -1505,16 +1348,16 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
     @TargetApi(Build.VERSION_CODES.M)
     fun askPermissions(url: String) {
         if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE
-            ) != PackageManager.PERMISSION_GRANTED
+                        this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
         ) {
             // Permission is not granted
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(
-                    this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                )
+                            this,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    )
             ) {
                 // Show an explanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
@@ -1524,9 +1367,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                         .setMessage("Permission required to save photos from the Web.")
                         .setPositiveButton("Allow") { dialog, id ->
                             ActivityCompat.requestPermissions(
-                                this,
-                                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                                    this,
+                                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
                             )
                             finish()
                         }
@@ -1535,9 +1378,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             } else {
                 // No explanation needed, we can request the permission.
                 ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                    MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
+                        this,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE
                 )
                 // MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE is an
                 // app-defined int constant. The callback method gets the
@@ -1570,8 +1413,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                     .setTitle(url.substring(url.lastIndexOf("/") + 1))
                     .setDescription("")
                     .setDestinationInExternalPublicDir(
-                        directory.toString(),
-                        url.substring(url.lastIndexOf("/") + 1)
+                            directory.toString(),
+                            url.substring(url.lastIndexOf("/") + 1)
                     )
         }
 
@@ -1606,7 +1449,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 //            DownloadManager.STATUS_PENDING -> "Pending"
             DownloadManager.STATUS_RUNNING -> "Downloading..."
             DownloadManager.STATUS_SUCCESSFUL -> "Image downloaded successfully in $directory" + File.separator + url.substring(
-                url.lastIndexOf("/") + 1
+                    url.lastIndexOf("/") + 1
             )
             else -> ""
         }
@@ -1665,21 +1508,21 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         }
 
         supervisorData.add(
-            0,
-            AllocateUserData(
-                id = SupervisorIdShowfirst,
-                name = nameSupervisorshowfirst,
-                designation = SupervisorDesignationnameshowfirst
-            )
+                0,
+                AllocateUserData(
+                        id = SupervisorIdShowfirst,
+                        name = nameSupervisorshowfirst,
+                        designation = SupervisorDesignationnameshowfirst
+                )
         )
         val setItems = supervisorData.distinctBy { it.name }
         supervisorData.clear()
         supervisorData.addAll(setItems)
 
         val aa = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            supervisorData
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                supervisorData
         )
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(supervisorSpinner) {
@@ -1710,12 +1553,12 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         }
 
         foremanData.add(
-            0,
-            AllocateUserData(
-                id = foremanidshowfirst!!,
-                name = nameForemanshowfirst!!,
-                designation = foremanDesignationnameshowfirst!!
-            )
+                0,
+                AllocateUserData(
+                        id = foremanidshowfirst!!,
+                        name = nameForemanshowfirst!!,
+                        designation = foremanDesignationnameshowfirst!!
+                )
         )
 
         val setItems = foremanData.distinctBy { it.name }
@@ -1723,9 +1566,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         foremanData.addAll(setItems)
 
         val aa = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            foremanData
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                foremanData
         )
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(foremanSpinner) {
@@ -1758,20 +1601,20 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
         }
 
         enduserData.add(
-            0,
-            AllocateUserData(
-                id = endidshowfirst,
-                name = nameshowfirst,
-                designation = designationnameshowfirst
-            )
+                0,
+                AllocateUserData(
+                        id = endidshowfirst,
+                        name = nameshowfirst,
+                        designation = designationnameshowfirst
+                )
         )
         val setItems = enduserData.distinctBy { it.name }
         enduserData.clear()
         enduserData.addAll(setItems)
         val aa = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            enduserData
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                enduserData
         )
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(enduserSpinner) {

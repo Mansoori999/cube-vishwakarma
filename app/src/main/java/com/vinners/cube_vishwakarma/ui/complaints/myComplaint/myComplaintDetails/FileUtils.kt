@@ -62,7 +62,8 @@ object FileUtils {
                     Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)!!)
 
                 return getDataColumn(context, contentUri, null, null)
-            } else if (isMediaDocument(uri)) {
+            }
+            else if (isMediaDocument(uri)) {
                 val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
                 val type = split[0]
