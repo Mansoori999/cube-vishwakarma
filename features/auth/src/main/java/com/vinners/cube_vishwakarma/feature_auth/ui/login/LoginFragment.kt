@@ -159,7 +159,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding, LoginViewModel>(R.layou
                     (requireActivity().application as CoreApplication).reInitCoreDependencies()
                     val intent = Intent(
                             context,
-                            Class.forName("com.vinners.cube_vishwakarma.ui.MainActivity")
+                            Class.forName("com.vinners.cube_vishwakarma.ui.dashboard.MainActivity")
                     )
                     startActivity(intent)
                     activity?.finish()

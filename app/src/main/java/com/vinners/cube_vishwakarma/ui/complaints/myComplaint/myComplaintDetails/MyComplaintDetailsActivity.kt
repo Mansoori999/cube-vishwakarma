@@ -355,6 +355,27 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                             try {
                                 imageResult = File(path)
                                 val url = appInfo.getFullAttachmentUrl(path)
+                                imageView1.background = Color.WHITE.toDrawable()
+                                imageView1.setImageDrawable(
+                                        ResourcesCompat.getDrawable(
+                                                this.getResources(),
+                                                R.drawable.default_pdf,
+                                                null
+                                        )
+                                )
+                                imageView1.setOnClickListener {
+                                    try {
+                                        val myIntent = Intent(Intent.ACTION_VIEW)
+                                        val file = File(path)
+                                        val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+                                        val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                                        myIntent.setDataAndType(Uri.fromFile(file), mimetype)
+                                        startActivity(myIntent)
+                                    } catch (e: java.lang.Exception) {
+                                        // TODO: handle exception
+                                        val data = e.message
+                                    }
+                                }
                                 filename.setOnClickListener {
                                     try {
                                         val myIntent = Intent(Intent.ACTION_VIEW)
@@ -394,6 +415,27 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                             val path = UtilsFile(this).getPath(uri!!)
                             try {
                                 mesurmentImageResult = File(path)
+                                imageView2.background = Color.WHITE.toDrawable()
+                                imageView2.setImageDrawable(
+                                        ResourcesCompat.getDrawable(
+                                                this.getResources(),
+                                                R.drawable.default_pdf,
+                                                null
+                                        )
+                                )
+                                imageView2.setOnClickListener {
+                                    try {
+                                        val myIntent = Intent(Intent.ACTION_VIEW)
+                                        val file = File(path)
+                                        val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+                                        val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                                        myIntent.setDataAndType(Uri.fromFile(file), mimetype)
+                                        startActivity(myIntent)
+                                    } catch (e: java.lang.Exception) {
+                                        // TODO: handle exception
+                                        val data = e.message
+                                    }
+                                }
                                 filename1.setOnClickListener {
                                     try {
                                         val myIntent = Intent(Intent.ACTION_VIEW)
@@ -433,6 +475,27 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                             val path = UtilsFile(this).getPath(uri!!)
                             try {
                                 layoutImageResult = File(path)
+                                imageView3.background = Color.WHITE.toDrawable()
+                                imageView3.setImageDrawable(
+                                        ResourcesCompat.getDrawable(
+                                                this.getResources(),
+                                                R.drawable.default_pdf,
+                                                null
+                                        )
+                                )
+                                imageView3.setOnClickListener {
+                                    try {
+                                        val myIntent = Intent(Intent.ACTION_VIEW)
+                                        val file = File(path)
+                                        val extension = MimeTypeMap.getFileExtensionFromUrl(Uri.fromFile(file).toString())
+                                        val mimetype = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension)
+                                        myIntent.setDataAndType(Uri.fromFile(file), mimetype)
+                                        startActivity(myIntent)
+                                    } catch (e: java.lang.Exception) {
+                                        // TODO: handle exception
+                                        val data = e.message
+                                    }
+                                }
                                 filename2.setOnClickListener {
                                     try {
                                         val myIntent = Intent(Intent.ACTION_VIEW)
@@ -1090,7 +1153,12 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             viewBinding.doneImageContainer.setVisibilityGone()
         }
 
-    if (userSessionManager.designation!!.toLowerCase().equals("sub admin")&&
+    if ((userSessionManager.designation!!.toLowerCase().equals("sub admin") ||
+                    userSessionManager.designation!!.toLowerCase().equals("subadmin")||
+                    userSessionManager.designation!!.toLowerCase().equals("foreman")||
+                    userSessionManager.designation!!.toLowerCase().equals("supervisor") ||
+                    userSessionManager.designation!!.toLowerCase().equals("enduser") ||
+                    userSessionManager.designation!!.toLowerCase().equals("end user")) &&
             ((content.status?.toLowerCase().equals("due") ||
                 content.status?.toLowerCase().equals("working") ||
                 content.status?.toLowerCase().equals("hold")

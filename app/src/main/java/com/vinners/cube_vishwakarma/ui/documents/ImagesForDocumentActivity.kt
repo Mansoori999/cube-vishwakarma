@@ -226,14 +226,7 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
         } catch (e: Exception) {
             e.printStackTrace()
         }
-//        cameraIntegrator = CameraIntegrator(this)
-//        cameraIntegrator.setImageDirectoryName(".priya")
-//        cameraIntegrator.setRequiredImageSize(ImagesSizes.OPTIMUM_BIG)
-//        try {
-//            cameraIntegrator.initiateCapture()
-//        } catch (e: IOException) {
-//            e.printStackTrace()
-//        }
+
     }
 
     private val cameraIntegrator: CameraIntegrator by lazy {
@@ -245,17 +238,7 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
             }
     }
 
-//    fun openCamera() {
-//        if (storagePermissions())
-//            cameraIntegrator.initiateCapture()
-//        else
-//            requestStoragePermissions()
-////        try {
-////            cameraIntegrator.initiateCapture()
-////        } catch (e: Exception) {
-////            e.printStackTrace()
-////        }
-//    }
+
 
     private fun requestStoragePermissions() {
         ActivityCompat.requestPermissions(
@@ -387,9 +370,9 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
                     fullPic =
                         imageDialog.findViewById(R.id.big_picture)
                     val deleteImage =
-                        imageDialog.findViewById<TextView>(R.id.delete_image)
+                        imageDialog.findViewById<ImageView>(R.id.delete_image)
                     val shareImage =
-                        imageDialog.findViewById<Button>(R.id.share_image)
+                        imageDialog.findViewById<ImageView>(R.id.share_image)
                     shareImage.setOnClickListener {
                         val uri =
                             FileProvider.getUriForFile(
