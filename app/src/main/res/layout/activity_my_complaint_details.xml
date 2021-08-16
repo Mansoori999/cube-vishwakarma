@@ -727,6 +727,7 @@
                     android:layout_centerHorizontal="true"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
+
                     android:text="Measurement Pic"
                     android:textColor="#CC000000"
                     android:textSize="14sp" />

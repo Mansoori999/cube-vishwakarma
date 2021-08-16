@@ -12,7 +12,7 @@ import com.vinners.cube_vishwakarma.core.mdm.DeviceInfoProvider
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.data.models.auth.LoginResponse
-import com.vinners.cube_vishwakarma.data.models.auth.LoginWithoutOtpRequest
+
 import com.vinners.cube_vishwakarma.data.models.mdm.MobileInformation
 import com.vinners.cube_vishwakarma.data.models.otp.VerifyOtpLoginRequest
 import com.vinners.cube_vishwakarma.data.models.otp.VerifyOtpRequest

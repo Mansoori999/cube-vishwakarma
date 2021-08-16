@@ -5,9 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
+import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.models.complaints.complaintRequest.*
 import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
 import com.vinners.cube_vishwakarma.data.repository.ComplaintRequestRepository
+import com.vinners.cube_vishwakarma.data.repository.MyComplaintRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,9 +39,13 @@ interface ComplaintTypeEvents {
 
     val viewComplaintRequestListState : LiveData<Lce<List<ComplaintRequestResponse>>>
 
+    val complaintListState: LiveData<Lce<List<MyComplaintList>>>
+
 }
 class ComplaintRequestViewModel @Inject constructor(
-private val complaintRequestRepository: ComplaintRequestRepository
+private val complaintRequestRepository: ComplaintRequestRepository,
+private val myComplaintRepository: MyComplaintRepository
+
 ) : ViewModel(),ComplaintTypeEvents {
     private val _loadRegionalAndSalesInfo = MutableLiveData<LoadMetaForAddComplaintState>()
     val loadRegionalAndSalesInfo: LiveData<LoadMetaForAddComplaintState> = _loadRegionalAndSalesInfo
@@ -138,6 +144,22 @@ private val complaintRequestRepository: ComplaintRequestRepository
                 _viewComplaintRequestListState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _viewComplaintRequestListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    private val _complaintListState = MutableLiveData<Lce<List<MyComplaintList>>>()
+    override val complaintListState: LiveData<Lce<List<MyComplaintList>>> = _complaintListState
+
+    fun getComplaintList(userid:String){
+        _complaintListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = myComplaintRepository.getComplaint(userid)
+                _complaintListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _complaintListState.postValue(Lce.error(e.localizedMessage))
 
             }
         }

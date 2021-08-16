@@ -124,6 +124,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private lateinit var foremanSpinner:Spinner
     private lateinit var enduserSpinner:Spinner
     private lateinit var errorText:TextView
+    private lateinit var errorTextstatus:TextView
     var nameshowfirst:String = "Select EndUser"
     var endidshowfirst:String = "XX"
     var designationnameshowfirst:String = ""
@@ -169,6 +170,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     private var imageResult: File? = null
     private var mesurmentImageResult: File? = null
     private var layoutImageResult: File? = null
+
 
     private var myFilePath :File? = null
     private var mesurmentFilePath: File? = null
@@ -385,7 +387,6 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                                         myIntent.setDataAndType(Uri.fromFile(file), mimetype)
                                         startActivity(myIntent)
                                     } catch (e: java.lang.Exception) {
-                                        // TODO: handle exception
                                         val data = e.message
                                     }
                                 }
@@ -552,30 +553,25 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
     private fun setValidationUpdate():Boolean {
         if  (reason.isVisible && reason.text.isNullOrBlank()){
-            showInformationDialog("Please Write Reason")
-            return true
+//            showInformationDialog("Please Write Reason")
+            errorTextstatus.setVisibilityVisible()
+            errorTextstatus.setText("Please Write Reason")
+            return false
         }
         if (statusValue == null){
-            showInformationDialog("Please Select Status")
-            return true
+            errorTextstatus.setVisibilityVisible()
+            errorTextstatus.setText("Please Select Status")
+//            showInformationDialog("Please Select Status")
+            return false
         }
 
         if (donecontainer.isVisible && imageResult == null){
-            showInformationDialog("Please Click Letter Pic OR Select File")
-            return true
+            errorTextstatus.setVisibilityVisible()
+            errorTextstatus.setText("Please Click Letter Pic OR Select File")
+//            showInformationDialog("Please Click Letter Pic OR Select File")
+            return false
         }
 
-
-
-        viewModel.upDateComplaints(
-                statusremarks = reason.text.toString(),
-                id = detailsId!!.toInt(),
-                status = statusValue.toString(),
-                letterPic = imageResult!!,
-                measurementPic = mesurmentImageResult!!,
-                layoutPic = layoutImageResult!!
-
-        )
         return true
 
     }
@@ -1113,6 +1109,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                     imageOpenDialog(imageUrl)
                 }
                 viewBinding.mesurenmentImageView.background = Color.WHITE.toDrawable()
+            }else{
+                viewBinding.mesurementLabel.setVisibilityGone()
+                viewBinding.mesurenmentImageView.setVisibilityGone()
             }
         }
         val layoutpic = content.layoutpic?.substringAfter(".")
@@ -1139,6 +1138,9 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                     imageOpenDialog(imageUrl)
                 }
                 viewBinding.layoutImageView.background = Color.WHITE.toDrawable()
+            }else{
+                viewBinding.layoutImageView.setVisibilityGone()
+                viewBinding.layoutLabel.setVisibilityGone()
             }
         }
 
@@ -1313,6 +1315,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
             val cancle = dialogView.findViewById<Button>(R.id.cancelbtn)
             val update = dialogView.findViewById<Button>(R.id.uploadbtn)
+            errorTextstatus = dialogView.findViewById<TextView>(R.id.errorText)
             cancle.setOnClickListener {
                 //dismiss dialog
                 mAlertDialog.dismiss()
@@ -1320,6 +1323,15 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             update.setOnClickListener{
                 if (setValidationUpdate() == true){
 //                setValidationUpdate()
+                    viewModel.upDateComplaints(
+                            statusremarks = reason.text.toString(),
+                            id = detailsId!!.toInt(),
+                            status = statusValue.toString(),
+                            letterPic = imageResult,
+                            measurementPic = mesurmentImageResult,
+                            layoutPic = layoutImageResult
+
+                    )
                     mAlertDialog.dismiss()
                 }
             }

@@ -2,10 +2,14 @@ package com.vinners.cube_vishwakarma.ui.complaints.complaintRequest
 
 import android.content.Intent
 import android.view.Gravity
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.view.LayoutInflater
+import android.widget.*
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
@@ -13,17 +17,22 @@ import com.vinners.cube_vishwakarma.core.extensions.onItemSelected
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
+import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.ActivityComplaintRequestBinding
 import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequest.model.*
 import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.ComplaintRequestViewActivity
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintRecyclerAdapter
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintsClickListener
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
+import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import java.util.stream.Collectors
 import javax.inject.Inject
 
 
-class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,ComplaintRequestViewModel>(R.layout.activity_complaint_request) {
+class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,ComplaintRequestViewModel>(R.layout.activity_complaint_request), AllComplaintsClickListener {
 
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
@@ -32,6 +41,22 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
     lateinit var userSessionManager: UserSessionManager
 
     override val viewModel: ComplaintRequestViewModel by viewModels { viewModelFactory }
+
+    private val allComplaintRecyclerAdapter: AllComplaintRecyclerAdapter by lazy {
+        AllComplaintRecyclerAdapter()
+                .apply {
+                    updateViewList(emptyList())
+                    setAllComplaintsListener(this@ComplaintRequestActivity)
+                }
+    }
+    lateinit var recyclerView :RecyclerView
+    private var progressBar: ProgressBar? = null
+    lateinit var textError:TextView
+    lateinit var errorImage:ImageView
+    var errorContainer:LinearLayout? = null
+    var userid : String? = null
+    var adminUserid : String = ""
+
 
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
@@ -42,7 +67,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
     }
 
     override fun onInitDataBinding() {
-
+        userid = userSessionManager.userId
         viewBinding.addComplaintDataMainLayout.complaintRequestToolbar.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -92,53 +117,89 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 
 
         viewBinding.addComplaintDataMainLayout.submitBtn.setOnClickListener {
-            validateAndSubmitComplaintData()
+            if ( validateAndSubmitComplaintData() == true) {
+                val inflater = LayoutInflater.from(this)
+//                val inflater: LayoutInflater = LayoutInflater.from(this)
+                val dialogView = inflater.inflate(R.layout.viewcomplaint_during_request, null)
+                val alertDialog = AlertDialog.Builder(this)
+                        .setView(dialogView)
+                        .setTitle("Do you still want to generate complaint?")
+
+                recyclerView = dialogView.findViewById(R.id.complaintsRecycler)
+                progressBar = dialogView.findViewById(R.id.progressBar)
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                allComplaintRecyclerAdapter.updateViewList(emptyList())
+                recyclerView.adapter = allComplaintRecyclerAdapter
+                errorContainer = dialogView.findViewById(R.id.errorContainer)
+                textError = dialogView.findViewById(R.id.message_tv)
+                errorImage = dialogView.findViewById(R.id.info_image_iv)
+                if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+                    viewModel.getComplaintList(adminUserid)
+                }else{
+                    viewModel.getComplaintList(userid!!)
+
+                }
+
+                alertDialog.setPositiveButton("Yes") { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                    val outletid = (viewBinding.addComplaintDataMainLayout.outletSpinner.selectedItem as OutletAreaData).id
+                    val complaintTypeid = (viewBinding.addComplaintDataMainLayout.complaintTypeSpinner.selectedItem as ComplaintTypeData).id
+                    val orderByid = (viewBinding.addComplaintDataMainLayout.orderBySpinner.selectedItem as OrderByData).id
+
+                    viewModel.submitComplaintRequest(
+                            typeid = complaintTypeid!!,
+                            outletid = outletid,
+                            orderby = orderByid!!,
+                            work = viewBinding.addComplaintDataMainLayout.wordEt.text.toString(),
+                            remarks = viewBinding.addComplaintDataMainLayout.editRemarks.text.toString()
+                    )
+
+                }
+
+                alertDialog.setNegativeButton("Cancel"){ DialogInterface, i: Int ->
+                    DialogInterface.dismiss()
+                }
+                alertDialog.show()
+            }
+
         }
     }
 
 
 
 
-    private fun validateAndSubmitComplaintData() {
+    private fun validateAndSubmitComplaintData():Boolean {
         if (viewBinding.addComplaintDataMainLayout.regionalSpinner.childCount == 0 || viewBinding.addComplaintDataMainLayout.regionalSpinner.selectedItemPosition == 0) {
             showInformationDialog("Please Select Regional Office")
-            return
+            return false
         }
         if (viewBinding.addComplaintDataMainLayout.salesareaSpinner.childCount == 0 ||
                 viewBinding.addComplaintDataMainLayout.salesareaSpinner.selectedItemPosition == 0) {
             showInformationDialog("Please Select Sales Area")
-            return
+            return false
         }
         if (viewBinding.addComplaintDataMainLayout.outletSpinner.childCount == 0 ||
                 viewBinding.addComplaintDataMainLayout.outletSpinner.selectedItemPosition == 0) {
             showInformationDialog("Please Select Outlet Area")
-            return
+            return false
         }
         if (viewBinding.addComplaintDataMainLayout.complaintTypeSpinner.childCount == 0 ||
                 viewBinding.addComplaintDataMainLayout.complaintTypeSpinner.selectedItemPosition == 0) {
             showInformationDialog("Please Select Complaint Type")
-            return
+            return false
         }
         if (viewBinding.addComplaintDataMainLayout.orderBySpinner.childCount == 0 ||
                 viewBinding.addComplaintDataMainLayout.orderBySpinner.selectedItemPosition==0){
             showInformationDialog("Please Select Order By")
-            return
+            return false
         }
         if (viewBinding.addComplaintDataMainLayout.wordEt.text.isNullOrBlank()) {
             showInformationDialog("Please Enter Work")
-            return
+            return false
         }
-        val outletid = (viewBinding.addComplaintDataMainLayout.outletSpinner.selectedItem as OutletAreaData).id
-        val complaintTypeid = (viewBinding.addComplaintDataMainLayout.complaintTypeSpinner.selectedItem as ComplaintTypeData).id
-        val orderByid = (viewBinding.addComplaintDataMainLayout.orderBySpinner.selectedItem as OrderByData).id
 
-        viewModel.submitComplaintRequest(
-                typeid = complaintTypeid!!,
-                outletid = outletid,
-                orderby = orderByid!!,
-                work = viewBinding.addComplaintDataMainLayout.wordEt.text.toString(),
-                remarks = viewBinding.addComplaintDataMainLayout.editRemarks.text.toString()
-        )
+        return true
+
 
 
     }
@@ -241,6 +302,45 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
             }
         })
         viewModel.getOrderByData()
+        viewModel.complaintListState.observe(this, Observer {
+            when(it){
+                Lce.Loading ->{
+                    progressBar?.setVisibilityVisible()
+
+                }
+                is Lce.Content->
+                {
+                    val itemlist = it.content.filter {
+                        it.status?.toLowerCase().equals("due") ||
+                                it.status?.toLowerCase().equals("working") ||
+                                it.status?.toLowerCase().equals("hold") ||
+                                it.status?.toLowerCase().equals("done")
+                    }
+                    if (itemlist.isEmpty()){
+                        errorContainer?.setVisibilityVisible()
+                        progressBar?.setVisibilityGone()
+                        errorImage.load(R.drawable.ic_information)
+                        textError.text = "Not Complaints Found"
+
+                    } else {
+                        progressBar?.setVisibilityGone()
+                        allComplaintRecyclerAdapter.updateViewList(itemlist)
+                        errorContainer?.setVisibilityGone()
+
+                    }
+
+                }
+                is Lce.Error ->
+                {
+                   progressBar?.setVisibilityGone()
+                    showInformationDialog(it.error)
+
+                }
+
+
+            }
+        })
+
 
         viewModel.submitListState.observe(this, Observer {
             when(it){
@@ -522,6 +622,14 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
             adapter = aa
             prompt = "Select Outlet Area"
             gravity = Gravity.CENTER
+        }
+    }
+
+    override fun OnAllComplaintsClick(myComplaintList: MyComplaintList) {
+        Intent(this, MyComplaintDetailsActivity::class.java).apply {
+            putExtra("complaintId", myComplaintList.id)
+        }.also {
+            startActivity(it)
         }
     }
 }

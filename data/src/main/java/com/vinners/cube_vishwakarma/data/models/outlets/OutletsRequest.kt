@@ -1,7 +1,6 @@
 package com.vinners.cube_vishwakarma.data.models.outlets
 
 import com.google.gson.annotations.SerializedName
-import com.vinners.cube_vishwakarma.data.models.mdm.MobileInformation
 
 
 data class OutletsRequest(

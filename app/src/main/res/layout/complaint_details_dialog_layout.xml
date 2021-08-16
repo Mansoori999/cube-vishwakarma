@@ -248,12 +248,26 @@
 
     </LinearLayout>
 <!--    </com.google.android.material.card.MaterialCardView>-->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:textColor="@android:color/holo_red_dark"
+        android:text="error"
+        android:layout_below="@+id/doneImage"
+        android:layout_marginTop="10dp"
+        android:id="@+id/errorText"
+        android:visibility="gone"
+        android:layout_centerHorizontal="true"
+        android:gravity="center_horizontal"
+        android:textStyle="bold"
 
+        />
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_below="@+id/doneImage"
+        android:layout_marginTop="15dp"
+        android:layout_below="@+id/errorText"
         android:layout_height="wrap_content">
 
         <com.google.android.material.button.MaterialButton

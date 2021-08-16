@@ -90,19 +90,24 @@ class AllComplaintFragmentViewModel @Inject constructor(
     /* Upload Complaint*/
     private val _upDateListState = MutableLiveData<Lce<List<String>>>()
     override val upDateListState: LiveData<Lce<List<String>>> = _upDateListState
+//    letterPic: File?,
+//    measurementPic:File?,
+//    layoutPic:File?
 
-    fun upDateComplaints(
+fun upDateComplaints(
             statusremarks: String,
             status: String,
             id: Int,
-            letterPic: File,
-            measurementPic:File,
-            layoutPic:File
+            letterPic: File?,
+            measurementPic:File?,
+            layoutPic:File?
     ){
         _upDateListState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {
-                val response = myComplaintRepository.upDateComplaints(statusremarks,status,id,letterPic.absolutePath,measurementPic.absolutePath,layoutPic.absolutePath)
+                val response = myComplaintRepository.upDateComplaints(statusremarks,status,id,
+                    letterPic?.absolutePath, measurementPic?.absolutePath, layoutPic?.absolutePath
+                )
                 _upDateListState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _upDateListState.postValue(Lce.error(e.localizedMessage))

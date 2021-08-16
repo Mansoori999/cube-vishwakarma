@@ -1,8 +1,6 @@
 package com.vinners.cube_vishwakarma.data.dataStores
 
 import com.vinners.cube_vishwakarma.data.models.auth.*
-import com.vinners.cube_vishwakarma.data.models.jobs.JobDetails
-import com.vinners.cube_vishwakarma.data.models.mdm.MobileInformation
 import com.vinners.cube_vishwakarma.data.models.otp.VerifyOtpLoginRequest
 import com.vinners.cube_vishwakarma.data.models.otp.VerifyOtpRequest
 import com.vinners.cube_vishwakarma.data.models.stateAndCity.*
