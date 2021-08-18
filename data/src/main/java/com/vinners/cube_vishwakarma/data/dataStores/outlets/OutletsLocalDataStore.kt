@@ -21,6 +21,16 @@ interface OutletsLocalDataStore  {
 
     suspend fun getAllMyComplaints():List<MyComplaintList>
 
+    suspend fun getComplaintBYIDAND(roid:List<Int> , said:List<Int>): List<MyComplaintList>
+
+    suspend fun getComplaintBYIDWithOR(roid:List<Int> , said:List<Int>): List<MyComplaintList>
+
+    suspend fun getComplaintByAllIDAND(roid:List<Int> , said:List<Int>,subadmin:List<Int>): List<MyComplaintList>
+
+    suspend fun getComplaintByIDWithSubAminOR(roid:List<Int> , said:List<Int>,subadmin:List<Int>): List<MyComplaintList>
+
+    suspend fun getComplaintByIDWithSubadminAndRO(roid:List<Int> , subadmin:List<Int>): List<MyComplaintList>
+
     suspend fun insertDashboardData(dashboardList : DashBoardResponseDataItem)
 
     suspend fun deleteDashboardData()

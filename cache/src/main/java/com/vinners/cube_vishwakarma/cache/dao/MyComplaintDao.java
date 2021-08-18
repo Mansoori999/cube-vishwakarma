@@ -23,20 +23,34 @@ public interface MyComplaintDao {
     List<MyComplaintList> getAllComplaints();
 
 
-//@Query("SELECT * FROM " + OutletsList.TABLE_NAME +
-//        " WHERE " + OutletsList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " OR " +
-//        OutletsList.COLUMN_SALES_AREA_ID + " IN (:said)" +"")
-//
-//    @Query("SELECT * FROM " + MyComplaintList.TABLE_NAME +
-//            " WHERE " + MyComplaintList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " AND "
-//            + MyComplaintList.COLUMN_SALES_AREA_ID + " IN (:said)" + "")
-////List<OutletsList>getOutletsByID(@Nullable String roid, @Nullable String said);
-//    List<MyComplaintList>getOutletsByID(List<Integer> roid, List<Integer> said);
-//
-//    @Query("SELECT * FROM " + MyComplaintList.TABLE_NAME +
-//            " WHERE " + MyComplaintList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " OR "
-//            + MyComplaintList.COLUMN_SALES_AREA_ID + " IN (:said)" + "")
-//    List<MyComplaintList>getOutletsByIDWithOR(List<Integer> roid, List<Integer> said);
+    @Query("SELECT * FROM " + MyComplaintList.TABLE_NAME +
+            " WHERE " + MyComplaintList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " AND "
+            + MyComplaintList.COLUMN_SALES_AREA_ID + " IN (:said)" + "")
+    List<MyComplaintList>getComplaintByIDAND(List<Integer> roid, List<Integer> said);
+
+    @Query("SELECT * FROM " + MyComplaintList.TABLE_NAME +
+            " WHERE " + MyComplaintList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " OR "
+            + MyComplaintList.COLUMN_SALES_AREA_ID + " IN (:said)" + "")
+    List<MyComplaintList>getComplaintByIDWithOR(List<Integer> roid, List<Integer> said);
+
+    @Query("SELECT * FROM " + MyComplaintList.TABLE_NAME +
+            " WHERE " + MyComplaintList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " OR "
+            + MyComplaintList.COLUMN_SALES_AREA_ID + " IN (:said)" + " OR "
+            + MyComplaintList.COLUMN_SUBAMIN_ID + " IN (:subadmin)" + "")
+    List<MyComplaintList>getComplaintByIDWithSubAmin(List<Integer> roid, List<Integer> said,List<Integer> subadmin);
+
+    @Query("SELECT * FROM " + MyComplaintList.TABLE_NAME +
+            " WHERE " + MyComplaintList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " AND "
+            + MyComplaintList.COLUMN_SALES_AREA_ID + " IN (:said)" + " AND "
+            + MyComplaintList.COLUMN_SUBAMIN_ID + " IN (:subadmin)" + "")
+    List<MyComplaintList>getComplaintByAllID(List<Integer> roid, List<Integer> said,List<Integer> subadmin);
+
+    @Query("SELECT * FROM " + MyComplaintList.TABLE_NAME +
+            " WHERE " + MyComplaintList.COLUMN_REGIONAL_OFFICE_ID + " IN (:roid)" + " AND "
+            + MyComplaintList.COLUMN_SUBAMIN_ID + " IN (:subadmin)" + "")
+    List<MyComplaintList>getComplaintByIDWithSubadminAndRO(List<Integer> roid, List<Integer> subadmin);
+
+
 
 
     @Query("SELECT DISTINCT " + MyComplaintList.COLUMN_REGIONAL_OFFICE + " FROM " + MyComplaintList.TABLE_NAME)

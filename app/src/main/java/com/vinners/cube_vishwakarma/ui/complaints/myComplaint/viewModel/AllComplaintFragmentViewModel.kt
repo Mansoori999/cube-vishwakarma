@@ -5,11 +5,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vinners.cube_vishwakarma.core.taskState.Lce
-import com.vinners.cube_vishwakarma.core.taskState.Lse
 import com.vinners.cube_vishwakarma.data.models.complaints.*
-import com.vinners.cube_vishwakarma.data.models.profile.Profile
 import com.vinners.cube_vishwakarma.data.repository.MyComplaintRepository
-import com.vinners.cube_vishwakarma.data.repository.ProfileRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -30,6 +27,15 @@ interface ComplaintEvents {
 
     val complaintDaoListState: LiveData<Lce<List<MyComplaintList>>>
 
+    val complaintDaoROANDSaidListState: LiveData<Lce<List<MyComplaintList>>>
+
+    val complaintDaoROORSaidListState: LiveData<Lce<List<MyComplaintList>>>
+
+    val complaintDaoAllANDListState: LiveData<Lce<List<MyComplaintList>>>
+
+    val complaintDaoWithSubAminORListState: LiveData<Lce<List<MyComplaintList>>>
+
+    val complaintDaoWithSubadminAndROListState: LiveData<Lce<List<MyComplaintList>>>
 }
 class AllComplaintFragmentViewModel @Inject constructor(
         private val myComplaintRepository: MyComplaintRepository
@@ -68,7 +74,93 @@ class AllComplaintFragmentViewModel @Inject constructor(
             }
         }
     }
+    private val _complaintDaoROANDSaidListState = MutableLiveData<Lce<List<MyComplaintList>>>()
+    override val complaintDaoROANDSaidListState: LiveData<Lce<List<MyComplaintList>>> = _complaintDaoROANDSaidListState
 
+    fun getComplaintBYIDROANDSaid(roid:List<Int> , said:List<Int>){
+        _complaintDaoROANDSaidListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = myComplaintRepository.getComplaintBYIDAND(roid,said)
+                _complaintDaoROANDSaidListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _complaintDaoROANDSaidListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    private val _complaintDaoROORSaidListState = MutableLiveData<Lce<List<MyComplaintList>>>()
+    override val complaintDaoROORSaidListState: LiveData<Lce<List<MyComplaintList>>> = _complaintDaoROORSaidListState
+
+    fun getComplaintBYIDWithOR(roid:List<Int> , said:List<Int>){
+        _complaintDaoROORSaidListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = myComplaintRepository.getComplaintBYIDWithOR(roid,said)
+                _complaintDaoROORSaidListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _complaintDaoROORSaidListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    private val _complaintDaoAllANDListState = MutableLiveData<Lce<List<MyComplaintList>>>()
+    override val complaintDaoAllANDListState: LiveData<Lce<List<MyComplaintList>>> = _complaintDaoAllANDListState
+
+    fun getComplaintByAllIDAND(roid:List<Int> , said:List<Int>,subadmin:List<Int>){
+        _complaintDaoAllANDListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = myComplaintRepository.getComplaintByAllIDAND(roid,said,subadmin)
+                _complaintDaoAllANDListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _complaintDaoAllANDListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    private val _complaintDaoWithSubAminORListState = MutableLiveData<Lce<List<MyComplaintList>>>()
+    override val complaintDaoWithSubAminORListState: LiveData<Lce<List<MyComplaintList>>> = _complaintDaoWithSubAminORListState
+
+    fun getComplaintByIDWithSubAminOR(roid:List<Int> , said:List<Int>,subadmin:List<Int>){
+        _complaintDaoWithSubAminORListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = myComplaintRepository.getComplaintByIDWithSubAminOR(roid,said,subadmin)
+                _complaintDaoWithSubAminORListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _complaintDaoWithSubAminORListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+    private val _complaintDaoWithSubadminAndROListState = MutableLiveData<Lce<List<MyComplaintList>>>()
+    override val complaintDaoWithSubadminAndROListState: LiveData<Lce<List<MyComplaintList>>> = _complaintDaoWithSubadminAndROListState
+
+    fun getComplaintByIDWithSubadminAndRO(roid:List<Int> , subadmin:List<Int>){
+        _complaintDaoWithSubadminAndROListState.value = Lce.Loading
+        viewModelScope.launch(Dispatchers.IO){
+            try {
+                val response = myComplaintRepository.getComplaintByIDWithSubadminAndRO(roid,subadmin)
+                _complaintDaoWithSubadminAndROListState.postValue(Lce.content(response))
+            }catch (e : Exception){
+                _complaintDaoWithSubadminAndROListState.postValue(Lce.error(e.localizedMessage))
+
+            }
+        }
+    }
+
+//shared viewMoel
+    private val data: MutableLiveData<List<MyComplaintList>> = MutableLiveData()
+    fun data(): LiveData<List<MyComplaintList>> = data
+
+    fun updateData(message: List<MyComplaintList>) {
+        data.value = message
+    }
     /*Complaint Details */
 
     private val _complaintDetailsState = MutableLiveData<Lce<MyComplainDetailsList>>()

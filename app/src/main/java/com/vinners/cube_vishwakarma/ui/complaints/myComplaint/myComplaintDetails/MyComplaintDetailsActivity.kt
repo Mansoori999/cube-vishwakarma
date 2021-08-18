@@ -138,7 +138,7 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
     var foremanDesignationnameshowfirst:String = ""
 
 
-    private var statusValue : String? = null
+    private lateinit var statusValue : String
     private var complaintid : String? = null
     private var reasonEt:String?=null
 
@@ -156,6 +156,8 @@ class MyComplaintDetailsActivity : BaseActivity<ActivityMyComplaintDetailsBindin
      var inputStream : InputStream? = null
     private lateinit var uri:Uri
     var filePath:String ? = null
+
+    private lateinit var statusSpinner:Spinner
 
     lateinit var imageClick1:TextView
     lateinit var imageClick2:TextView
@@ -558,7 +560,8 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
             errorTextstatus.setText("Please Write Reason")
             return false
         }
-        if (statusValue == null){
+//        statusValue.equals("Select Status") &&
+        if (statusSpinner.selectedItem.equals("Select Status")){
             errorTextstatus.setVisibilityVisible()
             errorTextstatus.setText("Please Select Status")
 //            showInformationDialog("Please Select Status")
@@ -1220,7 +1223,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                 .setTitle("Update Status - ${complaintid}")
 
             val  mAlertDialog = mBuilder.show()
-            val statusSpinner = dialogView.findViewById<Spinner>(R.id.status_spinner)
+            statusSpinner = dialogView.findViewById(R.id.status_spinner)
 
             reason = dialogView.findViewById<EditText>(R.id.reason)
             donecontainer = dialogView.findViewById(R.id.doneImage)
@@ -1295,13 +1298,31 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
                 adapterView ?: return@onItemSelected
                 if (statusSpinner.childCount != 0 && statusSpinner.selectedItemPosition != 0) {
                     statusValue = adapterView.getItemAtPosition(position).toString()
-                    if (statusValue!!.toLowerCase().equals("cancelled")) {
+                    if (statusValue.toLowerCase().equals("cancelled")) {
                         reason.setVisibilityVisible()
+                        errorTextstatus.setVisibilityGone()
+                        errorTextstatus.setText("")
                     } else {
                         reason.setVisibilityGone()
                     }
+                    if(statusValue.toLowerCase().equals("working")){
+                        errorTextstatus.setVisibilityGone()
+                        errorTextstatus.setText("")
 
-                    if(statusValue!!.toLowerCase().equals("done")){
+                    }
+                    if(statusValue.toLowerCase().equals("hold")){
+                        errorTextstatus.setVisibilityGone()
+                        errorTextstatus.setText("")
+
+                    }
+                    if(statusValue.toLowerCase().equals("due")){
+                        errorTextstatus.setVisibilityGone()
+                        errorTextstatus.setText("")
+
+                    }
+                    if(statusValue.toLowerCase().equals("done")){
+                        errorTextstatus.setVisibilityGone()
+                        errorTextstatus.setText("")
                         donecontainer.setVisibilityVisible()
 
 
@@ -1315,18 +1336,19 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
             val cancle = dialogView.findViewById<Button>(R.id.cancelbtn)
             val update = dialogView.findViewById<Button>(R.id.uploadbtn)
-            errorTextstatus = dialogView.findViewById<TextView>(R.id.errorText)
+            errorTextstatus = dialogView.findViewById<TextView>(R.id.errorTexts)
             cancle.setOnClickListener {
                 //dismiss dialog
                 mAlertDialog.dismiss()
             }
             update.setOnClickListener{
                 if (setValidationUpdate() == true){
+
 //                setValidationUpdate()
                     viewModel.upDateComplaints(
                             statusremarks = reason.text.toString(),
                             id = detailsId!!.toInt(),
-                            status = statusValue.toString(),
+                            status = statusValue,
                             letterPic = imageResult,
                             measurementPic = mesurmentImageResult,
                             layoutPic = layoutImageResult

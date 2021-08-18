@@ -256,7 +256,7 @@
         android:text="error"
         android:layout_below="@+id/doneImage"
         android:layout_marginTop="10dp"
-        android:id="@+id/errorText"
+        android:id="@+id/errorTexts"
         android:visibility="gone"
         android:layout_centerHorizontal="true"
         android:gravity="center_horizontal"
@@ -267,7 +267,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_marginTop="15dp"
-        android:layout_below="@+id/errorText"
+        android:layout_below="@+id/errorTexts"
         android:layout_height="wrap_content">
 
         <com.google.android.material.button.MaterialButton

@@ -50,6 +50,26 @@ class OutletLocalDataStoreImpl @Inject constructor(
         return myComplaintDao.getAllComplaints()
     }
 
+    override suspend fun getComplaintBYIDAND(roid: List<Int>, said: List<Int>): List<MyComplaintList> {
+        return myComplaintDao.getComplaintByIDAND(roid,said)
+    }
+
+    override suspend fun getComplaintBYIDWithOR(roid: List<Int>, said: List<Int>): List<MyComplaintList> {
+        return myComplaintDao.getComplaintByIDWithOR(roid,said)
+    }
+
+    override suspend fun getComplaintByAllIDAND(roid: List<Int>, said: List<Int>, subadmin: List<Int>): List<MyComplaintList> {
+        return myComplaintDao.getComplaintByAllID(roid,said,subadmin)
+    }
+
+    override suspend fun getComplaintByIDWithSubAminOR(roid: List<Int>, said: List<Int>, subadmin: List<Int>): List<MyComplaintList> {
+        return myComplaintDao.getComplaintByIDWithSubAmin(roid,said,subadmin)
+    }
+
+    override suspend fun getComplaintByIDWithSubadminAndRO(roid: List<Int>, subadmin: List<Int>): List<MyComplaintList> {
+        return myComplaintDao.getComplaintByIDWithSubadminAndRO(roid,subadmin)
+    }
+
     override suspend fun insertDashboardData(dashboardList: DashBoardResponseDataItem) {
         return dashboardDao.insertDashboardData(dashboardList)
     }

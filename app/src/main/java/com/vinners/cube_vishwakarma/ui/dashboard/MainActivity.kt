@@ -7,8 +7,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.activity.viewModels
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -52,7 +50,6 @@ import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.documents.ImagesForDocumentActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
-import com.vinners.cube_vishwakarma.ui.outlets.OutletComplaintsActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
@@ -190,13 +187,16 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>(R.
         drawermenu.setOnClickListener {
             drawerLayout.openDrawer(GravityCompat.START)
         }
+
         val toggle =
                 ActionBarDrawerToggle(
                         this, drawerLayout,
                         R.string.nav_app_bar_open_drawer_description, R.string.navigation_drawer_close
                 )
-        drawerLayout.setDrawerListener(toggle)
+//        drawerLayout.setDrawerListener(toggle)
+        drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
+        getSupportActionBar()?.setDefaultDisplayHomeAsUpEnabled(true);
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
         navigationView.setItemIconTintList(null)

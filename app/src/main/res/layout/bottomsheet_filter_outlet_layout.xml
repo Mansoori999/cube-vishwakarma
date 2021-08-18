@@ -151,23 +151,38 @@
                 android:padding="12dp"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
-            <!--                <com.androidbuts.multispinnerfilter.MultiSpinnerSearch-->
-            <!--                    android:layout_width="match_parent"-->
-            <!--                    android:layout_height="wrap_content"-->
-            <!--                    android:layout_marginLeft="10dp"-->
-            <!--                    android:layout_marginTop="5dp"-->
-            <!--                    android:layout_marginRight="10dp"-->
-            <!--                    android:layout_marginBottom="15dp"-->
-            <!--                    app:hintText="Select Regional Office"-->
-            <!--                    android:layout_toRightOf="@+id/statusTxt"-->
-            <!--                    android:id="@+id/ro_spinner"-->
-            <!--                    android:background="@drawable/spinner_background"-->
-            <!--                    android:minHeight="30dp"-->
-            <!--                    />-->
-
 
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_weight="1"
+            android:visibility="gone"
+            android:id="@+id/activeSubadmin_layout"
+            android:orientation="vertical">
 
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Sub Admin"
+                android:textColor="@color/black" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/subadmin_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/spinner_background"
+                android:gravity="left"
+                android:minHeight="28dp" />
+
+        </LinearLayout>
     </LinearLayout>
 
 

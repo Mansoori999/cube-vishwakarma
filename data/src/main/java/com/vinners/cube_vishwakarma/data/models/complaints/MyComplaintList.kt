@@ -43,11 +43,21 @@ data class MyComplaintList (
         @SerializedName("salesarea")
         val salesarea : String? =null,
 
+        @SerializedName("roid")
+        val roid : Int? =null,
+
+        @SerializedName("said")
+        val said : Int? =null,
+
         @SerializedName("work")
         val work : String? =null,
 
         @SerializedName("subadmin")
         val subadmin : String? =null,
+
+        @SerializedName("subadminid")
+        val subadminid : String? =null,
+
 
         @SerializedName("orderby")
         val orderby : String? =null,
@@ -110,6 +120,8 @@ data class MyComplaintList (
                 @Ignore
                 const val COLUMN_SALES_AREA_ID :String = "said"
 
+                @Ignore
+                const val COLUMN_SUBAMIN_ID :String = "subadmin"
 
 
 

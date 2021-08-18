@@ -22,6 +22,26 @@ class MyComplaintRepository @Inject constructor(
         return OutletsLocalDataStore.getAllMyComplaints()
     }
 
+    suspend fun getComplaintBYIDAND(roid:List<Int> , said:List<Int>): List<MyComplaintList>{
+        return OutletsLocalDataStore.getComplaintBYIDAND(roid,said)
+    }
+
+    suspend fun getComplaintBYIDWithOR(roid:List<Int> , said:List<Int>): List<MyComplaintList>{
+        return OutletsLocalDataStore.getComplaintBYIDWithOR(roid,said)
+    }
+
+    suspend fun getComplaintByAllIDAND(roid:List<Int> , said:List<Int>,subadmin:List<Int>): List<MyComplaintList>{
+        return OutletsLocalDataStore.getComplaintByAllIDAND(roid,said,subadmin)
+    }
+
+    suspend fun getComplaintByIDWithSubAminOR(roid:List<Int> , said:List<Int>,subadmin:List<Int>): List<MyComplaintList>{
+        return OutletsLocalDataStore.getComplaintByIDWithSubAminOR(roid,said,subadmin)
+    }
+
+    suspend fun getComplaintByIDWithSubadminAndRO(roid:List<Int> , subadmin:List<Int>): List<MyComplaintList>{
+        return OutletsLocalDataStore.getComplaintByIDWithSubadminAndRO(roid,subadmin)
+    }
+
     suspend fun getComplaintDetails(id :String):MyComplainDetailsList{
         return myComplaintRemoteDataStore.getComplaintetails(id)
     }

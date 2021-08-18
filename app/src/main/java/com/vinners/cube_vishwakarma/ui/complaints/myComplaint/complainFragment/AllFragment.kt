@@ -150,8 +150,13 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
 
             }
         })
+
+
         viewModel.getComplaintDaoList()
 
+        viewModel.data().observe(this, Observer {
+            allComplaintRecyclerAdapter.updateViewList(it)
+        })
 //        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
 //            viewModel.getComplaintList(adminUserid)
 //        }else{

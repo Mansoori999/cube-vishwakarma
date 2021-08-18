@@ -1,5 +1,6 @@
 package com.vinners.cube_vishwakarma.ui.complaints.complaintRequest
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -27,12 +28,10 @@ import com.vinners.cube_vishwakarma.ui.complaints.complaintRequestView.Complaint
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintRecyclerAdapter
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintsClickListener
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
-import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
-import java.util.stream.Collectors
 import javax.inject.Inject
 
 
-class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,ComplaintRequestViewModel>(R.layout.activity_complaint_request), AllComplaintsClickListener {
+class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding, ComplaintRequestViewModel>(R.layout.activity_complaint_request), AllComplaintsClickListener {
 
     @Inject
     lateinit var viewModelFactory: LauncherViewModelFactory
@@ -49,7 +48,13 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
                     setAllComplaintsListener(this@ComplaintRequestActivity)
                 }
     }
+
+    lateinit var alertDialog:AlertDialog.Builder
+    lateinit var progressDialog:ProgressDialog
+
     lateinit var recyclerView :RecyclerView
+    lateinit var yesButton: Button
+    lateinit var cancelBtn :Button
     private var progressBar: ProgressBar? = null
     lateinit var textError:TextView
     lateinit var errorImage:ImageView
@@ -118,48 +123,12 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 
         viewBinding.addComplaintDataMainLayout.submitBtn.setOnClickListener {
             if ( validateAndSubmitComplaintData() == true) {
-                val inflater = LayoutInflater.from(this)
-//                val inflater: LayoutInflater = LayoutInflater.from(this)
-                val dialogView = inflater.inflate(R.layout.viewcomplaint_during_request, null)
-                val alertDialog = AlertDialog.Builder(this)
-                        .setView(dialogView)
-                        .setTitle("Do you still want to generate complaint?")
-
-                recyclerView = dialogView.findViewById(R.id.complaintsRecycler)
-                progressBar = dialogView.findViewById(R.id.progressBar)
-                recyclerView.layoutManager = LinearLayoutManager(this)
-                allComplaintRecyclerAdapter.updateViewList(emptyList())
-                recyclerView.adapter = allComplaintRecyclerAdapter
-                errorContainer = dialogView.findViewById(R.id.errorContainer)
-                textError = dialogView.findViewById(R.id.message_tv)
-                errorImage = dialogView.findViewById(R.id.info_image_iv)
                 if (userSessionManager.designation!!.toLowerCase().equals("admin")){
                     viewModel.getComplaintList(adminUserid)
                 }else{
                     viewModel.getComplaintList(userid!!)
 
                 }
-
-                alertDialog.setPositiveButton("Yes") { dialogInterface, i ->
-                    dialogInterface.dismiss()
-                    val outletid = (viewBinding.addComplaintDataMainLayout.outletSpinner.selectedItem as OutletAreaData).id
-                    val complaintTypeid = (viewBinding.addComplaintDataMainLayout.complaintTypeSpinner.selectedItem as ComplaintTypeData).id
-                    val orderByid = (viewBinding.addComplaintDataMainLayout.orderBySpinner.selectedItem as OrderByData).id
-
-                    viewModel.submitComplaintRequest(
-                            typeid = complaintTypeid!!,
-                            outletid = outletid,
-                            orderby = orderByid!!,
-                            work = viewBinding.addComplaintDataMainLayout.wordEt.text.toString(),
-                            remarks = viewBinding.addComplaintDataMainLayout.editRemarks.text.toString()
-                    )
-
-                }
-
-                alertDialog.setNegativeButton("Cancel"){ DialogInterface, i: Int ->
-                    DialogInterface.dismiss()
-                }
-                alertDialog.show()
             }
 
         }
@@ -210,9 +179,9 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
             it.outletid == id
         } ?: return
         outletData.forEach {
-            viewBinding.addComplaintDataMainLayout.districtEt.setText("District :${ it.district }")
-            viewBinding.addComplaintDataMainLayout.locationET.setText("Location :${ it.location }")
-            viewBinding.addComplaintDataMainLayout.categoryEt.setText("Category :${ it.category }")
+            viewBinding.addComplaintDataMainLayout.districtEt.setText("District :${it.district}")
+            viewBinding.addComplaintDataMainLayout.locationET.setText("Location :${it.location}")
+            viewBinding.addComplaintDataMainLayout.categoryEt.setText("Category :${it.category}")
         }
 
     }
@@ -228,7 +197,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
                         viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
                         viewBinding.addDataLoadingLayout.setVisibilityVisible()
                     }
-                    is LoadMetaForAddComplaintState.MetaForAddComplaintStateLoaded->{
+                    is LoadMetaForAddComplaintState.MetaForAddComplaintStateLoaded -> {
                         viewBinding.addComplaintDataErrorLayout.root.setVisibilityGone()
                         viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
                         viewBinding.addDataLoadingLayout.setVisibilityGone()
@@ -236,15 +205,15 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 
                         val regionals = it.regionalAndSalesInfo.map {
                             RegionalOfficeData(
-                                id = it.roid!!,
-                                name = it.regionaloffice!!
+                                    id = it.roid!!,
+                                    name = it.regionaloffice!!
                             )
                         }.toMutableList()
 
                         setRegionalOnRegionalOfficeSpinner(regionals)
 
                     }
-                    is LoadMetaForAddComplaintState.ErrorInLoadingMetaForAddComplaintLoaded->{
+                    is LoadMetaForAddComplaintState.ErrorInLoadingMetaForAddComplaintLoaded -> {
                         viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
                         viewBinding.addDataLoadingLayout.setVisibilityGone()
                         viewBinding.addComplaintDataMainLayout.root.setVisibilityGone()
@@ -258,11 +227,11 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
             })
         viewModel.getNewComplaintData()
         viewModel.complaintTypeListState.observe(this, Observer {
-            when(it){
-                Lce.Loading ->{
+            when (it) {
+                Lce.Loading -> {
                     viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityVisible()
                 }
-                is Lce.Content->{
+                is Lce.Content -> {
                     viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
                     val complaintType = it.content.map {
                         ComplaintTypeData(
@@ -274,7 +243,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 
 
                 }
-                is Lce.Error ->{
+                is Lce.Error -> {
                     viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
                 }
             }
@@ -282,11 +251,11 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
         viewModel.getComplaintTypeData()
 
         viewModel.orderbyListState.observe(this, Observer {
-            when(it){
-                Lce.Loading ->{
+            when (it) {
+                Lce.Loading -> {
                     viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityVisible()
                 }
-                is Lce.Content->{
+                is Lce.Content -> {
                     viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
                     val orderBy = it.content.map {
                         OrderByData(
@@ -296,43 +265,82 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
                     }.toMutableList()
                     setOrderOnOrderBySpinner(orderBy)
                 }
-                is Lce.Error ->{
+                is Lce.Error -> {
                     viewBinding.addComplaintDataMainLayout.refreshProgressbar.setVisibilityGone()
                 }
             }
         })
         viewModel.getOrderByData()
+
         viewModel.complaintListState.observe(this, Observer {
-            when(it){
-                Lce.Loading ->{
-                    progressBar?.setVisibilityVisible()
+            when (it) {
+                Lce.Loading -> {
+//                    progressBar?.setVisibilityVisible()
+                    progressDialog = ProgressDialog(this)
+//                    progressDialog.setTitle("Kotlin Progress Bar")
+                    progressDialog.setMessage("Loading...")
+                    progressDialog.show()
 
                 }
-                is Lce.Content->
-                {
+                is Lce.Content -> {
+                    progressDialog.dismiss()
                     val itemlist = it.content.filter {
                         it.status?.toLowerCase().equals("due") ||
                                 it.status?.toLowerCase().equals("working") ||
                                 it.status?.toLowerCase().equals("hold") ||
                                 it.status?.toLowerCase().equals("done")
                     }
-                    if (itemlist.isEmpty()){
+                    if (itemlist.isEmpty()) {
                         errorContainer?.setVisibilityVisible()
-                        progressBar?.setVisibilityGone()
+//                        progressBar?.setVisibilityGone()
                         errorImage.load(R.drawable.ic_information)
                         textError.text = "Not Complaints Found"
 
+
                     } else {
                         progressBar?.setVisibilityGone()
-                        allComplaintRecyclerAdapter.updateViewList(itemlist)
                         errorContainer?.setVisibilityGone()
+                        val inflater = LayoutInflater.from(this)
+                        alertDialog = AlertDialog.Builder(this)
+                        val dialogView = inflater.inflate(R.layout.viewcomplaint_during_request, null)
+                        alertDialog.setView(dialogView)
+                        alertDialog.setTitle("Do you still want to generate complaint?")
+                        recyclerView = dialogView.findViewById(R.id.complaintsRecycler)
 
+                        progressBar = dialogView.findViewById(R.id.progressBar)
+                        recyclerView.layoutManager = LinearLayoutManager(this)
+//                        allComplaintRecyclerAdapter.updateViewList(emptyList())
+                        allComplaintRecyclerAdapter.updateViewList(itemlist)
+                        recyclerView.adapter = allComplaintRecyclerAdapter
+                        errorContainer = dialogView.findViewById(R.id.errorContainer)
+                        textError = dialogView.findViewById(R.id.message_tv)
+                        errorImage = dialogView.findViewById(R.id.info_image_iv)
+                        alertDialog.setPositiveButton("Yes") { dialogInterface, i ->
+                            dialogInterface.dismiss()
+                            val outletid = (viewBinding.addComplaintDataMainLayout.outletSpinner.selectedItem as OutletAreaData).id
+                            val complaintTypeid = (viewBinding.addComplaintDataMainLayout.complaintTypeSpinner.selectedItem as ComplaintTypeData).id
+                            val orderByid = (viewBinding.addComplaintDataMainLayout.orderBySpinner.selectedItem as OrderByData).id
+
+                            viewModel.submitComplaintRequest(
+                                    typeid = complaintTypeid!!,
+                                    outletid = outletid,
+                                    orderby = orderByid!!,
+                                    work = viewBinding.addComplaintDataMainLayout.wordEt.text.toString(),
+                                    remarks = viewBinding.addComplaintDataMainLayout.editRemarks.text.toString()
+                            )
+
+                        }
+
+                        alertDialog.setNegativeButton("Cancel") { DialogInterface, i: Int ->
+                            DialogInterface.dismiss()
+                        }
+                        alertDialog.show()
                     }
 
                 }
-                is Lce.Error ->
-                {
-                   progressBar?.setVisibilityGone()
+                is Lce.Error -> {
+//                    progressBar?.setVisibilityGone()
+                    progressDialog.dismiss()
                     showInformationDialog(it.error)
 
                 }
@@ -343,16 +351,16 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 
 
         viewModel.submitListState.observe(this, Observer {
-            when(it){
-                Lce.Loading ->{
+            when (it) {
+                Lce.Loading -> {
                     viewBinding.addComplaintDataMainLayout.root.setVisibilityGone()
                     viewBinding.addComplaintDataErrorLayout.root.setVisibilityGone()
                     viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
                     viewBinding.addDataLoadingLayout.setVisibilityVisible()
                 }
-                is Lce.Content ->{
+                is Lce.Content -> {
                     Toast.makeText(this, "Complaint Request Data Submitted", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this,ComplaintRequestViewActivity::class.java)
+                    val intent = Intent(this, ComplaintRequestViewActivity::class.java)
                     startActivity(intent)
                     finish()
 //                    viewModel.loadRegionalAndSalesInfo
@@ -443,7 +451,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
 //                    viewModel.getOrderByData()
 
                 }
-                is Lce.Error ->{
+                is Lce.Error -> {
                     viewBinding.addComplaintDataErrorWithRetryLayout.root.setVisibilityGone()
                     viewBinding.addDataLoadingLayout.setVisibilityGone()
                     viewBinding.addComplaintDataMainLayout.root.setVisibilityVisible()
@@ -518,16 +526,16 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
         regionals.clear()
         regionals.addAll(setItems)
         regionals.add(
-            0,
-            RegionalOfficeData(
-                id = 0,
-                name = "Select Regional Office"
-            )
+                0,
+                RegionalOfficeData(
+                        id = 0,
+                        name = "Select Regional Office"
+                )
         )
         val aa = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            regionals
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                regionals
         )
 
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -551,8 +559,8 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
             it.roid == id
         }.map {
             SalesAreaData(
-                it.said,
-                it.salesarea!!
+                    it.said,
+                    it.salesarea!!
             )
         }.distinctBy {
             it.id
@@ -562,16 +570,16 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
         sales.clear()
         sales.addAll(setItems)
         sales.add(
-            0,
-            SalesAreaData(
-                id = 0,
-                name = "Select Sales Area"
-            )
+                0,
+                SalesAreaData(
+                        id = 0,
+                        name = "Select Sales Area"
+                )
         )
         val aa = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            sales
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                sales
         )
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(viewBinding.addComplaintDataMainLayout.salesareaSpinner) {
@@ -594,7 +602,7 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
         }.map {
             OutletAreaData(
                     it.outletid!!,
-                "${ it.outlet!! } - ${it.customercode}"
+                    "${it.outlet!!} - ${it.customercode}"
             )
         }.distinctBy {
             it.id
@@ -605,17 +613,17 @@ class ComplaintRequestActivity : BaseActivity<ActivityComplaintRequestBinding,Co
         outlets.clear()
         outlets.addAll(setItems)
         outlets.add(
-            0,
-            OutletAreaData(
-                id = 0,
-                name = "Select Outlet Area"
-            )
+                0,
+                OutletAreaData(
+                        id = 0,
+                        name = "Select Outlet Area"
+                )
         )
 
         val aa = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_dropdown_item,
-            outlets
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                outlets
         )
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         with(viewBinding.addComplaintDataMainLayout.outletSpinner) {
