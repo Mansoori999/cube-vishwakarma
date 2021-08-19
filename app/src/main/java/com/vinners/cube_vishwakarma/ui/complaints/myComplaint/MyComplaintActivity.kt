@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.ArrayAdapter
 import android.widget.LinearLayout
@@ -16,6 +17,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager.widget.ViewPager
 import coil.api.load
@@ -23,8 +25,7 @@ import com.devstune.searchablemultiselectspinner.SearchableAdapter
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
-import com.tbuonomo.viewpagerdotsindicator.DotsIndicator
-import com.tbuonomo.viewpagerdotsindicator.WormDotsIndicator
+
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.base.BaseActivity
 import com.vinners.cube_vishwakarma.core.extensions.onItemSelected
@@ -51,6 +52,9 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
     private lateinit var viewPager: ViewPager
     private lateinit var tabs: TabLayout
 
+    private lateinit var sharedViewModel: MyComplaintSharedViewModel
+
+
     private val sectionsPagerAdapter: MyComplaintPagerAdapter by lazy {
         MyComplaintPagerAdapter(supportFragmentManager)
 
@@ -66,7 +70,7 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
     var salesArea =  mutableListOf<MyComplaintList>()
     var roselectedId = Arrays.asList<Int>()
     var saleselectedId = Arrays.asList<Int>()
-    var subadminId = Arrays.asList<Int>()
+    var subadminId = mutableListOf<Int>()
     var selectedItemList:String? = ""
     var saleselectedItemList:String? = ""
     var roid:Int = 0
@@ -117,7 +121,7 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
 
                     } else {
                         viewBinding.progressBar.setVisibilityGone()
-                        viewModel.updateData(it.content)
+                        sharedViewModel.updateData(it.content)
                         tabs.setVisibilityVisible()
                         viewPager.setVisibilityVisible()
                         viewPager.adapter = sectionsPagerAdapter
@@ -173,7 +177,7 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
 
                     } else {
                         viewBinding.progressBar.setVisibilityGone()
-                        viewModel.updateData(it.content)
+                        sharedViewModel.updateData(it.content)
 
                     }
                 }
@@ -201,7 +205,7 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
 
                     } else {
                         viewBinding.progressBar.setVisibilityGone()
-                        viewModel.updateData(it.content)
+                        sharedViewModel.updateData(it.content)
 
                     }
                 }
@@ -229,7 +233,7 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
 
                     } else {
                         viewBinding.progressBar.setVisibilityGone()
-                        viewModel.updateData(it.content)
+                        sharedViewModel.updateData(it.content)
 
                     }
                 }
@@ -257,7 +261,7 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
 
                     } else {
                         viewBinding.progressBar.setVisibilityGone()
-                        viewModel.updateData(it.content)
+                        sharedViewModel.updateData(it.content)
 
                     }
                 }
@@ -284,7 +288,7 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
 
                     } else {
                         viewBinding.progressBar.setVisibilityGone()
-                        viewModel.updateData(it.content)
+                        sharedViewModel.updateData(it.content)
 
                     }
                 }
@@ -520,7 +524,8 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
                     salesspinner.text = ""
                 }
             }
-
+            subadminId.clear()
+            subadminSpinner.setSelection(0)
 
         }
     }
@@ -552,6 +557,8 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
     }
 
     override fun onInitDataBinding() {
+
+        sharedViewModel = ViewModelProviders.of(this).get(MyComplaintSharedViewModel::class.java)
         userid = userSessionManager.userId
         setSupportActionBar(viewBinding.mycomplaintToolbar)
         getSupportActionBar()!!.setHomeAsUpIndicator(ResourcesCompat.getDrawable(getResources(),R.drawable.ic_arrow_left,null))
@@ -587,7 +594,11 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
         salesspinner = bottomSheetView.findViewById(R.id.sales_spinner)
        subadminSpinner = bottomSheetView.findViewById(R.id.subadmin_spinner)
         activeSubadminLayout = bottomSheetView.findViewById(R.id.activeSubadmin_layout)
-        activeSubadminLayout.setVisibilityVisible()
+        if (userSessionManager.designation?.toLowerCase().equals("admin")) {
+            activeSubadminLayout.setVisibilityVisible()
+        } else {
+            activeSubadminLayout.setVisibilityGone()
+        }
         sheetBehavior = BottomSheetBehavior.from(bottomSheetView.parent as View)
         sheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         sheetBehavior.setBottomSheetCallback(bottomSheetCallback)
@@ -598,7 +609,8 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
         subadminSpinner.onItemSelected { adapterView, view, i, l ->
             if (subadminSpinner.childCount != 0 && subadminSpinner.selectedItemPosition != 0) {
                 val subadminData = subadminSpinner.selectedItem as ActiveSubAdminData
-                subadminId.add(subadminData.id.toInt())
+               subadminId.add(subadminData.id.toInt())
+                Log.d("sabhj",subadminId.toString())
             }
         }
     }

@@ -154,13 +154,6 @@ class AllComplaintFragmentViewModel @Inject constructor(
         }
     }
 
-//shared viewMoel
-    private val data: MutableLiveData<List<MyComplaintList>> = MutableLiveData()
-    fun data(): LiveData<List<MyComplaintList>> = data
-
-    fun updateData(message: List<MyComplaintList>) {
-        data.value = message
-    }
     /*Complaint Details */
 
     private val _complaintDetailsState = MutableLiveData<Lce<MyComplainDetailsList>>()

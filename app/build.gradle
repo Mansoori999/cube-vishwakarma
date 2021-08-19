@@ -95,8 +95,8 @@ android {
             applicationId "com.vinners.cube_vishwakarma"
             resValue "string", "app_name", "Cube"
             buildConfigField "String", "API_URL", '"http://cube.afterworksol.com:8012"'
-            versionCode 9
-            versionName "1.0.9"
+            versionCode 10
+            versionName "1.1.0"
         }
         /**
          * development Build

@@ -5,6 +5,7 @@ import android.content.Intent
 
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.base.BaseFragment
@@ -59,8 +60,7 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
 
     }
 
-    val sharedViewModel: MyComplaintSharedViewModel by viewModels{ viewModelFactory }
-//    private val sharedViewModel: MyComplaintSharedViewModel by activityViewModels()
+    private lateinit var sharedViewModel: MyComplaintSharedViewModel
 
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
@@ -71,6 +71,9 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
     }
 
     override fun onInitDataBinding() {
+        activity?.let {
+            sharedViewModel = ViewModelProviders.of(it).get(MyComplaintSharedViewModel::class.java)
+        }
         userid = userSessionManager.userId
         viewBinding.allcomplaintFragmentRecycler.layoutManager = LinearLayoutManager(context)
         allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
@@ -94,9 +97,15 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
 
     override fun onInitViewModel() {
 
-//        sharedViewModel.getComplaints.let {
-//
-//            if (it!!.isEmpty()){
+//        viewModel.complaintDaoListState.observe(this, Observer {
+//            when(it){
+//                Lce.Loading ->{
+//                    viewBinding.errorLayout.root.setVisibilityGone()
+//                    viewBinding.progressBar.setVisibilityVisible()
+////                    viewBinding.refreshLayout.isRefreshing = false
+//                }
+//                is Lce.Content-> {
+//                    if (it.content.isEmpty()){
 //                        viewBinding.progressBar.setVisibilityGone()
 //                        viewBinding.errorLayout.root.setVisibilityVisible()
 //                        viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
@@ -105,16 +114,27 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
 //                    } else {
 //                        viewBinding.errorLayout.root.setVisibilityGone()
 //                        viewBinding.progressBar.setVisibilityGone()
-//                        allComplaintRecyclerAdapter.updateViewList(it)
-////                        if (!viewBinding.refreshLayout.isRefreshing) {
-////                            viewBinding.refreshLayout.isRefreshing = false
-////                        }
+//                        allComplaintRecyclerAdapter.updateViewList(it.content)
 //                    }
 //
-//        }
+//                }
+//                is Lce.Error ->
+//                {
+//                    viewBinding.progressBar.setVisibilityGone()
+////                    viewBinding.refreshLayout.isRefreshing = false
+//                    viewBinding.progressBar.setVisibilityGone()
+//                    showInformationDialog(it.error)
+//
+//                }
+//
+//
+//            }
+//        })
 
 
-        viewModel.complaintDaoListState.observe(this, Observer {
+//        viewModel.getComplaintDaoList()
+
+        sharedViewModel.data().observe(this, Observer {
             when(it){
                 Lce.Loading ->{
                     viewBinding.errorLayout.root.setVisibilityGone()
@@ -149,13 +169,6 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
 
 
             }
-        })
-
-
-        viewModel.getComplaintDaoList()
-
-        viewModel.data().observe(this, Observer {
-            allComplaintRecyclerAdapter.updateViewList(it)
         })
 //        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
 //            viewModel.getComplaintList(adminUserid)

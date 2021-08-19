@@ -70,9 +70,4 @@ abstract class LauncherModule {
     abstract fun bindDocumentsViewModel(viewModel: DocumentsViewModel): ViewModel
 
 
-    @Binds
-    @IntoMap
-    @ViewModelKey(MyComplaintSharedViewModel::class)
-    abstract fun bindMyComplaintSharedViewModel(viewModel: MyComplaintSharedViewModel): ViewModel
-
-}
+   }

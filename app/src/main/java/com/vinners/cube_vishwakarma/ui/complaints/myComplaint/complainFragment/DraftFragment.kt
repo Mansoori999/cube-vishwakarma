@@ -15,6 +15,7 @@ import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
 import com.vinners.cube_vishwakarma.core.taskState.Lce
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.vinners.cube_vishwakarma.data.models.complaints.MyComplaintList
 import com.vinners.cube_vishwakarma.data.sessionManagement.UserSessionManager
 import com.vinners.cube_vishwakarma.databinding.FragmentBilledBinding
@@ -25,6 +26,7 @@ import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllCompla
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintsClickListener
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.MyComplaintSharedViewModel
 import java.util.*
 import javax.inject.Inject
 
@@ -57,6 +59,7 @@ class DraftFragment :  BaseFragment<FragmentDraftBinding, AllComplaintFragmentVi
 
     override val viewModel: AllComplaintFragmentViewModel by viewModels{ viewModelFactory }
 
+    private lateinit var sharedViewModel: MyComplaintSharedViewModel
 
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
@@ -67,6 +70,9 @@ class DraftFragment :  BaseFragment<FragmentDraftBinding, AllComplaintFragmentVi
     }
 
     override fun onInitDataBinding() {
+        activity?.let {
+            sharedViewModel = ViewModelProviders.of(it).get(MyComplaintSharedViewModel::class.java)
+        }
         userid = userSessionManager.userId
         viewBinding.allcomplaintFragmentRecycler.layoutManager = LinearLayoutManager(context)
         allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
@@ -128,14 +134,53 @@ class DraftFragment :  BaseFragment<FragmentDraftBinding, AllComplaintFragmentVi
 
             }
         })
-        viewModel.getComplaintDaoList()
+//        viewModel.getComplaintDaoList()
 //        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
 //            viewModel.getComplaintList(adminUserid)
 //        }else{
 //            viewModel.getComplaintList(userid!!)
 //
 //        }
+        sharedViewModel.data().observe(this, Observer {
+            when(it){
+                Lce.Loading ->{
+                    viewBinding.errorLayout.root.setVisibilityGone()
+                    viewBinding.progressBar.setVisibilityVisible()
+                    viewBinding.refreshLayout.isRefreshing = false
+                }
+                is Lce.Content->
+                {
+                    val itemlist = it.content.filter {
+                        it.status?.toLowerCase().equals("draft")
+                    }
+                    if (itemlist.isEmpty()){
+                        viewBinding.errorLayout.root.setVisibilityVisible()
+                        viewBinding.progressBar.setVisibilityGone()
+                        viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
+                        viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+                        viewBinding.errorLayout.messageTv.text = "Not Draft Complaint Found"
+                    } else {
+                        viewBinding.errorLayout.root.setVisibilityGone()
+                        viewBinding.progressBar.setVisibilityGone()
+                        allComplaintRecyclerAdapter.updateViewList(itemlist)
+                        if (!viewBinding.refreshLayout.isRefreshing) {
+                            viewBinding.refreshLayout.isRefreshing = false
+                        }
+                    }
 
+                }
+                is Lce.Error ->
+                {
+                    viewBinding.progressBar.setVisibilityGone()
+                    viewBinding.refreshLayout.isRefreshing = false
+                    viewBinding.progressBar.setVisibilityGone()
+                    showInformationDialog(it.error)
+
+                }
+
+
+            }
+        })
     }
 
     override fun OnAllComplaintsClick(myComplaintList: MyComplaintList) {

@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
 import com.vinners.cube_vishwakarma.R
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.vinners.cube_vishwakarma.core.base.BaseFragment
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityGone
 import com.vinners.cube_vishwakarma.core.extensions.setVisibilityVisible
@@ -25,6 +26,7 @@ import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllCompla
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.complain.AllComplaintsClickListener
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails.MyComplaintDetailsActivity
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllComplaintFragmentViewModel
+import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.MyComplaintSharedViewModel
 import java.util.*
 import javax.inject.Inject
 
@@ -51,6 +53,8 @@ class HoldFragment : BaseFragment<FragmentHoldBinding, AllComplaintFragmentViewM
     @Inject
     lateinit var viewModelFactory : LauncherViewModelFactory
 
+    private lateinit var sharedViewModel: MyComplaintSharedViewModel
+
     @Inject
     lateinit var userSessionManager: UserSessionManager
 
@@ -69,6 +73,9 @@ class HoldFragment : BaseFragment<FragmentHoldBinding, AllComplaintFragmentViewM
     }
 
     override fun onInitDataBinding() {
+        activity?.let {
+            sharedViewModel = ViewModelProviders.of(it).get(MyComplaintSharedViewModel::class.java)
+        }
         userid = userSessionManager.userId
         viewBinding.allcomplaintFragmentRecycler.layoutManager = LinearLayoutManager(context)
         allComplaintRecyclerAdapter.updateViewList(emptyList())
@@ -132,13 +139,55 @@ class HoldFragment : BaseFragment<FragmentHoldBinding, AllComplaintFragmentViewM
 
             }
         })
-        viewModel.getComplaintDaoList()
+//        viewModel.getComplaintDaoList()
 //        if (userSessionManager.designation!!.toLowerCase().equals("admin")){
 //            viewModel.getComplaintList(adminUserid)
 //        }else{
 //            viewModel.getComplaintList(userid!!)
 //
 //        }
+        sharedViewModel.data().observe(this, Observer {
+            when(it){
+                Lce.Loading ->{
+                    viewBinding.errorLayout.root.setVisibilityGone()
+                    viewBinding.progressBar.setVisibilityVisible()
+                    viewBinding.refreshLayout.isRefreshing = false
+                }
+                is Lce.Content->
+                {
+                    val itemlist = it.content.filter {
+                        it.status?.toLowerCase().equals("hold")
+                    }
+                    if (itemlist.isEmpty()){
+                        viewBinding.progressBar.setVisibilityGone()
+                        viewBinding.errorLayout.root.setVisibilityVisible()
+                        allComplaintRecyclerAdapter.updateViewList(emptyList())
+                        viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
+                        viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+
+                        viewBinding.errorLayout.messageTv.text = "Not Hold Complaint Found"
+                    } else {
+                        viewBinding.errorLayout.root.setVisibilityGone()
+                        viewBinding.progressBar.setVisibilityGone()
+                        allComplaintRecyclerAdapter.updateViewList(itemlist)
+                        if (!viewBinding.refreshLayout.isRefreshing) {
+                            viewBinding.refreshLayout.isRefreshing = false
+                        }
+                    }
+
+                }
+                is Lce.Error ->
+                {
+                    viewBinding.progressBar.setVisibilityGone()
+                    viewBinding.refreshLayout.isRefreshing = false
+                    viewBinding.progressBar.setVisibilityGone()
+                    showInformationDialog(it.error)
+
+                }
+
+
+            }
+        })
 
     }
 
