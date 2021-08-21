@@ -9,6 +9,7 @@ import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.AllCompl
 import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel.MyComplaintSharedViewModel
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsViewModel
 import com.vinners.cube_vishwakarma.ui.languageSelection.LanguageViewModel
+import com.vinners.cube_vishwakarma.ui.nearBy.NearByViewModel
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsViewModel
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivityViewModel
 import com.vinners.cube_vishwakarma.ui.splash.SplashViewModel
@@ -68,6 +69,11 @@ abstract class LauncherModule {
     @IntoMap
     @ViewModelKey(DocumentsViewModel::class)
     abstract fun bindDocumentsViewModel(viewModel: DocumentsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(NearByViewModel::class)
+    abstract fun bindNearByViewModel(viewModel: NearByViewModel): ViewModel
 
 
    }

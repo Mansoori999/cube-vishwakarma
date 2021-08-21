@@ -105,4 +105,6 @@ interface CoreComponent {
 
     fun getDocumentsRepository():DocumentsRepository
 
+    fun getNearByRepository():NearByRepository
+
 }

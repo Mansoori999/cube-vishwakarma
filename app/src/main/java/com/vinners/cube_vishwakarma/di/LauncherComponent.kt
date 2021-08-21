@@ -21,6 +21,7 @@ import com.vinners.cube_vishwakarma.ui.complaints.myComplaint.myComplaintDetails
 import com.vinners.cube_vishwakarma.ui.dashboard.MainActivity
 import com.vinners.cube_vishwakarma.ui.documents.*
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
+import com.vinners.cube_vishwakarma.ui.nearBy.NearByActivity
 import com.vinners.cube_vishwakarma.ui.outlets.*
 import com.vinners.cube_vishwakarma.ui.profile.BankDetailsAndOtherDetailsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
@@ -119,6 +120,7 @@ interface LauncherComponent {
 
     fun inject(selectOutletsDetailsDialogFragment: SelectOutletsDetailsDialogFragment)
 
+    fun inject(nearByActivity: NearByActivity)
 
 
 }

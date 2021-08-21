@@ -259,4 +259,6 @@ dependencies {
 //    //camera_intergration for store on local directory
 //    implementation 'com.github.vinnersafterwork:camera_intergrator:0.3.3'
 
+    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.2'
+
 }

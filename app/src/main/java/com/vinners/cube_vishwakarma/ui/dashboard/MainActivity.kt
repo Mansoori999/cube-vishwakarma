@@ -50,6 +50,7 @@ import com.vinners.cube_vishwakarma.ui.dashboardFilter.RegionalOfficeFilterData
 import com.vinners.cube_vishwakarma.ui.documents.DocumentsActivity
 import com.vinners.cube_vishwakarma.ui.documents.ImagesForDocumentActivity
 import com.vinners.cube_vishwakarma.ui.expense.ExpenseActivity
+import com.vinners.cube_vishwakarma.ui.nearBy.NearByActivity
 import com.vinners.cube_vishwakarma.ui.outlets.OutletsActivity
 import com.vinners.cube_vishwakarma.ui.profile.ProfileActivity
 import com.vinners.cube_vishwakarma.ui.tutorials.TutorialsActivity
@@ -199,7 +200,7 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>(R.
         getSupportActionBar()?.setDefaultDisplayHomeAsUpEnabled(true);
         val navigationView = findViewById<NavigationView>(R.id.nav_view)
         val headerView: View = navigationView.getHeaderView(0)
-        navigationView.setItemIconTintList(null)
+//        navigationView.setItemIconTintList(null)
         val userName = headerView.findViewById<TextView>(R.id.username)
         userName.setText(String.format("Hii, %s", userSessionManager.userName))
         val userMobile = headerView.findViewById<TextView>(R.id.userMobile)
@@ -1116,6 +1117,10 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>(R.
                     val intent = Intent(this, OutletsActivity::class.java)
                     startActivity(intent)
                 }
+                R.id.nav_nearby -> {
+                    val intent = Intent(this, NearByActivity::class.java)
+                    startActivity(intent)
+                }
                 R.id.nav_images -> {
                     val intent = Intent(this, ImagesForDocumentActivity::class.java)
                     startActivity(intent)
@@ -1166,7 +1171,3 @@ class MainActivity : BaseActivity<ActivityMainBinding, MainActivityViewModel>(R.
 
 
     }
-
-
-
-

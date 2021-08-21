@@ -5,7 +5,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Dangerous Permissions -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -26,7 +26,8 @@
         android:theme="@style/Theme.Truman"
         android:usesCleartextTraffic="true"
         tools:ignore="UnusedAttribute">
-        <activity android:name=".ui.documents.ImagesForDocumentActivity"></activity>
+        <activity android:name=".ui.nearBy.NearByActivity"></activity>
+        <activity android:name=".ui.documents.ImagesForDocumentActivity" />
         <activity
             android:name=".ui.documents.ImagesForDocumentsActivity"
             android:launchMode="singleInstance" />

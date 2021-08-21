@@ -11,13 +11,6 @@ import kotlinx.coroutines.launch
 
 class MyComplaintSharedViewModel : ViewModel() {
 
-//    private val _complaintListState = MutableLiveData<List<MyComplaintList>>()
-//   val complaintListState: LiveData<List<MyComplaintList>> = _complaintListState
-//
-//    fun saveAllComplaints(complaints: List<MyComplaintList>){
-//        _complaintListState.value = complaints
-//    }
-
     val _complaintListState = MutableLiveData<List<MyComplaintList>>()
     val getComplaints: List<MyComplaintList>? = _complaintListState.value
 

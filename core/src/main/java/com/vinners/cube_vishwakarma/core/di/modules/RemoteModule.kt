@@ -13,6 +13,7 @@ import com.vinners.cube_vishwakarma.data.dataStores.documents.DocumentsRemoteDat
 import com.vinners.cube_vishwakarma.data.dataStores.help.HelpRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.jobs.JobsRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.money.MoneyRemoteDataStore
+import com.vinners.cube_vishwakarma.data.dataStores.nearby.NearByRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.notification.NotificationRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.outlets.OutletRemoteDataStore
 import com.vinners.cube_vishwakarma.data.dataStores.tutorials.TutorialsRemoteDataStore
@@ -178,6 +179,14 @@ abstract class RemoteModule {
             return retrofitServiceFactory.prepareService(DashBoardService::class.java)
         }
 
+        @Provides
+        @JvmStatic
+        fun provideNearByService(
+            retrofitServiceFactory: RetrofitServiceFactory
+        ): NearByService {
+            return retrofitServiceFactory.prepareService(NearByService::class.java)
+        }
+
 
         @Provides
         @JvmStatic
@@ -231,6 +240,9 @@ abstract class RemoteModule {
 
     @Binds
     abstract fun bindDocumentsRemoteDataStore(documentsRemoteDataStoreImpl: DocumentsRemoteDataStoreImpl): DocumentsRemoteDataStore
+
+    @Binds
+    abstract fun bindNearByRemoteDataStore(nearByRemoteDataStoreImpl: NearByRemoteDataStoreImpl): NearByRemoteDataStore
 
 
 }
