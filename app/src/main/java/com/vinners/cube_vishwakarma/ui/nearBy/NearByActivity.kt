@@ -7,9 +7,11 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Point
-import android.location.LocationManager
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
@@ -22,14 +24,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResolvableApiException
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.location.*
+import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.QuickAlertDialog
@@ -47,11 +45,12 @@ import com.vinners.cube_vishwakarma.di.DaggerLauncherComponent
 import com.vinners.cube_vishwakarma.di.LauncherViewModelFactory
 import com.vinners.cube_vishwakarma.ui.dashboard.MainActivity
 import com.vinners.cube_vishwakarma.ui.outlets.EditOutletActivity
+import java.util.*
 import javax.inject.Inject
 
 
 class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.layout.activity_near_by),
-    OnMapReadyCallback {
+    OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks {
 
     companion object{
         const val REQUEST_UPGRADE_GPS_SETTINGS = 120
@@ -75,6 +74,8 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
     override val viewModel: NearByViewModel by viewModels { viewModelFactory }
 
     private var map: GoogleMap? = null
+    private var location:android.location.Location? = null
+    var mGoogleApiClient: GoogleApiClient? = null
     private var userLocationCaptured = false
     private var isRequestingForLocation = false
     var lat:Double? = null
@@ -87,7 +88,7 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
 
     val locationlist = mutableListOf<NearByResponseItem>()
 
-
+//    var markers = ArrayList<Marker>()
     private var userLocation: Location = Location(
         latitude = 0.0,
         longitude = 0.0
@@ -111,67 +112,98 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
     private val locationCallback = object : LocationCallback() {
 
         override fun onLocationResult(location: LocationResult?) {
+
             if (location == null || map == null)
                 return
 
-            userLocation = Location(
-                location.lastLocation.latitude,
-                location.lastLocation.longitude
-            )
-            showLocationOnMap(userLocation)
-            showNearByOutlets()
+            if (locationlist.isEmpty().not()) {
+//                showNearByOutlets(map)
+            }else {
+                userLocation = Location(
+                    location.lastLocation.latitude,
+                    location.lastLocation.longitude
+                )
+                showLocationOnMap(userLocation)
+            }
             if (location.equals(null).not() && map != null) {
                 viewBinding.progressBar.setVisibilityGone()
                 viewBinding.outletDataContainer.setVisibilityVisible()
+                viewBinding.btnContainer.setVisibilityVisible()
 
             } else {
                 viewBinding.progressBar.setVisibilityVisible()
                 viewBinding.outletDataContainer.setVisibilityGone()
+                viewBinding.btnContainer.setVisibilityGone()
             }
         }
 
 
     }
     private fun showNearByOutlets() {
+        map?.let {
+            map?.clear()
+            Log.d("kjshjaskj", locationlist.size.toString())
+            for (i in 0 until locationlist.size) {
+                try {
+                    val gps = locationlist[i].gps
 
-        map?.clear()
-        locationlist.clear()
-        for (i in 0 until locationlist.size) {
-            try{
-            val gps = locationlist[i].gps
-                Log.d("kjsh",locationlist.size.toString())
-            val latLng = gps?.split(",")
-            val latitude: Double = latLng!!.get(0).toDouble()
-            val longitude = latLng[1].toDouble()
-               if (locationlist[i].workingcomplaint == false){
-                   map?.addMarker(
-                       MarkerOptions().position(LatLng(latitude, longitude)).title(
-                           locationlist[i].name
-                       ).icon(bitmapDescriptorFromVector(this, R.drawable.mapmarker))
-                   )
-               }else{
-                   map?.addMarker(
-                       MarkerOptions().position(LatLng(latitude, longitude)).title(
-                           locationlist[i].name
-                       ).icon(bitmapDescriptorFromVector(this, R.drawable.redmarker))
-                   )
-               }
+                    val latLng = gps?.split(",")
+                    val latitude: Double = latLng!!.get(0).toDouble()
+                    val longitude = latLng[1].toDouble()
+                    val gc = Geocoder(this)
+                    val list: List<Address> = gc.getFromLocation(latitude, longitude, 1)
+//                    val userLoc = LatLng(location.latitude, location.longitude)
+                    if (locationlist[i].workingcomplaint == false) {
+                        map?.addMarker(
+                            MarkerOptions()
+                                .title(locationlist[i].name)
+                                .icon(BitmapDescriptorFactory.fromBitmap(resizeBitmap(R.drawable.redmarker,80,80)))
+                                .position(LatLng(latitude, longitude))
+                        )
+//                        map?.addMarker(MarkerOptions().title(locationlist[i].name)
+//                            .draggable(true)
+//                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+//                            .position(LatLng(latitude, longitude)))
+                    } else {
 
-            val cameraPositionlist = CameraPosition.Builder()
-                .target(LatLng(latitude, longitude))
-                .zoom(15f)
-                .build()
-            map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPositionlist))
-            map?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
-            }catch (e:NumberFormatException) {
-                e.printStackTrace()
+
+                        map?.addMarker(MarkerOptions()
+                            .title(locationlist[i].name)
+                            .icon(BitmapDescriptorFactory.fromBitmap(resizeBitmap(R.drawable.mapmarker,80,80)))
+                            .position(LatLng(latitude, longitude)))
+                    }
+
+                    val cameraPositionlist = CameraPosition.Builder()
+                        .target(LatLng(latitude, longitude))
+                        .zoom(0f)
+                        .build()
+                    map?.setMaxZoomPreference(0f)
+                    map?.setMaxZoomPreference(15f)
+                    map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPositionlist))
+                    map?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
+                } catch (e: NumberFormatException) {
+                    e.printStackTrace()
+                }
             }
         }
+    }
+    fun resizeBitmap(drawableName: Int, width: Int, height: Int): Bitmap? {
+        val imageBitmap = BitmapFactory.decodeResource(
+            resources, resources.getIdentifier(
+                drawableName.toString(), "drawable",
+                packageName
+            )
+        )
+        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
     }
     private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
         return ContextCompat.getDrawable(context, vectorResId)?.run {
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-            val bitmap = Bitmap.createBitmap(intrinsicWidth, intrinsicHeight, Bitmap.Config.ARGB_8888)
+            val bitmap = Bitmap.createBitmap(
+                intrinsicWidth,
+                intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+            )
             draw(Canvas(bitmap))
             BitmapDescriptorFactory.fromBitmap(bitmap)
         }
@@ -202,8 +234,9 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
 
                 if (resultCode == Activity.RESULT_OK) {
                     locationHelper.startLocationUpdates()
-                } else if (resultCode == Activity.RESULT_CANCELED)
+                } else if (resultCode == Activity.RESULT_CANCELED) {
                     showRedirectToGpsPageDialog()
+                }
 
             }
             REQUEST_UPDATE_GPS_SETTINGS_MANUALLY -> {
@@ -227,6 +260,7 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
                     )
                 }
             })
+
     }
 
 
@@ -235,38 +269,55 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
         viewBinding.toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
+        //            val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+//
+//            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+////            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show()
+//            } else {
+//                showGPSDisabledAlertToUser()
+//            }
+        Handler().postDelayed({
 
+            val mapFragment =
+                supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(this)
+
+
+            if (locationPermissions())
+                checkForGpsStatus()
+            else
+                requestLocationPermissions()
+
+        }, 300)
         defaultRange = "${viewBinding.seekBar.getProgress()}"
         Log.d("akjl", defaultRange)
         viewBinding.seekBarText.setText("${viewBinding.seekBar.getProgress()}Km")
         val maxSizePoint = Point()
         windowManager.defaultDisplay.getSize(maxSizePoint)
         val maxX = maxSizePoint.x
+
         viewBinding.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(
                 seekBar: SeekBar,
                 progress: Int,
                 fromUser: Boolean
             ) {
-//                try {
                 val int =
                     (progress * (viewBinding.seekBar.getWidth() - 2 * viewBinding.seekBar.getThumbOffset())) / viewBinding.seekBar.getMax();
                 viewBinding.seekBarText.setText("${progress}Km")
-                range = "${progress}"
-                Log.d("jjhja", range)
+//                range = "${progress}"
+
                 var value =
                     viewBinding.seekBar.getX() + int + viewBinding.seekBar.getThumbOffset() / 2
-//                    val concatinateVakue = "${value}Km"
-//                    val float = concatinateVakue.toFloat()
                 viewBinding.seekBarText.setX(value)
 
-//                }catch (e:NumberFormatException){
-//
-//                }
             }
 
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar) {
+                range = "${seekBar.progress}"
+                Log.d("jjhja", range)
+            }
         })
 
         viewBinding.imageOutletBtn.tag = OUTLET_BUTTON
@@ -274,41 +325,24 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
             setButtonTag(view)
             viewBinding.imageOutletBtn.setEnabled(false)
             viewBinding.imageComplaintBtn.setEnabled(true)
-            viewBinding.progressBar.setVisibilityVisible()
-            val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
-
-            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-//            Toast.makeText(this, "GPS is Enabled in your devide", Toast.LENGTH_SHORT).show()
-            } else {
-                showGPSDisabledAlertToUser()
-            }
-            Handler().postDelayed({
-
-                val mapFragment =
-                    supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
-                mapFragment.getMapAsync(this)
-
-
-                if (locationPermissions())
-                    checkForGpsStatus()
-                else
-                    requestLocationPermissions()
-
-            }, 300)
-
-            Log.d("akjl", defaultRange)
-            Log.d("kjla", currentlyClickingButtonType)
-            if (userLocation.latitude == 0.0) {
-//            showInformationDialog("Location not captured yet, retry when location is updated on map")
-            }else {
+            map?.clear()
+            viewBinding.seekBar.setProgress(5)
+            if (userLocation.latitude != 0.0 && map != null) {
+                viewBinding.loadBtnContainer.setVisibilityVisible()
+                viewBinding.refreshProgressbar.setVisibilityGone()
                 viewModel.getNearByOutletByMap(
                     latitude = userLocation.latitude,
                     longitude = userLocation.longitude,
                     range = defaultRange!!,
                     type = currentlyClickingButtonType
                 )
-                showNearByOutlets()
+            } else {
+
+                viewBinding.refreshProgressbar.setVisibilityVisible()
             }
+
+            Log.d("akjl", defaultRange)
+            Log.d("kjla", currentlyClickingButtonType)
 
         }
         viewBinding.imageComplaintBtn.tag = COMPLAINTS_BUTTON
@@ -316,11 +350,33 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
             setButtonTag(view)
             viewBinding.imageOutletBtn.setEnabled(true)
             viewBinding.imageComplaintBtn.setEnabled(false)
-            viewBinding.outletDataContainer.setVisibilityGone()
+            viewBinding.mapContainer.setVisibilityVisible()
+            map?.clear()
+            viewBinding.seekBar.setProgress(5)
+            if (userLocation.latitude != 0.0 && map != null) {
+                viewBinding.refreshProgressbar.setVisibilityGone()
+                viewBinding.loadBtnContainer.setVisibilityVisible()
+
+                viewModel.getNearByOutletByMap(
+                    latitude = userLocation.latitude,
+                    longitude = userLocation.longitude,
+                    range = defaultRange!!,
+                    type = currentlyClickingButtonType
+                )
+
+            } else {
+                viewBinding.refreshProgressbar.setVisibilityVisible()
+            }
+            Log.d("akjl", defaultRange)
+            Log.d("kjla", currentlyClickingButtonType)
+
+
+
         }
         viewBinding.loadBtn.setOnClickListener {
 
             validateAndUploadNearByMap()
+
         }
     }
 
@@ -394,6 +450,8 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
                     longitude = it.getDouble(BUNDLE_EXTRA_LOCATION_LONG, 0.0)
                 )
                 showLocationOnMap(userLocation)
+
+
             }
         }
     }
@@ -443,6 +501,8 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
                     longitude = it.getDouble(BUNDLE_EXTRA_LOCATION_LONG, 0.0)
                 )
                 showLocationOnMap(userLocation)
+
+
             }
 
             isRequestingForLocation = it.getBoolean(BUNDLE_IS_REQUESTING_LOCATION, false)
@@ -479,10 +539,12 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
                 }
                 is Lce.Content -> {
                     viewBinding.refreshProgressbar.setVisibilityGone()
-                    val listValue = it.content
+                    locationlist.clear()
                     locationlist.addAll(it.content)
+                    showNearByOutlets()
 
 
+//                    locationHelper.startLocationUpdates()
                 }
                 is Lce.Error -> {
                     viewBinding.refreshProgressbar.setVisibilityGone()
@@ -495,13 +557,25 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
     override fun onMapReady(map: GoogleMap?) {
         this.map = map
 
-        if (userLocation.latitude != 0.0)
-            showLocationOnMap(userLocation)
-
-
+        Log.d("jsahsag", locationlist.toString())
         if (locationlist.isEmpty().not()){
             showNearByOutlets()
+        }else {
+            if (userLocation.latitude != 0.0)
+                showLocationOnMap(userLocation)
         }
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+
+
 
     }
     private fun validateAndUploadNearByMap() {
@@ -509,12 +583,12 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
             showInformationDialog("Location not captured yet, retry when location is updated on map")
             return
         }
-
         if (range == null){
-            showInformationDialog("range null ")
+           range = defaultRange
             return
         }
 
+        Log.d("tagnsbb", range)
 
         viewModel.getNearByOutletByMap(
             latitude = userLocation.latitude,
@@ -523,6 +597,64 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
             type = currentlyClickingButtonType
 
         )
+
+    }
+
+    override fun onLocationChanged(location: android.location.Location) {
+       if (location == null){
+       }else{
+
+
+           showNearByOutlets()
+//           val cameraPositionlist = CameraPosition.Builder()
+//               .target(LatLng(location.latitude, location.longitude))
+//               .zoom(15f)
+//               .build()
+//           map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPositionlist))
+//          map?.moveCamera(
+//              CameraUpdateFactory.newLatLng(
+//                  LatLng(
+//                      location.latitude,
+//                      location.longitude
+//                  )
+//              )
+//          )
+//           val ll = LatLng(location.latitude, location.longitude)
+//           val update = CameraUpdateFactory.newLatLngZoom(ll, 15f)
+//           map?.animateCamera(update)
+       }
+    }
+    override fun onConnected(p0: Bundle?) {
+        val mLocationRequest = LocationRequest.create()
+        mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+        mLocationRequest.setInterval(500)
+
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+            mGoogleApiClient,
+            mLocationRequest,
+            this
+        )
+    }
+
+    override fun onConnectionSuspended(p0: Int) {
+
     }
 
 }

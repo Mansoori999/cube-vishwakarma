@@ -24,7 +24,7 @@ import com.vinners.cube_vishwakarma.data.models.outlets.OutletsList
         MyComplaintList::class,
         DashBoardResponseDataItem::class
     ],
-    version = 18,
+    version = 19,
     exportSchema = false
 )
 @TypeConverters(
@@ -43,7 +43,7 @@ abstract class OutletsLocalDatabase : RoomDatabase() {
     abstract fun getDashboardDao(): DashboardDao
 
     companion object {
-        const val DATABASE_NAME = "cube_outlets.db"
+        const val DATABASE_NAME = "cube_outlets_complaints.db"
 
 //        private var INSTANCE: OutletsLocalDatabase ?= null
 //        fun getInstance(application: Application): OutletsLocalDatabase {
