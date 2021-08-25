@@ -5,7 +5,8 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
+import android.content.res.Resources
+import android.graphics.*
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -41,7 +42,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
 
-class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding, DocumentsViewModel>(R.layout.activity_images_for_document),
+
+class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding, DocumentsViewModel>(
+    R.layout.activity_images_for_document
+),
     ComplaintSelectionListener,
     OutletSelectionListener {
 
@@ -96,7 +100,7 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
                     showInformationDialog("Please select images")
                 } else {
                     val uriImageList =
-                            arrayOfNulls<Uri>(imageListForSend.size)
+                        arrayOfNulls<Uri>(imageListForSend.size)
                     var i = 0
                     while (i < imageListForSend.size) {
                         uriImageList[i] = imageListForSend.get(i)
@@ -107,8 +111,8 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
                     shareIntent.type = "application/image"
                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     shareIntent.putParcelableArrayListExtra(
-                            Intent.EXTRA_STREAM,
-                            imageListForSend
+                        Intent.EXTRA_STREAM,
+                        imageListForSend
                     )
                     shareIntent.setPackage("com.whatsapp")
                     startActivity(shareIntent)
@@ -189,11 +193,11 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
             viewBinding.imageBeforeAfter.setVisibility(View.GONE)
             viewBinding.afterBeforeView.setVisibility(View.GONE)
             SelectOutletsDetailsDialogFragment
-                    .newInstance(this)
-                    .show(
-                            supportFragmentManager,
-                            SelectOutletsDetailsDialogFragment.TAG
-                    )
+                .newInstance(this)
+                .show(
+                    supportFragmentManager,
+                    SelectOutletsDetailsDialogFragment.TAG
+                )
 
 
         })
@@ -207,11 +211,11 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
 //                return@OnClickListener
 //            }
             SelectComplaintDetailsDialogFragment
-                    .newInstance(this)
-                    .show(
-                            supportFragmentManager,
-                            SelectComplaintDetailsDialogFragment.TAG
-                    )
+                .newInstance(this)
+                .show(
+                    supportFragmentManager,
+                    SelectComplaintDetailsDialogFragment.TAG
+                )
         })
 
     }
@@ -238,21 +242,21 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
 
     private fun requestStoragePermissions() {
         ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                ),
-                PERMISSION_REQUEST_STORAGE
+            this,
+            arrayOf(
+                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ),
+            PERMISSION_REQUEST_STORAGE
         )
     }
     private fun storagePermissions(): Boolean {
         return ContextCompat.checkSelfPermission(
-                this, Manifest.permission.READ_EXTERNAL_STORAGE
+            this, Manifest.permission.READ_EXTERNAL_STORAGE
         ) == PackageManager.PERMISSION_GRANTED
                 &&
                 ContextCompat.checkSelfPermission(
-                        this, Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    this, Manifest.permission.WRITE_EXTERNAL_STORAGE
                 ) == PackageManager.PERMISSION_GRANTED
     }
 
@@ -292,8 +296,9 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
                 imageTextList.add(complaint!!.work!!.trim())
             }
             val image = result!!.bitmap
+            val photo = addWatermark(resources,image)
             val stampImage: Bitmap =
-                ImageHelper.stampImageWithText(image, imageTextList, checkboxTextColor)
+                ImageHelper.stampImageWithText(photo, imageTextList, checkboxTextColor)
             val storageDir =
                 Environment.getExternalStoragePublicDirectory("Cube")
             val subDirecory =
@@ -326,6 +331,69 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
 
     }
 
+    //    private fun addWaterMark(src: Bitmap): Bitmap {
+//        val w = src.width
+//        val h = src.height
+//        val result = Bitmap.createBitmap(w, h, src.config)
+//        val canvas = Canvas(result)
+//        canvas.drawBitmap(src, 0.0f, 0.0f, null)
+//        val waterMark = BitmapFactory.decodeResource(
+//            this.getResources(),
+//            R.drawable.ic_cube_app_login
+//        )
+//        val paint = Paint()
+//        paint.color = Color.TRANSPARENT
+//        paint.alpha = 50
+//        paint.isAntiAlias = true
+//        paint.isUnderlineText = false
+//        canvas.drawBitmap(waterMark, 0f, 0f, null)
+//        return result
+//    }
+    fun addWatermark(res: Resources, source: Bitmap): Bitmap? {
+        val w: Int
+        val h: Int
+        val c: Canvas
+        val paint: Paint
+        val bmp: Bitmap
+        val watermark: Bitmap
+        val matrix: Matrix
+        val scale: Float
+        val r: RectF
+        w = source.width
+        h = source.height
+        // Create the new bitmap
+        bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
+        paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG or Paint.FILTER_BITMAP_FLAG)
+        // Copy the original bitmap into the new one
+        c = Canvas(bmp)
+        c.drawBitmap(source, 0f, 0f, paint)
+        // Load the watermark
+        watermark = BitmapFactory.decodeResource( res ,R.drawable.ic_watermark)
+        // Scale the watermark to be approximately 40% of the source image height
+        scale = (h.toFloat() * 0.15 / watermark.height.toFloat()).toFloat()
+        // Create the matrix
+        matrix = Matrix()
+        matrix.postScale(scale, scale)
+        // Determine the post-scaled size of the watermark
+        r = RectF(500f, -2000f, watermark.width.toFloat(), watermark.height.toFloat())
+        matrix.mapRect(r)
+        // Move the watermark to the bottom right corner
+        matrix.postTranslate(w - r.width(), h - r.height())
+        // Draw the watermark
+        c.drawBitmap(watermark, matrix, paint)
+        // Free up the bitmap memory
+        watermark.recycle()
+        return bmp
+    }
+    fun resizeBitmap(drawableName: String, width: Int, height: Int): Bitmap? {
+        val imageBitmap = BitmapFactory.decodeResource(
+            resources, resources.getIdentifier(
+                drawableName, "drawable",
+                packageName
+            )
+        )
+        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
+    }
     fun inflateImageLayout() {
         imagesContainer.removeAllViews()
         val folder = Environment.getExternalStoragePublicDirectory("Cube")
@@ -350,16 +418,16 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
                     imageView.findViewById<ImageView>(R.id.remove_image)
                 imagesContainer.addView(imageView)
                 capturedImageList.add(
-                        imagesContainer.indexOfChild(imageView),
-                        captureOrSelectedImagePath
+                    imagesContainer.indexOfChild(imageView),
+                    captureOrSelectedImagePath
                 )
                 Glide.with(this@ImagesForDocumentActivity)
                     .load(imageList[i]).into(addedImage)
                 val finalImageList: Array<File> = imageList
                 addedImage.setOnClickListener {
                     val imageDialog = Dialog(
-                            this@ImagesForDocumentActivity,
-                            android.R.style.Theme_Black_NoTitleBar_Fullscreen
+                        this@ImagesForDocumentActivity,
+                        android.R.style.Theme_Black_NoTitleBar_Fullscreen
                     )
                     imageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
                     imageDialog.setContentView(R.layout.big_picture_image_delete_option)
@@ -372,10 +440,10 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
                     shareImage.setOnClickListener {
                         val uri =
                             FileProvider.getUriForFile(
-                                    this@ImagesForDocumentActivity,
-                                    this@ImagesForDocumentActivity.packageName
-                                            .toString() + ".provider",
-                                    finalImageList[i]
+                                this@ImagesForDocumentActivity,
+                                this@ImagesForDocumentActivity.packageName
+                                    .toString() + ".provider",
+                                finalImageList[i]
                             )
                         val shareIntent = Intent()
                         shareIntent.action = Intent.ACTION_SEND
@@ -390,14 +458,14 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
                             .setTitle("Delete Image")
                             .setMessage("Do you want to delete this image?")
                             .setPositiveButton(
-                                    "Yes"
+                                "Yes"
                             ) { dialog, which ->
                                 finalImageList[i].delete()
                                 inflateImageLayout()
                                 imageDialog.dismiss()
                             }
                             .setNegativeButton(
-                                    "No"
+                                "No"
                             ) { dialog, which -> }.show()
                     }
                     Glide.with(applicationContext)
@@ -409,29 +477,29 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
                 addedImage.setOnLongClickListener {
                     crossImage.visibility = View.VISIBLE
                     val uri = FileProvider.getUriForFile(
-                            this@ImagesForDocumentActivity,
-                            this@ImagesForDocumentActivity.packageName
-                                    .toString() + ".provider",
-                            finalImageList[i]
+                        this@ImagesForDocumentActivity,
+                        this@ImagesForDocumentActivity.packageName
+                            .toString() + ".provider",
+                        finalImageList[i]
                     )
                     if (!imageListForSend.contains(uri)) imageListForSend.add(uri)
                     true
                 }
                 crossImage.setOnClickListener {
                     val uri = FileProvider.getUriForFile(
-                            this@ImagesForDocumentActivity,
-                            this@ImagesForDocumentActivity.packageName
-                                    .toString() + ".provider",
-                            finalImageList[i]
+                        this@ImagesForDocumentActivity,
+                        this@ImagesForDocumentActivity.packageName
+                            .toString() + ".provider",
+                        finalImageList[i]
                     )
                     imageListForSend.remove(uri)
                     crossImage.visibility = View.GONE
                 }
                 for (k in imageListForSend.indices) {
                     val uri = FileProvider.getUriForFile(
-                            this@ImagesForDocumentActivity,
-                            this@ImagesForDocumentActivity.packageName.toString() + ".provider",
-                            finalImageList[i]
+                        this@ImagesForDocumentActivity,
+                        this@ImagesForDocumentActivity.packageName.toString() + ".provider",
+                        finalImageList[i]
                     )
                     if (imageListForSend.contains(uri)) {
                         crossImage.visibility = View.VISIBLE

@@ -1,4 +1,4 @@
-package com.vinners.cube_vishwakarma.feature_auth.ui.login.OtpVerify
+package com.vinners.cube_vishwakarma.feature_auth.ui.otpVerify
 
 import android.content.BroadcastReceiver
 import android.content.Context

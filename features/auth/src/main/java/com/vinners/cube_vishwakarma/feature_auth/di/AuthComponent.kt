@@ -2,8 +2,10 @@ package com.vinners.cube_vishwakarma.feature_auth.di
 
 import com.vinners.cube_vishwakarma.core.di.CoreComponent
 import com.vinners.cube_vishwakarma.core.di.scopes.FeatureScope
+
 import com.vinners.cube_vishwakarma.feature_auth.ui.login.LoginFragment
-import com.vinners.cube_vishwakarma.feature_auth.ui.login.OtpVerify.OtpCheckActivity
+import com.vinners.cube_vishwakarma.feature_auth.ui.otpVerify.OtpCheckActivity
+
 
 import dagger.Component
 

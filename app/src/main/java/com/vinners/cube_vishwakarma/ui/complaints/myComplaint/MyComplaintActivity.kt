@@ -629,9 +629,9 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
     private fun initBottomsheetFileterView() {
         applyBtn.setOnClickListener {
             if (roselectedId.isEmpty().not() && saleselectedId.isEmpty()){
-                viewModel.getComplaintBYIDROANDSaid(roselectedId, saleselectedId)
-            }else if (roselectedId.isEmpty().not() && saleselectedId.isEmpty().not()) {
                 viewModel.getComplaintBYIDWithOR(roselectedId, saleselectedId)
+            }else if (roselectedId.isEmpty().not() && saleselectedId.isEmpty().not()) {
+                viewModel.getComplaintBYIDROANDSaid(roselectedId, saleselectedId)
             }else if (roselectedId.isEmpty().not() && saleselectedId.isEmpty().not() && subadminId.isEmpty().not()){
                 viewModel.getComplaintByAllIDAND(roselectedId, saleselectedId,subadminId)
             }else if (roselectedId.isEmpty().not() || saleselectedId.isEmpty().not() || subadminId.isEmpty().not()){

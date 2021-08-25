@@ -22,7 +22,7 @@ import com.vinners.cube_vishwakarma.feature_auth.R
 import com.vinners.cube_vishwakarma.feature_auth.databinding.FragmentLoginBinding
 import com.vinners.cube_vishwakarma.feature_auth.di.AuthViewModelFactory
 import com.vinners.cube_vishwakarma.feature_auth.di.DaggerAuthComponent
-import com.vinners.cube_vishwakarma.feature_auth.ui.login.OtpVerify.OtpCheckActivity
+import com.vinners.cube_vishwakarma.feature_auth.ui.otpVerify.OtpCheckActivity
 import javax.inject.Inject
 
 @Suppress("UNREACHABLE_CODE")
