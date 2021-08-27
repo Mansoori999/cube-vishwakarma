@@ -6,10 +6,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.Canvas
-import android.graphics.Point
+import android.graphics.*
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -24,6 +21,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
+import com.github.razir.progressbutton.hideProgress
+import com.github.razir.progressbutton.showProgress
 import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -173,13 +172,14 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
                             .position(LatLng(latitude, longitude)))
                     }
 
-                    val cameraPositionlist = CameraPosition.Builder()
-                        .target(LatLng(latitude, longitude))
-                        .zoom(0f)
-                        .build()
-                    map?.setMaxZoomPreference(0f)
-                    map?.setMaxZoomPreference(15f)
-                    map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPositionlist))
+//                    val cameraPositionlist = CameraPosition.Builder()
+//                        .target(LatLng(latitude, longitude))
+//                        .zoom(0f)
+//                        .build()
+//                    map?.setMaxZoomPreference(0f)
+//                    map?.setMaxZoomPreference(15f)
+//                    map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPositionlist))
+                    map?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude),12.0f))
                     map?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
                 } catch (e: NumberFormatException) {
                     e.printStackTrace()
@@ -326,7 +326,7 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
             viewBinding.imageOutletBtn.setEnabled(false)
             viewBinding.imageComplaintBtn.setEnabled(true)
             map?.clear()
-            viewBinding.seekBar.setProgress(5)
+            viewBinding.seekBar.setProgress(25)
             if (userLocation.latitude != 0.0 && map != null) {
                 viewBinding.loadBtnContainer.setVisibilityVisible()
                 viewBinding.refreshProgressbar.setVisibilityGone()
@@ -352,7 +352,7 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
             viewBinding.imageComplaintBtn.setEnabled(false)
             viewBinding.mapContainer.setVisibilityVisible()
             map?.clear()
-            viewBinding.seekBar.setProgress(5)
+            viewBinding.seekBar.setProgress(25)
             if (userLocation.latitude != 0.0 && map != null) {
                 viewBinding.refreshProgressbar.setVisibilityGone()
                 viewBinding.loadBtnContainer.setVisibilityVisible()
@@ -535,10 +535,19 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
         viewModel.nearbyMapListState.observe(this, Observer {
             when (it) {
                 Lce.Loading -> {
+                   viewBinding.loadBtn.showProgress{
+                       buttonText = getString(com.vinners.cube_vishwakarma.feature_auth.R.string.loading)
+                       progressColor = Color.WHITE
+                   }
+                    viewBinding.loadBtn.isEnabled = false
                     viewBinding.refreshProgressbar.setVisibilityVisible()
                 }
                 is Lce.Content -> {
                     viewBinding.refreshProgressbar.setVisibilityGone()
+                    viewBinding.loadBtn.hideProgress(
+                            "Load"
+                    )
+                    viewBinding.loadBtn.isEnabled = true
                     locationlist.clear()
                     locationlist.addAll(it.content)
                     showNearByOutlets()
@@ -547,6 +556,11 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
 //                    locationHelper.startLocationUpdates()
                 }
                 is Lce.Error -> {
+                    viewBinding.loadBtn.isEnabled = true
+                    viewBinding.loadBtn.hideProgress(
+                            "Load"
+                    )
+                    showInformationDialog(it.error)
                     viewBinding.refreshProgressbar.setVisibilityGone()
                 }
             }
@@ -604,7 +618,7 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
        if (location == null){
        }else{
 
-
+           showLocationOnMap(userLocation)
            showNearByOutlets()
 //           val cameraPositionlist = CameraPosition.Builder()
 //               .target(LatLng(location.latitude, location.longitude))

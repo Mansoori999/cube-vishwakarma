@@ -165,7 +165,7 @@ dependencies {
     androidTestImplementation Libs.AndroidX.Test.runner
     androidTestImplementation Libs.AndroidX.Test.espressoCore
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-
+    implementation Libs.progressButton
     // debugImplementation Libs.leakCanary2
     debugImplementation Libs.Facebook.stetho
 
