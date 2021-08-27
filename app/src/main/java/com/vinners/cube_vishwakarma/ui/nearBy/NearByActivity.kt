@@ -7,8 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.*
-import android.location.Address
-import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
 import android.os.PersistableBundle
@@ -16,6 +14,7 @@ import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.SeekBar
+import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -27,6 +26,7 @@ import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.*
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter
 import com.google.android.gms.maps.model.*
 import com.vinners.cube_vishwakarma.R
 import com.vinners.cube_vishwakarma.core.QuickAlertDialog
@@ -49,7 +49,7 @@ import javax.inject.Inject
 
 
 class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.layout.activity_near_by),
-    OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks {
+    OnMapReadyCallback, LocationListener, GoogleApiClient.ConnectionCallbacks{
 
     companion object{
         const val REQUEST_UPGRADE_GPS_SETTINGS = 120
@@ -73,7 +73,9 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
     override val viewModel: NearByViewModel by viewModels { viewModelFactory }
 
     private var map: GoogleMap? = null
-    private var location:android.location.Location? = null
+
+    val areaOfIinterest : android.location.Location? = null
+    val currentPosition :android.location.Location? = null
     var mGoogleApiClient: GoogleApiClient? = null
     private var userLocationCaptured = false
     private var isRequestingForLocation = false
@@ -89,10 +91,14 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
 
 //    var markers = ArrayList<Marker>()
     private var userLocation: Location = Location(
+    latitude = 0.0,
+    longitude = 0.0
+)
+
+    private var destinationLocation: Location = Location(
         latitude = 0.0,
         longitude = 0.0
     )
-
     override fun onInitDependencyInjection() {
         DaggerLauncherComponent
             .builder()
@@ -138,77 +144,7 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
 
 
     }
-    private fun showNearByOutlets() {
-        map?.let {
-            map?.clear()
-            Log.d("kjshjaskj", locationlist.size.toString())
-            for (i in 0 until locationlist.size) {
-                try {
-                    val gps = locationlist[i].gps
-
-                    val latLng = gps?.split(",")
-                    val latitude: Double = latLng!!.get(0).toDouble()
-                    val longitude = latLng[1].toDouble()
-                    val gc = Geocoder(this)
-                    val list: List<Address> = gc.getFromLocation(latitude, longitude, 1)
-//                    val userLoc = LatLng(location.latitude, location.longitude)
-                    if (locationlist[i].workingcomplaint == false) {
-                        map?.addMarker(
-                            MarkerOptions()
-                                .title(locationlist[i].name)
-                                .icon(BitmapDescriptorFactory.fromBitmap(resizeBitmap(R.drawable.redmarker,80,80)))
-                                .position(LatLng(latitude, longitude))
-                        )
-//                        map?.addMarker(MarkerOptions().title(locationlist[i].name)
-//                            .draggable(true)
-//                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-//                            .position(LatLng(latitude, longitude)))
-                    } else {
-
-
-                        map?.addMarker(MarkerOptions()
-                            .title(locationlist[i].name)
-                            .icon(BitmapDescriptorFactory.fromBitmap(resizeBitmap(R.drawable.mapmarker,80,80)))
-                            .position(LatLng(latitude, longitude)))
-                    }
-
-//                    val cameraPositionlist = CameraPosition.Builder()
-//                        .target(LatLng(latitude, longitude))
-//                        .zoom(0f)
-//                        .build()
-//                    map?.setMaxZoomPreference(0f)
-//                    map?.setMaxZoomPreference(15f)
-//                    map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPositionlist))
-                    map?.animateCamera(CameraUpdateFactory.newLatLngZoom(LatLng(latitude, longitude),12.0f))
-                    map?.moveCamera(CameraUpdateFactory.newLatLng(LatLng(latitude, longitude)))
-                } catch (e: NumberFormatException) {
-                    e.printStackTrace()
-                }
-            }
-        }
-    }
-    fun resizeBitmap(drawableName: Int, width: Int, height: Int): Bitmap? {
-        val imageBitmap = BitmapFactory.decodeResource(
-            resources, resources.getIdentifier(
-                drawableName.toString(), "drawable",
-                packageName
-            )
-        )
-        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
-    }
-    private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
-        return ContextCompat.getDrawable(context, vectorResId)?.run {
-            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-            val bitmap = Bitmap.createBitmap(
-                intrinsicWidth,
-                intrinsicHeight,
-                Bitmap.Config.ARGB_8888
-            )
-            draw(Canvas(bitmap))
-            BitmapDescriptorFactory.fromBitmap(bitmap)
-        }
-    }
-    private fun showLocationOnMap(location: Location) {
+       private fun showLocationOnMap(location: Location) {
 
         map?.let {
 
@@ -226,6 +162,8 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
             map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         }
     }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -325,6 +263,7 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
             setButtonTag(view)
             viewBinding.imageOutletBtn.setEnabled(false)
             viewBinding.imageComplaintBtn.setEnabled(true)
+            viewBinding.flagContainer.setVisibilityVisible()
             map?.clear()
             viewBinding.seekBar.setProgress(25)
             if (userLocation.latitude != 0.0 && map != null) {
@@ -351,11 +290,13 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
             viewBinding.imageOutletBtn.setEnabled(true)
             viewBinding.imageComplaintBtn.setEnabled(false)
             viewBinding.mapContainer.setVisibilityVisible()
+            viewBinding.flagContainer.setVisibilityVisible()
             map?.clear()
             viewBinding.seekBar.setProgress(25)
             if (userLocation.latitude != 0.0 && map != null) {
                 viewBinding.refreshProgressbar.setVisibilityGone()
                 viewBinding.loadBtnContainer.setVisibilityVisible()
+
 
                 viewModel.getNearByOutletByMap(
                     latitude = userLocation.latitude,
@@ -535,21 +476,23 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
         viewModel.nearbyMapListState.observe(this, Observer {
             when (it) {
                 Lce.Loading -> {
-                   viewBinding.loadBtn.showProgress{
-                       buttonText = getString(com.vinners.cube_vishwakarma.feature_auth.R.string.loading)
-                       progressColor = Color.WHITE
-                   }
+                    viewBinding.loadBtn.showProgress {
+                        buttonText =
+                            getString(com.vinners.cube_vishwakarma.feature_auth.R.string.loading)
+                        progressColor = Color.WHITE
+                    }
                     viewBinding.loadBtn.isEnabled = false
                     viewBinding.refreshProgressbar.setVisibilityVisible()
                 }
                 is Lce.Content -> {
                     viewBinding.refreshProgressbar.setVisibilityGone()
                     viewBinding.loadBtn.hideProgress(
-                            "Load"
+                        "Load"
                     )
                     viewBinding.loadBtn.isEnabled = true
                     locationlist.clear()
                     locationlist.addAll(it.content)
+//                showLocationOnMap(userLocation)
                     showNearByOutlets()
 
 
@@ -558,7 +501,7 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
                 is Lce.Error -> {
                     viewBinding.loadBtn.isEnabled = true
                     viewBinding.loadBtn.hideProgress(
-                            "Load"
+                        "Load"
                     )
                     showInformationDialog(it.error)
                     viewBinding.refreshProgressbar.setVisibilityGone()
@@ -614,34 +557,152 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
 
     }
 
-    override fun onLocationChanged(location: android.location.Location) {
-       if (location == null){
-       }else{
+    private fun showNearByOutlets() {
 
-           showLocationOnMap(userLocation)
-           showNearByOutlets()
-//           val cameraPositionlist = CameraPosition.Builder()
-//               .target(LatLng(location.latitude, location.longitude))
-//               .zoom(15f)
-//               .build()
-//           map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPositionlist))
-//          map?.moveCamera(
-//              CameraUpdateFactory.newLatLng(
-//                  LatLng(
-//                      location.latitude,
-//                      location.longitude
-//                  )
-//              )
-//          )
-//           val ll = LatLng(location.latitude, location.longitude)
-//           val update = CameraUpdateFactory.newLatLngZoom(ll, 15f)
-//           map?.animateCamera(update)
-       }
+
+        map?.let {
+            map?.clear()
+            Log.d("kjshjaskj", locationlist.size.toString())
+            for (i in 0 until locationlist.size) {
+                try {
+                    val gps = locationlist[i].gps
+
+                    val latLng = gps?.split(",")
+                    val latitude: Double = latLng!!.get(0).toDouble()
+                    val longitude = latLng[1].toDouble()
+                    val current = LatLng(userLocation.latitude, userLocation.longitude)
+                    Log.d("sjhJHJ", userLocation.latitude.toString())
+                    map?.addMarker(MarkerOptions().position(current).title("Your Location"))
+
+                    val destination = LatLng(latitude, longitude)
+                    if (locationlist[i].workingcomplaint == false) {
+                        if (locationlist[i].complaintid != null){
+                        map?.addMarker(
+                            MarkerOptions()
+                                .title("${locationlist[i].name} - ${locationlist[i].customercode}")
+                                .icon(
+                                    BitmapDescriptorFactory.fromBitmap(
+                                        resizeBitmap(
+                                            R.drawable.redmarker,
+                                            80,
+                                            80
+                                        )
+                                    )
+                                )
+                                .position(destination)
+                                .snippet(
+                                    "RO : ${locationlist[i].regionaloffice}   "  +  "SA : ${locationlist[i].salesarea}" + '\n' +
+                                            "${locationlist[i].complaintid}"
+                                )
+                        )
+                        }else{
+                            map?.addMarker(
+                                MarkerOptions()
+                                    .title("${locationlist[i].name} - ${locationlist[i].customercode}")
+                                    .icon(BitmapDescriptorFactory.fromBitmap(resizeBitmap(R.drawable.redmarker, 80, 80)))
+                                    .position(destination)
+                                    .snippet(
+                                        "RO : ${locationlist[i].regionaloffice}   "  +  "SA : ${locationlist[i].salesarea}"
+                                    )
+                            )
+                        }
+//                        map?.addMarker(MarkerOptions().title(locationlist[i].name)
+//                            .draggable(true)
+//                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+//                            .position(LatLng(latitude, longitude)))
+                    } else {
+
+
+                        map?.addMarker(
+                            MarkerOptions()
+                                .title("${locationlist[i].name}")
+                                .icon(
+                                    BitmapDescriptorFactory.fromBitmap(
+                                        resizeBitmap(
+                                            R.drawable.mapmarker,
+                                            80,
+                                            80
+                                        )
+                                    )
+                                )
+                                .position(destination)
+                                .snippet(
+                                    "RO : ${locationlist[i].regionaloffice}   "  +  "SA : ${locationlist[i].salesarea}" + '\n' +
+                                            "${locationlist[i].complaintid}"
+                                )
+                        )
+                    }
+                    val builder = LatLngBounds.Builder()
+                    builder.include(destination)
+                    builder.include(current)
+                    val bounds = builder.build()
+                    map?.animateCamera(CameraUpdateFactory.newLatLngBounds(bounds, 100), 2000, null);
+
+                  map?.setInfoWindowAdapter(object :InfoWindowAdapter{
+                      override fun getInfoWindow(p0: Marker?): View? {
+                          return null
+                      }
+
+                      override fun getInfoContents(marker: Marker): View {
+                          val view: View = layoutInflater.inflate(R.layout.map_info_layout, null)
+
+                          val title = view.findViewById<View>(R.id.title) as TextView
+                          val ro = view.findViewById<View>(R.id.ro) as TextView
+//                          val sal = view.findViewById<View>(R.id.sal) as TextView
+//                          val complaintid = view.findViewById<View>(R.id.complaintid) as TextView
+
+                          title.setText(marker.getTitle())
+                          ro.setText(marker.getSnippet())
+//                          sal.text = marker.snippet
+//                          complaintid.text = marker.snippet
+
+                          return view
+                      }
+
+                  })
+
+                } catch (e: NumberFormatException) {
+                    e.printStackTrace()
+                }
+            }
+        }
     }
+    fun resizeBitmap(drawableName: Int, width: Int, height: Int): Bitmap? {
+        val imageBitmap = BitmapFactory.decodeResource(
+            resources, resources.getIdentifier(
+                drawableName.toString(), "drawable",
+                packageName
+            )
+        )
+        return Bitmap.createScaledBitmap(imageBitmap, width, height, false)
+    }
+
+
+    private fun bitmapDescriptorFromVector(context: Context, vectorResId: Int): BitmapDescriptor? {
+        return ContextCompat.getDrawable(context, vectorResId)?.run {
+            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+            val bitmap = Bitmap.createBitmap(
+                intrinsicWidth,
+                intrinsicHeight,
+                Bitmap.Config.ARGB_8888
+            )
+            draw(Canvas(bitmap))
+            BitmapDescriptorFactory.fromBitmap(bitmap)
+        }
+    }
+
+    override fun onLocationChanged(location: android.location.Location) {
+//       if (location == null){
+//       }else{
+//           showLocationOnMap(userLocation)
+//           showNearByOutlets()
+//       }
+    }
+
     override fun onConnected(p0: Bundle?) {
         val mLocationRequest = LocationRequest.create()
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-        mLocationRequest.setInterval(500)
+        mLocationRequest.setInterval(1000)
 
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -670,5 +731,6 @@ class NearByActivity : BaseActivity<ActivityNearByBinding, NearByViewModel>(R.la
     override fun onConnectionSuspended(p0: Int) {
 
     }
+
 
 }

@@ -122,6 +122,52 @@
     android:id="@+id/mapContainer"
     android:visibility="visible"
     android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:id="@+id/flagContainer"
+        android:padding="5dp"
+        android:visibility="gone"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_height="wrap_content">
+    <View
+        android:layout_width="10dp"
+        android:layout_height="10dp"
+        android:id="@+id/red"
+        android:layout_centerVertical="true"
+        android:background="#F61919"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Not Working"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/red"
+            android:id="@+id/notWorking"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textColor="#CC000000"
+            android:textSize="10sp"/>
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:id="@+id/blue"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/notWorking"
+            android:layout_marginLeft="10dp"
+            android:background="#4810AE"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Working"
+            android:layout_toRightOf="@+id/blue"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textColor="#CC000000"
+            android:textSize="10sp"/>
+    </RelativeLayout>
             <ProgressBar
                 android:id="@+id/refreshProgressbar"
                 android:layout_width="40dp"
@@ -130,12 +176,12 @@
                 android:layout_centerInParent="true" />
             <fragment
                 android:id="@+id/map"
+                android:layout_below="@+id/flagContainer"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_height="match_parent"
-
                 tools:context=".MapsActivity" />
 </RelativeLayout>
             <RelativeLayout

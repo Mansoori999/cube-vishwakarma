@@ -32,6 +32,7 @@ data class NearByResponseItem(
 	val customercode: String? = null,
 	val location: String? = null,
 	val category: String? = null,
-	val regionaloffice: String? = null
+	val regionaloffice: String? = null,
+	val complaintid:String?= null
 )
 
