@@ -147,6 +147,7 @@ class AllFragment : BaseFragment<FragmentAllBinding,AllComplaintFragmentViewMode
                         viewBinding.errorLayout.root.setVisibilityVisible()
                         viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
                         viewBinding.errorLayout.errorActionButton.setVisibilityGone()
+                        allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
                         viewBinding.errorLayout.messageTv.text = "Not Complaint Found"
                     } else {
                         viewBinding.errorLayout.root.setVisibilityGone()

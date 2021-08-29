@@ -10,6 +10,9 @@ data class NearByRequest(
     val range: String? = null,
 
     @field:SerializedName("type")
-    val type: String? = null,
+    val type: String? = null
+
+
+
 
 )

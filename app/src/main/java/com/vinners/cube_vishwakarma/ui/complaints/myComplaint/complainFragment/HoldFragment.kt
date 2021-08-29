@@ -80,20 +80,20 @@ class HoldFragment : BaseFragment<FragmentHoldBinding, AllComplaintFragmentViewM
         viewBinding.allcomplaintFragmentRecycler.layoutManager = LinearLayoutManager(context)
         allComplaintRecyclerAdapter.updateViewList(emptyList())
         viewBinding.allcomplaintFragmentRecycler.adapter = allComplaintRecyclerAdapter
-        viewBinding.refreshLayout.setOnRefreshListener {
-
-            if (!viewBinding.refreshLayout.isRefreshing) {
-                viewBinding.refreshLayout.isRefreshing = true
-            }
-
-            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
-                viewModel.getComplaintList(adminUserid)
-            }else{
-                viewModel.getComplaintList(userid!!)
-
-            }
-
-        }
+//        viewBinding.refreshLayout.setOnRefreshListener {
+//
+//            if (!viewBinding.refreshLayout.isRefreshing) {
+//                viewBinding.refreshLayout.isRefreshing = true
+//            }
+//
+//            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+//                viewModel.getComplaintList(adminUserid)
+//            }else{
+//                viewModel.getComplaintList(userid!!)
+//
+//            }
+//
+//        }
     }
 
     override fun onInitViewModel() {
@@ -115,7 +115,7 @@ class HoldFragment : BaseFragment<FragmentHoldBinding, AllComplaintFragmentViewM
                         allComplaintRecyclerAdapter.updateViewList(emptyList())
                         viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
                         viewBinding.errorLayout.errorActionButton.setVisibilityGone()
-
+                        allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
                         viewBinding.errorLayout.messageTv.text = "Not Hold Complaint Found"
                     } else {
                         viewBinding.errorLayout.root.setVisibilityGone()

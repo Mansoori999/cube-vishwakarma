@@ -443,14 +443,14 @@ public class ImageHelper {
         final int width= bitmap.getWidth();
         float h= (float) height;
         float w= (float) width;
-        paint.setColor(Color.parseColor("#2383E1"));
+        paint.setColor(Color.parseColor("#F88017"));
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
         canvas.drawBitmap(bitmap, 0.0f, 5.0f, null);
         Paint ractPaint = new Paint();
         ractPaint.setStyle(Paint.Style.STROKE);
         ractPaint.setAntiAlias(true);
-        ractPaint.setColor(Color.parseColor("#2383E1"));
+        ractPaint.setColor(Color.parseColor("#F88017"));
         canvas.drawRoundRect(new RectF(5.0f,
                 imageHeight - 5.0f * f,
                 imageWidth - 5.0f,
@@ -466,11 +466,11 @@ public class ImageHelper {
                 } else if (checkboxText.equals("Working")) {
                     paint.setColor(Color.YELLOW);
                 } else if (checkboxText.equals("After")) {
-                    paint.setColor(Color.parseColor("#2383E1"));
+                    paint.setColor(Color.parseColor("#F88017"));
                 }
                 canvas.drawText(arrayList.get(k), 10.0f, (imageHeight + 1.5f * f2 - 3.8f * f), paint);
             } else {
-                paint.setColor(Color.parseColor("#2383E1"));
+                paint.setColor(Color.parseColor("#F88017"));
                 canvas.drawText(arrayList.get(k), 40.0f, (imageHeight + 1.5f * f2 - 5.3f * f), paint);
                 f2 += f;
             }

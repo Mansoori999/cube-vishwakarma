@@ -296,9 +296,10 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
                 imageTextList.add(complaint!!.work!!.trim())
             }
             val image = result!!.bitmap
-            val photo = addWatermark(resources,image)
+            val photo = addWatermark(resources, image)
             val stampImage: Bitmap =
                 ImageHelper.stampImageWithText(photo, imageTextList, checkboxTextColor)
+
             val storageDir =
                 Environment.getExternalStoragePublicDirectory("Cube")
             val subDirecory =
@@ -365,10 +366,14 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
         bmp = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888)
         paint = Paint(Paint.ANTI_ALIAS_FLAG or Paint.DITHER_FLAG or Paint.FILTER_BITMAP_FLAG)
         // Copy the original bitmap into the new one
+        paint.setColor(Color.WHITE)
+        paint.setAntiAlias(true)
         c = Canvas(bmp)
         c.drawBitmap(source, 0f, 0f, paint)
         // Load the watermark
-        watermark = BitmapFactory.decodeResource( res ,R.drawable.ic_watermark)
+        watermark = BitmapFactory.decodeResource(res, R.drawable.ic_watermark)
+        paint.alpha = 100
+        paint.style = Paint.Style.FILL
         // Scale the watermark to be approximately 40% of the source image height
         scale = (h.toFloat() * 0.15 / watermark.height.toFloat()).toFloat()
         // Create the matrix

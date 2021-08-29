@@ -17,7 +17,7 @@ class NearByRemoteDataStoreImpl @Inject constructor(
             NearByRequest(
                 gpsaddress = gpsaddress,
                 range = range,
-                type = type
+                type = type,
             )).bodyOrThrow()
     }
 

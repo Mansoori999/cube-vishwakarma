@@ -82,20 +82,20 @@ class DoneFragment : BaseFragment<FragmentDoneBinding, AllComplaintFragmentViewM
         viewBinding.allcomplaintFragmentRecycler.layoutManager = LinearLayoutManager(context)
         allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
         viewBinding.allcomplaintFragmentRecycler.adapter = allComplaintRecyclerAdapter
-        viewBinding.refreshLayout.setOnRefreshListener {
-
-            if (!viewBinding.refreshLayout.isRefreshing) {
-                viewBinding.refreshLayout.isRefreshing = true
-            }
-
-            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
-                viewModel.getComplaintList(adminUserid)
-            }else{
-                viewModel.getComplaintList(userid!!)
-
-            }
-
-        }
+//        viewBinding.refreshLayout.setOnRefreshListener {
+//
+//            if (!viewBinding.refreshLayout.isRefreshing) {
+//                viewBinding.refreshLayout.isRefreshing = true
+//            }
+//
+//            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+//                viewModel.getComplaintList(adminUserid)
+//            }else{
+//                viewModel.getComplaintList(userid!!)
+//
+//            }
+//
+//        }
     }
 
     override fun onInitViewModel() {
@@ -104,7 +104,7 @@ class DoneFragment : BaseFragment<FragmentDoneBinding, AllComplaintFragmentViewM
                 Lce.Loading ->{
                     viewBinding.errorLayout.root.setVisibilityGone()
                     viewBinding.progressBar.setVisibilityVisible()
-                    viewBinding.refreshLayout.isRefreshing = false
+//                    viewBinding.refreshLayout.isRefreshing = false
                 }
                 is Lce.Content->
                 {
@@ -117,21 +117,22 @@ class DoneFragment : BaseFragment<FragmentDoneBinding, AllComplaintFragmentViewM
                         viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
                         viewBinding.errorLayout.errorActionButton.setVisibilityGone()
                         viewBinding.errorLayout.messageTv.text = "Not Done Complaint Found"
+                        allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
                     } else {
                         viewBinding.errorLayout.root.setVisibilityGone()
                         viewBinding.progressBar.setVisibilityGone()
 
                         allComplaintRecyclerAdapter.updateViewList(itemlist)
-                        if (!viewBinding.refreshLayout.isRefreshing) {
-                            viewBinding.refreshLayout.isRefreshing = false
-                        }
+//                        if (!viewBinding.refreshLayout.isRefreshing) {
+//                            viewBinding.refreshLayout.isRefreshing = false
+//                        }
                     }
 
                 }
                 is Lce.Error ->
                 {
                     viewBinding.progressBar.setVisibilityGone()
-                    viewBinding.refreshLayout.isRefreshing = false
+//                    viewBinding.refreshLayout.isRefreshing = false
                     viewBinding.progressBar.setVisibilityGone()
                     showInformationDialog(it.error)
 

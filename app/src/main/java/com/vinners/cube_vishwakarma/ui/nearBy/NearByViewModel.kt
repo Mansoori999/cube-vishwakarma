@@ -29,7 +29,8 @@ private val nearByRepository: NearByRepository
         latitude: Double,
         longitude: Double,
         range:String,
-        type:String){
+        type:String,
+        ){
         _nearbyMapListState.value = Lce.Loading
         viewModelScope.launch(Dispatchers.IO){
             try {

@@ -80,20 +80,20 @@ class WorkingFragment : BaseFragment<FragmentWorkingBinding, AllComplaintFragmen
         viewBinding.allcomplaintFragmentRecycler.layoutManager = LinearLayoutManager(context)
         allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
         viewBinding.allcomplaintFragmentRecycler.adapter = allComplaintRecyclerAdapter
-        viewBinding.refreshLayout.setOnRefreshListener {
-
-            if (!viewBinding.refreshLayout.isRefreshing) {
-                viewBinding.refreshLayout.isRefreshing = true
-            }
-
-            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
-                viewModel.getComplaintList(adminUserid)
-            }else{
-                viewModel.getComplaintList(userid!!)
-
-            }
-
-        }
+//        viewBinding.refreshLayout.setOnRefreshListener {
+//
+//            if (!viewBinding.refreshLayout.isRefreshing) {
+//                viewBinding.refreshLayout.isRefreshing = true
+//            }
+//
+//            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+//                viewModel.getComplaintList(adminUserid)
+//            }else{
+//                viewModel.getComplaintList(userid!!)
+//
+//            }
+//
+//        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -120,6 +120,7 @@ class WorkingFragment : BaseFragment<FragmentWorkingBinding, AllComplaintFragmen
                         viewBinding.errorLayout.errorActionButton.setVisibilityGone()
                         allComplaintRecyclerAdapter.updateViewList(emptyList())
                         viewBinding.errorLayout.messageTv.text = "Not Working Complaint Found"
+                        allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
                     } else {
                         viewBinding.errorLayout.root.setVisibilityGone()
                         viewBinding.progressBar.setVisibilityGone()

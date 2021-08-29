@@ -121,7 +121,7 @@ data class MyComplaintList (
                 const val COLUMN_SALES_AREA_ID :String = "said"
 
                 @Ignore
-                const val COLUMN_SUBAMIN_ID :String = "subadmin"
+                const val COLUMN_SUBAMIN_ID :String = "subadminid"
 
 
 

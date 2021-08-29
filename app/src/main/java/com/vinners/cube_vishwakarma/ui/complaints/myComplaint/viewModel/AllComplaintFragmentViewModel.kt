@@ -1,5 +1,6 @@
 package com.vinners.cube_vishwakarma.ui.complaints.myComplaint.viewModel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -130,6 +131,7 @@ class AllComplaintFragmentViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO){
             try {
                 val response = myComplaintRepository.getComplaintByIDWithSubAminOR(roid,said,subadmin)
+
                 _complaintDaoWithSubAminORListState.postValue(Lce.content(response))
             }catch (e : Exception){
                 _complaintDaoWithSubAminORListState.postValue(Lce.error(e.localizedMessage))

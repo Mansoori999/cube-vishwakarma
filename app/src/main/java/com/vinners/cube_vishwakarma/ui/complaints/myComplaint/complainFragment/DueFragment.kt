@@ -76,20 +76,20 @@ class DueFragment : BaseFragment<FragmentDueBinding, AllComplaintFragmentViewMod
         viewBinding.allcomplaintFragmentRecycler.layoutManager = LinearLayoutManager(context)
         allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
         viewBinding.allcomplaintFragmentRecycler.adapter = allComplaintRecyclerAdapter
-        viewBinding.refreshLayout.setOnRefreshListener {
-
-            if (!viewBinding.refreshLayout.isRefreshing) {
-                viewBinding.refreshLayout.isRefreshing = true
-            }
-
-            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
-                viewModel.getComplaintList(adminUserid)
-            }else{
-                viewModel.getComplaintList(userid!!)
-
-            }
-
-        }
+//        viewBinding.refreshLayout.setOnRefreshListener {
+//
+//            if (!viewBinding.refreshLayout.isRefreshing) {
+//                viewBinding.refreshLayout.isRefreshing = true
+//            }
+//
+//            if (userSessionManager.designation!!.toLowerCase().equals("admin")){
+//                viewModel.getComplaintList(adminUserid)
+//            }else{
+//                viewModel.getComplaintList(userid!!)
+//
+//            }
+//
+//        }
     }
 
     override fun onInitViewModel() {
@@ -112,6 +112,7 @@ class DueFragment : BaseFragment<FragmentDueBinding, AllComplaintFragmentViewMod
                         viewBinding.errorLayout.infoImageIv.load(R.drawable.ic_information)
                         viewBinding.errorLayout.errorActionButton.setVisibilityGone()
                         viewBinding.errorLayout.messageTv.text = "Not Due Complaint Found"
+                        allComplaintRecyclerAdapter.updateViewList(Collections.emptyList())
                     } else {
                         viewBinding.errorLayout.root.setVisibilityGone()
                         viewBinding.progressBar.setVisibilityGone()

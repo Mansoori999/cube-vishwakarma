@@ -75,7 +75,7 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
     var saleselectedItemList:String? = ""
     var roid:Int = 0
     val regionalOfficeResetData =  mutableListOf<RegionalOfficeFilterData>()
-
+    val saleareaResetData =  mutableListOf<RegionalOfficeFilterData>()
 
     var searchableItems= listOf<RegionalOfficeFilterData>()
     private lateinit var sheetBehavior: BottomSheetBehavior<View>
@@ -172,14 +172,9 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
                 is Lce.Content->
                 {
 
-                    if (it.content.isEmpty()){
-                        viewBinding.progressBar.setVisibilityGone()
-
-                    } else {
                         viewBinding.progressBar.setVisibilityGone()
                         sharedViewModel.updateData(it.content)
 
-                    }
                 }
                 is Lce.Error ->
                 {
@@ -200,14 +195,9 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
                 is Lce.Content->
                 {
 
-                    if (it.content.isEmpty()){
-                        viewBinding.progressBar.setVisibilityGone()
-
-                    } else {
                         viewBinding.progressBar.setVisibilityGone()
                         sharedViewModel.updateData(it.content)
 
-                    }
                 }
                 is Lce.Error ->
                 {
@@ -228,14 +218,9 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
                 is Lce.Content->
                 {
 
-                    if (it.content.isEmpty()){
-                        viewBinding.progressBar.setVisibilityGone()
-
-                    } else {
                         viewBinding.progressBar.setVisibilityGone()
                         sharedViewModel.updateData(it.content)
 
-                    }
                 }
                 is Lce.Error ->
                 {
@@ -256,14 +241,9 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
                 is Lce.Content->
                 {
 
-                    if (it.content.isEmpty()){
-                        viewBinding.progressBar.setVisibilityGone()
-
-                    } else {
                         viewBinding.progressBar.setVisibilityGone()
                         sharedViewModel.updateData(it.content)
 
-                    }
                 }
                 is Lce.Error ->
                 {
@@ -283,14 +263,9 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
                 is Lce.Content->
                 {
 
-                    if (it.content.isEmpty()){
-                        viewBinding.progressBar.setVisibilityGone()
-
-                    } else {
                         viewBinding.progressBar.setVisibilityGone()
                         sharedViewModel.updateData(it.content)
 
-                    }
                 }
                 is Lce.Error ->
                 {
@@ -399,136 +374,6 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
 
     }
 
-    private fun setSalesOnSpinner(id: List<Int>) {
-
-        for(i in 0 until id.size){
-            roid = id[i]
-        }
-        val sales = salesArea.filter {
-            it.roid == roid
-        }.map {
-            RegionalOfficeFilterData(
-                    it.said!!,
-                    it.salesarea!!,
-                    isSelected = false
-            )
-        }.distinctBy {
-            it.id
-        }.toMutableList()
-        sales.sortBy { it.name }
-        val setItems = sales.distinctBy { it.name }
-        sales.clear()
-        sales.addAll(setItems)
-
-
-        salesspinner.setOnClickListener {
-            val alertDialog = AlertDialog.Builder(this)
-            val inflater = LayoutInflater.from(this)
-            val convertView = inflater.inflate(R.layout.searchable_list_layout, null)
-
-            alertDialog.setView(convertView)
-            alertDialog.setTitle("Select Sales Area")
-
-            val searchView = convertView.findViewById<SearchView>(R.id.searchView)
-            val recyclerView =
-                    convertView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
-            val mLayoutManager = LinearLayoutManager(this)
-
-            val adapter =
-                    SearchableAdapter(
-                            this,
-                            sales,
-                            sales,
-                            object : SearchableAdapter.ItemClickListener {
-                                override fun onItemClicked(
-                                        item: RegionalOfficeFilterData,
-                                        position: Int,
-                                        b: Boolean
-                                ) {
-                                    for (i in 0 until sales.size) {
-                                        if (sales[i].id == item.id) {
-                                            sales[i].isSelected = b
-                                            break
-                                        }
-                                    }
-                                }
-
-                            }, false)
-
-            adapter.notifyDataSetChanged()
-
-
-            recyclerView.itemAnimator = null
-            recyclerView.layoutManager = mLayoutManager
-            recyclerView.adapter = adapter
-
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    // do something on text submit
-                    return false
-                }
-
-                override fun onQueryTextChange(newText: String): Boolean {
-                    // do something when text changes
-                    adapter.filter.filter(newText)
-                    return false
-                }
-            })
-
-            alertDialog.setPositiveButton("Done") { dialogInterface, i ->
-                dialogInterface.dismiss()
-                val resultList = ArrayList<RegionalOfficeFilterData>()
-                for (i in 0 until sales.size) {
-                    if (sales[i].isSelected) {
-                        resultList.add(sales[i])
-                    }
-                }
-                salesspinner.text = resultList.toString().substring(1, resultList.toString().length - 1)
-                saleselectedId  = resultList.map { it.id }
-
-//                selectionCompleteListener?.onCompleteSelection(resultList)
-            }
-            alertDialog.setNegativeButton("clear"){ DialogInterface, i: Int ->
-                val resultList =ArrayList<RegionalOfficeFilterData>()
-                for (i in 0 until sales.size) {
-                    if (sales[i].isSelected) {
-                        sales[i].isSelected = false
-                        resultList.remove(sales[i])
-                    }
-                }
-                salesspinner.text = ""
-//                selectionCompleteListener?.onCompleteSelection(resultList)
-            }
-
-            alertDialog.show()
-
-        }
-
-
-        resestTV.setOnClickListener {
-            val resultList = ArrayList<RegionalOfficeFilterData>()
-            for (i in 0 until regionalOfficeResetData.size) {
-                if (regionalOfficeResetData[i].isSelected) {
-                    regionalOfficeResetData[i].isSelected = false
-                    resultList.remove(regionalOfficeResetData[i])
-                    regionalspinner.setText("")
-                }
-            }
-            roselectedId.clear()
-            saleselectedId.clear()
-            val result =ArrayList<RegionalOfficeFilterData>()
-            for (i in 0 until sales.size) {
-                if (sales[i].isSelected) {
-                    sales[i].isSelected = false
-                    result.remove(sales[i])
-                    salesspinner.text = ""
-                }
-            }
-            subadminId.clear()
-            subadminSpinner.setSelection(0)
-
-        }
-    }
 
     private fun setActiveSubAdminTypeSpinner(activeSubadmin: MutableList<ActiveSubAdminData>) {
         activeSubadmin.sortBy { it.name }
@@ -613,6 +458,31 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
                 Log.d("sabhj",subadminId.toString())
             }
         }
+        resestTV.setOnClickListener {
+            subadminId.clear()
+            subadminSpinner.setSelection(0)
+            roselectedId.clear()
+            saleselectedId.clear()
+            val resultList = ArrayList<RegionalOfficeFilterData>()
+            for (i in 0 until regionalOfficeResetData.size) {
+                if (regionalOfficeResetData[i].isSelected) {
+                    regionalOfficeResetData[i].isSelected = false
+                    resultList.remove(regionalOfficeResetData[i])
+                    regionalspinner.setText("")
+                }
+            }
+            val result =ArrayList<RegionalOfficeFilterData>()
+            for (i in 0 until saleareaResetData.size) {
+                if (saleareaResetData[i].isSelected) {
+                    saleareaResetData[i].isSelected = false
+                    result.remove(saleareaResetData[i])
+                    salesspinner.text = ""
+                }
+            }
+//            subadminId.clear()
+//            subadminSpinner.setSelection(0)
+
+        }
     }
 
     private fun toggleFilterSheets() {
@@ -628,15 +498,17 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
     }
     private fun initBottomsheetFileterView() {
         applyBtn.setOnClickListener {
-            if (roselectedId.isEmpty().not() && saleselectedId.isEmpty()){
-                viewModel.getComplaintBYIDWithOR(roselectedId, saleselectedId)
-            }else if (roselectedId.isEmpty().not() && saleselectedId.isEmpty().not()) {
-                viewModel.getComplaintBYIDROANDSaid(roselectedId, saleselectedId)
-            }else if (roselectedId.isEmpty().not() && saleselectedId.isEmpty().not() && subadminId.isEmpty().not()){
+
+            if (roselectedId.isEmpty().not() && saleselectedId.isEmpty().not() && subadminId.isEmpty().not()){
                 viewModel.getComplaintByAllIDAND(roselectedId, saleselectedId,subadminId)
-            }else if (roselectedId.isEmpty().not() || saleselectedId.isEmpty().not() || subadminId.isEmpty().not()){
+            }else if (roselectedId.isEmpty() && saleselectedId.isEmpty() && subadminId.isEmpty().not()){
+                Log.d("sakjkjja",subadminId.size.toString())
                 viewModel.getComplaintByIDWithSubAminOR(roselectedId, saleselectedId,subadminId)
-            }else if (roselectedId.isEmpty().not() && subadminId.isEmpty().not()){
+            }else if (roselectedId.isEmpty().not() && saleselectedId.isEmpty() && subadminId.isEmpty()){
+                viewModel.getComplaintBYIDWithOR(roselectedId, saleselectedId)
+            }else if (roselectedId.isEmpty().not() && saleselectedId.isEmpty().not() && subadminId.isEmpty()) {
+                viewModel.getComplaintBYIDROANDSaid(roselectedId, saleselectedId)
+            }else if (roselectedId.isEmpty().not() && subadminId.isEmpty().not() && saleselectedId.isEmpty()){
                 viewModel.getComplaintByIDWithSubadminAndRO(roselectedId,subadminId)
             }else{
                 if (userSessionManager.designation!!.toLowerCase().equals("admin")){
@@ -652,6 +524,139 @@ class MyComplaintActivity: BaseActivity<ActivityMyComplaintBinding,AllComplaintF
 
         }
 
+    }
+
+    private fun setSalesOnSpinner(id: List<Int>) {
+
+        for(i in 0 until id.size){
+            roid = id[i]
+        }
+        val sales = salesArea.filter {
+            it.roid == roid
+        }.map {
+            RegionalOfficeFilterData(
+                it.said!!,
+                it.salesarea!!,
+                isSelected = false
+            )
+        }.distinctBy {
+            it.id
+        }.toMutableList()
+        sales.sortBy { it.name }
+        val setItems = sales.distinctBy { it.name }
+        sales.clear()
+        sales.addAll(setItems)
+
+
+        salesspinner.setOnClickListener {
+            val alertDialog = AlertDialog.Builder(this)
+            val inflater = LayoutInflater.from(this)
+            val convertView = inflater.inflate(R.layout.searchable_list_layout, null)
+
+            alertDialog.setView(convertView)
+            alertDialog.setTitle("Select Sales Area")
+
+            val searchView = convertView.findViewById<SearchView>(R.id.searchView)
+            val recyclerView =
+                convertView.findViewById<androidx.recyclerview.widget.RecyclerView>(R.id.recyclerView)
+            val mLayoutManager = LinearLayoutManager(this)
+
+            val adapter =
+                SearchableAdapter(
+                    this,
+                    sales,
+                    sales,
+                    object : SearchableAdapter.ItemClickListener {
+                        override fun onItemClicked(
+                            item: RegionalOfficeFilterData,
+                            position: Int,
+                            b: Boolean
+                        ) {
+                            for (i in 0 until sales.size) {
+                                if (sales[i].id == item.id) {
+                                    sales[i].isSelected = b
+                                    break
+                                }
+                            }
+                        }
+
+                    }, false)
+
+            adapter.notifyDataSetChanged()
+
+
+            recyclerView.itemAnimator = null
+            recyclerView.layoutManager = mLayoutManager
+            recyclerView.adapter = adapter
+
+            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    // do something on text submit
+                    return false
+                }
+
+                override fun onQueryTextChange(newText: String): Boolean {
+                    // do something when text changes
+                    adapter.filter.filter(newText)
+                    return false
+                }
+            })
+
+            alertDialog.setPositiveButton("Done") { dialogInterface, i ->
+                dialogInterface.dismiss()
+                val resultList = ArrayList<RegionalOfficeFilterData>()
+                for (i in 0 until sales.size) {
+                    if (sales[i].isSelected) {
+                        resultList.add(sales[i])
+                    }
+                }
+                salesspinner.text = resultList.toString().substring(1, resultList.toString().length - 1)
+                saleselectedId  = resultList.map { it.id }
+                saleareaResetData.addAll(resultList)
+//                selectionCompleteListener?.onCompleteSelection(resultList)
+            }
+            alertDialog.setNegativeButton("clear"){ DialogInterface, i: Int ->
+                val resultList =ArrayList<RegionalOfficeFilterData>()
+                for (i in 0 until sales.size) {
+                    if (sales[i].isSelected) {
+                        sales[i].isSelected = false
+                        resultList.remove(sales[i])
+                    }
+                }
+                salesspinner.text = ""
+//                selectionCompleteListener?.onCompleteSelection(resultList)
+            }
+
+            alertDialog.show()
+
+        }
+
+
+//        resestTV.setOnClickListener {
+//            subadminId.clear()
+//            subadminSpinner.setSelection(0)
+//            roselectedId.clear()
+//            saleselectedId.clear()
+//            val resultList = ArrayList<RegionalOfficeFilterData>()
+//            for (i in 0 until regionalOfficeResetData.size) {
+//                if (regionalOfficeResetData[i].isSelected) {
+//                    regionalOfficeResetData[i].isSelected = false
+//                    resultList.remove(regionalOfficeResetData[i])
+//                    regionalspinner.setText("")
+//                }
+//            }
+//            val result =ArrayList<RegionalOfficeFilterData>()
+//            for (i in 0 until sales.size) {
+//                if (sales[i].isSelected) {
+//                    sales[i].isSelected = false
+//                    result.remove(sales[i])
+//                    salesspinner.text = ""
+//                }
+//            }
+////            subadminId.clear()
+////            subadminSpinner.setSelection(0)
+//
+//        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
