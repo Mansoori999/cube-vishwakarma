@@ -451,27 +451,29 @@ public class ImageHelper {
         ractPaint.setStyle(Paint.Style.STROKE);
         ractPaint.setAntiAlias(true);
         ractPaint.setColor(Color.parseColor("#F88017"));
-        canvas.drawRoundRect(new RectF(5.0f,
-                imageHeight - 5.0f * f,
-                imageWidth - 5.0f,
-                (imageHeight - 5.0f * f) + 4.7f * f), 6, 6, ractPaint);
+//        canvas.drawRoundRect(new RectF(5.0f,
+//                imageHeight - 5.0f * f,
+//                imageWidth - 5.0f,
+//                (imageHeight - 5.0f * f) + 4.7f * f), 6, 6, ractPaint);
         float f2 = f;
 
         for (int k = 0; k < arrayList.size(); k++) {
             if (k == 0) {
                 canvas.drawText(arrayList.get(k), 10.0f, f2, paint);
-            } else if (k == 1) {
-                if (checkboxText.equals("Before")) {
-                    paint.setColor(Color.RED);
-                } else if (checkboxText.equals("Working")) {
-                    paint.setColor(Color.YELLOW);
-                } else if (checkboxText.equals("After")) {
-                    paint.setColor(Color.parseColor("#F88017"));
-                }
-                canvas.drawText(arrayList.get(k), 10.0f, (imageHeight + 1.5f * f2 - 3.8f * f), paint);
-            } else {
+            }
+//            else if (k == 1) {
+//                if (checkboxText.equals("Before")) {
+//                    paint.setColor(Color.RED);
+//                } else if (checkboxText.equals("Working")) {
+//                    paint.setColor(Color.YELLOW);
+//                } else if (checkboxText.equals("After")) {
+//                    paint.setColor(Color.parseColor("#F88017"));
+//                }
+//                canvas.drawText(arrayList.get(k), 10.0f, (imageHeight + 1.5f * f2 - 3.8f * f), paint);
+//            }
+            else {
                 paint.setColor(Color.parseColor("#F88017"));
-                canvas.drawText(arrayList.get(k), 40.0f, (imageHeight + 1.5f * f2 - 5.3f * f), paint);
+                canvas.drawText(arrayList.get(k), 10.0f, (imageHeight + 1.5f * f2 - 5.3f * f), paint);
                 f2 += f;
             }
         }

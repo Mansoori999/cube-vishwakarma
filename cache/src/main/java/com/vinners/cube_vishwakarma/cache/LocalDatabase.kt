@@ -15,7 +15,7 @@ import com.vinners.cube_vishwakarma.cache.typeConverter.DateTypeConverter
     entities = [
         CachedProfile::class
     ],
-    version = 15,
+    version = 16,
     exportSchema = false
 )
 @TypeConverters(
@@ -24,7 +24,7 @@ import com.vinners.cube_vishwakarma.cache.typeConverter.DateTypeConverter
 abstract class LocalDatabase : RoomDatabase() {
 
     companion object {
-        const val DATABASE_NAME = "cube_2.db"
+        const val DATABASE_NAME = "cube_3.db"
     }
 
     // The associated DAOs for the database

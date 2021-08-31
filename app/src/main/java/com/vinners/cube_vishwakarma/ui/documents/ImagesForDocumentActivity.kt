@@ -284,13 +284,13 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
             val calendar = Calendar.getInstance()
             imageTextList.add(simpleDateFormat.format(calendar.time).toString())
             if (outlet != null) {
-                imageTextList.add("⦿")
+//                imageTextList.add("⦿")
                 imageTextList.add(outlet!!.customercode!!.trim())
                 imageTextList.add(outlet!!.name!!.trim())
                 imageTextList.add(outlet!!.regionaloffice!!.trim())
             }
             if (complaint != null) {
-                imageTextList.add("⦿")
+//                imageTextList.add("⦿")
                 imageTextList.add(complaint!!.complaintid!!.trim())
                 imageTextList.add(complaint!!.outlet!!.trim())
                 imageTextList.add(complaint!!.work!!.trim())
@@ -372,7 +372,7 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
         c.drawBitmap(source, 0f, 0f, paint)
         // Load the watermark
         watermark = BitmapFactory.decodeResource(res, R.drawable.ic_watermark)
-        paint.alpha = 100
+        paint.alpha = 95
         paint.style = Paint.Style.FILL
         // Scale the watermark to be approximately 40% of the source image height
         scale = (h.toFloat() * 0.15 / watermark.height.toFloat()).toFloat()
@@ -380,7 +380,8 @@ class ImagesForDocumentActivity : BaseActivity<ActivityImagesForDocumentBinding,
         matrix = Matrix()
         matrix.postScale(scale, scale)
         // Determine the post-scaled size of the watermark
-        r = RectF(500f, -2000f, watermark.width.toFloat(), watermark.height.toFloat())
+//        r = RectF(500f, -2000f, watermark.width.toFloat(), watermark.height.toFloat())
+        r = RectF(watermark.width.toFloat(), watermark.height.toFloat(), 0f,0f)
         matrix.mapRect(r)
         // Move the watermark to the bottom right corner
         matrix.postTranslate(w - r.width(), h - r.height())
